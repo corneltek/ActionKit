@@ -1,0 +1,30 @@
+---
+staging: 
+  version: 0.1
+  sitename: 
+  desc: 
+  domain: antenna.lart-asia.com
+  base_path: /
+  base_url: http://antenna.lart-asia.com/
+  lang: zh_TW
+  avatar_path: avatar/
+  database: 
+    name: lart_antenna
+    user: lart_antenna
+    pass: antennasport234
+    host: localhost
+develpment: 
+  version: 0.1
+  sitename: 
+  desc: 
+  domain: localhost
+  base_path: /git/lart/antenna/website
+  base_url: >
+    http://localhost/git/lart/antenna/website
+  lang: zh_TW
+  avatar_path: avatar/
+  database: 
+    name: antenna
+    user: root
+    pass: 123123
+    host: localhost
