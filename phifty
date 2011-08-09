@@ -1,0 +1,14 @@
+#!/usr/bin/env php
+<?php
+require('autoload.php');
+use \Phifty\Commander;
+
+try {
+    $cmd = new Commander();
+    $cmd->run();
+}
+catch( Exception $e ) 
+{
+    echo $e->getMessage();
+}
+?>
