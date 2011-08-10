@@ -1,4 +1,4 @@
 .hg
 comp/etedb/logs/*.log
-webroot/ph_plugins
+webroot/ph/
 cache/
