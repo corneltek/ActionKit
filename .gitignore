@@ -3,3 +3,4 @@ comp/etedb/logs/*.log
 webroot/ph/
 cache/
 coverage/
+.DS_Store
