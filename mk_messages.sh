@@ -6,5 +6,5 @@ find plugins tests dists/EteDB cache core lib -iname "*.php" -exec xgettext --fr
 f=locale/zh_TW/LC_MESSAGES/phifty.po
 msgmerge $f locale/phifty.pot >| tmp.po
 cp tmp.po $f
-open $f
+open -W $f
 po update
