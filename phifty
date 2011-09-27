@@ -2,14 +2,122 @@
 <?php
 namespace bootstrap;
 
-
 function msg($msg) {
-    echo "\033[0;32m" . $msg . "\033[0m\n";
+    echo "\033[0;32m[ " . $msg . " ]\033[0m\n";
 }
 
 function fail($msg) {
     die( "\033[0;31m" . $msg . "\033[0m\n" );
 }
+
+
+
+function init_define_file( $appname )
+{
+    file_put_contents( 'define.php' , <<<"DOC"
+<?php 
+define( 'PH_APP_NAME' , '$appname' );
+define( 'PH_ENVIRONMENT' , 'dev' ); // or 'prod'
+define( 'PH_DEBUG', true);
+define( 'PH_ROOT' , __DIR__ );
+
+DOC
+    );
+}
+
+function init_autoload_file( $phifty_submodule_target )
+{
+    file_put_contents( 'autoload.php' , <<<"DOC"
+<?php
+include( __DIR__ . '/$phifty_submodule_target/autoload.php');
+
+DOC
+    );
+}
+
+
+function init_config_file( $appname ) 
+{
+    file_put_contents( 'config/config.yml' , <<<"END"
+# This configuration file is for Phifty core.
+# Application configuration doesn't inherits from this.
+---
+appname: $appname
+sitename: $appname
+version: 0.1
+dev: 1
+desc: 
+hostname: localhost
+current_user:
+  class: \Phifty\CurrentUser
+  model: \User\Model\User
+php:
+  extension:
+    - apc
+    - gettext
+web:
+  jquery: 1.6.2
+i18n:
+  localedir: locale
+  default: zh_TW
+  lang:
+    - en
+    - fr
+    - ja
+    - zh_TW
+    - zh_CN
+avatar_path: avatar/
+mail:
+  admin: admin@localhost
+  manager: admin@localhost
+  smtp:
+    host: localhost
+  pop3:
+    host: localhost
+view:
+  backend: twig
+  twig:
+  smarty:
+    force_compile: true
+    debugging: false
+    caching: false
+    cache_lifetime: 120
+database:
+  driver: mysqli
+  config:
+    user: root
+    pass: 123123
+    dbname: phifty2
+    host: localhost
+  conn:
+    lazy: 1
+test:
+  domain: phifty.local
+plugins:
+  I18N:
+  AdminUI:
+  SimpleImage:
+# max_size: KB
+#  SB:
+  ImageData:
+    max_size: 600
+    resize:
+      width: 200
+  News:
+  User:
+    allow_signup: 1
+  Product:
+#  ManualOrder:
+  StandardOrder:
+  Contact:
+    to: c9s@Cornelius.local
+    bcc: cornelius.howl@gmail.com
+END
+);
+
+
+}
+
 
 # options for init phifty
 #################################
@@ -26,33 +134,19 @@ if( ! file_exists('define.php') )
         exit(0);
     }
 
-    list( $script, $command, $name ) = $argv;
+    list( $script, $command, $appname ) = $argv;
 
-    msg( "Creating new website $name ..." );
+    msg( "Creating new website $appname ..." );
 
     # create one define.php
     msg("Generating define.php ...");
-    file_put_contents( 'define.php' , <<<"DOC"
-<?php 
-define( 'PH_APP_NAME' , '$name' );
-define( 'PH_ENVIRONMENT' , 'dev' ); // or 'prod'
-define( 'PH_DEBUG', true);
-define( 'PH_ROOT' , __DIR__ );
-
-DOC
-    );
-
+    init_define_file( $appname );
 
 
     # ----------- put autoload file
     if( ! file_exists('autoload.php') ) {
         msg('Generating autoload.php ...');
-        file_put_contents( 'autoload.php' , <<<"DOC"
-<?php
-include( __DIR__ . '/$phifty_submodule_target/autoload.php');
-
-DOC
-);
+        init_autoload_file( $phifty_submodule_target );
     }
     # ----------- put autoload file
 
@@ -62,7 +156,6 @@ DOC
     }
     msg( "Initializing git submodule ... " );
     system("git submodule init");
-
 
     if( $phifty_submodule_branch ) {
         msg( "Adding phifty ($phifty_submodule_branch) to submodule ... " );
@@ -90,10 +183,18 @@ DOC
     msg( "Changing directory back to app ... " );
     chdir("..");
 
+    msg( "Creating default config file" );
+    if( ! file_exists('config' ) )
+        mkdir( 'config' );
+    init_config_file( $appname );
+
+    if( ! file_exists('locale' ) )
+        mkdir( 'locale' );
+
     msg( "Making sure phifty is ok ... " );
     system("php $phifty_submodule_target/phifty");
 
-    msg( "Done!" );
+    msg( "DONE!" );
 }
 
 namespace main;
