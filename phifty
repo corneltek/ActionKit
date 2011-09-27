@@ -1,5 +1,6 @@
 #!/usr/bin/env php
 <?php
+
 if( ! file_exists('define.php') ) 
 {
     if( count($argv) < 3 || $argv[1] != "init" ) 
@@ -18,8 +19,18 @@ if( ! file_exists('define.php') )
 define( 'PH_APP_NAME' , '$name' );
 define( 'PH_ENVIRONMENT' , 'dev' ); // or 'prod'
 define( 'PH_DEBUG', true);
+define( 'PH_ROOT' , __DIR__ );
 
 DOC
+    file_put_contents( 'autoload.php' , <<<"DOC"
+<?php
+include('define.php');
+include( __DIR__ . '/phifty/autoload.php');
+
+DOC
+);
+
+
     );
 
     if ( ! file_exists('.git') ) {
@@ -32,6 +43,12 @@ DOC
     echo "Adding phifty to submodule ...\n";
     system("git submodule add git@git2.corneltek.com:phifty2.git phifty");
 
+    echo "Updating phifty submodule ...\n";
+    system("git submodule update");
+
+    if( ! file_exists("phifty") )
+        die("phifty submodule dir not found...");
+
     echo "Changing directory into phifty ...\n";
     chdir("phifty");
 
@@ -43,8 +60,8 @@ DOC
 
     echo "Changing directory back to app ...\n";
     chdir("..");
-}
 
+}
 
 include('phifty/autoload.php');
 use \Phifty\Commander;
@@ -56,6 +73,7 @@ try {
 # CliException
 catch( Exception $e ) 
 {
-    die($e->getMessage());
+    die(  $e->getMessage()  );
 }
+
 
