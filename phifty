@@ -36,12 +36,12 @@ DOC
 }
 
 function init_app_file( $appname ) {
-    $dir = strtolower($appname) . DIRECTORY_SEPARATOR . 'lib';
-    mkdir( $dir );
-    $path = $dir . DIRECTORY_SEPARATOR . $appname . '.php' ;
+    mkdir( strtolower($appname) . DIRECTORY_SEPARATOR . 'lib' , true );
+    $path = strtolower($appname) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . $appname . '.php' ;
+
     file_put_contents( $path , <<<"END"
 <?php
-
+// Class: $appname
 class $appname extends \\Phifty\\MicroApp
 {
 
