@@ -1,14 +1,61 @@
 #!/usr/bin/env php
 <?php
-require('autoload.php');
+if( ! file_exists('define.php') ) 
+{
+    if( count($argv) < 3 || $argv[1] != "init" ) 
+    {
+        echo "define.php does not exist. please give an application name with init command.\n";
+        echo "Usage: \n";
+        echo "\tphifty init {{AppName}}\n";
+        exit(0);
+    }
+
+    list( $script, $command, $name ) = $argv;
+
+    # create one define.php
+    file_put_contents( 'define.php' , <<<"DOC"
+<?php 
+define( 'PH_APP_NAME' , '$name' );
+define( 'PH_ENVIRONMENT' , 'dev' ); // or 'prod'
+define( 'PH_DEBUG', true);
+
+DOC
+    );
+
+    if ( ! file_exists('.git') ) {
+        echo "Initializing .git repository...\n";
+        system("git init");
+    }
+    echo "Initializing git submodule ...\n";
+    system("git submodule init");
+
+    echo "Adding phifty to submodule ...\n";
+    system("git submodule add git@git2.corneltek.com:phifty2.git phifty");
+
+    echo "Changing directory into phifty ...\n";
+    chdir("phifty");
+
+    echo "Initializing phifty submodules ...\n";
+    system("git submodule init");
+
+    echo "Updating phifty submodules ...\n";
+    system("git submodule update");
+
+    echo "Changing directory back to app ...\n";
+    chdir("..");
+}
+
+
+include('phifty/autoload.php');
 use \Phifty\Commander;
 
 try {
     $cmd = new Commander();
     $cmd->run();
 }
+# CliException
 catch( Exception $e ) 
 {
-    echo $e->getMessage();
+    die($e->getMessage());
 }
-?>
+
