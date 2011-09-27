@@ -36,7 +36,7 @@ DOC
 }
 
 function init_app_file( $appname ) {
-    mkdir( strtolower($appname) . DIRECTORY_SEPARATOR . 'lib' , true );
+    mkdir( strtolower($appname) . DIRECTORY_SEPARATOR . 'lib' , 0777 , true );
     $path = strtolower($appname) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . $appname . '.php' ;
 
     file_put_contents( $path , <<<"END"
@@ -187,22 +187,24 @@ if( ! file_exists('define.php') )
     if( ! file_exists( $phifty_submodule_target ) )
         fail("phifty submodule dir not found...");
 
-    msg( "Changing directory into phifty ... " );
+    msg( "Changing directory into phifty ..." );
     chdir( $phifty_submodule_target );
 
-    msg( "Initializing phifty submodules ... " );
+    msg( "Initializing phifty submodules ..." );
     system("git submodule --quiet init");
 
-    msg( "Updating phifty submodules ... " );
+    msg( "Updating phifty submodules ..." );
     system("git submodule --quiet update");
 
-    msg( "Changing directory back to app ... " );
+    msg( "Changing directory back to app ..." );
     chdir("..");
 
-    msg( "Creating default config file" );
+    msg( "Creating default config file..." );
     if( ! file_exists('config' ) )
         mkdir( 'config' );
     init_config_file( $appname );
+
+    msg( "Creating app lib file..." );
     init_app_file( $appname );
 
     if( ! file_exists('locale' ) )
