@@ -35,6 +35,22 @@ DOC
     );
 }
 
+function init_app_file( $appname ) {
+    $dir = strtolower($appname) . DIRECTORY_SEPARATOR . 'lib';
+    mkdir( $dir );
+    $path = $dir . DIRECTORY_SEPARATOR . $appname . '.php' ;
+    file_put_contents( $path , <<<"END"
+<?php
+
+class $appname extends \\Phifty\\MicroApp
+{
+
+}
+
+END
+);
+}
+
 
 function init_config_file( $appname ) 
 {
@@ -187,6 +203,7 @@ if( ! file_exists('define.php') )
     if( ! file_exists('config' ) )
         mkdir( 'config' );
     init_config_file( $appname );
+    init_app_file( $appname );
 
     if( ! file_exists('locale' ) )
         mkdir( 'locale' );
