@@ -1,6 +1,12 @@
 #!/usr/bin/env php
 <?php
 
+# options for init phifty
+#################################
+$phifty_submodule_branch = "feature-cli-init";
+$phifty_submodule_target = "phifty";
+
+
 if( ! file_exists('define.php') ) 
 {
     if( count($argv) < 3 || $argv[1] != "init" ) 
@@ -13,7 +19,10 @@ if( ! file_exists('define.php') )
 
     list( $script, $command, $name ) = $argv;
 
+    echo "Creating new website $name ...\n";
+
     # create one define.php
+    echo "Generating define.php ...\n";
     file_put_contents( 'define.php' , <<<"DOC"
 <?php 
 define( 'PH_APP_NAME' , '$name' );
@@ -22,16 +31,24 @@ define( 'PH_DEBUG', true);
 define( 'PH_ROOT' , __DIR__ );
 
 DOC
-    file_put_contents( 'autoload.php' , <<<"DOC"
+    );
+
+
+
+    # ----------- put autoload file
+    if( ! file_exists('autoload.php') ) {
+        echo "Generating autoload.php ...\n";
+        file_put_contents( 'autoload.php' , <<<"DOC"
 <?php
 include('define.php');
-include( __DIR__ . '/phifty/autoload.php');
+include( __DIR__ . '/$phifty_submodule_target/autoload.php');
 
 DOC
 );
+    }
+    # ----------- put autoload file
 
 
-    );
 
     if ( ! file_exists('.git') ) {
         echo "Initializing .git repository...\n";
@@ -40,17 +57,23 @@ DOC
     echo "Initializing git submodule ...\n";
     system("git submodule init");
 
-    echo "Adding phifty to submodule ...\n";
-    system("git submodule add git@git2.corneltek.com:phifty2.git phifty");
+
+    if( $phifty_submodule_branch ) {
+        echo "Adding phifty ($phifty_submodule_branch) to submodule ...\n";
+        system("git submodule add --branch $phifty_submodule_branch git@git2.corneltek.com:phifty2.git $phifty_submodule_target");
+    } else {
+        echo "Adding phifty to submodule ...\n";
+        system("git submodule add git@git2.corneltek.com:phifty2.git $phifty_submodule_target");
+    }
 
     echo "Updating phifty submodule ...\n";
     system("git submodule update");
 
-    if( ! file_exists("phifty") )
+    if( ! file_exists( $phifty_submodule_target ) )
         die("phifty submodule dir not found...");
 
     echo "Changing directory into phifty ...\n";
-    chdir("phifty");
+    chdir( $phifty_submodule_target );
 
     echo "Initializing phifty submodules ...\n";
     system("git submodule init");
@@ -61,9 +84,13 @@ DOC
     echo "Changing directory back to app ...\n";
     chdir("..");
 
+    echo "Making sure phifty is ok ...\n";
+    system("php $phifty_submodule_target/phifty");
+
+    echo "Done!";
 }
 
-include('phifty/autoload.php');
+include('autoload.php');
 use \Phifty\Commander;
 
 try {
