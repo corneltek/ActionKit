@@ -1,10 +1,14 @@
 #!/usr/bin/env php
 <?php
-namespace Phifty\Bootstrap;
+namespace bootstrap;
 
 
 function msg($msg) {
     echo "\033[0;32m" . $msg . "\033[0m\n";
+}
+
+function fail($msg) {
+    die( "\033[0;31m" . $msg . "\033[0m\n" );
 }
 
 # options for init phifty
@@ -72,7 +76,7 @@ DOC
     system("git submodule update");
 
     if( ! file_exists( $phifty_submodule_target ) )
-        die("phifty submodule dir not found...");
+        fail("phifty submodule dir not found...");
 
     msg( "Changing directory into phifty ... " );
     chdir( $phifty_submodule_target );
@@ -104,7 +108,7 @@ try {
 # CliException
 catch( Exception $e ) 
 {
-    die(  $e->getMessage()  );
+    \bootstrap\fail(  $e->getMessage()  );
 }
 
 
