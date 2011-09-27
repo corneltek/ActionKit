@@ -4,7 +4,7 @@ namespace Phifty\Bootstrap;
 
 
 function msg($msg) {
-    echo "\033[0;31m" . $msg . "\033[0m\n";
+    echo "\033[0;32m" . $msg . "\033[0m\n";
 }
 
 # options for init phifty
