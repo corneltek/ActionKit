@@ -7,6 +7,8 @@
 - Change plugin config setter, getter: {{plugin}}::one()->config( "key" );
   - Add {{plugin}}::one()->configHash
   - Since static variable doesn't work for subclasses...
+- Use Exporter to export vars to template
+	- remove phifty scope.
 
 0.3
 	* change validParis label => key   to key => lable.
