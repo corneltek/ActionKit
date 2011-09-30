@@ -1,8 +1,9 @@
 <?php
 
 namespace Phifty\Widget;
+use Phifty\Widget;
 
-class Galleria
+class Galleria extends Widget
 {
     function js() 
     {
@@ -23,8 +24,5 @@ class Galleria
 
     }
 }
-
-
-
 
 
