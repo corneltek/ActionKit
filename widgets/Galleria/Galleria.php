@@ -25,7 +25,7 @@ class Galleria extends Widget
 		$this->images[] = array( 'path' => $path, 'attrs' => $attrs );
 	}
 
-    function defaultTemplate()
+    function template()
     {
 		return <<<"HTML"
 
