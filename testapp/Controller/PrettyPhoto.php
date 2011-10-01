@@ -8,7 +8,7 @@ class PrettyPhoto extends \Phifty\Controller
 {
     function run()
     {
-
+        return $this->render( 'pretty_photo.html' );
     }
 }
 
