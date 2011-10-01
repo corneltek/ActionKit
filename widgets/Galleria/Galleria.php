@@ -1,6 +1,7 @@
 <?php
 
-namespace Phifty\Widget;
+namespace Phifty\Widgets;
+
 use Phifty\Widget;
 
 class Galleria extends Widget
@@ -27,19 +28,21 @@ class Galleria extends Widget
     function defaultTemplate()
     {
 		return <<<"HTML"
+
 <script type="text/javascript">
 jQuery(document.body).ready(function() {
 	Galleria.loadTheme('{{ Widget.baseUrl }}/themes/twelve/galleria.twelve.min.js');
 	jQuery('#gallery').height( 500 );
 	jQuery('#gallery').galleria();
-
 });
 </script>
+
 <div id="gallery">
 {% for image in Widget.images %}
 	<img src="{{ image.path }}"/>
 {% endfor %}
 </div>
+
 HTML;
 
     }
