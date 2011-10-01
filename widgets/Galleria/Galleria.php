@@ -29,19 +29,21 @@ class Galleria extends Widget
     {
 		return <<<"HTML"
 
-<script type="text/javascript">
-jQuery(document.body).ready(function() {
-	Galleria.loadTheme('{{ Widget.baseUrl }}/themes/twelve/galleria.twelve.min.js');
-	jQuery('#gallery').height( 500 );
-	jQuery('#gallery').galleria();
-});
-</script>
+	<script type="text/javascript">
+	jQuery(document.body).ready(function() {
+		Galleria.loadTheme('{{ Widget.baseUrl }}/themes/twelve/galleria.twelve.min.js');
+		jQuery('#gallery').height( {{ Widget.height }} );
+		jQuery('#gallery').galleria();   
+	}
+	);
+	</script>
 
-<div id="gallery">
-{% for image in Widget.images %}
-	<img src="{{ image.path }}"/>
-{% endfor %}
-</div>
+	<div id="gallery">
+	{% for image in Widget.images %}
+		<img src="{{ image.path }}"/>
+	{% endfor %}
+	</div>
+
 
 HTML;
 
