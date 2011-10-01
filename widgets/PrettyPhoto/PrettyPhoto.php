@@ -46,7 +46,8 @@ ul.prettyphoto li {
     {% for item in Widget.images %}
         <li>
             <a href="{{ item.image }}" 
-                rel="{{ item.rel | default('prettyPhoto[gallery]') }}"
+                class="prettyphoto"
+                rel="prettyPhoto[{{ item.set|default('gallery') }}]"
                 {% if item.caption %}  title="{{ item.caption }}"  {% endif %}
                 ><img src="{{ item.thumb | default(item.image) }}" 
                     {% if item.width %}   width="{{ item.width }}"   {% endif %}
@@ -57,14 +58,15 @@ ul.prettyphoto li {
     {% endfor %}
 </ul>
 <script type="text/javascript">
-jQuery(".prettyphoto a[rel^='prettyPhoto']").prettyPhoto({
+jQuery("a[rel^='prettyPhoto'].prettyphoto").prettyPhoto({
     animation_speed:'normal',
     theme:'light_rounded',
     slideshow:3000, 
     social_tools: false,
     autoplay_slideshow: false,
     autoplay: false,
-    allow_resize: false
+    allow_resize: false,
+    overlay_gallery: false
 });
 </script>
 
