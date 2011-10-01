@@ -44,7 +44,6 @@ class Galleria extends Widget
 	{% endfor %}
 	</div>
 
-
 HTML;
 
     }

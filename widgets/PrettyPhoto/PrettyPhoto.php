@@ -17,7 +17,9 @@ class PrettyPhoto extends Widget
 
 	function template()
 	{
+		return <<<"HTML"
 
+HTML;
 	}
 
 
