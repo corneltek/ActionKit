@@ -17,7 +17,6 @@ function init_define_file( $appname )
     file_put_contents( 'define.php' , <<<"DOC"
 <?php 
 define( 'PH_APP_NAME' , '$appname' );
-define( 'PH_ENVIRONMENT' , 'dev' ); // or 'prod'
 define( 'PH_DEBUG', true);
 define( 'PH_ROOT' , __DIR__ );
 
