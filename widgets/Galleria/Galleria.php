@@ -10,6 +10,16 @@ class Galleria extends Widget
 	public $height = 400;
 	public $images = array();
 
+    function height( $px )
+    {
+        $this->height = $px;
+    }
+
+    function width( $px )
+    {
+        $this->width = $px;
+    }
+
     function js() 
     {
         return array( "galleria-1.2.5.js" );

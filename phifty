@@ -17,7 +17,6 @@ function init_define_file( $appname )
     file_put_contents( 'define.php' , <<<"DOC"
 <?php 
 define( 'PH_APP_NAME' , '$appname' );
-define( 'PH_ENVIRONMENT' , 'dev' ); // or 'prod'
 define( 'PH_DEBUG', true);
 define( 'PH_ROOT' , __DIR__ );
 
@@ -137,7 +136,7 @@ END
 
 # options for init phifty
 #################################
-$phifty_submodule_branch = "feature-cli-init";
+$phifty_submodule_branch = "master";
 $phifty_submodule_target = "phifty";
 
 if( ! file_exists('define.php') ) 
@@ -150,7 +149,13 @@ if( ! file_exists('define.php') )
         exit(0);
     }
 
-    list( $script, $command, $appname ) = $argv;
+    $script = $argv[0];
+    $command = $argv[1];
+    $appname = $argv[2];
+
+    if( isset($argv[3]) ) {
+        $phifty_submodule_branch = $argv[3];
+    }
 
     msg( "Creating new website $appname ..." );
 

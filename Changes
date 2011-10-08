@@ -3,12 +3,21 @@
 
 三  9/28 13:50:17 2011
 
-* feature-iconnews branch
+### Feature-iconnews branch
 - Change plugin config setter, getter: {{plugin}}::one()->config( "key" );
   - Add {{plugin}}::one()->configHash
   - Since static variable doesn't work for subclasses...
 - Use Exporter to export vars to template
 	- remove phifty scope.
+
+### Config improvement
+- load config/app.yml and config/app_site.yml first.
+
+    appname => app_id
+    sitename => app_name
+    
+- then load config/dev.yml or config/prod.yml or config/testing.yml
+
 
 0.3
 	* change validParis label => key   to key => lable.

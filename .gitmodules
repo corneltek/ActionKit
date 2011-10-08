@@ -7,3 +7,6 @@
 [submodule "dists/Twig-extensions"]
 	path = dists/Twig-extensions
 	url = git://github.com/fabpot/Twig-extensions.git
+[submodule "dists/fabpot-yaml"]
+	path = dists/fabpot-yaml
+	url = https://github.com/fabpot/yaml.git
