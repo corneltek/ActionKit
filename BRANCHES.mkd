@@ -1,0 +1,15 @@
+
+## Current branches
+
+master        - release branch
+alpha         - release_candidate/testing branch
+i18n          - locale improvement
+html5uploader - html5uploader
+swiftmail     - swifmail integration
+adminui       - adminui improvement
+
+## Prefix
+
+`website-` - website branch
+`feature-` - feature branch
+`bug-` - bug branch
