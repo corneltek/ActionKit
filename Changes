@@ -9,6 +9,11 @@
   - Since static variable doesn't work for subclasses...
 - Use Exporter to export vars to template
 	- remove phifty scope.
+- Add locale command to merge po files from framework.
+- Import Twig Text extension.
+- Fix AdminUI menu, div blocks can't be show in IE.
+- Add User CRUD Pages, Password Change, Edit, Update, Create.
+- Improve UniversalClassLoader.
 
 ### Config improvement
 - load config/app.yml and config/app_site.yml first.
