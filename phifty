@@ -51,16 +51,21 @@ END
 }
 
 
-function init_config_file( $appname ) 
+function init_config_file( $appid, $appname ) 
 {
-    file_put_contents( 'config/config.yml' , <<<"END"
+    file_put_contents( 'config/app.yml' , <<<"END"
+---
+app_name: $appname
+app_id: $appid
+development: true
+environment: dev
+END
+);
+    file_put_contents( 'config/dev.yml' , <<<"END"
 # This configuration file is for Phifty core.
 # Application configuration doesn't inherits from this.
 ---
-appname: $appname
-sitename: $appname
 version: 0.1
-dev: 1
 desc: 
 hostname: localhost
 current_user:
@@ -111,22 +116,15 @@ test:
 plugins:
   I18N:
   AdminUI:
+  User:
+    allow_signup: 1
   SimpleImage:
-# max_size: KB
-#  SB:
   ImageData:
     max_size: 600
     resize:
       width: 200
   News:
-  User:
-    allow_signup: 1
   Product:
-#  ManualOrder:
-  StandardOrder:
-  Contact:
-    to: c9s@Cornelius.local
-    bcc: cornelius.howl@gmail.com
 END
 );
 
@@ -152,6 +150,7 @@ if( ! file_exists('define.php') )
     $script = $argv[0];
     $command = $argv[1];
     $appname = $argv[2];
+    $appid   = strtolower( $appname );
 
     if( isset($argv[3]) ) {
         $phifty_submodule_branch = $argv[3];
@@ -207,7 +206,7 @@ if( ! file_exists('define.php') )
     msg( "Creating default config file..." );
     if( ! file_exists('config' ) )
         mkdir( 'config' );
-    init_config_file( $appname );
+    init_config_file( $appid, $appname );
 
     msg( "Creating app lib file..." );
     init_app_file( $appname );
