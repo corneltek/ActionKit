@@ -136,6 +136,7 @@ END
 #################################
 $phifty_submodule_branch = "master";
 $phifty_submodule_target = "phifty";
+$phifty_submodule_source = 'git@git2.corneltek.com:phifty2.git';
 
 if( ! file_exists('define.php') ) 
 {
@@ -162,7 +163,6 @@ if( ! file_exists('define.php') )
     msg("Generating define.php ...");
     init_define_file( $appname );
 
-
     # ----------- put autoload file
     if( ! file_exists('autoload.php') ) {
         msg('Generating autoload.php ...');
@@ -170,19 +170,28 @@ if( ! file_exists('define.php') )
     }
     # ----------- put autoload file
 
+
+    msg( "Creating default config file..." );
+    if( ! file_exists('config' ) )
+        mkdir( 'config' );
+    init_config_file( $appid, $appname );
+
     if ( ! file_exists('.git') ) {
         msg( "Initializing .git repository... ");
         system("git init");
+        # system("git add config");
+        # system("git commit config -m 'Add config file.' ");
     }
+
     msg( "Initializing git submodule ... " );
     system("git submodule --quiet init");
 
-    if( $phifty_submodule_branch ) {
+    if( $phifty_submodule_branch != 'master' ) {
         msg( "Adding phifty ($phifty_submodule_branch) to submodule ... " );
-        system("git submodule add --branch $phifty_submodule_branch git@git2.corneltek.com:phifty2.git $phifty_submodule_target");
+        system("git submodule add --branch $phifty_submodule_branch $phifty_submodule_source $phifty_submodule_target");
     } else {
         msg( "Adding phifty to submodule ... " );
-        system("git submodule add git@git2.corneltek.com:phifty2.git $phifty_submodule_target");
+        system("git submodule add $phifty_submodule_source $phifty_submodule_target");
     }
 
     msg( "Updating phifty submodule ... " );
@@ -203,10 +212,6 @@ if( ! file_exists('define.php') )
     msg( "Changing directory back to app ..." );
     chdir("..");
 
-    msg( "Creating default config file..." );
-    if( ! file_exists('config' ) )
-        mkdir( 'config' );
-    init_config_file( $appid, $appname );
 
     msg( "Creating app lib file..." );
     init_app_file( $appname );
