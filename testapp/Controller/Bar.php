@@ -8,7 +8,7 @@ class Bar extends \Phifty\Controller
 {
     function run()
     {
-        $this->render('default.html');
+        return $this->render('testapp/template/default.html');
     }
 }
 
