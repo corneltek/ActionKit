@@ -17,9 +17,7 @@ function init_define_file( $appname )
     file_put_contents( 'define.php' , <<<"DOC"
 <?php 
 define( 'PH_APP_NAME' , '$appname' );
-define( 'PH_DEBUG', true);
 define( 'PH_APP_ROOT' , __DIR__ );
-
 DOC
     );
 }
@@ -28,8 +26,8 @@ function init_autoload_file( $phifty_submodule_target )
 {
     file_put_contents( 'autoload.php' , <<<"DOC"
 <?php
+require('define.php');
 include( __DIR__ . '/$phifty_submodule_target/autoload.php');
-
 DOC
     );
 }
@@ -107,12 +105,12 @@ database:
   config:
     user: root
     pass: 123123
-    dbname: phifty2
+    dbname: lart_$appid
     host: localhost
   conn:
     lazy: 1
 test:
-  domain: phifty.local
+  domain: $appid.local
 plugins:
   I18N:
   AdminUI:
