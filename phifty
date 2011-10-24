@@ -136,7 +136,7 @@ END
 #################################
 $phifty_submodule_branch = "master";
 $phifty_submodule_target = "phifty";
-$phifty_submodule_source = 'git@git2.corneltek.com:phifty2.git';
+$phifty_submodule_source = 'git@git.corneltek.com:phifty.git';
 
 if( ! file_exists('define.php') ) 
 {
