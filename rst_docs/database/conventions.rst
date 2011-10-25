@@ -2,8 +2,8 @@ Database Conventions
 ====================
 
 
-Column Naming
--------------
+Table Naming
+------------
 
 Phifty framework uses EteDB ORM to generate tables dynamically, the table name
 is transformed from Model class name by ``CakePHP\Inflector``.
@@ -55,5 +55,18 @@ the table name will be ``menu_items``.
 +------------------------+--------------------------+
 | ``Comment``            | ``comments``             |
 +------------------------+--------------------------+
+
+
+Column naming
+-------------
+
+Column names may only contain alphanumeric characters,
+Numbers are permitted, but are discouraged in most cases.
+
+* Any model should have a primary key (id) with ``auto_increment``, ``unsigned
+  int`` and ``primary key`` attribute. This is generated automatically from 
+  EteDB ORM (Corneltek).
+
+* A column, which has a reference to others, should have a suffix of the primary key of the referenced table.
 
 
