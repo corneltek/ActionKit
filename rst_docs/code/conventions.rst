@@ -17,6 +17,7 @@ or "single quote" should always be used to demarcate the string:
 
 .. code-block:: php
 
+    <?php
     $a = 'Example String';
 
 String Literals Containing Apostrophes When a literal string itself
@@ -27,6 +28,7 @@ statements:
 
 .. code-block:: php
 
+    <?php
     $sql = "SELECT `id`, `name` from `people` "
         . "WHERE `name`='Fred' OR `name`='Susan'";
 
@@ -38,6 +40,7 @@ Variable substitution is permitted using either of these forms:
 
 .. code-block:: php
 
+    <?php
     $greeting = "Hello $name, welcome back!";
     $greeting = "Hello {$name}, welcome back!";
 
@@ -45,6 +48,7 @@ For consistency, this form is not permitted:
 
 .. code-block:: php
 
+    <?php
     $greeting = "Hello ${name}, welcome back!";
 
 Array
@@ -54,6 +58,7 @@ Do not write the array declaration in one line if it's too long (more than 80 ch
 
 .. code-block:: php
 
+    <?php
     $sampleArray = array( 1, 2, 3, 'String', $a, $b, $c, 56.44, $d, 500 );
 
 You should declare with indentation and new line:
@@ -225,6 +230,7 @@ must be indented using four spaces.
 
 .. code-block:: php
 
+    <?php
     if ($a != 2) {
         $a = 2;
     }
@@ -232,8 +238,9 @@ must be indented using four spaces.
 Switch
 ~~~~~~
 
-.. code-block:: 
+.. code-block:: php
 
+    <?php
     switch ($numPeople) {
         case 1:
             break;
@@ -253,6 +260,7 @@ Every file that contains PHP code must have a docblock at the top of the file th
 
 .. code-block:: php
 
+    <?php
     /**
     * Short description for file
     *
@@ -270,4 +278,6 @@ Every file that contains PHP code must have a docblock at the top of the file th
     * @since      File available since Release 1.5.0
     */
 
+The **@category** annotation must have a value of "Corneltek".
+  
 

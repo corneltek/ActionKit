@@ -10,7 +10,9 @@ Development
 .. toctree::
     :maxdepth: 1
 
-    code/standards
-    code/conventions
-    about
-    readme
+    code/standards.rst
+    code/conventions.rst
+    database/conventions.rst
+    about.rst
+
+.. # readme.rst
