@@ -128,3 +128,7 @@ doctest:
 	$(SPHINXBUILD) -b doctest $(ALLSPHINXOPTS) $(BUILDDIR)/doctest
 	@echo "Testing of doctests in the sources finished, look at the " \
 	      "results in $(BUILDDIR)/doctest/output.txt."
+
+update:
+	@echo "Adding rst files to git"
+	git add -v $(find . -type f -iname "*.rst")
