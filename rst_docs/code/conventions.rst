@@ -245,3 +245,29 @@ Switch
             break;
     }
 
+
+Files
+-----
+
+Every file that contains PHP code must have a docblock at the top of the file that contains these phpDocumentor tags at a minimum:
+
+.. code-block:: php
+
+    /**
+    * Short description for file
+    *
+    * Long description for file (if any)...
+    *
+    * LICENSE: Some license information
+    *
+    * @category   Corneltek
+    * @package    Phifty
+    * @subpackage Sample
+    * @copyright  Copyright (c) 2010 Corneltek Inc. (http://corneltek.com)
+    * @license    http://corneltek.com/license   MIT License
+    * @version    $Id:$
+    * @link       http://corneltek.com/
+    * @since      File available since Release 1.5.0
+    */
+
+

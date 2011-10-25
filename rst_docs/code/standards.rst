@@ -34,7 +34,10 @@ example containing most features described below:
     /*
      * This file is part of the Corneltek package.
      *
-     * (c) Yo-An Lin <pedro@corneltek.com>
+     * @category   Corneltek
+     * @package    Acme
+     * @copyright  Copyright (c) 2010 Corneltek Inc. (http://corneltek.com)
+     * @author     Yo-An Lin <pedro@corneltek.com>
      *
      * For the full copyright and license information, please view the LICENSE
      * file that was distributed with this source code.
