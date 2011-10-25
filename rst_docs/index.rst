@@ -2,16 +2,7 @@
 Phifty Documentation
 ***********************
 
-
 .. rubric:: Everything you need to know about Phifty.
-
-
-
-Getting Started
-===============
-
-
-
 
 Development
 ===============
@@ -20,4 +11,6 @@ Development
     :maxdepth: 1
 
     code/standards
+    code/conventions
     about
+    readme

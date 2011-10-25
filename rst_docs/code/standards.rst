@@ -164,8 +164,6 @@ Line termination follows the Unix text file convention. Lines must end with a si
 
 Note: Do not use carriage returns (CR) as is the convention in Apple OS's (0x0D) or the carriage return - linefeed combination (CRLF) as is standard for the Windows OS (0x0D, 0x0A).
 
-
-
 Naming Conventions
 ------------------
 
@@ -183,26 +181,8 @@ Simple Rules
 
 * Use alphanumeric characters and underscores for file names;
 
-* Don't forget to look at the more verbose :doc:`conventions` document for
-  more subjective naming considerations.
-
-
-Class
-~~~~~
-
-Class names may only contain alphanumeric characters. Numbers are permitted in
-class names but are discouraged in most cases. 
-
-.. code-block:: php
-
-    <?php
-
-    class ClassLoader {
-
-
-    }
-
-    ?>
+Don't forget to look at the more verbose :doc:`conventions` document for
+more subjective naming considerations.
 
 
 Documentation

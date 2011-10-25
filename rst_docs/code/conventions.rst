@@ -7,6 +7,128 @@ coding standards and conventions used in the core framework to make it more
 consistent and predictable. You are encouraged to follow them in your own
 code, but you don't need to.
 
+Strings
+-------
+
+When a string is literal (contains no variable substitutions), the apostrophe
+or "single quote" should always be used to demarcate the string:
+
+.. code-block:: php
+
+    $a = 'Example String';
+
+String Literals Containing Apostrophes When a literal string itself
+contains apostrophes, it is permitted to demarcate the string with
+quotation marks or "double quotes". This is especially useful for SQL
+statements:
+
+
+.. code-block:: php
+
+    $sql = "SELECT `id`, `name` from `people` "
+        . "WHERE `name`='Fred' OR `name`='Susan'";
+
+
+Variable Substitution
+---------------------
+
+Variable substitution is permitted using either of these forms:
+
+.. code-block:: php
+
+    $greeting = "Hello $name, welcome back!";
+    $greeting = "Hello {$name}, welcome back!";
+
+For consistency, this form is not permitted:
+
+.. code-block:: php
+
+    $greeting = "Hello ${name}, welcome back!";
+
+Array
+-----
+
+Do not write the array declaration in one line if it's too long (more than 80 chars)
+
+.. code-block:: php
+
+    $sampleArray = array( 1, 2, 3, 'Studio', $a, $b, $c, 56.44, $d, 500 );
+
+You should declare with indentation and new line:
+
+.. code-block:: php
+
+    $sampleArray = array(
+        1, 2, 3, 'Studio',
+        $a, $b, $c,
+        56.44, $d, 500,
+    );
+
+
+Associative Arrays
+------------------
+When declaring associative arrays with the Array construct, breaking the
+statement into multiple lines is encouraged.
+
+.. code-block:: php
+
+    $sampleArray = array('firstKey'  => 'firstValue',
+                         'secondKey' => 'secondValue');
+
+
+Class
+-----
+
+Class names may only contain alphanumeric characters. Numbers are permitted in
+class names but are discouraged in most cases. 
+
+An example of acceptable class:
+
+.. code-block:: php
+
+    /**
+    * Documentation Block Here
+    */
+    class SampleClass
+    {
+        // all contents of class
+        // must be indented four spaces
+    }
+
+Classes that extend other classes or which implement interfaces should declare their dependencies on the same line when possible.
+
+.. code-block:: php
+
+    class SampleClass extends FooAbstract implements BarInterface
+    {
+    }
+
+If the class implements multiple interfaces and the declaration exceeds the
+maximum line length, break after each comma separating the interfaces, and
+indent the interface names such that they align.
+
+.. code-block:: php
+
+    class SampleClass
+        implements BarInterface,
+                BazInterface
+    {
+
+    }
+
+Class name with namespace, namespace should be in CamelCase, and with captical case.
+
+.. code-block:: php
+
+    <?php
+
+    namespace YourApp;
+
+    class ClassLoader {
+
+    }
+
+
 Method Names
 ------------
 

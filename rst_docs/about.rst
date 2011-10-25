@@ -2,7 +2,6 @@
 About
 =====
 
-
 This documentation is written in reStructuredText (rst) and is built by sphinx_
 (from python)
 
