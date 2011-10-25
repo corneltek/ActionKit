@@ -131,4 +131,4 @@ doctest:
 
 update:
 	@echo "Adding rst files to git"
-	git add -v $(find . -type f -iname "*.rst")
+	@git add -v $$(find . -type f -iname "*.rst")
