@@ -2,10 +2,12 @@ Conventions
 ===========
 
 The :doc:`standards` document describes the coding standards for the Phifty
-projects and the internal and third-party bundles. This document describes
-coding standards and conventions used in the core framework to make it more
-consistent and predictable. You are encouraged to follow them in your own
-code, but you don't need to.
+projects and the internal and third-party bundles. 
+
+This document describes coding standards and conventions used in the core
+framework to make it more consistent and predictable.
+
+You are encouraged to follow them in your own code, but you don't need to.
 
 Strings
 -------
@@ -52,14 +54,14 @@ Do not write the array declaration in one line if it's too long (more than 80 ch
 
 .. code-block:: php
 
-    $sampleArray = array( 1, 2, 3, 'Studio', $a, $b, $c, 56.44, $d, 500 );
+    $sampleArray = array( 1, 2, 3, 'String', $a, $b, $c, 56.44, $d, 500 );
 
 You should declare with indentation and new line:
 
 .. code-block:: php
 
     $sampleArray = array(
-        1, 2, 3, 'Studio',
+        1, 2, 3, 'String',
         $a, $b, $c,
         56.44, $d, 500,
     );
@@ -127,6 +129,9 @@ Class name with namespace, namespace should be in CamelCase, and with captical c
     class ClassLoader {
 
     }
+
+
+
 
 
 Method Names
@@ -198,3 +203,45 @@ must be used instead (where ``XXX`` is the name of the related thing):
     difference: "setXXX" may replace, or add new elements to the relation. 
     "replaceXXX" on the other hand is specifically forbidden to add new 
     elements, but most throw an exception in these cases.
+
+
+Controll Statements
+-------------------
+
+if and else if
+~~~~~~~~~~~~~~
+
+Control statements based on the if and elseif constructs must have a single
+space before the opening parenthesis of the conditional and a single space
+after the closing parenthesis.
+
+Within the conditional statements between the parentheses, operators must be
+separated by spaces for readability. Inner parentheses are encouraged to
+improve logical grouping for larger conditional expressions.
+
+The opening brace is written on the same line as the conditional statement. The
+closing brace is always written on its own line. Any content within the braces
+must be indented using four spaces.
+
+.. code-block:: php
+
+    if ($a != 2) {
+        $a = 2;
+    }
+
+Switch
+~~~~~~
+
+.. code-block:: 
+
+    switch ($numPeople) {
+        case 1:
+            break;
+    
+        case 2:
+            break;
+    
+        default:
+            break;
+    }
+
