@@ -67,6 +67,32 @@ Numbers are permitted, but are discouraged in most cases.
   int`` and ``primary key`` attribute. This is generated automatically from 
   EteDB ORM (Corneltek).
 
-* A column, which has a reference to others, should have a suffix of the primary key of the referenced table.
+* A column has a reference to others, should have a suffix of the primary key of the referenced table.
 
+
+Column with reference
+~~~~~~~~~~~~~~~~~~~~~
+
+A product model which has a reference to category, should have colum named ``category_id`` in its model schema.
+
+That is,
+
+.. code-block:: php
+
+    <?php
+
+    class Product extends Model {
+        function schema() {
+            $this->column('category_id')->refer('Category');
+        }
+    }
+
+Then the generated SQL:
+
+.. code-block:: sql
+
+    CREATE TABLE products (
+        id int unsigned primary key auto_increment,
+        category_id int unsigned reference categories
+    );
 
