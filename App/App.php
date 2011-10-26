@@ -1,6 +1,6 @@
 <?php
 
-class TestApp extends \Phifty\MicroApp
+class App extends \Phifty\MicroApp
 {
     function init()
     {
