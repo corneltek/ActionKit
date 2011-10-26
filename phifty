@@ -116,7 +116,6 @@ plugins:
   AdminUI:
   User:
     allow_signup: 1
-  SimpleImage:
   ImageData:
     max_size: 600
     resize:
