@@ -13,7 +13,7 @@ class GalleriaDemo extends \Phifty\Controller
 		$widget->addImage( $widget->baseUrl() . '/images/1.jpg' );
 		$widget->addImage( $widget->baseUrl() . '/images/2.jpg' );
 		$widget->addImage( $widget->baseUrl() . '/images/3.jpg' );
-        return $this->render( 'testapp/template/galleria_demo.html' , array( 'Galleria' => $widget ) );
+        return $this->render( 'App/template/galleria_demo.html' , array( 'Galleria' => $widget ) );
     }
 }
 
