@@ -15,4 +15,5 @@ class jQueryTools extends Widget
             'scrollable/scrollable.navigator.js',
         );
 	}
+    function template() {  }
 }

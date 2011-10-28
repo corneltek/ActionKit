@@ -256,8 +256,14 @@
 		}
 		
 		// next/prev buttons
-		var prev = find(root, conf.prev).click(function(e) { e.stopPropagation(); self.prev(); }),
-			 next = find(root, conf.next).click(function(e) { e.stopPropagation(); self.next(); }); 
+		var prev = find(root, conf.prev).click(function(e) { 
+                e.stopPropagation(); 
+                self.prev(); 
+            }),
+			 next = find(root, conf.next).click(function(e) { 
+                 e.stopPropagation(); 
+                 self.next();
+            }); 
 		
 		if (!conf.circular) {
 			self.onBeforeSeek(function(e, i) {
