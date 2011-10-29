@@ -6,3 +6,4 @@ cache/
 coverage/
 .DS_Store
 tests/tmp/
+rst_docs/_build/
