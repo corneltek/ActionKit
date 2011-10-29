@@ -1,7 +1,6 @@
 
 # Changes
-#
-#
+
 五 10/28 19:30:28 2011
 
 - Change plugin paths:  core to Core/,  core/lib/Core.php Core/Core.php
