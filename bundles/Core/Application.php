@@ -1,7 +1,7 @@
 <?php
 namespace Core;
 
-class Core extends \Phifty\MicroApp
+class Application extends \Phifty\MicroApp
 {
     function init()
     {
