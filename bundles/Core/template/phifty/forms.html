@@ -1,0 +1,67 @@
+{# 
+vim:filetype=jinja: 
+#}
+
+{% macro file(name) %}
+    <input type="file" class="file" name="{{ name }}"/>
+{% endmacro %}
+
+{% macro button_link(label,href) %}
+    <input type="button" class="button link" value="{% trans label %}" onclick=" window.location.href = '{{ href }}'; "/>
+{% endmacro %}
+
+{% macro action(class) %}
+    <input type="hidden" name="action" value="{{class|e}}"/>
+{% endmacro %}
+
+{% macro hidden(name,value) %}
+    <input type="hidden" name="{{ name }}" value="{{ value }}"/>
+{% endmacro %}
+
+{% macro input(name, value, type, size) %}
+    <input type="{{ type|default('text') }}" name="{{ name }}" value="{{ value|e }}" size="{{ size|default(20) }}" />
+{% endmacro %}
+
+{% macro label( label ) %}
+    {% if label %}
+    <div class="label"> {% trans label %} </div>
+    {% else %}
+    <div class="label"> </div>
+    {% endif %}
+{% endmacro %}
+
+{% macro textarea( name, value, rows, cols ) %}
+    <textarea class="mceEditor" name="{{ name }}" rows="{{ rows|default(10) }}" cols="{{ cols|default(40) }}">{{ value|e }}</textarea>
+{% endmacro %}
+
+{% macro select( name, options, selected ) %}
+    <select name="{{ name }}">
+        {% for key,name in options %}
+            {% if key is sameas(selected) %}
+                <option value="{{ key }}" selected>{{ name }}</option>
+            {% else %}
+                <option value="{{ key }}">{{ name }}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
+{% endmacro %}
+
+
+
+
+{# 
+---- render fields ---- 
+    forms.field( label , type , name , 1 )
+#}
+{% macro field( label, type, name, value, vertical, opts ) %}
+    {% if vertical %} <div class="v-field"> {% else %} <div class="field"> {% endif %}
+        <div class="label">{% trans label %}:</div>
+        <div class="input">
+            <input class="{{type}}" type="{{ type }}" name="{{ name }}" value="{{ value }}"
+                {% for k,v in opts %}
+                    {{k}}="{{v}}"
+                {% endfor %}/>
+        </div>
+    </div>
+{% endmacro %}
+

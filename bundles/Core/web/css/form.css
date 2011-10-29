@@ -1,0 +1,178 @@
+
+/* ====================
+ * form widgets
+ * ====================
+ * */
+
+.field {  
+    margin-top: 5px;
+}
+
+.field .label { 
+    width: 70px;
+    margin: 4px;
+    float: left; 
+    text-align: right;
+    font-size: 16px;
+    padding: 1px 3px;
+    color: #666;
+    text-shadow: #fff 1px 1px;
+}
+
+
+.field .input { 
+    float: left;
+}
+
+.field label.checkbox {
+    width: 130px;
+    margin: 10px 4px;
+    font-size: 14px;
+    padding: 1px 3px;
+    color: #666;
+    text-shadow: #fff 1px 1px;
+}
+
+
+
+/* vertical field */
+.v-field {
+    margin-top: 12px;
+}
+
+.v-field .label { 
+/*     letter-spacing: 0.1em; */
+/*     margin-left: 0px; */
+    font-size: 16px;
+    padding: 1px 3px;
+    color: #666;
+    text-shadow: #fff 1px 1px;
+}
+.v-field .desc { 
+    margin-top: 6px;
+    margin-right: 10px;
+    padding: 3px;
+    color: #666;
+    text-shadow: #fff 1px 1px;
+    background: #eee;
+}
+
+
+
+
+
+
+
+/* input widget style */
+.input input {
+    font-size: 14px;
+    padding: 4px 2px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    text-shadow: #fff 1px 1px;
+    font-family: Tahoma, sans-serif;
+}
+
+.input input:focus {
+    background-color: #ccc;
+    text-shadow: #fff 1px 1px;
+}
+
+.input input.text,
+.input input.password,
+.input input[type="text"],
+.input input[type="password"] { 
+    background-color: #fff;
+}
+
+
+
+
+
+.section input.text:focus {
+    color: #000;
+    background: #eee;
+    background: -webkit-gradient(linear, 0 0, 0 bottom, from(#eee), to(#fff));
+    background: -webkit-linear-gradient(#eee, #fff);
+    background: -moz-linear-gradient(#eee, #fff);
+    background: -ms-linear-gradient(#eee, #fff);
+    background: -o-linear-gradient(#eee, #fff);
+    background: linear-gradient(#eee, #fff);
+    -pie-background: linear-gradient(#eee, #fff);
+    text-shadow: #fff 1px 1px;
+/*     behavior: url(/ph/core/css/pie/PIE.htc); */
+}
+
+
+.button-group {
+    margin-top: 10px;
+    text-align: right;
+}
+
+input.button {
+    color: #000;
+    background-color: #f3f3f3;
+    border: 1px solid #ccc;
+    padding: 5px 8px;
+
+    font-size: 14px;
+
+    background: #fff;
+    background: -webkit-gradient(linear, 0 0, 0 bottom, from(#fff), to(#ccc));
+    background: -webkit-linear-gradient(#fff, #ccc);
+    background: -moz-linear-gradient(#fff, #ccc);
+    background: -ms-linear-gradient(#fff, #ccc);
+    background: -o-linear-gradient(#fff, #ccc);
+    background: linear-gradient(#fff, #ccc);
+    -pie-background: linear-gradient(#fff, #ccc);
+
+    border-radius: 5px;
+    text-shadow: #fff 1px 1px;
+    box-shadow: #888 0px 0px 5px;
+
+/*     behavior: url(/ph/core/css/pie/PIE.htc); */
+}
+
+input.button:hover {
+    background: #fff;
+    background: -webkit-gradient(linear, 0 0, 0 bottom, from(#fff), to(#eee));
+    background: -webkit-linear-gradient(#fff, #eee);
+    background: -moz-linear-gradient(#fff, #eee);
+    background: -ms-linear-gradient(#fff, #eee);
+    background: -o-linear-gradient(#fff, #eee);
+    background: linear-gradient(#fff, #eee);
+    -pie-background: linear-gradient(#fff, #eee);
+    /* behavior: url(css/pie/PIE.htc); */
+}
+
+select {
+    border: 1px solid #ccc;;
+    border-radius: 0px;
+    background: #fff;
+    font-size: 12px;
+}
+
+input.button.create,
+input.button.submit {
+    font-weight: bold;
+}
+
+input.button.cancel {
+
+}
+
+input.button.delete {
+    color: red;
+}
+
+textarea {
+    font-size: 14px;
+    font-family: Tahoma, sans-serif;
+    padding: 6px;
+    background: #fff;
+    border: 2px ridge #CCC;
+    line-height: 180%;
+    border-radius: 5px;
+}
+

@@ -1,0 +1,682 @@
+{
+   "tr" : {
+      "less then a minute" : "1 dakikadan az",
+      "%1 hours" : "%1 saat civarında",
+      "1 minute" : "1 dakika",
+      "one day" : "1 gün",
+      "about 1 hour" : "1 saat civarında",
+      "%1 days" : "%1 gün",
+      "over a year" : "1 yıldan fazla",
+      "%1 minutes" : "%1 dakika"
+   },
+   "sv-SE" : {
+      "less then a minute" : "mindre än en minut",
+      "%1 hours" : "ungefär %1 timmar",
+      "1 minute" : "en minut",
+      "one day" : "en dag",
+      "about 1 hour" : "ungefär en timme",
+      "%1 days" : "%1 dagar",
+      "over a year" : "mer än ett år",
+      "%1 minutes" : "%1 minuter"
+   },
+   "gl-ES" : {
+      "less then a minute" : "1 minuto",
+      "%1 hours" : "%1 horas",
+      "1 minute" : "1 minuto",
+      "one day" : "1 día",
+      "about 1 hour" : "aproximadamente unha hora",
+      "%1 days" : "%1 días",
+      "over a year" : "máis dun ano",
+      "%1 minutes" : "%1 minuto"
+   },
+   "da" : {
+      "less then a minute" : "mindre end et minut",
+      "%1 hours" : "cirka %1 timer",
+      "1 minute" : "et minut",
+      "one day" : "en dag",
+      "about 1 hour" : "cirka en time",
+      "%1 days" : "%1 dage",
+      "over a year" : "mere end et år",
+      "%1 minutes" : "%1 minutter"
+   },
+   "ru" : {
+      "less then a minute" : "меньше %1 минуты",
+      "%1 hours" : "около %1 часа",
+      "1 minute" : "%1 минуту",
+      "one day" : "%1 день",
+      "about 1 hour" : "около %1 часа",
+      "%1 days" : "%1 дня",
+      "over a year" : "больше %1 года",
+      "%1 minutes" : "%1 минуты"
+   },
+   "pt-PT" : {
+      "less then a minute" : "menos de um minuto",
+      "%1 hours" : "aproximadamente %1 horas",
+      "1 minute" : "1 minuto",
+      "one day" : "1 dia",
+      "about 1 hour" : "aproximadamente 1 hora",
+      "%1 days" : "%1 dias",
+      "over a year" : "mais de 1 ano",
+      "%1 minutes" : "%1 minutos"
+   },
+   "nb" : {
+      "less then a minute" : "mindre enn 1 minutt",
+      "%1 hours" : "rundt %1 timer",
+      "1 minute" : "1 minutt",
+      "one day" : "1 dag",
+      "about 1 hour" : "rundt 1 time",
+      "%1 days" : "%1 dager",
+      "over a year" : "over 1 år",
+      "%1 minutes" : "%1 minutter"
+   },
+   "ro" : {
+      "less then a minute" : "mai puțin de un minut",
+      "%1 hours" : "aproximativ %1 ore",
+      "1 minute" : "1 minut",
+      "one day" : "1 zi",
+      "about 1 hour" : "aproximativ o oră",
+      "%1 days" : "%1 zile",
+      "over a year" : "mai mult de un an",
+      "%1 minutes" : "%1 minute"
+   },
+   "vi" : {
+      "less then a minute" : "chưa tới 1 phút",
+      "%1 hours" : "khoảng %1 giờ",
+      "1 minute" : "1 phút",
+      "one day" : "1 ngày",
+      "about 1 hour" : "khoảng 1 giờ",
+      "%1 days" : "%1 ngày",
+      "over a year" : "hơn 1 năm",
+      "%1 minutes" : "%1 phút"
+   },
+   "lo" : {
+      "less then a minute" : "ນ້ອຍກວ່າ 1 ນາທີ ",
+      "%1 hours" : "ປະມານ %1 ຊົ່ວໂມງ",
+      "1 minute" : "1 ນາທີ ",
+      "one day" : "1 ມື້ ",
+      "about 1 hour" : "ປະມານ 1 ຊົ່ວໂມງ",
+      "%1 days" : "%1 ມື້ ",
+      "over a year" : "ຫຼາຍກວ່າ 1 ປີ ",
+      "%1 minutes" : "%1 ນາທີ "
+   },
+   "en-AU" : {
+      "less then a minute" : "less than a minute",
+      "%1 hours" : "about %1 hours",
+      "1 minute" : "1 minute",
+      "one day" : "1 day",
+      "about 1 hour" : "about 1 hour",
+      "%1 days" : "%1 days",
+      "over a year" : "over 1 year",
+      "%1 minutes" : "%1 minutes"
+   },
+   "fur" : {
+      "less then a minute" : "mancul di un minût",
+      "%1 hours" : "cirche %1 oris",
+      "1 minute" : "1 minût",
+      "one day" : "1 zornade",
+      "about 1 hour" : "cirche une ore",
+      "%1 days" : "%1 zornadis",
+      "over a year" : "plui di un an",
+      "%1 minutes" : "%1 minûts"
+   },
+   "es-AR" : {
+      "less then a minute" : "menos de 1 minuto",
+      "%1 hours" : "cerca de %1 horas",
+      "1 minute" : "1 minuto",
+      "one day" : "1 día",
+      "about 1 hour" : "cerca de 1 hora",
+      "%1 days" : "%1 días",
+      "over a year" : "más de 1 año",
+      "%1 minutes" : "%1 minutos"
+   },
+   "cy" : {
+      "less then a minute" : "llai na munud",
+      "%1 hours" : "tua %1 awr",
+      "1 minute" : "1 munud",
+      "one day" : "1 diwrnod",
+      "about 1 hour" : "tuag awr",
+      "%1 days" : "%1 diwrnod",
+      "over a year" : "dros flwyddyn",
+      "%1 minutes" : "%1 o funudau"
+   },
+   "ko" : {
+      "less then a minute" : "일 분 이하",
+      "%1 hours" : "약 %1시간",
+      "1 minute" : "일 분",
+      "one day" : "하루",
+      "about 1 hour" : "약 한 시간",
+      "%1 days" : "%1일",
+      "over a year" : "일 년 이상",
+      "%1 minutes" : "%1분"
+   },
+   "en-GB" : {
+      "less then a minute" : "less than a minute",
+      "%1 hours" : "about %1 hours",
+      "1 minute" : "1 minute",
+      "one day" : "1 day",
+      "about 1 hour" : "about 1 hour",
+      "%1 days" : "%1 days",
+      "over a year" : "over 1 year",
+      "%1 minutes" : "%1 minutes"
+   },
+   "is" : {
+      "less then a minute" : "minna en 1 mínúta",
+      "%1 hours" : "u.þ.b. %1 klukkustundir",
+      "1 minute" : "1 mínúta",
+      "one day" : "1 dagur",
+      "about 1 hour" : "u.þ.b. 1 klukkustund",
+      "%1 days" : "%1 dagar",
+      "over a year" : "meira en 1 ár",
+      "%1 minutes" : "%1 mínútur"
+   },
+   "bs" : {
+      "less then a minute" : "manje od 1 minut",
+      "%1 hours" : "око %1 sati",
+      "1 minute" : "1 minut",
+      "one day" : "1 dan",
+      "about 1 hour" : "oko 1 sat",
+      "%1 days" : "%1 dana",
+      "over a year" : "preko 1 godine",
+      "%1 minutes" : "%1 minuta"
+   },
+   "hsb" : {
+      "less then a minute" : "mjenje hač 1 mjeńšinu",
+      "%1 hours" : "něhdźe %1 hodźinami",
+      "1 minute" : "1 mjeńšinu",
+      "one day" : "1 dnjom",
+      "about 1 hour" : "něhdźe 1 hodźinu",
+      "%1 days" : "%1 dnjemi",
+      "over a year" : "přez 1 lětom",
+      "%1 minutes" : "%1 mjeńšinami"
+   },
+   "eu" : {
+      "less then a minute" : "1 minutu bat baino gutxiago",
+      "%1 hours" : "%1 ordu inguru",
+      "1 minute" : "minutu bat",
+      "one day" : "egun bat",
+      "about 1 hour" : "ordu bat inguru",
+      "%1 days" : "%1 egun",
+      "over a year" : "urte bat baino gehiago",
+      "%1 minutes" : "%1 minutu"
+   },
+   "bg" : {
+      "less then a minute" : "по-малко от %1 минута",
+      "%1 hours" : "около %1 часа",
+      "1 minute" : "%1 минута",
+      "one day" : "%1 ден",
+      "about 1 hour" : "около %1 час",
+      "%1 days" : "%1 дни",
+      "over a year" : "над %1 година",
+      "%1 minutes" : "%1 минути"
+   },
+   "it" : {
+      "less then a minute" : "meno di un minuto",
+      "%1 hours" : "circa %1 ore",
+      "1 minute" : "1 minuto",
+      "one day" : "1 giorno",
+      "about 1 hour" : "circa un'ora",
+      "%1 days" : "%1 giorni",
+      "over a year" : "oltre un anno",
+      "%1 minutes" : "%1 minuti"
+   },
+   "es-MX" : {
+      "less then a minute" : "menos de 1 minuto",
+      "%1 hours" : "cerca de %1 horas",
+      "1 minute" : "1 minuto",
+      "one day" : "1 día",
+      "about 1 hour" : "cerca de 1 hora",
+      "%1 days" : "%1 días",
+      "over a year" : "más de 1 año",
+      "%1 minutes" : "%1 minutos"
+   },
+   "fr-CH" : {
+      "less then a minute" : "moins d'une minute",
+      "%1 hours" : "environ %1 heures",
+      "1 minute" : "1 minute",
+      "one day" : "1 jour",
+      "about 1 hour" : "environ une heure",
+      "%1 days" : "%1 jours",
+      "over a year" : "plus d'un an",
+      "%1 minutes" : "%1 minutes"
+   },
+   "hu" : {
+      "less then a minute" : "kevesebb, mint 1 perc",
+      "%1 hours" : "kb %1 óra",
+      "1 minute" : "1 perc",
+      "one day" : "1 nap",
+      "about 1 hour" : "kb 1 óra",
+      "%1 days" : "%1 nap",
+      "over a year" : "több, mint 1 év",
+      "%1 minutes" : "%1 perc"
+   },
+   "pl" : {
+      "less then a minute" : "mniej niż minutę",
+      "%1 hours" : "około %1 godzin",
+      "1 minute" : "1 minuta",
+      "one day" : "1 dzień",
+      "about 1 hour" : "około godziny",
+      "%1 days" : "%1 dni",
+      "over a year" : "ponad rok",
+      "%1 minutes" : "%1 minut"
+   },
+   "ca" : {
+      "less then a minute" : "menys d'1 minut",
+      "%1 hours" : "aproximadament %1 hores",
+      "1 minute" : "1 minut",
+      "one day" : "1 dia",
+      "about 1 hour" : "aproximadament 1 hora",
+      "%1 days" : "%1 dies",
+      "over a year" : "més d'1 any",
+      "%1 minutes" : "%1 minuts"
+   },
+   "fa" : {
+      "less then a minute" : "کمتر از ۱ دقیقه",
+      "%1 hours" : "حدود %1 ساعت",
+      "1 minute" : "۱ دقیقه",
+      "one day" : "۱ روز",
+      "about 1 hour" : "حدود ۱ ساعت",
+      "%1 days" : "%1 روز",
+      "over a year" : "بیش از ۱ سال",
+      "%1 minutes" : "%1 دقیقه"
+   },
+   "bn-IN" : {
+      "less then a minute" : "১ মিনিটের কম",
+      "%1 hours" : "প্রায় %1 ঘন্টা",
+      "1 minute" : "১ মিনিট",
+      "one day" : "১ দিন",
+      "about 1 hour" : "প্রায় ১ ঘন্টা",
+      "%1 days" : "%1 দিন",
+      "over a year" : "১ বছরের বেশি",
+      "%1 minutes" : "%1 মিনিট"
+   },
+   "sk" : {
+      "less then a minute" : "pred necelou minútou",
+      "%1 hours" : "asi %1 hodinami",
+      "1 minute" : "minútou",
+      "one day" : "24 hodinami",
+      "about 1 hour" : "asi hodinou",
+      "%1 days" : "%1 dňami",
+      "over a year" : "pred viac ako rokom",
+      "%1 minutes" : "%1 minútami"
+   },
+   "es-CO" : {
+      "less then a minute" : "menos de 1 minuto",
+      "%1 hours" : "cerca de %1 horas",
+      "1 minute" : "1 minuto",
+      "one day" : "1 día",
+      "about 1 hour" : "cerca de 1 hora",
+      "%1 days" : "%1 días",
+      "over a year" : "más de 1 año",
+      "%1 minutes" : "%1 minutos"
+   },
+   "es-PE" : {
+      "less then a minute" : "menos de 1 minuto",
+      "%1 hours" : "cerca de {{count}} horas",
+      "1 minute" : "1 minuto",
+      "one day" : "1 día",
+      "about 1 hour" : "cerca de 1 hora",
+      "%1 days" : "{{count}} días",
+      "over a year" : "más de 1 año",
+      "%1 minutes" : "{{count}} minutos"
+   },
+   "uk" : {
+      "less then a minute" : "менше %1 хвилини",
+      "%1 hours" : "близько %1 години",
+      "1 minute" : "%1 хвилина",
+      "one day" : "%1 день",
+      "about 1 hour" : "близько %1 година",
+      "%1 days" : "%1 дня",
+      "over a year" : "більше %1 року",
+      "%1 minutes" : "%1 хвилини"
+   },
+   "hi" : {
+      "less then a minute" : "एक मिनट से कम",
+      "%1 hours" : "लगभग %1 घंटा",
+      "1 minute" : "एक मिनट",
+      "one day" : "एक दिन",
+      "about 1 hour" : "लगभग एक घंटा",
+      "%1 days" : "%1 दिन",
+      "over a year" : "एक साल के ऊपर",
+      "%1 minutes" : "%1 मिनट"
+   },
+   "es" : {
+      "less then a minute" : "menos de 1 minuto",
+      "%1 hours" : "alrededor de %1 horas",
+      "1 minute" : "1 minuto",
+      "one day" : "1 día",
+      "about 1 hour" : "alrededor de 1 hora",
+      "%1 days" : "%1 días",
+      "over a year" : "más de 1 año",
+      "%1 minutes" : "%1 minutos"
+   },
+   "sw" : {
+      "less then a minute" : "chini ya dakika 1",
+      "%1 hours" : "kama masaa %1",
+      "1 minute" : "dakika 1",
+      "one day" : "siku 1",
+      "about 1 hour" : "kama saa limoja",
+      "%1 days" : "siku %1",
+      "over a year" : "zaidi ya mwaka 1",
+      "%1 minutes" : "dakika %1"
+   },
+   "lv" : {
+      "less then a minute" : "mazāk par vienu minūti",
+      "%1 hours" : "apmēram %1 stundas",
+      "1 minute" : "1 minūte",
+      "one day" : "1 diena",
+      "about 1 hour" : "apmēram 1 stunda",
+      "%1 days" : "%1 dienas",
+      "over a year" : "vairāk kā gads",
+      "%1 minutes" : "%1 minūtes"
+   },
+   "de-CH" : {
+      "less then a minute" : "weniger als eine Minute",
+      "%1 hours" : "etwa %1 Stunden",
+      "1 minute" : "eine Minute",
+      "one day" : "ein Tag",
+      "about 1 hour" : "etwa eine Stunde",
+      "%1 days" : "%1 Tage",
+      "over a year" : "mehr als ein Jahr",
+      "%1 minutes" : "%1 Minuten"
+   },
+   "zh-CN" : {
+      "less then a minute" : "不到一分钟",
+      "%1 hours" : "大约 %1 小时",
+      "1 minute" : "一分钟",
+      "one day" : "一天",
+      "about 1 hour" : "大约一小时",
+      "%1 days" : "%1 天",
+      "over a year" : "一年多",
+      "%1 minutes" : "%1 分钟"
+   },
+   "fr" : {
+      "less then a minute" : "moins d'une minute",
+      "%1 hours" : "environ %1 heures",
+      "1 minute" : "1 minute",
+      "one day" : "1 jour",
+      "about 1 hour" : "environ une heure",
+      "%1 days" : "%1 jours",
+      "over a year" : "plus d'un an",
+      "%1 minutes" : "%1 minutes"
+   },
+   "id" : {
+      "less then a minute" : "kurang dari 1 menit",
+      "%1 hours" : "sekitar %1 jam",
+      "1 minute" : "menit",
+      "one day" : "sehari",
+      "about 1 hour" : "sekitar 1 jam",
+      "%1 days" : "%1 hari",
+      "over a year" : "lebih dari setahun",
+      "%1 minutes" : "%1 menit"
+   },
+   "sr" : {
+      "less then a minute" : "мање од 1 минут",
+      "%1 hours" : "око %1 сати",
+      "1 minute" : "1 минут",
+      "one day" : "1 дан",
+      "about 1 hour" : "око 1 сат",
+      "%1 days" : "%1 дана",
+      "over a year" : "преко 1 године",
+      "%1 minutes" : "%1 минута"
+   },
+   "et" : {
+      "less then a minute" : "vähem kui %1 minut",
+      "%1 hours" : "umbes %1 tundi",
+      "1 minute" : "%1 minut",
+      "one day" : "%1 päev",
+      "about 1 hour" : "umbes %1 tund",
+      "%1 days" : "%1 päeva",
+      "over a year" : "üle %1 aasta",
+      "%1 minutes" : "%1 minutit"
+   },
+   "es-CL" : {
+      "less then a minute" : "menos de 1 minuto",
+      "%1 hours" : "alrededor de %1 horas",
+      "1 minute" : "1 minuto",
+      "one day" : "1 día",
+      "about 1 hour" : "alrededor de 1 hora",
+      "%1 days" : "%1 días",
+      "over a year" : "más de 1 año",
+      "%1 minutes" : "%1 minutos"
+   },
+   "mk" : {
+      "less then a minute" : "помалку од 1 минута",
+      "%1 hours" : "околу %1 часа",
+      "1 minute" : "1 минута",
+      "one day" : "1 ден",
+      "about 1 hour" : "околу 1 час",
+      "%1 days" : "%1 денови",
+      "over a year" : "над 1 година",
+      "%1 minutes" : "%1 минути"
+   },
+   "fi" : {
+      "less then a minute" : "alle minuutti",
+      "%1 hours" : "noin %1 tuntia",
+      "1 minute" : "minuutti",
+      "one day" : "päivä",
+      "about 1 hour" : "noin tunti",
+      "%1 days" : "%1 päivää",
+      "over a year" : "yli vuosi",
+      "%1 minutes" : "%1 minuuttia"
+   },
+   "lt" : {
+      "less then a minute" : "mažiau nei minutė",
+      "%1 hours" : "apie %1 valandų",
+      "1 minute" : "1 minutė",
+      "one day" : "1 diena",
+      "about 1 hour" : "apie 1 valanda",
+      "%1 days" : "%1 dienų",
+      "over a year" : "virš 1 metų",
+      "%1 minutes" : "%1 minutės"
+   },
+   "de" : {
+      "less then a minute" : "weniger als eine Minute",
+      "%1 hours" : "etwa %1 Stunden",
+      "1 minute" : "eine Minute",
+      "one day" : "ein Tag",
+      "about 1 hour" : "etwa eine Stunde",
+      "%1 days" : "%1 Tage",
+      "over a year" : "mehr als ein Jahr",
+      "%1 minutes" : "%1 Minuten"
+   },
+   "hr" : {
+      "less then a minute" : "manje od 1 minute",
+      "%1 hours" : "oko %1 sati",
+      "1 minute" : "1 minuta",
+      "one day" : "1 dan",
+      "about 1 hour" : "oko 1 sat",
+      "%1 days" : "%1 dana",
+      "over a year" : "preko 1 godine",
+      "%1 minutes" : "%1 minuta-e"
+   },
+   "zh-TW" : {
+      "less then a minute" : "不到一分鐘",
+      "%1 hours" : "大約 %1 小時",
+      "1 minute" : "一分鐘",
+      "one day" : "一天",
+      "about 1 hour" : "大約一小時",
+      "%1 days" : "%1 天",
+      "over a year" : "一年多",
+      "%1 minutes" : "%1 分鐘"
+   },
+   "en-US" : {
+      "less then a minute" : "less than a minute",
+      "%1 hours" : "about %1 hours",
+      "1 minute" : "1 minute",
+      "one day" : "1 day",
+      "about 1 hour" : "about 1 hour",
+      "%1 days" : "%1 days",
+      "over a year" : "over 1 year",
+      "%1 minutes" : "%1 minutes"
+   },
+   "sl" : {
+      "less then a minute" : "manj kot ena minuta",
+      "%1 hours" : "okoli %1 ur",
+      "1 minute" : "1 minuta",
+      "one day" : "1 dan",
+      "about 1 hour" : "okoli 1 ura",
+      "%1 days" : "%1 dni",
+      "over a year" : "več kot 1 leto",
+      "%1 minutes" : "%1 minut"
+   },
+   "de-AT" : {
+      "less then a minute" : "weniger als eine Minute",
+      "%1 hours" : "etwa %1 Stunden",
+      "1 minute" : "eine Minute",
+      "one day" : "ein Tag",
+      "about 1 hour" : "etwa eine Stunde",
+      "%1 days" : "%1 Tage",
+      "over a year" : "mehr als ein Jahr",
+      "%1 minutes" : "%1 Minuten"
+   },
+   "nn" : {
+      "less then a minute" : "mindre enn 1 minutt",
+      "%1 hours" : "rundt %1 timar",
+      "1 minute" : "1 minutt",
+      "one day" : "1 dag",
+      "about 1 hour" : "rundt 1 time",
+      "%1 days" : "%1 dagar",
+      "over a year" : "over 1 år",
+      "%1 minutes" : "%1 minutt"
+   },
+   "ja" : {
+      "less then a minute" : "1分以内",
+      "%1 hours" : "約%1時間",
+      "1 minute" : "1分",
+      "one day" : "1日",
+      "about 1 hour" : "約1時間",
+      "%1 days" : "%1日",
+      "over a year" : "1年以上",
+      "%1 minutes" : "%1分"
+   },
+   "sr-Latn" : {
+      "less then a minute" : "manje od 1 minut",
+      "%1 hours" : "oko %1 sati",
+      "1 minute" : "1 minut",
+      "one day" : "1 dan",
+      "about 1 hour" : "oko 1 sat",
+      "%1 days" : "%1 dana",
+      "over a year" : "preko 1 godine",
+      "%1 minutes" : "%1 minuta"
+   },
+   "dsb" : {
+      "less then a minute" : "mjenjej ako 1 minutu",
+      "%1 hours" : "něźi %1 góźinami",
+      "1 minute" : "1 minutu",
+      "one day" : "1 dnjom",
+      "about 1 hour" : "něźi 1 góźinu",
+      "%1 days" : "%1 dnjami",
+      "over a year" : "wěcej ako 1 lětom",
+      "%1 minutes" : "%1 minutami"
+   },
+   "gsw-CH" : {
+      "less then a minute" : "weniger als ä Minuutä",
+      "%1 hours" : "öppe nä %1 Schtund",
+      "1 minute" : "ä Minutä",
+      "one day" : "än Taag",
+      "about 1 hour" : "öppe nä Schtund",
+      "%1 days" : "%1 Taag",
+      "over a year" : "meh als äs Jaar",
+      "%1 minutes" : "%1 Minutä"
+   },
+   "pt-BR" : {
+      "less then a minute" : "menos de um minuto",
+      "%1 hours" : "aproximadamente %1 horas",
+      "1 minute" : "1 minuto",
+      "one day" : "1 dia",
+      "about 1 hour" : "aproximadamente 1 hora",
+      "%1 days" : "%1 dias",
+      "over a year" : "mais de 1 ano",
+      "%1 minutes" : "%1 minutos"
+   },
+   "rm" : {
+      "less then a minute" : "main ch’ina minuta",
+      "%1 hours" : "circa %1 uras",
+      "1 minute" : "1 minuta",
+      "one day" : "in di",
+      "about 1 hour" : "circa in'ura",
+      "%1 days" : "%1 dis",
+      "over a year" : "dapli ch'in onn",
+      "%1 minutes" : "%1 minutas"
+   },
+   "he" : {
+      "less then a minute" : "פחות מדקה אחת",
+      "%1 hours" : "בערך %1 שעות",
+      "1 minute" : "דקה אחת",
+      "one day" : "יום אחד",
+      "about 1 hour" : "בערך שעה אחת",
+      "%1 days" : "%1 ימים",
+      "over a year" : "מעל שנה אחת",
+      "%1 minutes" : "%1 דקות"
+   },
+   "hi-IN" : {
+      "less then a minute" : "एक मिनट से कम",
+      "%1 hours" : "लग - भग %1 घंटा",
+      "1 minute" : "एक मिनट",
+      "one day" : "एक दिन",
+      "about 1 hour" : "लग - भग एक घंटा",
+      "%1 days" : "%1 दिन",
+      "over a year" : "एक साल के ऊपर",
+      "%1 minutes" : "%1 मिनट"
+   },
+   "eo" : {
+      "less then a minute" : "malpli ol unu minuto",
+      "%1 hours" : "ĉirkaŭ %1 horoj",
+      "1 minute" : "1 minuto",
+      "one day" : "1 tago",
+      "about 1 hour" : "ĉirkaŭ unu horo",
+      "%1 days" : "%1 tagoj",
+      "over a year" : "pli ol unu jaro",
+      "%1 minutes" : "%1 minutoj"
+   },
+   "fr-CA" : {
+      "less then a minute" : "moins d'une minute",
+      "%1 hours" : "environ %1 heures",
+      "1 minute" : "1 minute",
+      "one day" : "1 jour",
+      "about 1 hour" : "environ une heure",
+      "%1 days" : "%1 jours",
+      "over a year" : "plus d'un an",
+      "%1 minutes" : "%1 minutes"
+   },
+   "ar" : {
+      "less then a minute" : "أقل من دقيقة",
+      "%1 hours" : "%1 ساعات",
+      "1 minute" : "دقيقة واحدة",
+      "one day" : "يوم واحد",
+      "about 1 hour" : "حوالي ساعة واحدة",
+      "%1 days" : "%1 أيام",
+      "%1 minutes" : "%1 دقائق",
+      "over a year" : "أكثر من سنة"
+   },
+   "nl" : {
+      "less then a minute" : "minder dan Ã©Ã©n minuut",
+      "%1 hours" : "ongeveer %1 uur",
+      "1 minute" : "1 minuut",
+      "one day" : "1 dag",
+      "about 1 hour" : "ongeveer Ã©Ã©n uur",
+      "%1 days" : "%1 dagen",
+      "over a year" : "meer dan Ã©Ã©n jaar",
+      "%1 minutes" : "%1 minuten"
+   },
+   "mn" : {
+      "less then a minute" : "%1 минутаас бага",
+      "%1 hours" : "%1 цаг орчим",
+      "1 minute" : "%1 минут",
+      "one day" : "%1 өдөр",
+      "about 1 hour" : "%1 цаг орчим",
+      "%1 days" : "%1 өдөр",
+      "over a year" : "%1 жилээс илүү",
+      "%1 minutes" : "%1 минут"
+   },
+   "el" : {
+      "less then a minute" : "λιγότερο από ένα λεπτό",
+      "%1 hours" : "περίπου %1 ώρες",
+      "1 minute" : "1 λεπτό",
+      "one day" : "1 ώρα",
+      "about 1 hour" : "περίπου μία ώρα",
+      "%1 days" : "%1 ώρες",
+      "over a year" : "πάνω από ένα χρόνο",
+      "%1 minutes" : "%1 λεπτά"
+   }
+}
