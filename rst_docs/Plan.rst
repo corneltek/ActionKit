@@ -11,7 +11,12 @@ Controller Improvement
 * Pre-filter resource path from template ( baseURL for href and src )
     * Make this as an option.
 
+Store Plugin
+------------
 
+* Add google map and geolocation support.
+* Add Store photo model.
+    * Make this as an option.
 
 
 Cart System
