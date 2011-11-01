@@ -2,14 +2,49 @@ Plans
 =======
 
 
+Core Improvement
+----------------
+
+* Exception handler for CLI mode.
+  * should print friendly error message.
+* Exception page for web mode.
+  * provide an production mode page (no stacktrace)
+  * provide an development mode page (with stacktrace, and can read source code.)
+
+AdminUI Improvement
+--------------------
+* Refactor current admin ui theme.
+* can switch theme from config file.
+* Integrate with superfish menu.
+* Provide an backend menu register, plugins can register their menu items to the UI.
+* Add jQuery tools widget for menu tooltips 
+* Add simple slider for backend image preview.
+
+
+jQuery improvement
+------------------
+* Use google CDN jQuery loader.
+
+jQuery component widgets
+------------------------
+* Add jScroll widget.
+* Add jQuery tools widget.
+* Document those jQuery widget usage:
+  with front-end loader, html layout ... etc
+* Provide an basic layout for Kate to design.
+
+
 Controller Improvement
 ----------------------
 
+* Support multiple action (with another name?) in one controller.
 * Refactor current router and routerset.
 * Retrieve controller mount path from template (view).
 * Generate controller URL.
 * Pre-filter resource path from template ( baseURL for href and src )
     * Make this as an option.
+* better getMatches design, with a named placeholder.
+* re-route to not_found page. (redirect)
 
 Store Plugin
 ------------
@@ -18,24 +53,19 @@ Store Plugin
 * Add Store photo model.
     * Make this as an option.
 
-Product Importer
-----------------
 
-Menu Importer
--------------
-
-Page Importer
--------------
-
+Importers
+---------
+* Product importer
+* Menu importer
+* Page content importer
 
 
 Cart System
 -----------
 
 * Add virtual column to get collection or model data.
-
 * Cart Calculation Interface
-
 * Product Plugin Hierarchal
 
 ::
@@ -47,11 +77,6 @@ Cart System
     |-Coupon
 
 
-Controller
-----------
-
-* better getMatches design
-* re-route to not_found page. (redirect)
 
 OTHERS
 ------
