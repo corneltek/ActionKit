@@ -2,6 +2,18 @@ Plans
 =======
 
 
+Controller Improvement
+----------------------
+
+* Refactor current router and routerset.
+* Retrieve controller mount path from template (view).
+* Generate controller URL.
+* Pre-filter resource path from template ( baseURL for href and src )
+    * Make this as an option.
+
+
+
+
 Cart System
 -----------
 
