@@ -33,6 +33,13 @@ jQuery component widgets
   with front-end loader, html layout ... etc
 * Provide an basic layout for Kate to design.
 
+* Move swfobjects into widgets.
+
+
+Web Debug Toolbar
+-----------------
+* http://www.symfony-project.org/more-with-symfony/1_4/en/07-Extending-the-Web-Debug-Toolbar
+
 
 Controller Improvement
 ----------------------
@@ -279,4 +286,10 @@ Mobile Web Todos
 
 
 
-
+Reference
+=========
+* http://symfony.com/doc/2.0/book/index.html
+* http://symfony.com/doc/2.0/cookbook/controller/service.html
+* http://symfony.com/doc/2.0/book/security.html
+* http://symfony.com/doc/2.0/book/routing.html
+* http://symfony.com/doc/2.0/book/http_fundamentals.html
