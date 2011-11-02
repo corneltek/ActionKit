@@ -10,8 +10,6 @@ function fail($msg) {
     die( "\033[0;31m" . $msg . "\033[0m\n" );
 }
 
-
-
 function init_define_file( $appname )
 {
     file_put_contents( 'define.php' , <<<"DOC"
@@ -33,13 +31,13 @@ DOC
 }
 
 function init_app_file( $appname ) {
-    mkdir( strtolower($appname) . DIRECTORY_SEPARATOR . 'lib' , 0777 , true );
-    $path = strtolower($appname) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . $appname . '.php' ;
-
+    mkdir( 'App' );
+    # mkdir( strtolower($appname) . DIRECTORY_SEPARATOR . 'lib' , 0777 , true );
+    # $path = strtolower($appname) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . $appname . '.php' ;
+    $path = 'App' . DIRECTORY_SEPARATOR . 'App.php' ;
     file_put_contents( $path , <<<"END"
 <?php
-// Class: $appname
-class $appname extends \\Phifty\\MicroApp
+class App extends \\Phifty\\MicroApp
 {
 
 }
@@ -80,18 +78,9 @@ i18n:
   default: zh_TW
   lang:
     - en
-    - fr
-    - ja
     - zh_TW
     - zh_CN
-avatar_path: avatar/
 mail:
-  admin: admin@localhost
-  manager: admin@localhost
-  smtp:
-    host: localhost
-  pop3:
-    host: localhost
 view:
   backend: twig
   twig:
@@ -116,7 +105,6 @@ plugins:
   AdminUI:
   User:
     allow_signup: 1
-  SimpleImage:
   ImageData:
     max_size: 600
     resize:

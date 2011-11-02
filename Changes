@@ -1,6 +1,11 @@
 
 # Changes
 
+五 10/28 19:30:28 2011
+
+- Change plugin paths:  core to Core/,  core/lib/Core.php Core/Core.php
+- Fix tinyMCE bugs
+
 日 10/23 22:01:04 2011
 
 - Rename model->data to model->_data

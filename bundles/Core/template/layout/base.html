@@ -1,0 +1,95 @@
+{#
+vim:filetype=jinja:
+#}
+
+{% macro js(path) %}
+	<script type="text/javascript" charset="utf-8" src="{{path}}"> </script>
+{% endmacro %}
+
+{% macro css(path,media) %}
+	<link rel="stylesheet" href="{{path}}" type="text/css" media="{{ media |default('screen') }}" charset="utf-8" />
+{% endmacro %}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    {% set appname = Kernel.getAppName() %}
+
+    {% block head %}
+
+    <title>{% block title %} {{ title|default(appname) }} {% endblock %}</title>
+
+	<meta charset="UTF-8" /> 
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="content" content="Content-Type: text/html; Charset: UTF-8; " />
+
+    {{ Web.include_core_js | raw }}
+    {{ Web.include_core_css | raw }}
+    {{ Web.include_widget_js | raw }}
+    {{ Web.include_widget_css | raw }}
+
+    <!--
+    <script type="text/javascript" charset="utf-8" src="jquery-ui/js/jquery-1.5.1.min.js"> </script>
+    <script type="text/javascript" charset="utf-8" src="jquery-ui/js/jquery-ui-1.8.14.custom.min.js"> </script>
+    <link rel="stylesheet" href="jquery-ui/css/redmond/jquery-ui-1.8.14.custom.css" type="text/css" media="screen" charset="utf-8" />
+    -->
+    {% endblock %}
+</head>
+<body>
+
+{% block operation %}
+    <div id="operation">  
+        <img class="logo" src="/ph/core/images/lart-logo.jpg"/>
+
+        <div class="logo-text"> 
+			{% block logo_text %}
+                {{ appname }}
+			{% endblock %}
+        </div>
+
+
+		{% block operation_buttons %}
+
+
+        <div class="buttons">
+
+            <form style=" display: inline; margin:0; padding:0; " name="lang_select" method="post">
+                <input type="hidden" name="action" value="I18N::Action::ChooseLang"/>
+                {% set currentLang = Kernel.lang.getCurrentLang %}
+                {% set langList = Kernel.lang.getLangList %}
+                <select name="lang" onchange=" this.form.submit();" style="margin:0;">
+                    {% for langId,label in langList %}
+                        <option value="{{ langId }}" {% if langId == currentLang %} selected {% endif %}>{{ label }} </option>
+                    {% endfor %}
+                </select>
+            </form>
+
+			{% if Kernel.currentUser().isLogged() %}
+                <a href="/logout">{% trans 'Logout' %}</a>
+			{% else %}
+                <a href="/login">{% trans 'Login' %}</a>
+			{% endif %}
+
+            {# <a href="" onclick=" $('#search-form').slideDown(); return false;" >{% trans 'Search' %}</a> #}
+        </div>
+		{% endblock %}
+
+    </div>
+{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block content %} 
+{% endblock %}
+
+{% block footer %}
+<div style="padding-bottom:40px;">  </div>
+<div style=" position: absolute; bottom: 0px; left: 0px; width: 100%; "> 
+</div>
+{% endblock %}
+
+    </body>
+</html>
