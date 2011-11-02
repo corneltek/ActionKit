@@ -1,0 +1,39 @@
+
+## View Variable Export
+
+### Requirement
+
+* external functions
+* external variables
+  * request variables
+  * action result variables
+
+External functions,
+    Can be from a plugin
+
+External variables,
+    Model data.
+    Action Result.
+    Phifty Config
+    Plugin Config
+
+    js include function     (this could be twig macro)
+    css include function    (this could be twig macro)
+
+### Design
+
+use Phifty\Web\Exporter,
+
+objects,functions can register themself to Exporter,
+
+In Twig, we can use $twig->addFunction to register functions and object methods
+
+    Function: http://twig.sensiolabs.org/doc/advanced.html#functions
+    Twig Extensions: http://twig.sensiolabs.org/doc/extensions.html
+
+In Smarty, to export functions:
+    http://www.smarty.net/docsv2/en/plugins.functions.tpl
+
+Use-case:
+
+    {{ Env }}

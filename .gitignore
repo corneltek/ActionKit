@@ -1,9 +1,11 @@
 .hg
+*.log
 comp/etedb/logs/*.log
 webroot/ph/
 webroot/static/upload/
 cache/
 coverage/
 .DS_Store
+.svn
 tests/tmp/
-rst_docs/_build/
+docs/_build/
