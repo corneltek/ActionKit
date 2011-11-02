@@ -1,0 +1,166 @@
+
+Application Dir Structure
+=========================
+
+Application File Structure
+
+    app.php # entry point code, load phifty
+    app/view/
+    app/controller/
+    app/action/
+    app/model/
+
+    plugins/
+        product/view
+        product/controller
+        product/action
+        product/model
+        product/web
+
+        other/view/
+        other/action/
+        other/controller/
+
+        databrowse/view/
+        databrowse/action/
+
+    app/
+    app/view/templates...
+    app/config.yml
+
+    web/
+    web/images/
+    web/css
+    web/js
+    web/ph/css - link
+    web/ph/js  - link
+    web/test.php
+
+    phifty/lib/
+    phifty/lib/Phifty/
+    phifty/lib/Phifty/Component/...
+    phifty/lib/Phifty/ClassLoader.php
+    phifty/lib/....
+    phifty/lib/Phifty/Bundle/EteDB
+    phifty/res/css/
+    phifty/res/js/
+    dists/etedb/....
+
+
+Phifty export commmand
+====================
+
+init command should parse dirs from `plugins` dir and `app`, `core` dirs.
+
+Problems
+========
+
+* How to map plugin static files to web path ?
+
+
+
+
+
+
+
+
+AppSpace
+=================
+
+For action class names like:
+
+    new App\Action\CreateUser
+    new App\Action\UpdateUser
+
+should look up actino files in app:
+
+    app/action/CreateUser.php
+    app/action/UpdateUser.php
+
+and the names in form:
+
+    App::Action::CreateUser
+    App::Action::UpdateUser
+
+for phifty core action:
+
+    Phifty::Action::Redirect
+
+
+For model names like:
+
+    App::Model::Product
+
+should look up files in app/model
+
+    app/model/Product.php
+
+
+App Controller
+
+    App\Controller\Index
+    App\Controller\AddUser
+    App\Controller\RemoveUser
+
+
+Plugin
+===============
+
+* Requirements
+** Plugin can inject content to a page header.
+** Plugin can require its js or css file from its plugin/web dir.
+** Plugin can have its model, controller, action, view (template)
+
+To add a plugin, edit etc/config.yml first.
+
+    - plugins:
+        - SB
+
+Your plugin structure is like:
+
+    plugins/sb/model/
+    plugins/sb/action/
+    plugins/sb/controller/
+    plugins/sb/view/
+    plugins/sb/config/config.yml
+
+Product class extends from \Phifty\Plugin.
+
+    init()
+    pageStart()
+    pageEnd()
+
+plugin loader init script is in:
+
+    plugins/sb/init.php
+
+For action name with plugin
+
+    SB\Action\CreateProduct
+    SB\Action\UpdateProduct
+    SB\Action\DeleteProduct
+
+should look up
+
+    plugins/SB/Action/CreateProduct.php
+    plugins/SB/Action/UpdateProduct.php
+    plugins/SB/Action/DeleteProduct.php
+
+For model name with plugin
+
+    SB\Model\Product
+
+should look up:
+
+    plugins/SB/Model/Product.php
+
+Model name with plugin name (Small Business Plugin)
+
+    SB\Model\Product
+    SB\Model\ProductCategory
+    SB\Model\Order
+    SB\Model\OrderItem
+
+    PluginName\Controller\Index
+    PluginName\Controller\Back
+

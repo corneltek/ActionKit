@@ -1,0 +1,105 @@
+
+Action class
+============
+
+A Simple usage:
+
+    class YourAction extends Phifty\Action
+    {
+
+        function run()
+        {
+            return $this->success( 'Success Helper (point to action result object)' );
+            return $this->error( 'Error Helper (point to action result object)' );
+        }
+
+    }
+
+Caller:
+
+    $act = new Action;
+    $act->run();
+
+
+Action
+======
+
+Action Schema
+
+    class Action 
+    {
+        function schema()
+        {
+            $this->param('id')->type('integer');
+            $this->param('title')->type('string');
+            $this->param('content')->type('string')->filter( 'html' );  # load html filter
+            $this->param('image','Image')   # Image File Column Class  Action\ImageColumn
+                ->type('file')              # Image and File column class will auto set type = 'file'
+                ->validExtension(array('jpg','png'))
+                ->resize( 100 , 100 )
+                ->putIn( webapp()->getAppWebDir() . DIR_SEP . 'public' );
+        }
+    }
+
+Action Widgets
+==============
+
+    $post = new Post;
+    $update = $post->asUpdateAction();
+    $html = $update->getParam('title')->render();
+    $html = $update->getParam('title')->render( array( 'class' => '....' ));
+
+    $html = $update->render('title',array( /* attributes.... */ ));
+    $html = $update->render( null, array( /* attributes */ )  );
+
+    $html = $update->renderWidget( 'cover', 'Checkbox', array( /* attributes */ )  );
+
+
+CRUD Action Example
+===================
+
+CreateNews
+
+    <?php
+    namespace News\Action;
+    use Phifty\Action\CreateRecordAction;
+
+    class CreateNews extends CreateRecordAction
+    {
+        var $recordClass = '\News\Model\News';
+    }
+
+    ?>
+
+UpdateNews
+
+    <?php
+
+    namespace News\Action;
+    use Phifty\Action\UpdateRecordAction;
+
+    class UpdateNews extends UpdateRecordAction
+    {
+        var $recordClass = '\News\Model\News';
+    }
+
+
+ActionResult
+============
+
+To get an action result
+
+    
+    $runner = Phifty\Action\Runner::one();
+    $result = $runner->getResult( 'Login::...' );
+
+
+To get an action result from an action object.
+
+    $rs = $action->get_result();
+    if( $rs->is_success() ) {
+        $msg = $rs->getMessage();
+        $data = $rs->getData();
+    }
+
+

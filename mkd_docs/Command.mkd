@@ -1,0 +1,43 @@
+
+
+Command
+=======
+
+
+Schema command
+--------------
+
+
+To build all model schemas, if database exists, skip:
+
+    phifty schema 
+    phifty schema --init  # the same
+
+To build one model schema, if table exists, skip:
+
+    phifty schema App\Model\Post
+
+To rebuild all model schema:
+
+    phifty schema --rebuild 
+
+To rebuild one model schema:
+
+    phifty schema --rebuild App\Model\Post
+
+
+Generate command
+----------------
+
+
+    class Generate extends \Phifty\Command
+    {
+        public $longOpts = array( 
+            "M|model::+", 
+            "A|action::+",
+            "C|controller::+", 
+            "V|view::",
+            "v|verbose",
+            "f|force"
+        );
+

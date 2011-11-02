@@ -1,0 +1,268 @@
+
+EteDB TodoList
+==============
+
+* Add support validValues, validPairs from closure.
+
+
+
+EteDB
+=====
+
+
+TODO
+======
+Add this to test case:
+
+        if( $env->request->name ) {
+            $collection->where( array( 'name' => array('like', '%' . $env->request->name . '%') ) );
+        }
+        if( $env->request->created_on ) {
+            $time = strtotime( $env->request->created_on );
+            // var_dump( date('Y-m-d',$time) ); 
+            $collection->where( array( 
+                'date(created_on)' => date('Y-m-d',$time)
+            ));
+        }
+        $collection->fetch();
+        // var_dump( $collection->lastSQL ); 
+
+
+
+
+
+
+## SYNOPSIS
+
+    $etedb = new EteDB;
+    $etedb->connect( 'mysqli' , array( 
+        'user' => 'dbuser',
+        'pass' => 'dbpass',
+        'host' => 'localhost',
+        'port' => 8888 ), array( "lazy" => true ) );
+
+    $conn = $etedb->getConnection();  // get default connection
+    $conn = $etedb->getConnection( 'connection_name' );
+
+
+    // get backend handle object, like 'mysqli' object.
+    $h = $conn->getHandle();
+
+
+### Connect method {backend} {database config} {connection config}
+
+
+        $etedb = new EteDB;
+        $etedb->connect( 'mysqli' , array( 
+            'user' => 'dbuser',
+            'pass' => 'dbpass',
+            'host' => 'localhost',
+            'port' => 8888 ), array( 'lazy' => true , 'name' => ... ) );
+
+    * Backend
+
+        Can be 'mysqli'.  current only support mysqli.
+
+    * Connection config
+
+        name: connection name, without name, this connection will be default value.
+        lazy: this connection should be lazy, connect to database only if need.
+		no_select_db: do not use default database, select db manually.
+
+    * Database config
+
+        user: database user name
+        pass: database user password
+        host: host name
+        port: port number
+
+
+### connection {name (optional)}
+
+returns connection object.
+
+### close {name (optional)}
+### disconnect {name (optional)}
+
+close a connection.
+
+
+
+Model View
+==========
+
+    Action::setWidgetNs( '\Phifty\Widget' );
+
+    $update = $post->asUpdateAction();
+    $update->getParam( 'title' )->renderAs( 'Text' ); // call EteDB\Widget\Text to render
+    $update->getParam( 'created_on' )->renderAs( 'DateTime' ); // call EteDB\Widget\DateTime to render
+
+    $create = $post->asCreateAction();
+    $create->getParam( 'title' )->renderAs( 'Text' );
+    $create->getParam( 'title' )->renderAs( 'Select' );
+    $create->getParam( 'title' )->renderAs( 'DateTime' );
+    $create->getParam( 'title' )->renderAs( 'File' );
+
+    the renderAs method should be a plugin...
+
+
+Model
+=====================
+
+Column Schema Example:
+
+    class Foo extends EteDB\ModelBase {
+        function schema() {
+            $this->table( 'blah_blah' );
+            $this->column('bar')->refer('Bar');
+            $this->column('name')->type('varchar(30)')->defaultValue('test');
+            $this->column('pending')->type('boolean');
+            $this->column('creator')->type('text')->null();
+        }
+    }
+
+### Model methods
+
+#### __construct
+<<<<<<< HEAD
+
+    $post = new Post( array(  .... data ... ) );
+
+
+#### load
+
+    $post->load( array( "name" => "John" ) );
+
+
+#### save
+
+    $post->title = 'new title';
+    $post->gender = 'male';
+    $post->save();
+
+
+#### update
+
+    $post->update(array( .... ));
+
+### Columns
+
+#### type( string type )
+
+
+#### varchar( int length )
+
+    set type as "varchar(int)"
+
+#### validPairs
+=======
+
+    $post = new Post( array(  .... data ... ) );
+>>>>>>> master
+
+    $this->column('gender')->validPairs( array(
+        'female' => _('Female'),
+        'male' => _('Male'),
+    ));
+
+<<<<<<< HEAD
+    $post->display('gender');   // will display Male for male...  etc
+
+=======
+#### load
+
+    $post->load( array( "name" => "John" ) );
+
+
+#### save
+
+    $post->title = 'new title';
+    $post->gender = 'male';
+    $post->save();
+
+
+#### update
+
+    $post->update(array( .... ));
+
+### Columns
+
+#### type( string type )
+
+
+#### varchar( int length )
+
+    set type as "varchar(int)"
+
+#### validPairs
+
+    $this->column('gender')->validPairs( array(
+        'female' => _('Female'),
+        'male' => _('Male'),
+    ));
+
+    $post->display('gender');   // will display Male for male...  etc
+
+>>>>>>> master
+#### validValues
+
+
+Collection
+----------
+
+
+Collection API:
+
+    $posts = new PostCollection;
+    $posts->query( "select * from ..... " );
+    while( $post = $posts->next() ) {
+
+    }
+    $result = $db->query( );
+
+Todo: Support Cache, Memcached
+
+Collection Interface 
+
+    $posts = new PostCollection;
+    $posts->where( array( ) )->fetch();
+
+    equal to:
+
+    $posts->load( array( ) );
+
+
+
+
+Join
+----------
+
+    $builder->join( 'bar' , 'b' ); // alias b
+
+    $collection->join('category', 'c', 'id' )
+        ->order('id', 'desc')
+        ->fetch();
+
+
+
+    $products->join( 'category_id' , 'category' , 'id' );
+    $products->category_name;
+    $products->category_id;
+
+
+    it should be
+
+    select * from products p left join product_categories pc on ( pc.id = p.category_id ) ... where ... ;
+
+
+many to many join:
+
+    select * from products p 
+        left join product_feature_rel rel on ( rel.product_id = p.id )
+        left join product_features    f   on ( rel.feature_id = f.id )
+
+    ->manyToMany( accessor name,  relation object, the accessor of relation object );
+
+
+
+
