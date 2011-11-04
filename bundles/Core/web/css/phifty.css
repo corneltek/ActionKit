@@ -1,8 +1,8 @@
 @import "lart.css";
+
 @import "section.css";
 @import "form.css";
 @import "button-rect.css";
-@import "message.css";
 
 /* ------ reset ------ */
 caption, th, td { text-align: center; font-weight:400; }
