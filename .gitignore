@@ -1,6 +1,5 @@
 .hg
 *.log
-comp/etedb/logs/*.log
 webroot/ph/
 webroot/static/upload/
 cache/
