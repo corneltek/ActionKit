@@ -1,23 +1,10 @@
 {#
 vim:filetype=jinja:
-
-TODO: This should be AdminUI base page
 #}
-
-{% macro js(path) %}
-	<script type="text/javascript" charset="utf-8" src="{{path}}"> </script>
-{% endmacro %}
-
-{% macro css(path,media) %}
-	<link rel="stylesheet" href="{{path}}" type="text/css" media="{{ media |default('screen') }}" charset="utf-8" />
-{% endmacro %}
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-
     {% set appname = Kernel.getAppName() %}
-
     {% block head %}
 
     <meta name="content" content="Content-Type: text/html; Charset: UTF-8; " />
@@ -25,19 +12,13 @@ TODO: This should be AdminUI base page
     <meta name="keywords" content="{{ Page.Keywords }}" />
     <meta name="description" content="{{ Page.Description }}"/>
     <title>{% block title %} {{ title|default(appname) }} {% endblock %}</title>
-
     {{ Web.include_core_js|raw }}
     {{ Web.include_core_css|raw }}
     {{ Web.include_plugins|raw }}
-
-    <!--
-    <script type="text/javascript" charset="utf-8" src="jquery-ui/js/jquery-1.5.1.min.js"> </script>
-    <script type="text/javascript" charset="utf-8" src="jquery-ui/js/jquery-ui-1.8.14.custom.min.js"> </script>
-    <link rel="stylesheet" href="jquery-ui/css/redmond/jquery-ui-1.8.14.custom.css" type="text/css" media="screen" charset="utf-8" />
-    -->
     {% endblock %}
 </head>
 <body>
+{% block body %}
 
 {% block operation %}
     <div id="operation">  
@@ -90,5 +71,7 @@ TODO: This should be AdminUI base page
 </div>
 {% endblock %}
 
-    </body>
+
+{% endblock %}
+</body>
 </html>

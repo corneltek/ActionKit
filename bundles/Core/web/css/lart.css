@@ -2,11 +2,6 @@
 @import "round.css";
 @import "common.css";
 
-/* border red */
-.border-red {
-    border: 1px solid red;
-}
-
 .text-white-shadow {
     color: #2D3536;
     text-shadow: 0 1px 0 white;
