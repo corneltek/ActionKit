@@ -20,57 +20,6 @@ vim:filetype=jinja:
 <body>
 {% block body %}
 
-{% block operation %}
-    <div id="operation">  
-        <img class="logo" src="/ph/Core/images/lart-logo.jpg"/>
-
-        <div class="logo-text"> 
-			{% block logo_text %}
-                {{ appname }}
-			{% endblock %}
-        </div>
-
-
-		{% block operation_buttons %}
-
-        <div class="buttons">
-
-            <form style=" display: inline; margin:0; padding:0; " name="lang_select" method="post">
-                <input type="hidden" name="action" value="I18N::Action::ChooseLang"/>
-                {% set currentLang = Kernel.lang.getCurrentLang %}
-                {% set langList = Kernel.lang.getLangList %}
-                <select name="lang" onchange=" this.form.submit();" style="margin:0;">
-                    {% for langId,label in langList %}
-                        <option value="{{ langId }}" {% if langId == currentLang %} selected {% endif %}>{{ label }} </option>
-                    {% endfor %}
-                </select>
-            </form>
-
-			{% if Kernel.user.isLogged() %}
-                <a href="/bs/logout">{% trans 'Logout' %}</a>
-			{% else %}
-                <a href="/bs/login">{% trans 'Login' %}</a>
-			{% endif %}
-
-            {# <a href="" onclick=" $('#search-form').slideDown(); return false;" >{% trans 'Search' %}</a> #}
-        </div>
-		{% endblock %}
-
-    </div>
-{% endblock %}
-
-{% block header %}
-{% endblock %}
-
-{% block content %} 
-{% endblock %}
-
-{% block footer %}
-<div style="padding-bottom:40px;">  </div>
-<div style=" position: absolute; bottom: 0px; left: 0px; width: 100%; "> 
-</div>
-{% endblock %}
-
 
 {% endblock %}
 </body>
