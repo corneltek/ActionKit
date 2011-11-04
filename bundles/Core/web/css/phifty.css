@@ -1,5 +1,4 @@
 @import "lart.css";
-
 @import "button-rect.css";
 
 /* ------ reset ------ */
@@ -61,5 +60,3 @@ body {
 }
 
 .clear { clear: both; }
-
-
