@@ -1,5 +1,7 @@
+@charset "UTF-8";
 @import "lart.css";
 @import "button-rect.css";
+@import "common.css";
 
 /* ------ reset ------ */
 caption, th, td { text-align: center; font-weight:400; }
