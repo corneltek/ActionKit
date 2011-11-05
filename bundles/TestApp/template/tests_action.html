@@ -1,7 +1,14 @@
-{% extends 'Core/template/phifty/base.html' %}
-{% block body %}
+{% extends 'plugins/QUnit/template/base.html' %}
+{% block tests %}
 
+{# jquery qunit test here #}
 
-
+<script>
+test("a basic test example", function() {
+    ok( true, "this test is fine" );
+    var value = "hello";
+    equal( value, "hello", "We expect value to be hello" );
+});
+</script>
 
 {% endblock %}
