@@ -4,10 +4,17 @@
 <phpunit bootstrap="autoload.php"
          backupGlobals="false"
          verbose="true">
+
   <testsuites>
+
+        <testsuite name="Selenium">
+            <directory suffix="Test.php">selenium</directory>
+        </testsuite>
+
         <testsuite name="Phifty">
             <directory suffix="Test.php">tests</directory>
         </testsuite>
+
   </testsuites>
 
   <logging>
