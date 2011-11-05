@@ -17,6 +17,7 @@ class Application extends \Phifty\MicroApp
 
         # front end unit testing
         $this->route( '/tests/action' , 'ActionUnitTest' );
+        $this->route( '/tests/qunit'  , 'QUnitTest' );
     }
 }
 

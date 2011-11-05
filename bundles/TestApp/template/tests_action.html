@@ -1,4 +1,5 @@
-{% extends 'plugins/QUnit/template/base.html' %}
+{% extends 'TestApp/template/qunit_base.html' %}
+
 {% block tests %}
 
 {# jquery qunit test here #}
@@ -9,9 +10,6 @@ test('Action.js', function() {
     ok( Action , 'has action' );
     var a = new Action;
     ok( a , 'action created' );
-
-
-
 });
 test("a basic test example", function() {
     ok( true, "this test is fine" );

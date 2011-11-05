@@ -18,8 +18,8 @@ class WebTest extends SeleniumTestCase
     {
         # $this->open('http://phifty.dev/qunit');
         $title = $this->getTitle();
-
         $this->assertEquals(1,1);
+
         # $this->ok( $title );
         # $this->assertTitleEquals('Google');
     }

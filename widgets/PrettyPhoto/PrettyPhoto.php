@@ -1,5 +1,4 @@
 <?php
-
 namespace Phifty\Widgets;
 use Phifty\Widget;
 
