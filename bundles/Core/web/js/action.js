@@ -7,12 +7,8 @@ Author: Yo-An Lin <cornelius.howl@gmail.com>
 Date: 2/16 17:04:44 2011 
 
 USAGE
+-----
 
-    Action.form( $('form#confirmemail') , { status: true } ).onSubmit({ });
-
-*/
-
-/*
 $(window).error( function(errorMessage, fileName, lineNumber) {
         alert( fileName + ':' + errorMessage + '  Line:' + lineNumber );
 });
@@ -1137,10 +1133,10 @@ Interface
 Properties:
 
     this.opts - plugin options
-    this.a   - action object
+    this.action   - action object
 
 */
-var ActionPluginBase = Class.extend({
+var ActionPlugin = Class.extend({
     init: function(action,config) { 
         if( ! action )
             throw "Action object is required.";
@@ -1169,7 +1165,7 @@ var ActionPluginBase = Class.extend({
     onSubmit:     function( d ) {  }
 });
 
-var ActionGrowler = ActionPluginBase.extend({
+var ActionGrowler = ActionPlugin.extend({
     init: function(action,config) {
         this._super(action,config);
     },
@@ -1210,7 +1206,7 @@ TODO:
 
 Move progressbar out as a plugin.
 */
-var ActionMsgbox = ActionPluginBase.extend({
+var ActionMsgbox = ActionPlugin.extend({
     dict: function() {
         return {
             "zh_TW": {

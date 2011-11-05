@@ -27,8 +27,11 @@ TODO:
 
 
     test('Action plugin base test', function() {
+
+        ok( ActionPlugin );
+
         var a = new Action;
-        var plugin = new ActionPluginBase(a);
+        var plugin = new ActionPlugin(a);
         ok( a );
         ok( plugin );
         ok( plugin.action );
@@ -36,7 +39,6 @@ TODO:
 
         var growler = new ActionGrowler(a);
         ok( growler );
-
     });
 
     test('Action.js', function() {
