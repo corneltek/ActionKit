@@ -18,6 +18,7 @@ $(window).error( function(errorMessage, fileName, lineNumber) {
 });
 */
 
+
 window.debug = function( ) {
     if( window.console )
         window.console.log.apply( window.console , arguments );
