@@ -1064,7 +1064,7 @@ Action.prototype = {
 })();
 
 
-/* helper functions */
+/* action helper functions */
 function submitActionWith( f , extendData , arg1 , arg2 ) {
     return Action.form(f).submitWith( extendData, arg1, arg2);
 }
@@ -1077,10 +1077,8 @@ function runAction(actionName,args,arg1,arg2) {
     return (new Action).run( actionName, args,arg1,arg2);
 }
 
-
 // Export Action to jQuery.
 $.Action = Action;
-
 
 /*
 
