@@ -437,9 +437,6 @@ Action.prototype = {
         var that = this;
         var s = this.getValidateStyle() || "perfield";
 
-        $(this.plugins).each(function(i,e) {
-            e.handleResult( resp );
-        });
 
         if( s == "perfield" ) {
             // XXX: BROKEN 
@@ -917,6 +914,10 @@ Action.prototype = {
 		// submit handler {{{
         var submitHandler = function(resp) {
 
+            $(that.plugins).each(function(i,e) {
+                e.handleResult( resp );
+            });
+
             debug( 'Run submit handler' );
             
             if( window.console )
@@ -1177,6 +1178,7 @@ var ActionGrowler = function(a,opts) {
 };
 
 ActionGrowler.prototype = $.extend( ActionPluginPrototype , {
+
     growl: function(text,opts) {
         return $.jGrowl(text,opt);
     },
@@ -1295,21 +1297,9 @@ ActionMsgbox.prototype = $.extend( ActionPluginPrototype , {
     }
 });
 
-Action.plug( ActionMsgbox , {  } );
-
-Action.plug( ActionGrowler, { 
-    // success: {  },
-    // error:  {  }
-} );
 
 /* init scripts for Action */
-/*
 $(document.body).ready(function() {
-    // trigger onLoad for plugin
-    $(Action.plugins).each(function(i,e) {
-        if( window.console )
-            console.info( "Loading Plugin:" , e );
-        e.instance = new e.plugin( e.options );
-    });
+    Action.plug( ActionMsgbox , {  } );
+    Action.plug( ActionGrowler, {  } );
 });
-*/
