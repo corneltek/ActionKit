@@ -1,8 +1,7 @@
 <?php
-
 require_once 'PHPUnit/Extensions/SeleniumTestCase.php';
  
-class SeleniumTest extends PHPUnit_Extensions_SeleniumTestCase
+class SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
 {
     protected function setUp()
     {
@@ -18,4 +17,3 @@ class SeleniumTest extends PHPUnit_Extensions_SeleniumTestCase
     }
 }
 
-?>
