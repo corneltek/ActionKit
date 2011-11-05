@@ -20,22 +20,38 @@ TODO:
 
 <script src="/ph/Core/js/jquery/jquery-1.6.2.min.js"> </script>
 <script src="/ph/Core/js/minilocale.js"> </script>
+<script src="/ph/Core/js/simpleclass.js"> </script>
 <script src="/ph/Core/js/region.js"> </script>
 <script src="/ph/Core/js/action.js"> </script>
+<script type="text/javascript">
 
-<script>
 
-test('Action.js', function() {
-    ok( Action , 'has action' );
-    var a = new Action;
-    ok( a , 'action created' );
-});
-test("a basic test example", function() {
-    ok( true, "this test is fine" );
+    test('Action plugin base test', function() {
+        var a = new Action;
+        var plugin = new ActionPluginBase(a);
+        ok( a );
+        ok( plugin );
+        ok( plugin.action );
+        equals( plugin.action , a , 'plugin action == action' );
 
-    var value = "hello";
-    equal( value, "hello", "We expect value to be hello" );
-});
+        var growler = new ActionGrowler(a);
+        ok( growler );
+
+    });
+
+    test('Action.js', function() {
+        ok( Action , 'has action' );
+        var a = new Action;
+        ok( a , 'action created' );
+    });
+
+    test("a basic test example", function() {
+        ok( true, "this test is fine" );
+
+        var value = "hello";
+        equal( value, "hello", "We expect value to be hello" );
+    });
+
 </script>
 
 {% endblock %}

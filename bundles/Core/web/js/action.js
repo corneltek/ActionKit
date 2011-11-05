@@ -18,11 +18,11 @@ $(window).error( function(errorMessage, fileName, lineNumber) {
 });
 */
 
-
 window.debug = function( ) {
-    if( window.console )
-        window.console.log.apply( window.console , arguments );
-}
+    if( window.console ) {
+        window.console.log.apply(window.console, arguments);
+    }
+};
 
 var Action;
 var ActionHighlight;
@@ -295,30 +295,20 @@ Action.form = function(form,opts) {
 
     a.plugins = [];
 
-    for( var i=0; i < pgs.length ; ++i ) {
+    for( var i=0; i < pgs.length ; ++i ) 
+    {
         var e = pgs[ i ];
-
-        if( window.console )
-            console.info( "Plugin: new " , e );
         var pg = new e.plugin( a , e.options );
-
-        if( window.console )
-            console.info( "Plugin: importdict " , e );
-
         var pgdict = pg.dict();
         Action.importdict( pgdict );
-
-        if( window.console )
-            console.info( "Plugin: load " , e );
-
         pg.load();
         a.plugins.push(pg);
     }
-
     return a;
 };
 
 Action.prototype = {
+
     form: function(f) {
         if(f) {
             this.formEl = $(f);
@@ -1150,9 +1140,15 @@ Properties:
     this.a   - action object
 
 */
-var ActionPluginPrototype = {  
-    action: function() { return this.a; },
-    form:   function() { return this.a.form(); },
+var ActionPluginBase = Class.extend({
+    init: function(action,config) { 
+        if( ! action )
+            throw "Action object is required.";
+        this.action = action;
+        this.config = config;
+    },
+    action: function() { return this.action; },
+    form:   function() { return this.action.form(); },
     dict:   function() { return {  }; },
     config: function(config) { 
         if( config )
@@ -1171,19 +1167,15 @@ var ActionPluginPrototype = {
     beforeSubmit: function( d ) { return d; },
     afterSubmit:  function( r ) {  },
     onSubmit:     function( d ) {  }
-};
+});
 
-var ActionGrowler = function(a,opts) {
-    this.a = a;
-    this.config( opts );
-};
-
-ActionGrowler.prototype = $.extend( ActionPluginPrototype , {
-
+var ActionGrowler = ActionPluginBase.extend({
+    init: function(action,config) {
+        this._super(action,config);
+    },
     growl: function(text,opts) {
         return $.jGrowl(text,opt);
     },
-
     handleResult: function(resp) {
         if( ! resp.message ) {
             if( resp.error && resp.validations ) {
@@ -1208,6 +1200,7 @@ ActionGrowler.prototype = $.extend( ActionPluginPrototype , {
     }
 });
 
+
 /* 
 Action Message Box Plugin 
     
@@ -1217,12 +1210,7 @@ TODO:
 
 Move progressbar out as a plugin.
 */
-var ActionMsgbox = function(a,opts) {
-    this.a = a;
-    this.config( opts );
-};
-
-ActionMsgbox.prototype = $.extend( ActionPluginPrototype , {
+var ActionMsgbox = ActionPluginBase.extend({
     dict: function() {
         return {
             "zh_TW": {
@@ -1297,7 +1285,6 @@ ActionMsgbox.prototype = $.extend( ActionPluginPrototype , {
         this.div.html( ws ).show();
     }
 });
-
 
 /* init scripts for Action */
 $(document.body).ready(function() {
