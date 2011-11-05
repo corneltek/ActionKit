@@ -3,6 +3,7 @@ require_once 'PHPUnit/Extensions/SeleniumTestCase.php';
  
 class SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
 {
+
     protected function setUp()
     {
         $this->setBrowser('*firefox');
@@ -12,8 +13,8 @@ class SeleniumTestCase extends PHPUnit_Extensions_SeleniumTestCase
  
     public function testTitle()
     {
-        $this->open('http://www.google.com/');
-        $this->assertTitleEquals('Google');
+        $this->open('http://phifty.dev/qunit');
+        # $this->assertTitleEquals('Google');
     }
 }
 
