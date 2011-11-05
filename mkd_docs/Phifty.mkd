@@ -1,13 +1,6 @@
-
-
-
-
 # Phifty Execution Flow
 
 (app/autoload.php) App loads it's autoload.php
-
-    define app name 
-    define app version
 
 (app/autoload.php)    App's autoload.php loads phifty's autoload.php
 
@@ -67,22 +60,4 @@ environment config file defines:
 
 - plugins:
     defines what plugin needs to be loaded.
-
-
-## Template 
-
-Currently, variables and classes are exported from \Phifty\View\Engine:
-
-        $this->phiftyExport['results'] = $runner->results;
-        $this->phiftyExport['web'] = new \Phifty\Web;
-		$this->phiftyExport['kernel'] = \AppKernel::getInstance();
-
-In template, the usage is like:
-
-        {{ phifty.web.method_foo }}
-        {{ phifty.results. .... }}
-        {{ phifty.kernel...  }}
-
-
-
 
