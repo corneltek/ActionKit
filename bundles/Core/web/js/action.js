@@ -6,29 +6,6 @@ Depends on: minilocale.js region.js, jQuery.scrollTo.js
 Author: Yo-An Lin <cornelius.howl@gmail.com>
 Date: 2/16 17:04:44 2011 
 
-    TODO:
-
-    * rewrite region stuff as a plugin.
-    * rewrite progressbar as a plugin.
-    * rewrite highlighter as plugin
-    * move lang setter to app.js init script.
-
-    * move action result to outside of form.
-    * provide an option to removeForm if action submit success.
-    * provide an option to specify action result template.
-    * refactor growl options
-    * integrate progressbar with action result.
-
-    * front-end validation
-    * msgbox redesign
-    * global config (with message)
-    * refactor options (submit method and run method)
-    * let refresh option takes element array.
-        refresh: [ $('#userlist') , $('#messages') ]
-        refreshWith: { args ... }
-    * permission denied redirection
-    * error handler
-
 USAGE
 
     Action.form( $('form#confirmemail') , { status: true } ).onSubmit({ });
@@ -254,7 +231,6 @@ Action = function(arg1,arg2) {
     }
 
     this.plugins = [ ];
-    this.growler = 'jGrowl'; // 'notify' or 'jGrowl'
     this.actionPath = null;
     this.opts = $.extend( { 
                     debug: false
@@ -510,8 +486,7 @@ Action.prototype = {
         Dispatch growler to growl.
     */
     growl: function(text,opt) {
-        if( this.growler == "jGrowl" && $.jGrowl )
-            return $.jGrowl(text,opt);
+        return $.jGrowl(text,opt);
     },
 
     /* load action arguments from result */
@@ -1208,12 +1183,11 @@ ActionGrowler.prototype = $.extend( ActionPluginPrototype , {
 
     handleResult: function(resp) {
         if( ! resp.message ) {
-            /*
             if( resp.error && resp.validations ) {
                 var errs = this.extErrorMsgs(resp);
-                this.growl( errs.pop() , { theme: 'error' } );
+                for ( var i in errs )
+                    this.growl( errs[i] , { theme: 'error' } );
             }
-            */
             return;
         }
 
@@ -1323,12 +1297,10 @@ ActionMsgbox.prototype = $.extend( ActionPluginPrototype , {
 
 Action.plug( ActionMsgbox , {  } );
 
-/*
 Action.plug( ActionGrowler, { 
-    success: {  },
-    error:  {  }
+    // success: {  },
+    // error:  {  }
 } );
-*/
 
 /* init scripts for Action */
 /*
