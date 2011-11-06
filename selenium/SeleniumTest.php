@@ -4,7 +4,7 @@ require_once 'PHPUnit/Extensions/SeleniumTestCase.php';
 
 use Phifty\Testing\SeleniumTestCase;
 
-class WebTest extends SeleniumTestCase
+class SeleniumWebTest extends SeleniumTestCase
 {
 
     function setUp()
