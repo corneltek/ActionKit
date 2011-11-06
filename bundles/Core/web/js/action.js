@@ -221,7 +221,6 @@ Action = function(arg1,arg2) {
             throw "Action form element not found";
     }
 
-    this._bind   = [ ];
     this.plugins = [ ];
     this.actionPath = null;
     this.opts = $.extend( { 
