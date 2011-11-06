@@ -216,7 +216,9 @@ Action = function(arg1,arg2) {
 
     if( f ) {
         this.formEl = $(f);
-        this.formEl.attr('method','post');
+        this.formEl.attr('method','post'); // always to POST method
+        if( ! this.formEl.get(0) )
+            throw "Action form element not found";
     }
 
     this._bind   = [ ];

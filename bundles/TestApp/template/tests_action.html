@@ -3,6 +3,9 @@
 #}
 {% extends 'widgets/QUnit/template/base.html' %}
 
+
+
+
 {% block tests %}
 
 {# 
@@ -23,6 +26,7 @@ TODO:
 <script src="/ph/Core/js/simpleclass.js"> </script>
 <script src="/ph/Core/js/region.js"> </script>
 <script src="/ph/Core/js/action.js"> </script>
+
 <script type="text/javascript">
 
 $(document.body).ready(function() {
@@ -50,6 +54,14 @@ $(document.body).ready(function() {
         Action.reset();
 
         equals( 0, Action._global_plugins.length );
+    });
+
+
+    test('Action form' , function() {
+
+        var a = new Action( $('#testform1') , {  });
+        ok( a );
+
     });
 
     test('Action plugin base test', function() {
@@ -80,10 +92,12 @@ $(document.body).ready(function() {
 });
 </script>
 
-<form>
-
-
-
-</form>
+<div>
+    <form id="testform1">
+        <input type="text" name="action" value="TestApp::Action::Dummy"/>
+        <input type="text" name="name" value="Dummy Name"/>
+        <input type="submit"/>
+    </form>
+</div>
 
 {% endblock %}
