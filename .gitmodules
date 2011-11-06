@@ -13,3 +13,6 @@
 [submodule "dists/firephp"]
 	path = dists/firephp
 	url = https://github.com/firephp/firephp.git
+[submodule "plugins/QUnit/web/qunit"]
+	path = plugins/QUnit/web/qunit
+	url = https://github.com/jquery/qunit.git

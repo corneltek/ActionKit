@@ -2,51 +2,6 @@
 Application Dir Structure
 =========================
 
-Application File Structure
-
-    app.php # entry point code, load phifty
-    app/view/
-    app/controller/
-    app/action/
-    app/model/
-
-    plugins/
-        product/view
-        product/controller
-        product/action
-        product/model
-        product/web
-
-        other/view/
-        other/action/
-        other/controller/
-
-        databrowse/view/
-        databrowse/action/
-
-    app/
-    app/view/templates...
-    app/config.yml
-
-    web/
-    web/images/
-    web/css
-    web/js
-    web/ph/css - link
-    web/ph/js  - link
-    web/test.php
-
-    phifty/lib/
-    phifty/lib/Phifty/
-    phifty/lib/Phifty/Component/...
-    phifty/lib/Phifty/ClassLoader.php
-    phifty/lib/....
-    phifty/lib/Phifty/Bundle/EteDB
-    phifty/res/css/
-    phifty/res/js/
-    dists/etedb/....
-
-
 Phifty export commmand
 ====================
 
@@ -118,21 +73,17 @@ To add a plugin, edit etc/config.yml first.
 
 Your plugin structure is like:
 
-    plugins/sb/model/
-    plugins/sb/action/
-    plugins/sb/controller/
-    plugins/sb/view/
-    plugins/sb/config/config.yml
+    plugins/sb/Model/
+    plugins/sb/Action/
+    plugins/sb/Controller/
+    plugins/sb/View/
+    plugins/sb/config/config.yml (not support yet)
 
 Product class extends from \Phifty\Plugin.
 
     init()
     pageStart()
     pageEnd()
-
-plugin loader init script is in:
-
-    plugins/sb/init.php
 
 For action name with plugin
 

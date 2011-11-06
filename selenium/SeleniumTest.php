@@ -1,21 +1,27 @@
 <?php
-
+require_once 'autoload.php';
 require_once 'PHPUnit/Extensions/SeleniumTestCase.php';
- 
-class SeleniumTest extends PHPUnit_Extensions_SeleniumTestCase
+
+use Phifty\Testing\SeleniumTestCase;
+
+class SeleniumWebTest extends SeleniumTestCase
 {
-    protected function setUp()
+
+    function setUp()
     {
         $this->setBrowser('*firefox');
         # $this->setBrowser('*googlechrome');
         $this->setBrowserUrl('http://www.google.com/');
     }
  
-    public function testTitle()
+    function testTitle()
     {
-        $this->open('http://www.google.com/');
-        $this->assertTitleEquals('Google');
+        # $this->open('http://phifty.dev/qunit');
+        $title = $this->getTitle();
+        $this->assertEquals(1,1);
+
+        # $this->ok( $title );
+        # $this->assertTitleEquals('Google');
     }
 }
 
-?>

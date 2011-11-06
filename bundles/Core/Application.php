@@ -31,6 +31,7 @@ class Application extends \Phifty\MicroApp
             'js/js-model-0.9.4.min.js',
             'js/jquery.scrollTo-min.js',
             'js/jquery.oembed.js',
+            'js/simpleclass.js',
             'js/region.js',
             'js/action.js',
             'js/crud.js',
