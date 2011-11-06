@@ -56,8 +56,14 @@ $(document.body).ready(function() {
         equals( 0, Action._global_plugins.length );
     });
 
-
-
+    asyncTest('asynchronous test', function() {
+        runAction('TestApp::Action::Dummy',{ name: 'John' }, function(resp) { 
+            ok( resp, 'response info' );
+            ok( resp.success );
+            equals( resp.message , 'Hello John' );
+            start();
+        });
+    });
 
     test('Action form' , function() {
 
