@@ -14,6 +14,7 @@ class Application extends \Phifty\MicroApp
         $this->route( '/bar' , 'Bar' );
         $this->route( '/galleria_demo' , 'GalleriaDemo' );   // Controller\GalleriaDemo
         $this->route( '/pretty_photo' , 'PrettyPhoto' );     // Controller\PrettyPhoto
+        $this->route( '/phpinfo' , 'PhpInfo' );
     }
 }
 
