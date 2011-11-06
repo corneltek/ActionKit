@@ -332,6 +332,9 @@ Action.prototype = {
     */
     options: function(opts)  { 
 
+        if( window.console )
+            console.error('options method DEPRECATED.');
+
         var that = this;
         this.opts = $.extend( this.opts , opts );
         if( opts.validation ) {
