@@ -57,12 +57,17 @@ $(document.body).ready(function() {
     });
 
     asyncTest('asynchronous test', function() {
+
+        Action.plug( ActionGrowler );
+
         runAction('TestApp::Action::Dummy',{ name: 'John' }, function(resp) { 
             ok( resp, 'response info' );
             ok( resp.success );
             equals( resp.message , 'Hello John' );
             start();
         });
+
+        Action.reset();
     });
 
     test('Action form' , function() {

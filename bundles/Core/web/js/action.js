@@ -632,6 +632,8 @@ Action.prototype = {
 
         var successHandler = function(resp) { 
 
+            $(that).trigger('action.on_result',[resp]);
+
                 debug( 'Run success handler' , resp );
 
                 if( formEl && options.disableInput ) {
@@ -894,6 +896,7 @@ Action.prototype = {
 
 		// submit handler {{{
         var submitHandler = function(resp) {
+
             $(that).trigger('action.on_result',[resp]);
 
             if( window.console )
@@ -1142,14 +1145,14 @@ var ActionPlugin = Class.extend({
     onSubmit:     function(ev, d ) {  }
 });
 
+
+
 var ActionGrowler = ActionPlugin.extend({
-    init: function(action,config) {
-        this._super(action,config);
-    },
     growl: function(text,opts) {
         return $.jGrowl(text,opt);
     },
-    onResult: function(resp) {
+
+    onResult: function(ev,resp) {
         if( ! resp.message ) {
             if( resp.error && resp.validations ) {
                 var errs = this.extErrorMsgs(resp);
@@ -1208,11 +1211,11 @@ var ActionMsgbox = ActionPlugin.extend({
         this.div.empty().hide();
     },
 
-    beforeSubmit: function(d) { 
+    beforeSubmit: function(ev,d) { 
         this.wait();
     },
 
-    onResult: function(resp) { 
+    onResult: function(ev,resp) { 
         var that = this;
         if( resp.success ) {
             var sd = $('<div/>').addClass('success').html(resp.message);
@@ -1253,6 +1256,7 @@ var ActionMsgbox = ActionPlugin.extend({
         var d = $('<div/>').addClass('error-message').html(msg);
         this.div.find('.errors').append(d);
     },
+
     wait: function() { 
         var ws = $('<div/>').addClass('waiting').html( Action.loc("Progressing") );
         this.div.html( ws ).show();
