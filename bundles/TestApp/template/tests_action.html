@@ -25,20 +25,50 @@ TODO:
 <script src="/ph/Core/js/action.js"> </script>
 <script type="text/javascript">
 
+$(document.body).ready(function() {
+
+    test("a basic test example", function() {
+        ok( true, "this test is fine" );
+        var value = "hello";
+        equal( value, "hello", "We expect value to be hello" );
+    });
+
+    test('Action constructor' , function() {
+        var a = new Action;
+        ok( a );
+
+    });
+
+    test('plug/reset' , function() {
+
+        equals( 0, Action._global_plugins.length );
+
+        Action.plug( ActionGrowler );
+
+        equals( 1, Action._global_plugins.length );
+
+        Action.reset();
+
+        equals( 0, Action._global_plugins.length );
+    });
 
     test('Action plugin base test', function() {
 
-        ok( ActionPlugin );
-
         var a = new Action;
-        var plugin = new ActionPlugin(a);
         ok( a );
+
+        ok( ActionPlugin );
+        var plugin = new ActionPlugin(a);
         ok( plugin );
         ok( plugin.action );
         equals( plugin.action , a , 'plugin action == action' );
 
         var growler = new ActionGrowler(a);
         ok( growler );
+
+        a.plug( ActionGrowler , { type: 'jGrowl' } );
+        ok( a.plugins );
+        equals( 1 , a.plugins.length , 'one plugin loaded' );
     });
 
     test('Action.js', function() {
@@ -47,13 +77,13 @@ TODO:
         ok( a , 'action created' );
     });
 
-    test("a basic test example", function() {
-        ok( true, "this test is fine" );
-
-        var value = "hello";
-        equal( value, "hello", "We expect value to be hello" );
-    });
-
+});
 </script>
+
+<form>
+
+
+
+</form>
 
 {% endblock %}

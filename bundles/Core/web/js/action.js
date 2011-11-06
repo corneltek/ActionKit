@@ -201,14 +201,6 @@ ActionPerfield.prototype = {
 };
 
 
-
-
-
-/*
-
-Action.js start here.
-
-*/
 (function() {
 
 Action = function(arg1,arg2) {
@@ -227,6 +219,7 @@ Action = function(arg1,arg2) {
         this.formEl.attr('method','post');
     }
 
+    this._bind   = [ ];
     this.plugins = [ ];
     this.actionPath = null;
     this.opts = $.extend( { 
@@ -248,6 +241,12 @@ Action = function(arg1,arg2) {
             throw "Action name is undefined.";
     }
 
+    /* init plugins */
+    var self = this;
+    var pgs = Action._global_plugins; // or from global plugin list
+    $(pgs).each( function(i,e) { 
+        self.plug( e.plugin, e.options );
+    });
 };
 
 /* i18n dictionary */
@@ -263,7 +262,7 @@ Action.locale = new MiniLocale( Action.dict , "zh_TW" );
 Action.loc = Action.locale.getloc();
 // Action.loc = new MiniLocale( Action.dict , "zh_TW" , { returnLoc: true } );
 
-Action.plugins = [ ];
+Action._global_plugins = [ ];
 
 /*
 Action.plug( plugin function , plugin options )
@@ -271,7 +270,11 @@ Action.plug( plugin function , plugin options )
     register a plugin.
 */
 Action.plug = function( plugin , opts ) {
-    this.plugins.push( { plugin: plugin, options: opts });
+    this._global_plugins.push( { plugin: plugin, options: opts });
+};
+
+Action.reset = function() {
+    this._global_plugins = [];
 };
 
 Action.importdict = function( subdict ) {
@@ -282,24 +285,8 @@ Action.importdict = function( subdict ) {
 
 /* factory method , create an Action object from a form. */
 Action.form = function(form,opts) {
-
     opts = opts || { };
-
-    var a =  new Action(form,opts);
-
-    var pgs = opts.plugins || Action.plugins; // or from global plugin list
-
-    a.plugins = [];
-
-    for( var i=0; i < pgs.length ; ++i ) 
-    {
-        var e = pgs[ i ];
-        var pg = new e.plugin( a , e.options );
-        var pgdict = pg.dict();
-        Action.importdict( pgdict );
-        pg.load();
-        a.plugins.push(pg);
-    }
+    var a = new Action(form,opts);
     return a;
 };
 
@@ -319,6 +306,14 @@ Action.prototype = {
             console.log( console , arguments );
         }
         this.logger.log( arguments );
+    },
+
+    plug: function(plugin,options) {
+        var p = new plugin(this, options );
+        var p_dict = p.dict();
+        Action.importdict( p_dict );
+        this.plugins.push(p);
+        return p;
     },
 
     /*
@@ -892,23 +887,16 @@ Action.prototype = {
         data['__ajax_request'] = 1;  // it's an ajax request
 
         if( options.beforeSubmit )
-            options.beforeSubmit.call( this , fEl, data );
+            options.beforeSubmit.call( this, data );
 
-        $(that.plugins).each(function(i,e) {
-            data = e.beforeSubmit(data) || data;
-        });
+        $(that).trigger('action.before_submit',[data]);
 
 		// submit handler {{{
         var submitHandler = function(resp) {
+            $(that).trigger('action.on_result',[resp]);
 
-            $(that.plugins).each(function(i,e) {
-                e.handleResult( resp );
-            });
-
-            debug( 'Run submit handler' );
-            
             if( window.console )
-                console.info( "Action Result: " , resp );
+                console.info( "Action response: " , resp );
 
             if( cb ) {
                 var ret = cb(resp);
@@ -1080,87 +1068,77 @@ function runAction(actionName,args,arg1,arg2) {
 // Export Action to jQuery.
 $.Action = Action;
 
-/*
-
-Action Plugin
-
-Register to Action:
-
-    Action.plug( ActionMsgbox , {  plugin options } );
-
-    Or via config
-
-    # TODO
-    Action.config({
-        plugins: [  { plugin: .... , options: { ... } }  ]
-    });
 
 
-Interface
-
-   plugin.constructor( action , opts )
-
-   (dict)        plugin.dict()
-                 i18n dictionary
-
-   (config)      plugin.config( config || null )
-
-   (action)      plugin.action(a)
-                    get/set current action.
-                    
-   (jquery form) plugin.form()
-                    get current form from current action.
-
-                 plugin.load()
-                    when the form is first initialized with action.
-
-   (form data)   plugin.handleData( formData )
-                 plugin.handleResult( result )
-                 plugin.handleValidateData( )
-
-                 plugin.onSuccess( result )
-                 plugin.onError( result )
-
-                 plugin.onValidate( formData )
-
-   (form data)   plugin.beforeSubmit( formData )
-                 plugin.onSubmit( formData )
-                 plugin.afterSubmit( result )
-
-
-Properties:
-
-    this.opts - plugin options
-    this.action   - action object
-
-*/
+/* Action plugin base class 
+ **/
 var ActionPlugin = Class.extend({
     init: function(action,config) { 
         if( ! action )
             throw "Action object is required.";
         this.action = action;
         this.config = config;
+
+        // init events
+        $(this.action).bind('action.on_result', this.onResult );
+
+        /* when action init */
+        $(this.action).bind('action.on_init',this.onInit);
+
+        /* when the action result presents success */
+        $(this.action).bind('action.on_success',this.onSuccess);
+        /* when the action result presents error */
+        $(this.action).bind('action.on_error',this.onError);
+
+        /* before user submit the form */
+        $(this.action).bind('action.before_submit',this.beforeSubmit);
+
+        /* after user submit the form */
+        $(this.action).bind('action.after_submit',this.afterSubmit);
+
+        this.load();
     },
-    action: function() { return this.action; },
-    form:   function() { return this.action.form(); },
-    dict:   function() { return {  }; },
+
+    /* Accessors */
+    action: function() { 
+        return this.action; 
+    },
+
+    form:   function() { 
+        return this.action.form(); 
+    },
+
+    dict:   function() { 
+        return {  };
+    },
     config: function(config) { 
         if( config )
             this.opts = $.extend( this.opts , config );
         return this.opts;
     },
+
     load: function()  {  
           
     },
-    handleData:   function( d ) { return d; },
-    handleValidateData: function( v ) { },
-    handleResult: function( r ) {  },
 
-    onSuccess: function( r ) {  },
-    onError: function( r ) {  },
-    beforeSubmit: function( d ) { return d; },
-    afterSubmit:  function( r ) {  },
-    onSubmit:     function( d ) {  }
+    /* Filters
+    */
+
+    /* filter the data before submit or run, this allow plugin to change/append
+    * some data. */
+    filterData: function(data) { return data; },
+
+
+    /*
+    * Event handlers 
+    * */
+    onInit:       function(ev) {  },
+    onResult:     function(ev, r ) {  },
+    onSuccess:    function(ev, r ) {  },
+    onError:      function(ev, r ) {  },
+    beforeSubmit: function(ev, d ) { return d; },
+    afterSubmit:  function(ev, r ) {  },
+    onSubmit:     function(ev, d ) {  }
 });
 
 var ActionGrowler = ActionPlugin.extend({
@@ -1170,7 +1148,7 @@ var ActionGrowler = ActionPlugin.extend({
     growl: function(text,opts) {
         return $.jGrowl(text,opt);
     },
-    handleResult: function(resp) {
+    onResult: function(resp) {
         if( ! resp.message ) {
             if( resp.error && resp.validations ) {
                 var errs = this.extErrorMsgs(resp);
@@ -1233,7 +1211,7 @@ var ActionMsgbox = ActionPlugin.extend({
         this.wait();
     },
 
-    handleResult: function(resp) { 
+    onResult: function(resp) { 
         var that = this;
         if( resp.success ) {
             var sd = $('<div/>').addClass('success').html(resp.message);
@@ -1279,11 +1257,3 @@ var ActionMsgbox = ActionPlugin.extend({
         this.div.html( ws ).show();
     }
 });
-
-/* init scripts for Action */
-$(document.body).ready(function() {
-    Action.plug( ActionMsgbox , {  } );
-    Action.plug( ActionGrowler, {  } );
-});
-
-
