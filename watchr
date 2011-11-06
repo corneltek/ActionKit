@@ -13,6 +13,8 @@ watch '^lib/.*\.php' do |match|
 end
 
 
+# http://growl.info/extras.php#growlnotify
+
 # def phpunit file
 #   if File.exists? file
 #     cmd = "phpunit #{file} 2>&1" # redirect stderr to stdout
