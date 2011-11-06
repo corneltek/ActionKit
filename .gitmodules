@@ -16,3 +16,6 @@
 [submodule "plugins/QUnit/web/qunit"]
 	path = plugins/QUnit/web/qunit
 	url = https://github.com/jquery/qunit.git
+[submodule "dists/WebDriver"]
+	path = dists/WebDriver
+	url = git://github.com/facebook/php-webdriver.git

@@ -25,3 +25,4 @@ class SeleniumWebTest extends SeleniumTestCase
     }
 }
 
+
