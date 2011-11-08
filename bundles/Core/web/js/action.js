@@ -1006,7 +1006,6 @@ Action.prototype = {
                     return true 
                 },
                 onComplete: function(respText) { 
-
                     that.log( "AIM onComplete" , respText );
 
                     if( options.replaceForm ) {
@@ -1015,6 +1014,7 @@ Action.prototype = {
                     }
 
                     var json = JSON.parse( respText );
+                    $(that).trigger('action.on_result',[json]);
 
                     if( options.onUpload )
                         options.onUpload.call( that, json );
@@ -1084,35 +1084,41 @@ var ActionPlugin = Class.extend({
         if( ! action )
             throw "Action object is required.";
         this.action = action;
-        this.config = config;
+        this.form = action.form();
+        this.config = config || {};
 
+        var self = this;
         // init events
-        $(this.action).bind('action.on_result', this.onResult );
+        $(this.action).bind('action.on_result', function() { 
+            self.onResult.apply(self,arguments);
+        });
 
         /* when action init */
-        $(this.action).bind('action.on_init',this.onInit);
+        $(this.action).bind('action.on_init', function(){
+            self.onInit.apply(self,arguments);
+        });
 
         /* when the action result presents success */
-        $(this.action).bind('action.on_success',this.onSuccess);
+        $(this.action).bind('action.on_success',function() {
+            self.onSuccess.apply(self,arguments);
+        });
+
         /* when the action result presents error */
-        $(this.action).bind('action.on_error',this.onError);
+        $(this.action).bind('action.on_error', function() {
+            self.onError.apply(self,arguments);
+        });
 
         /* before user submit the form */
-        $(this.action).bind('action.before_submit',this.beforeSubmit);
+        $(this.action).bind('action.before_submit', function() {
+            self.beforeSubmit.apply(self,arguments);
+        });
 
         /* after user submit the form */
-        $(this.action).bind('action.after_submit',this.afterSubmit);
+        $(this.action).bind('action.after_submit', function() {
+            self.afterSubmit.apply(self,arguments);
+        });
 
         this.load();
-    },
-
-    /* Accessors */
-    action: function() { 
-        return this.action; 
-    },
-
-    form:   function() { 
-        return this.action.form(); 
     },
 
     dict:   function() { 
@@ -1152,10 +1158,11 @@ var ActionPlugin = Class.extend({
 
 var ActionGrowler = ActionPlugin.extend({
     growl: function(text,opts) {
-        return $.jGrowl(text,opt);
+        return $.jGrowl(text,opts);
     },
 
     onResult: function(ev,resp) {
+
         if( ! resp.message ) {
             if( resp.error && resp.validations ) {
                 var errs = this.extErrorMsgs(resp);
@@ -1166,9 +1173,9 @@ var ActionGrowler = ActionPlugin.extend({
         }
 
         if( resp.success ) {
-            this.growl( resp.message , this.opts.success );
+            this.growl( resp.message , this.config.success );
         } else {
-            this.growl(resp.message, $.extend( this.opts.error , { theme: 'error' } ));
+            this.growl(resp.message, $.extend( this.config.error , { theme: 'error' } ));
         }
 
         if( window.console )
@@ -1200,15 +1207,15 @@ var ActionMsgbox = ActionPlugin.extend({
     },
     load: function() {
         /* since we use Phifty::Action::...  ... */
-        var actionName = this.action().name;
+        var actionName = this.action.name;
         var actionId = actionName.replace( /::/g , '-' );
 
         this.cls    = 'action-' + actionId + '-result';
         this.ccls   = 'action-result';  // common class
-        this.div    = this.form().find( '.' + this.cls );
+        this.div    = this.form.find( '.' + this.cls );
         if( ! this.div.get(0) ) { 
             this.div = $('<div/>').addClass( this.cls ).addClass( this.ccls ).hide();
-            this.form().prepend( this.div );
+            this.form.prepend( this.div );
         }
 
         this.div.empty().hide();
@@ -1264,4 +1271,10 @@ var ActionMsgbox = ActionPlugin.extend({
         var ws = $('<div/>').addClass('waiting').html( Action.loc("Progressing") );
         this.div.html( ws ).show();
     }
+});
+
+
+$(function() {
+    Action.plug( ActionGrowler );
+    Action.plug( ActionMsgbox );
 });
