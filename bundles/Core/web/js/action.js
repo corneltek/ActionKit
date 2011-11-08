@@ -1146,14 +1146,13 @@ var ActionPlugin = Class.extend({
     * Event handlers 
     * */
     onInit:       function(ev) {  },
-    onResult:     function(ev, r ) {  },
-    onSuccess:    function(ev, r ) {  },
-    onError:      function(ev, r ) {  },
-    beforeSubmit: function(ev, d ) { return d; },
-    afterSubmit:  function(ev, r ) {  },
-    onSubmit:     function(ev, d ) {  }
+    onResult:     function(ev, resp) {  },
+    onSuccess:    function(ev, resp) {  },
+    onError:      function(ev, resp) {  },
+    beforeSubmit: function(ev, data ) { return data; },
+    afterSubmit:  function(ev, resp ) {  },
+    onSubmit:     function(ev, data ) {  }
 });
-
 
 
 var ActionGrowler = ActionPlugin.extend({
