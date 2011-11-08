@@ -1084,7 +1084,7 @@ var ActionPlugin = Class.extend({
         if( ! action )
             throw "Action object is required.";
         this.action = action;
-        this.form = action.form();
+        this.form   = action.form();
         this.config = config || {};
 
         var self = this;
@@ -1204,7 +1204,12 @@ var ActionMsgbox = ActionPlugin.extend({
             }
         };
     },
+
     load: function() {
+        /* if we have form */
+        if( ! this.form )
+            return;
+
         /* since we use Phifty::Action::...  ... */
         var actionName = this.action.name;
         var actionId = actionName.replace( /::/g , '-' );
@@ -1221,10 +1226,15 @@ var ActionMsgbox = ActionPlugin.extend({
     },
 
     beforeSubmit: function(ev,d) { 
+        if( ! this.form )
+            return;
         this.wait();
     },
 
     onResult: function(ev,resp) { 
+        if( ! this.form )
+            return;
+
         var that = this;
         if( resp.success ) {
             var sd = $('<div/>').addClass('success').html(resp.message);
