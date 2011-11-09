@@ -18,6 +18,7 @@
     <div class="bd">
 		{% block controll %}
 
+
             {# list I18n selector #}
             {% if Kernel.getPlugin('I18N') and CRUD.object.model.getColumn('lang') %}
                 <div class="corner-controll" style="display: inline;">
@@ -35,6 +36,8 @@
                     </select>
                 </div>
             {% endif %}
+
+
 		{% endblock %}
 
         {% block order_by %} {% endblock %}
