@@ -1,0 +1,22 @@
+<div class="message {{ result.type }}">
+
+	<span style="float: left; " class="ui-icon ui-icon-notice"> </span>
+
+	<div class="text"> {{ result.message }} </div>
+
+	<div class="desc">
+		{% for k,v in result.validations %}
+			{% if v.invalid %}
+				<div class="error-message">{{ v.invalid }}</div>
+			{% endif %}
+		{% endfor %}
+
+		{% if result.desc %}
+			<div class="desc"> {{ result.desc }}  </div>
+		{% endif %}
+	</div>
+
+
+	<!-- close button -->
+	<span onclick="$(this).parent().fadeOut();" style="position: absolute; top: 6px; right: 6px;" class="ui-icon ui-icon-circle-close"> </span>
+</div>

@@ -1,0 +1,58 @@
+.region-statusbar {
+    position: fixed;
+    left: 5px;
+    bottom: 30px;
+    height: 18px;
+    width: 30%;
+    alpha: 0.8;
+
+    background-color: #fff;
+    border: 1px solid #ccc;
+    font-size: 12px;
+    padding-top: 6px;
+    padding-left: 6px;
+    padding-bottom: 6px;
+}
+
+.region-statusbar.loading {
+    padding-left: 32px;
+    background: #fff url(images/ajax-circle-loading.gif) 6px 7px no-repeat;
+    color: #333;
+}
+
+
+/* css when region is loading */
+.region-loading { 
+    width: 30px;
+    height: 30px;
+    background: #fff url(images/ajax-circle-loading.gif) center center no-repeat;
+}
+
+
+/* .region-loading .text {  display: none; } */
+
+.region-error { 
+    color: red;
+}
+
+.__region { 
+    /* border: 1px dashed #ddd; */
+    /* padding: 3px; */
+    position: relative;
+}
+
+.region-backbtn {
+    width: 20px;
+    height: 15px;
+    background: url(images/back-arrow.png);
+    /*
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    */
+}
+.region-backbtn:hover { 
+    border: 1px solid #ccc;
+}
+
+

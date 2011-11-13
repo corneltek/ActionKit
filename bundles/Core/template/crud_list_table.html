@@ -1,0 +1,53 @@
+{# 
+  vim:filetype=jinja
+
+  Extracted from crud_list_table.html
+#}
+
+<table class="result" width="100%">
+    <thead>
+        <tr>
+            {% for column in CRUD.List.columns %}
+                <th> {{ CRUD.object.model.getColumn(column).getLabel() }} </th>
+            {% endfor %}
+            <th> - - - -  </th>
+        </tr>
+    </thead>
+    <tbody>
+
+    {% if not CRUD.List.items %}
+        <tr> <td> {% trans 'No Data' %} </td> </tr>
+    {% endif %}
+
+    {% for item in CRUD.List.items %}
+
+        {% block row %}
+
+            {% if loop.index is even %} <tr class="even"> {% else %} <tr class="old"> {% endif %}
+
+                {% for column in CRUD.List.columns %}
+                    <td> {{ item.display( column ) }} </td>
+                {% endfor %}
+
+                <td> 
+
+                    {# --- javascript buttons --- #}
+                    <input type="button" 
+                        value="{% trans "Edit" %}"
+                        onclick=" Region.before( this , '/bs/{{ CRUD.object.crudId }}/crud/edit' , { id:  {{ item.data.id }}  } ); "/>
+
+                    <input type="button" 
+                        value="{% trans "Delete" %}"
+                        onclick=" runAction( '{{ CRUD.object.namespace }}::Action::Delete{{ CRUD.object.modelName }}' , { id: {{ item.data.id }}  } , { confirm: '確認刪除? ', removeTr: this } ); "/>
+
+                    {% block extra_buttons %}
+
+                    {% endblock %}
+
+                </td>
+            </tr>
+
+        {% endblock row %}
+    {% endfor %}
+    </tbody>
+</table>

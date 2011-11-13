@@ -1,0 +1,187 @@
+/* -------------------------------------------------------------- 
+   
+   grid.css
+   * Sets up an easy-to-use grid of 24 columns.
+   
+   Based on work by:
+   * Nathan Borror     [playgroundblues.com]
+   * Jeff Croft        [jeffcroft.com]
+   * Christian Metts   [mintchaos.com]
+   * Khoi Vinh         [subtraction.com]
+   
+   The grid is 760px wide, with 24 columns 
+   spanning 24px, and a 8px margin between columns.
+   
+   XXX:
+   we've adjust width from 760px to 850px
+   
+-------------------------------------------------------------- */
+
+/* A container should group all your columns. */
+.container {
+  width: 840px;
+  margin: 0 auto;
+}
+
+
+/* Columns
+-------------------------------------------------------------- */
+
+/* Use this class together with the .span-x classes
+   to create any composition of columns in a layout. */
+   
+.column {
+  float: left;
+  margin-right: 8px;
+}
+
+
+/* The last column in a row needs this class. */
+.last { margin-right: 0; }
+
+/* Use these classes to set the width of a column. */
+.span-1   { width: 24px; }
+.span-2   { width: 56px; }
+.span-3   { width: 88px; }
+.span-4   { width: 120px; }
+.span-5   { width: 152px; }
+.span-6   { width: 184px; }
+.span-7   { width: 216px; }
+.span-8   { width: 248px; }
+.span-9   { width: 280px; }
+.span-10  { width: 312px; }
+.span-11  { width: 344px; }
+.span-12  { width: 376px; }
+.span-13  { width: 408px; }
+.span-14  { width: 440px; }
+.span-15  { width: 472px; }
+.span-16  { width: 504px; }
+.span-17  { width: 536px; }
+.span-18  { width: 568px; }
+.span-19  { width: 600px; }
+.span-20  { width: 632px; }
+.span-21  { width: 664px; }
+.span-22  { width: 696px; }
+.span-23  { width: 728px; }
+.span-24  { width: 760px; margin: 0; }
+
+/* Add these to a column to append empty cols. */
+.append-1   { padding-right: 32px; }  
+.append-2   { padding-right: 64px; } 
+.append-3   { padding-right: 96px; } 
+.append-4   { padding-right: 128px; } 
+.append-5   { padding-right: 160px; } 
+.append-6   { padding-right: 192px; } 
+.append-7   { padding-right: 224px; } 
+.append-8   { padding-right: 256px; } 
+.append-9   { padding-right: 288px; } 
+.append-10  { padding-right: 320px; } 
+.append-11  { padding-right: 352px; } 
+.append-12  { padding-right: 484px; } 
+.append-13  { padding-right: 416px; } 
+.append-14  { padding-right: 448px; } 
+.append-15  { padding-right: 480px; } 
+.append-16  { padding-right: 512px; } 
+.append-17  { padding-right: 544px; } 
+.append-18  { padding-right: 576px; } 
+.append-19  { padding-right: 608px; } 
+.append-20  { padding-right: 640px; } 
+.append-21  { padding-right: 672px; } 
+.append-22  { padding-right: 704px; } 
+.append-23  { padding-right: 736px; } 
+
+/* Add these to a column to prepend empty cols. */
+.prepend-1   { padding-left: 32px;}
+.prepend-2   { padding-left: 64px;}
+.prepend-3   { padding-left: 96px;}
+.prepend-4   { padding-left: 128px;}
+.prepend-5   { padding-left: 160px;}
+.prepend-6   { padding-left: 192px;}
+.prepend-7   { padding-left: 224px;}
+.prepend-8   { padding-left: 256px;}
+.prepend-9   { padding-left: 288px;}
+.prepend-10  { padding-left: 320px;}
+.prepend-11  { padding-left: 352px;}
+.prepend-12  { padding-left: 384px;}
+.prepend-13  { padding-left: 416px;}
+.prepend-14  { padding-left: 448px;}
+.prepend-15  { padding-left: 480px;}
+.prepend-16  { padding-left: 512px;}
+.prepend-17  { padding-left: 544px;}
+.prepend-18  { padding-left: 576px;}
+.prepend-19  { padding-left: 608px;}
+.prepend-20  { padding-left: 640px;}
+.prepend-21  { padding-left: 672px;}
+.prepend-22  { padding-left: 704px;}
+.prepend-23  { padding-left: 736px;}
+
+
+
+/* Border on right hand side of a column. */
+.border {
+  padding-right: 3px;
+  margin-right: 4px;
+  border-right: 1px solid #ddd;
+}
+
+/* Border with more whitespace, spans one column. */
+.colborder {
+  padding-right: 19px;
+  margin-right: 20px;
+  border-right: 1px solid #ddd;
+}
+
+
+/* Use these classes on an element to push it into the 
+   next column, or to pull it into the previous column. */
+
+.pull-1  { margin-left: -32px;}
+.pull-2  { margin-left: -64px;}
+.pull-3  { margin-left: -96px;}
+.pull-4  { margin-left: -128px;}
+
+
+.push-0  { margin: 0 0 0 18px; } 
+.push-1  { margin: 0 -32px 0 18px; }
+.push-2  { margin: 0 -64px 0 18px; }
+.push-3  { margin: 0 -96px 0 18px; }
+.push-4  { margin: 0 -128px 0 18px; }
+.push-0, .push-1, .push-2, .push-3, .push-4 { float: right; }
+
+
+/* Misc classes and elements
+-------------------------------------------------------------- */
+
+/* Use a .box to create a padded box inside a column.  */ 
+.box { 
+  padding: 1.5em; 
+  margin-bottom: 1.5em; 
+  background: #eee; 
+}
+
+/* Use this to create a horizontal ruler across a column. */
+hr {
+  background: #ddd; 
+  color: #ddd;
+  clear: both; 
+  float: none; 
+  width: 100%; 
+  height: .1em;
+  margin: 0 0 1.4em;
+  border: none; 
+}
+
+/* Clearing floats without extra markup
+   Based on How To Clear Floats Without Structural Markup by PiE
+   [http://www.positioniseverything.net/easyclearing.html] */
+
+.clear { display: inline-block; }   
+.clear:after, .container:after {
+  content: "."; 
+  display: block; 
+  height: 0; 
+  clear: both; 
+  visibility: hidden;
+}
+* html .clear { height: 1%; }
+.clear { display: block; }

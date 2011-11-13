@@ -1,0 +1,16 @@
+
+.text-white-shadow {
+    color: #2D3536;
+    text-shadow: 0 1px 0 white;
+}
+
+.code-mark-black {
+    font-family: Courier,"Courier New",Monaco,Tahoma;
+    background: #2A2A2A;
+    color: white;
+    padding: 0px 2px;
+    text-shadow: 0 1px 0 black;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}

@@ -1,8 +1,15 @@
 .hg
-comp/etedb/logs/*.log
+*.log
 webroot/ph/
 webroot/static/upload/
 cache/
 coverage/
 .DS_Store
+.svn
 tests/tmp/
+docs/_build/
+*.zip
+*.tar.bz2
+*.tar
+*.tbz
+*.rar

@@ -10,16 +10,12 @@ function fail($msg) {
     die( "\033[0;31m" . $msg . "\033[0m\n" );
 }
 
-
-
 function init_define_file( $appname )
 {
     file_put_contents( 'define.php' , <<<"DOC"
 <?php 
 define( 'PH_APP_NAME' , '$appname' );
-define( 'PH_DEBUG', true);
-define( 'PH_ROOT' , __DIR__ );
-
+define( 'PH_APP_ROOT' , __DIR__ );
 DOC
     );
 }
@@ -28,20 +24,20 @@ function init_autoload_file( $phifty_submodule_target )
 {
     file_put_contents( 'autoload.php' , <<<"DOC"
 <?php
+require('define.php');
 include( __DIR__ . '/$phifty_submodule_target/autoload.php');
-
 DOC
     );
 }
 
 function init_app_file( $appname ) {
-    mkdir( strtolower($appname) . DIRECTORY_SEPARATOR . 'lib' , 0777 , true );
-    $path = strtolower($appname) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . $appname . '.php' ;
-
+    mkdir( 'App' );
+    # mkdir( strtolower($appname) . DIRECTORY_SEPARATOR . 'lib' , 0777 , true );
+    # $path = strtolower($appname) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . $appname . '.php' ;
+    $path = 'App' . DIRECTORY_SEPARATOR . 'App.php' ;
     file_put_contents( $path , <<<"END"
 <?php
-// Class: $appname
-class $appname extends \\Phifty\\MicroApp
+class App extends \\Phifty\\MicroApp
 {
 
 }
@@ -82,18 +78,9 @@ i18n:
   default: zh_TW
   lang:
     - en
-    - fr
-    - ja
     - zh_TW
     - zh_CN
-avatar_path: avatar/
 mail:
-  admin: admin@localhost
-  manager: admin@localhost
-  smtp:
-    host: localhost
-  pop3:
-    host: localhost
 view:
   backend: twig
   twig:
@@ -107,18 +94,17 @@ database:
   config:
     user: root
     pass: 123123
-    dbname: phifty2
+    dbname: lart_$appid
     host: localhost
   conn:
     lazy: 1
 test:
-  domain: phifty.local
+  domain: $appid.local
 plugins:
   I18N:
   AdminUI:
   User:
     allow_signup: 1
-  SimpleImage:
   ImageData:
     max_size: 600
     resize:
@@ -136,7 +122,7 @@ END
 #################################
 $phifty_submodule_branch = "master";
 $phifty_submodule_target = "phifty";
-$phifty_submodule_source = 'git@git2.corneltek.com:phifty2.git';
+$phifty_submodule_source = 'git@git.corneltek.com:phifty.git';
 
 if( ! file_exists('define.php') ) 
 {
