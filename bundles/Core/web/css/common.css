@@ -3,22 +3,11 @@
 .italic { font-style: italic; }
 .text-shadow { text-shadow: #ddd 0 1px; }
 
-
-/* header div */
-.hd {  }
-
-/* body div */
-.bd {  }
-
-/* footer div */
-.fd {  }
-
 /* floating columns */
 .column { float: left; }
 .center { margin: 0 auto; }
 .left { float: left; }
 .right { float: right; }
-
 
 /* text alignment */
 .text-center { text-align: center; }

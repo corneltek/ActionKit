@@ -17,6 +17,7 @@
 
     <div class="bd">
 		{% block controll %}
+            {# list I18n selector #}
             {% if Kernel.getPlugin('I18N') and CRUD.object.model.getColumn('lang') %}
                 <div class="corner-controll" style="display: inline;">
                     {% trans 'Language' %}: <select name="_data_lang" id="lang-chooser" onchange=" return (function(o) { 
@@ -24,7 +25,6 @@
                                 })(this);">
                         <option></option>
                         {% for key,lang in Web.langs %}
-
                             {% if Env.request._data_lang == key %}
                                 <option value="{{ key }}" selected>{{ lang }}</option>
                             {% else %}
@@ -33,6 +33,7 @@
                         {% endfor %}
                     </select>
                 </div>
+                <div class="clear"> </div>
             {% endif %}
 		{% endblock %}
 

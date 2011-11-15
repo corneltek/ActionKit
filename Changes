@@ -1,6 +1,16 @@
 
 # Changes
 
+六 11/ 5 11:51:28 2011
+
+- Change route api and refactor route dispatcher.
+
+** model changes
+
+- news plugin: is_cover column.
+- usecase plugin: lang columns.
+- product plugin: hide, token column.
+
 五 10/28 19:30:28 2011
 
 - Change plugin paths:  core to Core/,  core/lib/Core.php Core/Core.php

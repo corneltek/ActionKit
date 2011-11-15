@@ -1,11 +1,3 @@
-@charset "UTF-8";
-@import "round.css";
-@import "common.css";
-
-/* border red */
-.border-red {
-    border: 1px solid red;
-}
 
 .text-white-shadow {
     color: #2D3536;
@@ -22,4 +14,3 @@
     -moz-border-radius: 3px;
     border-radius: 3px;
 }
-

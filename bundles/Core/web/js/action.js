@@ -6,45 +6,19 @@ Depends on: minilocale.js region.js, jQuery.scrollTo.js
 Author: Yo-An Lin <cornelius.howl@gmail.com>
 Date: 2/16 17:04:44 2011 
 
-    TODO:
-
-    * rewrite region stuff as a plugin.
-    * rewrite progressbar as a plugin.
-    * rewrite highlighter as plugin
-    * move lang setter to app.js init script.
-
-    * move action result to outside of form.
-    * provide an option to removeForm if action submit success.
-    * provide an option to specify action result template.
-    * refactor growl options
-    * integrate progressbar with action result.
-
-    * front-end validation
-    * msgbox redesign
-    * global config (with message)
-    * refactor options (submit method and run method)
-    * let refresh option takes element array.
-        refresh: [ $('#userlist') , $('#messages') ]
-        refreshWith: { args ... }
-    * permission denied redirection
-    * error handler
-
 USAGE
+-----
 
-    Action.form( $('form#confirmemail') , { status: true } ).onSubmit({ });
-
-*/
-
-/*
 $(window).error( function(errorMessage, fileName, lineNumber) {
         alert( fileName + ':' + errorMessage + '  Line:' + lineNumber );
 });
 */
 
 window.debug = function( ) {
-    if( window.console )
-        window.console.log.apply( window.console , arguments );
-}
+    if( window.console ) {
+        window.console.log.apply(window.console, arguments);
+    }
+};
 
 var Action;
 var ActionHighlight;
@@ -227,14 +201,6 @@ ActionPerfield.prototype = {
 };
 
 
-
-
-
-/*
-
-Action.js start here.
-
-*/
 (function() {
 
 Action = function(arg1,arg2) {
@@ -250,11 +216,12 @@ Action = function(arg1,arg2) {
 
     if( f ) {
         this.formEl = $(f);
-        this.formEl.attr('method','post');
+        this.formEl.attr('method','post'); // always to POST method
+        if( ! this.formEl.get(0) )
+            throw "Action form element not found";
     }
 
     this.plugins = [ ];
-    this.growler = 'jGrowl'; // 'notify' or 'jGrowl'
     this.actionPath = null;
     this.opts = $.extend( { 
                     debug: false
@@ -275,6 +242,12 @@ Action = function(arg1,arg2) {
             throw "Action name is undefined.";
     }
 
+    /* init plugins */
+    var self = this;
+    var pgs = Action._global_plugins; // or from global plugin list
+    $(pgs).each( function(i,e) { 
+        self.plug( e.plugin, e.options );
+    });
 };
 
 /* i18n dictionary */
@@ -290,7 +263,7 @@ Action.locale = new MiniLocale( Action.dict , "zh_TW" );
 Action.loc = Action.locale.getloc();
 // Action.loc = new MiniLocale( Action.dict , "zh_TW" , { returnLoc: true } );
 
-Action.plugins = [ ];
+Action._global_plugins = [ ];
 
 /*
 Action.plug( plugin function , plugin options )
@@ -298,7 +271,11 @@ Action.plug( plugin function , plugin options )
     register a plugin.
 */
 Action.plug = function( plugin , opts ) {
-    this.plugins.push( { plugin: plugin, options: opts });
+    this._global_plugins.push( { plugin: plugin, options: opts });
+};
+
+Action.reset = function() {
+    this._global_plugins = [];
 };
 
 Action.importdict = function( subdict ) {
@@ -309,39 +286,13 @@ Action.importdict = function( subdict ) {
 
 /* factory method , create an Action object from a form. */
 Action.form = function(form,opts) {
-
     opts = opts || { };
-
-    var a =  new Action(form,opts);
-
-    var pgs = opts.plugins || Action.plugins; // or from global plugin list
-
-    a.plugins = [];
-
-    for( var i=0; i < pgs.length ; ++i ) {
-        var e = pgs[ i ];
-
-        if( window.console )
-            console.info( "Plugin: new " , e );
-        var pg = new e.plugin( a , e.options );
-
-        if( window.console )
-            console.info( "Plugin: importdict " , e );
-
-        var pgdict = pg.dict();
-        Action.importdict( pgdict );
-
-        if( window.console )
-            console.info( "Plugin: load " , e );
-
-        pg.load();
-        a.plugins.push(pg);
-    }
-
+    var a = new Action(form,opts);
     return a;
 };
 
 Action.prototype = {
+
     form: function(f) {
         if(f) {
             this.formEl = $(f);
@@ -358,6 +309,14 @@ Action.prototype = {
         this.logger.log( arguments );
     },
 
+    plug: function(plugin,options) {
+        var p = new plugin(this, options );
+        var p_dict = p.dict();
+        Action.importdict( p_dict );
+        this.plugins.push(p);
+        return p;
+    },
+
     /*
      options:
 
@@ -372,6 +331,9 @@ Action.prototype = {
 
     */
     options: function(opts)  { 
+
+        if( window.console )
+            console.error('options method DEPRECATED.');
 
         var that = this;
         this.opts = $.extend( this.opts , opts );
@@ -461,9 +423,6 @@ Action.prototype = {
         var that = this;
         var s = this.getValidateStyle() || "perfield";
 
-        $(this.plugins).each(function(i,e) {
-            e.handleResult( resp );
-        });
 
         if( s == "perfield" ) {
             // XXX: BROKEN 
@@ -510,8 +469,7 @@ Action.prototype = {
         Dispatch growler to growl.
     */
     growl: function(text,opt) {
-        if( this.growler == "jGrowl" && $.jGrowl )
-            return $.jGrowl(text,opt);
+        return $.jGrowl(text,opt);
     },
 
     /* load action arguments from result */
@@ -676,6 +634,8 @@ Action.prototype = {
             };
 
         var successHandler = function(resp) { 
+
+            $(that).trigger('action.on_result',[resp]);
 
                 debug( 'Run success handler' , resp );
 
@@ -933,19 +893,17 @@ Action.prototype = {
         data['__ajax_request'] = 1;  // it's an ajax request
 
         if( options.beforeSubmit )
-            options.beforeSubmit.call( this , fEl, data );
+            options.beforeSubmit.call( this, data );
 
-        $(that.plugins).each(function(i,e) {
-            data = e.beforeSubmit(data) || data;
-        });
+        $(that).trigger('action.before_submit',[data]);
 
 		// submit handler {{{
         var submitHandler = function(resp) {
 
-            debug( 'Run submit handler' );
-            
+            $(that).trigger('action.on_result',[resp]);
+
             if( window.console )
-                console.info( "Action Result: " , resp );
+                console.info( "Action response: " , resp );
 
             if( cb ) {
                 var ret = cb(resp);
@@ -1048,7 +1006,6 @@ Action.prototype = {
                     return true 
                 },
                 onComplete: function(respText) { 
-
                     that.log( "AIM onComplete" , respText );
 
                     if( options.replaceForm ) {
@@ -1057,6 +1014,7 @@ Action.prototype = {
                     }
 
                     var json = JSON.parse( respText );
+                    $(that).trigger('action.on_result',[json]);
 
                     if( options.onUpload )
                         options.onUpload.call( that, json );
@@ -1101,7 +1059,7 @@ Action.prototype = {
 })();
 
 
-/* helper functions */
+/* action helper functions */
 function submitActionWith( f , extendData , arg1 , arg2 ) {
     return Action.form(f).submitWith( extendData, arg1, arg2);
 }
@@ -1114,113 +1072,109 @@ function runAction(actionName,args,arg1,arg2) {
     return (new Action).run( actionName, args,arg1,arg2);
 }
 
-
 // Export Action to jQuery.
 $.Action = Action;
 
 
-/*
 
-Action Plugin
+/* Action plugin base class 
+ **/
+var ActionPlugin = Class.extend({
+    init: function(action,config) { 
+        if( ! action )
+            throw "Action object is required.";
+        this.action = action;
+        this.form   = action.form();
+        this.config = config || {};
 
-Register to Action:
+        var self = this;
+        // init events
+        $(this.action).bind('action.on_result', function() { 
+            self.onResult.apply(self,arguments);
+        });
 
-    Action.plug( ActionMsgbox , {  plugin options } );
+        /* when action init */
+        $(this.action).bind('action.on_init', function(){
+            self.onInit.apply(self,arguments);
+        });
 
-    Or via config
+        /* when the action result presents success */
+        $(this.action).bind('action.on_success',function() {
+            self.onSuccess.apply(self,arguments);
+        });
 
-    # TODO
-    Action.config({
-        plugins: [  { plugin: .... , options: { ... } }  ]
-    });
+        /* when the action result presents error */
+        $(this.action).bind('action.on_error', function() {
+            self.onError.apply(self,arguments);
+        });
 
+        /* before user submit the form */
+        $(this.action).bind('action.before_submit', function() {
+            self.beforeSubmit.apply(self,arguments);
+        });
 
-Interface
+        /* after user submit the form */
+        $(this.action).bind('action.after_submit', function() {
+            self.afterSubmit.apply(self,arguments);
+        });
 
-   plugin.constructor( action , opts )
+        this.load();
+    },
 
-   (dict)        plugin.dict()
-                 i18n dictionary
-
-   (config)      plugin.config( config || null )
-
-   (action)      plugin.action(a)
-                    get/set current action.
-                    
-   (jquery form) plugin.form()
-                    get current form from current action.
-
-                 plugin.load()
-                    when the form is first initialized with action.
-
-   (form data)   plugin.handleData( formData )
-                 plugin.handleResult( result )
-                 plugin.handleValidateData( )
-
-                 plugin.onSuccess( result )
-                 plugin.onError( result )
-
-                 plugin.onValidate( formData )
-
-   (form data)   plugin.beforeSubmit( formData )
-                 plugin.onSubmit( formData )
-                 plugin.afterSubmit( result )
-
-
-Properties:
-
-    this.opts - plugin options
-    this.a   - action object
-
-*/
-var ActionPluginPrototype = {  
-    action: function() { return this.a; },
-    form:   function() { return this.a.form(); },
-    dict:   function() { return {  }; },
+    dict:   function() { 
+        return {  };
+    },
     config: function(config) { 
         if( config )
             this.opts = $.extend( this.opts , config );
         return this.opts;
     },
+
     load: function()  {  
           
     },
-    handleData:   function( d ) { return d; },
-    handleValidateData: function( v ) { },
-    handleResult: function( r ) {  },
 
-    onSuccess: function( r ) {  },
-    onError: function( r ) {  },
-    beforeSubmit: function( d ) { return d; },
-    afterSubmit:  function( r ) {  },
-    onSubmit:     function( d ) {  }
-};
+    /* Filters
+    */
 
-var ActionGrowler = function(a,opts) {
-    this.a = a;
-    this.config( opts );
-};
+    /* filter the data before submit or run, this allow plugin to change/append
+    * some data. */
+    filterData: function(data) { return data; },
 
-ActionGrowler.prototype = $.extend( ActionPluginPrototype , {
+
+    /*
+    * Event handlers 
+    * */
+    onInit:       function(ev) {  },
+    onResult:     function(ev, resp) {  },
+    onSuccess:    function(ev, resp) {  },
+    onError:      function(ev, resp) {  },
+    beforeSubmit: function(ev, data ) { return data; },
+    afterSubmit:  function(ev, resp ) {  },
+    onSubmit:     function(ev, data ) {  }
+});
+
+
+var ActionGrowler = ActionPlugin.extend({
     growl: function(text,opts) {
-        return $.jGrowl(text,opt);
+        return $.jGrowl(text,opts);
     },
 
-    handleResult: function(resp) {
+    onResult: function(ev,resp) {
+
         if( ! resp.message ) {
-            /*
             if( resp.error && resp.validations ) {
                 var errs = this.extErrorMsgs(resp);
-                this.growl( errs.pop() , { theme: 'error' } );
+                for ( var i in errs )
+                    this.growl( errs[i] , { theme: 'error' } );
             }
-            */
             return;
         }
 
         if( resp.success ) {
-            this.growl( resp.message , this.opts.success );
+            this.growl( resp.message , this.config.success );
         } else {
-            this.growl(resp.message, $.extend( this.opts.error , { theme: 'error' } ));
+            this.growl(resp.message, $.extend( this.config.error , { theme: 'error' } ));
         }
 
         if( window.console )
@@ -1231,6 +1185,7 @@ ActionGrowler.prototype = $.extend( ActionPluginPrototype , {
     }
 });
 
+
 /* 
 Action Message Box Plugin 
     
@@ -1240,12 +1195,7 @@ TODO:
 
 Move progressbar out as a plugin.
 */
-var ActionMsgbox = function(a,opts) {
-    this.a = a;
-    this.config( opts );
-};
-
-ActionMsgbox.prototype = $.extend( ActionPluginPrototype , {
+var ActionMsgbox = ActionPlugin.extend({
     dict: function() {
         return {
             "zh_TW": {
@@ -1254,27 +1204,37 @@ ActionMsgbox.prototype = $.extend( ActionPluginPrototype , {
             }
         };
     },
+
     load: function() {
+        /* if we have form */
+        if( ! this.form )
+            return;
+
         /* since we use Phifty::Action::...  ... */
-        var actionName = this.action().name;
+        var actionName = this.action.name;
         var actionId = actionName.replace( /::/g , '-' );
 
         this.cls    = 'action-' + actionId + '-result';
         this.ccls   = 'action-result';  // common class
-        this.div    = this.form().find( '.' + this.cls );
+        this.div    = this.form.find( '.' + this.cls );
         if( ! this.div.get(0) ) { 
             this.div = $('<div/>').addClass( this.cls ).addClass( this.ccls ).hide();
-            this.form().prepend( this.div );
+            this.form.prepend( this.div );
         }
 
         this.div.empty().hide();
     },
 
-    beforeSubmit: function(d) { 
+    beforeSubmit: function(ev,d) { 
+        if( ! this.form )
+            return;
         this.wait();
     },
 
-    handleResult: function(resp) { 
+    onResult: function(ev,resp) { 
+        if( ! this.form )
+            return;
+
         var that = this;
         if( resp.success ) {
             var sd = $('<div/>').addClass('success').html(resp.message);
@@ -1315,29 +1275,15 @@ ActionMsgbox.prototype = $.extend( ActionPluginPrototype , {
         var d = $('<div/>').addClass('error-message').html(msg);
         this.div.find('.errors').append(d);
     },
+
     wait: function() { 
         var ws = $('<div/>').addClass('waiting').html( Action.loc("Progressing") );
         this.div.html( ws ).show();
     }
 });
 
-Action.plug( ActionMsgbox , {  } );
 
-/*
-Action.plug( ActionGrowler, { 
-    success: {  },
-    error:  {  }
-} );
-*/
-
-/* init scripts for Action */
-/*
-$(document.body).ready(function() {
-    // trigger onLoad for plugin
-    $(Action.plugins).each(function(i,e) {
-        if( window.console )
-            console.info( "Loading Plugin:" , e );
-        e.instance = new e.plugin( e.options );
-    });
+$(function() {
+    Action.plug( ActionGrowler );
+    Action.plug( ActionMsgbox );
 });
-*/

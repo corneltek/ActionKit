@@ -7,6 +7,7 @@ class jQueryTools extends Widget
 {
     public $images;
     public $config = array();
+
 	function js()
 	{
         return array(
@@ -15,5 +16,4 @@ class jQueryTools extends Widget
             'scrollable/scrollable.navigator.js',
         );
 	}
-    function template() {  }
 }
