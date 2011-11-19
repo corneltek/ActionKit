@@ -25,7 +25,7 @@
 			// Register the command so that it can be invoked by using tinyMCE.activeEditor.execCommand('mceImageChooser');
 			ed.addCommand('mceImageChooser', function() {
 
-                var dialog = window.open('/_adminui/image_chooser','status: no; location: no;','width=480, height=600');
+                var dialog = window.open('/_adminui/image_chooser','imagechooser','location=0,menubar=0,width=480, height=600');
                 $(dialog.document).ready(function() {
                     // export function to dialog.
                     window.appendImage = dialog.appendImage = function(image_path,attrs) {
