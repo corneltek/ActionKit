@@ -24,28 +24,36 @@
 		init : function(ed, url) {
 			// Register the command so that it can be invoked by using tinyMCE.activeEditor.execCommand('mceImageChooser');
 			ed.addCommand('mceImageChooser', function() {
-				ed.windowManager.open({
-					file : url + '/dialog.htm',
-					width : 320 + parseInt(ed.getLang('imagechooser.delta_width', 0)),
-					height : 120 + parseInt(ed.getLang('imagechooser.delta_height', 0)),
-					inline : 1
-				}, {
-					plugin_url : url, // Plugin absolute URL
-					some_custom_arg : 'custom arg' // Custom argument
-				});
+
+                var dialog = window.open('/_adminui/image_chooser','','width=480, height=600');
+                $(dialog.document).ready(function() {
+                    // export function to dialog.
+                    window.appendImage = dialog.appendImage = function(image_path) {
+                        // get the tinyMCE content box, append text ...
+                        var img = '<img width="500" src="' + image_path + '"/>';
+                        ed.execCommand('mceInsertContent', false, img );
+
+                        // show fadeIn.
+                        setTimeout(function() {
+                            dialog.close();
+                        },1000);
+                    };
+                });
 			});
 
 			// Register imagechooser button
 			ed.addButton('imagechooser', {
 				title : 'imagechooser.desc',
 				cmd : 'mceImageChooser',
-				image : url + '/img/img.gif'
+				image : url + '/img/icon_photo_upload_16px.gif'
 			});
 
 			// Add a node change handler, selects the button in the UI when a image is selected
+            /*
 			ed.onNodeChange.add(function(ed, cm, n) {
 				cm.setActive('imagechooser', n.nodeName == 'IMG');
 			});
+            */
 		},
 
 		/**
