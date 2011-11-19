@@ -15,7 +15,7 @@ $(window).error( function(errorMessage, fileName, lineNumber) {
 */
 
 window.debug = function( ) {
-    if( window.console ) {
+    if( window.console && window.console.apply ) {
         window.console.log.apply(window.console, arguments);
     }
 };
