@@ -61,7 +61,8 @@ tinyMCE_Helper = {
 
                 // Skin options
                 skin : "o2k7",
-                skin_variant : "silver"
+                skin_variant : "silver",
+                convert_urls : false
 
                 // document_base_url : "/ph/Core/js/tinymce/"
                 // Example content CSS (should be your site CSS)
