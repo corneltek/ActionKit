@@ -56,13 +56,14 @@ tinyMCE_Helper = {
                         customformat : {inline : 'span', styles : {color : '#00ff00', fontSize : '20px'}, attributes : {title : 'My custom format'}}
                 },
 
+                content_css : "/ph/Core/js/tinymce_content.css",
+
                 // Skin options
                 skin : "o2k7",
                 skin_variant : "silver"
 
                 // document_base_url : "/ph/Core/js/tinymce/"
                 // Example content CSS (should be your site CSS)
-                // content_css : "css/example.css"
         }
     } 
 };
