@@ -1,6 +1,6 @@
 tinyMCEPopup.requireLangPack();
 
-var ExampleDialog = {
+var ImageChooserDialog = {
 	init : function() {
 		var f = document.forms[0];
 
@@ -16,4 +16,4 @@ var ExampleDialog = {
 	}
 };
 
-tinyMCEPopup.onInit.add(ExampleDialog.init, ExampleDialog);
+tinyMCEPopup.onInit.add(ImageChooserDialog.init, ImageChooserDialog);

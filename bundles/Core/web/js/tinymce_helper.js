@@ -14,13 +14,13 @@ tinyMCE_Helper = {
         "adv1": {
                 // General options
                 theme : "advanced",
-                plugins : "autolink,lists,spellchecker,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template",
+                plugins : "autolink,lists,spellchecker,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,imagechooser",
 
                 mode : "specific_textareas",
                 editor_selector : "mceEditor",
 
                 // Theme options
-                theme_advanced_buttons1 : "formatselect,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,table,removeformat,code,|,image,link,|,preview,",
+                theme_advanced_buttons1 : "formatselect,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,table,removeformat,code,|,image,link,|,preview,imagechooser",
                 theme_advanced_buttons2 : "",
                 theme_advanced_buttons3 : "",
                 theme_advanced_buttons4 : "",
@@ -30,6 +30,7 @@ tinyMCE_Helper = {
                 theme_advanced_statusbar_location : "bottom",
                 theme_advanced_resizing : true,
 
+                // default language
                 language : "zh-tw",
 
                 // Style formats
