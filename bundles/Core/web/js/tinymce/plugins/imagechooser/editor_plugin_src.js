@@ -28,9 +28,10 @@
                 var dialog = window.open('/_adminui/image_chooser','status: no; location: no;','width=480, height=600');
                 $(dialog.document).ready(function() {
                     // export function to dialog.
-                    window.appendImage = dialog.appendImage = function(image_path) {
+                    window.appendImage = dialog.appendImage = function(image_path,attrs) {
                         // get the tinyMCE content box, append text ...
-                        var img = '<img width="500" src="' + image_path + '"/>';
+
+                        var img = '<img src="' + image_path + '"/>';
                         ed.execCommand('mceInsertContent', false, img );
 
                         // show fadeIn.
