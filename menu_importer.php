@@ -44,7 +44,7 @@ class MenuImporter extends Importer
                     ),array('label','data','parent'));
                 }
 
-                echo str_repeat( "\t" , $level );
+                echo str_repeat( "\t" , $level + 1 );
                 echo "create menu item " . $item['label'] . " ({$menu->data}) ({$menu->id})\n";
             } 
             // is a folder
@@ -61,7 +61,7 @@ class MenuImporter extends Importer
                         'parent' => $parent ? $parent->id : 0,
                     ),array('label','parent'));
 
-                    echo str_repeat( "\t" , $level );
+                    echo str_repeat( "\t" , $level + 1 );
                     echo "create folder " . $folder . " ({$folderItem->id})\n";
                     $this->traverse_items($lang,$subitems,$folderItem, $level + 1);
                 }
