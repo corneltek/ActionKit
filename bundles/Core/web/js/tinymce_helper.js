@@ -14,7 +14,7 @@ tinyMCE_Helper = {
         "adv1": {
                 // General options
                 theme : "advanced",
-                plugins : "autoresize,autolink,lists,spellchecker,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,imagechooser",
+                plugins : "autolink,lists,spellchecker,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,imagechooser",
 
                 mode : "specific_textareas",
                 editor_selector : "mceEditor",
@@ -32,6 +32,8 @@ tinyMCE_Helper = {
 
                 // default language
                 language : "zh-tw",
+
+                height : "480px",
 
                 // Style formats
                 /*
@@ -91,6 +93,9 @@ tinyMCE_Helper.init = function( name , args ) {
 
 function use_tinymce(name,args) {
     $(document.body).ready(function() {
+        $(tinyMCE.editors).each(function(){
+            tinyMCE.remove(this);
+        });
         tinyMCE_Helper.init( name , args );
     });
 }
