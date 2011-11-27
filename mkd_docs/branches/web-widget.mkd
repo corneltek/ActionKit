@@ -54,8 +54,8 @@ x Design/Implement Phifty\WidgetLoader.
     plugin export to
 
         webroot/ph/plugins
-        webroot/ph/core/css
-        webroot/ph/core/js
+        webroot/ph/Core/css
+        webroot/ph/Core/js
         
 * Add Widget class loading rule to class loader.
 
