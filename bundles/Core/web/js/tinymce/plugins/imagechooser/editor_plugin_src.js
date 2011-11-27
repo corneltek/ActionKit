@@ -30,7 +30,7 @@
                     // export function to dialog.
                     window.appendImage = dialog.appendImage = function(image_path) {
                         // get the tinyMCE content box, append text ...
-                        var img = '<img width="500" src="' + image_path + '"/>';
+                        var img = '<img src="' + image_path + '"/>';
                         ed.execCommand('mceInsertContent', false, img );
 
                         // show fadeIn.
