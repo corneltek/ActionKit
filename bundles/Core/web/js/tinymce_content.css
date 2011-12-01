@@ -1,11 +1,5 @@
-.mceContentBody p {   
-    font-size: 16px !important;
-}
-
-.mceEditor td.mceIframeContainer iframe {
-    min-height: 350px !important;
-}
-
+.mceContentBody p {   font-size: 16px !important; }
+.mceEditor td.mceIframeContainer iframe { min-height: 350px !important; }
 .bold { font-weight: bold; }
 .italic { font-style: italic; }
 .underline { text-decoration: underline; }
