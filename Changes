@@ -1,5 +1,14 @@
 
 # Changes
+#
+#
+六 11/26 03:24:25 2011
+
+News plugin:
+- remove icon image column.
+- add thumb column.
+- add image column.
+- rename with_icon option to with_image.
 
 六 11/ 5 11:51:28 2011
 
