@@ -5,3 +5,32 @@
 .mceEditor td.mceIframeContainer iframe {
     min-height: 350px !important;
 }
+
+.bold { font-weight: bold; }
+.italic { font-style: italic; }
+.underline { text-decoration: underline; }
+.left { text-align: inherit; }
+.center { text-align: center; }
+.right { text-align: right; }
+.full { text-align: justify }
+/* Image and table specific aligns */
+
+img.left, table.left {
+	float: left;
+	text-align: inherit;
+}
+
+img.center, table.center {
+	margin-left: auto;
+	margin-right: auto;
+	text-align: inherit;
+}
+
+img.center {
+	display: block;
+}
+
+img.right, table.right {
+	float: right;
+	text-align: inherit;
+}
