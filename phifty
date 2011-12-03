@@ -32,8 +32,8 @@ DOC
 
 function init_app_file( $appname ) {
     mkdir( 'App' );
-    # mkdir( strtolower($appname) . DIRECTORY_SEPARATOR . 'lib' , 0777 , true );
-    # $path = strtolower($appname) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . $appname . '.php' ;
+    # mkdir( strtolower($appname) . DIRECTORY_SEPARATOR . 'src' , 0777 , true );
+    # $path = strtolower($appname) . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . $appname . '.php' ;
     $path = 'App' . DIRECTORY_SEPARATOR . 'App.php' ;
     file_put_contents( $path , <<<"END"
 <?php
