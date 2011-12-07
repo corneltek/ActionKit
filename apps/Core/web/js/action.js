@@ -206,6 +206,7 @@ ActionPerfield.prototype = {
 Action = function(arg1,arg2) {
     var f,opts;
 
+    // is jQuery
     if( arg1 && ( arg1.attr || arg1.nodeType == 1 ) ) {
         f = $(arg1);
         opts = arg2 || { };
@@ -217,8 +218,11 @@ Action = function(arg1,arg2) {
     if( f ) {
         this.formEl = $(f);
         this.formEl.attr('method','post'); // always to POST method
-        if( ! this.formEl.get(0) )
+        if( ! this.formEl.get(0) ) {
+            if( window.console )
+                console.error( arg1 );
             throw "Action form element not found";
+        }
     }
 
     this.plugins = [ ];
