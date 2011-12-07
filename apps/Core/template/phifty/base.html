@@ -14,6 +14,7 @@ vim:filetype=jinja:
     <title>{% block title %} {{ title|default(appname) }} {% endblock %}</title>
     {{ Web.include_core_js|raw }}
     {{ Web.include_core_css|raw }}
+
     {{ Web.include_plugins|raw }}
     {{ Web.include_widgets|raw }}
     {% endblock %}
