@@ -2,7 +2,7 @@
 namespace Phifty\Widgets;
 use Phifty\Widget;
 
-class Ext4js extends Widget 
+class Extjs extends Widget 
 {
     function js()
     {

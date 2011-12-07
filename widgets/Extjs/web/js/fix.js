@@ -1,0 +1,1 @@
+Ext.scopeResetCSS = true;
