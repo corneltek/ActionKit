@@ -16,7 +16,8 @@ class Application extends \Phifty\MicroApp
             'css/common.css',
             'css/phifty.css',
             'css/action.css',
-            'jquery-ui/css/redmond/jquery-ui-1.8.14.custom.css',
+            # 'jquery-ui/css/redmond/jquery-ui-1.8.14.custom.css',
+            'jquery-ui-smoothness/css/smoothness/jquery-ui-1.8.16.custom.css',
         );
     }
 
@@ -35,9 +36,9 @@ class Application extends \Phifty\MicroApp
             'js/region.js',
             'js/action.js',
             'js/crud.js',
-            'jquery-ui/js/jquery-ui-1.8.14.custom.min.js',
             'js/tinymce/tiny_mce.js',
             'js/tinymce_helper.js',
+            'jquery-ui-smoothness/js/jquery-ui-1.8.16.custom.min.js',
         );
     }
 
