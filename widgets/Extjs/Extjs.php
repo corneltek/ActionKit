@@ -6,7 +6,7 @@ class Extjs extends Widget
 {
     function js()
     {
-        return array( 'js/ext-all-scoped.js', 'js/fix.js' );
+        return array( 'js/fix.js', 'js/ext-all.js' );
     }
 
     function css() 
