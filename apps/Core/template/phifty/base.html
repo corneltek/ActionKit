@@ -15,8 +15,10 @@ vim:filetype=jinja:
     {{ Web.include_core_js|raw }}
     {{ Web.include_core_css|raw }}
 
-    {{ Web.include_plugins|raw }}
     {{ Web.include_widgets|raw }}
+
+    {{ Web.include_plugins|raw }}
+
     {% endblock %}
 </head>
 <body>

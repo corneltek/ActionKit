@@ -26748,9 +26748,13 @@ Ext.define('Ext.data.Model', {
         operation = Ext.create('Ext.data.Operation', options);
 
         callback = function(operation) {
+
+            console.log( operation );
+
             if (operation.wasSuccessful()) {
+
+
                 record = operation.getRecords()[0];
-                
                 
                 me.set(record.data);
                 record.dirty = false;
