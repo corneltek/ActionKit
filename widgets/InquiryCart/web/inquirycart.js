@@ -10,6 +10,8 @@ var InquiryCart = function(options) {
 InquiryCart.prototype = {
 
     init: function() { 
+        var that = this;
+
         if( typeof $.jGrowl == 'undefined' ) 
             alert( 'please include $.jGrowl' );
 
@@ -34,9 +36,18 @@ InquiryCart.prototype = {
         link.attr({ href: this.options.submit_link }).html('Submit inquiry form');
         linkwrapper.append( link );
 
+        var clear_link = $('<a/>');
+        clear_link.click(function() {
+            if( confirm('Are you sure to clear inquiry form ?') ) {
+                that.clear();
+            }
+        });
+        clear_link.html( 'Clear' );
+        linkwrapper.append( ' , ' );
+        linkwrapper.append( clear_link );
+
         this.cartbar.append( linkwrapper );
 
-        var that = this;
         $.getJSON('/api/inquirycart/list', function(data) { 
             var items = data.items;
             that.updateItemInfo(items);
@@ -59,6 +70,14 @@ InquiryCart.prototype = {
                 that.updateItemInfo( data.items );
             }
 
+        });
+    },
+    clear: function() {
+        var that = this;
+        $.getJSON('/api/inquirycart/clear', function(data) { 
+            if( data.success ) {
+                that.growl_container.jGrowl(data.message);
+            }
         });
     }
 
