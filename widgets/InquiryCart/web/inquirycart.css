@@ -12,13 +12,13 @@
 
 .inquirycart-bar .title { 
     font-size: 12px;
+    font-weight: bold;
 }
 
 .inquirycart-bar .desc {
 
 }
 
-.inquirycart-bar .number {
-    color: #920000;
-}
+.inquirycart-bar .number { color: #920000; }
+.inquirycart-bar .link { text-align: right; }
 

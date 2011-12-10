@@ -2,7 +2,8 @@
 
 
 
-var InquiryCart = function() {
+var InquiryCart = function(options) {
+    this.options = options || { };
     this.items = [];
 };
 
@@ -27,6 +28,13 @@ InquiryCart.prototype = {
 
         this.desc = $('<div/>').addClass('desc');
         this.cartbar.append(this.desc);
+
+        var linkwrapper = $('<div/>').addClass('link');
+        var link = $('<a/>');
+        link.attr({ href: this.options.submit_link }).html('Submit inquiry form');
+        linkwrapper.append( link );
+
+        this.cartbar.append( linkwrapper );
 
         var that = this;
         $.getJSON('/api/inquirycart/list', function(data) { 
@@ -57,16 +65,10 @@ InquiryCart.prototype = {
 };
 
 
-InquiryCart.get = function() { 
+InquiryCart.get = function(options) { 
     if( typeof __cart != 'undefined' )
         return __cart;
-    __cart = new InquiryCart;
+    __cart = new InquiryCart(options);
     __cart.init();
     return __cart;
 };
-
-
-// depends on jGrowl
-$(document.body).ready(function() {
-    var cart = InquiryCart.get();
-});
