@@ -1,0 +1,24 @@
+
+.inquirycart-bar { 
+    background: #fff;
+    border: 1px solid #ccc;
+    position: fixed;
+    right: 60px;
+    bottom: 0px;
+    padding: 10px;
+    width: 210px;
+    border-radius: 15px 15px 0 0;
+}
+
+.inquirycart-bar .title { 
+    font-size: 12px;
+}
+
+.inquirycart-bar .desc {
+
+}
+
+.inquirycart-bar .number {
+    color: #920000;
+}
+
