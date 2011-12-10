@@ -16,9 +16,8 @@
 }
 
 .inquirycart-bar .desc {
-
+    color: #666;
 }
 
 .inquirycart-bar .number { color: #920000; }
 .inquirycart-bar .link { text-align: right; }
-
