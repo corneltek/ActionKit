@@ -4,6 +4,7 @@ webroot/ph/
 webroot/static/upload/
 cache/
 coverage/
+build/
 .DS_Store
 .svn
 tests/tmp/
