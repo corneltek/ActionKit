@@ -2,7 +2,7 @@
 *.log
 webroot/ph/
 webroot/static/upload/
-cache/
+^cache/
 coverage/
 build/
 .DS_Store
