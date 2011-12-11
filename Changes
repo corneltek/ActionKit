@@ -1,7 +1,27 @@
 
 # Changes
-#
-#
+
+
+日 12/11 18:54:52 2011
+
+Inquiry Cart 
+    - floating cart div
+    - bottom right bubble message
+    - can add product name to the cart list.
+    - contact form
+
+Page Importer
+    - render page template.
+    - get content via dom
+    - insert content into database.
+
+
+Js I18N
+    - Fix i18n env variable export for Javascript
+    - js i18n parser 
+    - js i18n export to json with language code
+
+
 六 11/26 03:24:25 2011
 
 News plugin:
