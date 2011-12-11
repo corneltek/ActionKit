@@ -85,8 +85,8 @@
     settings: {
       opacity      : 0.2,
       overlay      : true,
-      loadingImage : '/ph/plugins/Facebox/facebox/src/loading.gif',
-      closeImage   : '/ph/plugins/Facebox/facebox/src/closelabel.png',
+      loadingImage : '/ph/widgets/Facebox/facebox/src/loading.gif',
+      closeImage   : '/ph/widgets/Facebox/facebox/src/closelabel.png',
       imageTypes   : [ 'png', 'jpg', 'jpeg', 'gif' ],
       faceboxHtml  : '\
     <div id="facebox" style="display:none;"> \
@@ -95,7 +95,7 @@
 			<div class="content"> \
 			</div> \
 		</div> \
-        <a href="#" class="close"><img src="/ph/plugins/Facebox/facebox/src/closelabel.png" title="close" class="close_image" /></a> \
+        <a href="#" class="close"><img src="/ph/widgets/Facebox/facebox/src/closelabel.png" title="close" class="close_image" /></a> \
       </div> \
     </div>'
     },
