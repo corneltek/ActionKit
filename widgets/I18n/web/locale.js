@@ -103,4 +103,4 @@ window._ = function() {
     return Locale.loc.apply(Locale, arguments);
 };
 
-Locale.init({ lang: 'zh_tw' , dict_path: '/static/dict/' });
+Locale.init({ lang: 'zh_TW' , dict_path: '/static/dict/' });
