@@ -25,7 +25,7 @@ InquiryCart.prototype = {
         this.cartbar = $('<div/>').addClass('inquirycart-bar');
         $(document.body).append( this.cartbar );
 
-        this.title = $('<div/>').addClass('title').html('Inquiry Cart');
+        this.title = $('<div/>').addClass('title').html(_('Inquiry Cart'));
         this.cartbar.append( this.title );
 
         this.desc = $('<div/>').addClass('desc');
@@ -33,16 +33,16 @@ InquiryCart.prototype = {
 
         var linkwrapper = $('<div/>').addClass('link');
         var link = $('<a/>');
-        link.attr({ href: this.options.submit_link }).html('Submit inquiry form');
+        link.attr({ href: this.options.submit_link }).html(_('Submit inquiry form'));
         linkwrapper.append( link );
 
         var clear_link = $('<a/>');
         clear_link.click(function() {
-            if( confirm('Are you sure to clear inquiry form ?') ) {
+            if( confirm( _('Are you sure to clear inquiry form ?')) ) {
                 that.clear();
             }
         });
-        clear_link.html( 'Clear' );
+        clear_link.html( _('Clear') );
         linkwrapper.append( ' , ' );
         linkwrapper.append( clear_link );
 
@@ -57,7 +57,7 @@ InquiryCart.prototype = {
     updateItemInfo: function(items) {
         var  size = items.length;
         this.items = items;
-        this.desc.html( '<span class="number">' + size + '</span>' +  (size > 1 ? ' items' : ' item' ));
+        this.desc.html( '<span class="number">' + size + '</span>' +  (size > 1 ? _(' items') : _(' item') ));
     },
 
     /* add product item */
