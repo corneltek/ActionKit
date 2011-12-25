@@ -27,16 +27,18 @@ class BenchmarkController extends Controller
 
         $series = array();
 
+        $categories = array();
         $list = array( 'name' => 'autoload' , 'data' => array() );
         foreach( $cursor as $item ) {
-            $list['data'][] = array( 
-                $item['created_on']->sec,
-                $item['duration'] );
+            // $item['created_on']->sec,
+            $categories[] = substr($item['commit'],0,5);
+            $list['data'][] = $item['duration'];
         }
 
         $series[] = $list;
         AssetLoader::load('HighCharts');
         return $this->render('apps/TestApp/template/benchmark/index.html', array( 
+            'categories' => $categories,
             'series' => $series
         ));
     }

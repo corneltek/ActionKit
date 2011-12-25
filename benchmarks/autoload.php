@@ -17,5 +17,5 @@ $commit = system('git rev-parse HEAD');
 echo "git commit:" . $commit . "\n";
 
 #  // add a record
-$obj = array( 'task' => $taskName , 'duration' => $t2 * 1000000 , 'unit' => 'us' , 'commit' => $commit , 'created_on' => new MongoDate(time()) ); // microseconds
+$obj = array( 'task' => $taskName , 'duration' => $t2 * 1000 , 'unit' => 'ms' , 'commit' => $commit , 'created_on' => new MongoDate(time()) ); // microseconds
 $collection->insert($obj);
