@@ -12,6 +12,10 @@ $db = $m->benchmarks;
 // select a collection (analogous to a relational database's table)
 $collection = $db->phifty;
 
+$commit = system('git rev-parse HEAD');
+
+echo "git commit:" . $commit . "\n";
+
 #  // add a record
-$obj = array( 'task' => $taskName , 'duration' => $t2 * 1000000 , 'unit' => 'us' , 'created_on' => new MongoDate(time()) ); // microseconds
+$obj = array( 'task' => $taskName , 'duration' => $t2 * 1000000 , 'unit' => 'us' , 'commit' => $commit , 'created_on' => new MongoDate(time()) ); // microseconds
 $collection->insert($obj);

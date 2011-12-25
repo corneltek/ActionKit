@@ -29,7 +29,9 @@ class BenchmarkController extends Controller
 
         $list = array( 'name' => 'autoload' , 'data' => array() );
         foreach( $cursor as $item ) {
-            $list['data'][] = $item['duration'];
+            $list['data'][] = array( 
+                $item['created_on']->sec,
+                $item['duration'] );
         }
 
         $series[] = $list;
