@@ -1,9 +1,9 @@
 <?php
-namespace Phifty\Widgets;
+namespace Phifty\Assets;
 
-use Phifty\Widget;
+use Phifty\Asset;
 
-class QUnit extends Widget 
+class QUnit extends Asset 
 {
 
     public function js()

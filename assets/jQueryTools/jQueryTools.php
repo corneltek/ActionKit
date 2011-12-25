@@ -1,9 +1,9 @@
 <?php
 
-namespace Phifty\Widgets;
-use Phifty\Widget;
+namespace Phifty\Assets;
+use Phifty\Asset;
 
-class jQueryTools extends Widget
+class jQueryTools extends Asset
 {
     public $images;
     public $config = array();

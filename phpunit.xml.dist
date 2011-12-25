@@ -8,6 +8,8 @@
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          verbose="true">
+         <!--
+         -->
 
   <testsuites>
 

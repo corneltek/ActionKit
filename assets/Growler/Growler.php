@@ -8,10 +8,10 @@
  * file that was distributed with this source code.
  *
  */
-namespace Phifty\Widgets;
-use Phifty\Widget;
+namespace Phifty\Assets;
+use Phifty\Asset\Asset;
 
-class Growler extends Widget 
+class Growler extends Asset 
 {
     function js()
     {

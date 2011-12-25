@@ -49,7 +49,7 @@
 
 x Move form widget from Phifty\Widget to Form Widget.
 x Design/Implement Phifty\Widget.
-x Design/Implement Phifty\WidgetLoader.
+x Design/Implement Phifty\AssetLoader.
 * Export widget web path to webroot.
     plugin export to
 
@@ -85,10 +85,10 @@ Backend use case:
         function addImage($image, $attrs = array() );
     }
 
-    WidgetLoader::load( 'Galleria' );  # core/widgets/Galleria.php
-    WidgetLoader::loadFromPlugin( 'BannderSlider' , 'Galleria' );
+    AssetLoader::load( 'Galleria' );  # core/widgets/Galleria.php
+    AssetLoader::loadFromPlugin( 'BannderSlider' , 'Galleria' );
 
-    \Phifty\Web\WidgetLoader::load( 'SliderWidget' );
+    \Phifty\Web\AssetLoader::load( 'SliderWidget' );
 
     $w = new Slider;
     $w->addImage( 'image.png', array( .... ) );
