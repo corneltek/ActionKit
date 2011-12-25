@@ -13,3 +13,5 @@ docs/_build/
 *.tar
 *.tbz
 *.rar
+build
+vendor
