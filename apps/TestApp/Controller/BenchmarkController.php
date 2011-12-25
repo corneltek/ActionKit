@@ -36,7 +36,7 @@ class BenchmarkController extends Controller
         }
 
         $categories = array_reverse( $categories );
-        $list = array_reverse( $list );
+        $list['data'] = array_reverse( $list['data'] );
 
         $series[] = $list;
         AssetLoader::load('HighCharts');
