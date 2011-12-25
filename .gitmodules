@@ -1,6 +1,3 @@
-[submodule "dists/Twig"]
-	path = dists/Twig
-	url = git://github.com/fabpot/Twig.git
 [submodule "src/Symfony/Component/Finder"]
 	path = src/Symfony/Component/Finder
 	url = git://github.com/symfony/Finder.git
