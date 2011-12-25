@@ -13,5 +13,5 @@ $db = $m->benchmarks;
 $collection = $db->phifty;
 
 #  // add a record
-$obj = array( 'task' => $taskName , 'duration' => $t2 * 1000 , 'unit' => 'ms' , 'created_on' => new MongoDate(time()) ); // microseconds
+$obj = array( 'task' => $taskName , 'duration' => $t2 * 1000000 , 'unit' => 'us' , 'created_on' => new MongoDate(time()) ); // microseconds
 $collection->insert($obj);
