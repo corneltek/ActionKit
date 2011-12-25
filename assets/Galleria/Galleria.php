@@ -1,5 +1,4 @@
 <?php
-
 namespace Phifty\Assets;
 use Phifty\Asset\Asset;
 
@@ -15,3 +14,4 @@ class Galleria extends Asset
         return array( "themes/twelve/galleria.twelve.css" );
     }
 }
+
