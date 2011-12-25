@@ -1,16 +1,12 @@
 <?php
-namespace Phifty\Widgets;
-use Phifty\Widget;
 
-class PrettyPhoto extends Widget
+namespace Phifty\Assets;
+use Phifty\Asset;
+
+class NivoSlider extends Asset
 {
     public $images;
-    public $config = array( 
-        'animation_speed' => 'normal',
-        'theme' => 'light_rounded',
-        'slideshow' => 3000, 
-        'autoplay_slideshow' => true
-    );
+    public $config = array();
 
     function config($config)
     {
@@ -24,12 +20,12 @@ class PrettyPhoto extends Widget
 
 	function js()
 	{
-		return array('js/jquery.prettyPhoto.js');
+		return array('jquery.nivo.slider.pack.js');
 	}
 
 	function css()
 	{
-		return array('css/prettyPhoto.css');
+		return array('themes/default/default.css');
 	}
 
 	function template()
@@ -42,7 +38,7 @@ ul.prettyphoto li {
 }
 </style>
 <ul class="prettyphoto">
-    {% for item in Widget.images %}
+    {% for item in Asset.images %}
         <li>
             <a href="{{ item.image }}" 
                 class="prettyphoto"

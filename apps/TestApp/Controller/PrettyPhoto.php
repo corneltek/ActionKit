@@ -3,13 +3,13 @@
 namespace TestApp\Controller;
 
 use Phifty\Controller;
-use Phifty\WidgetLoader;
+use Phifty\AssetLoader;
 
 class PrettyPhoto extends \Phifty\Controller
 {
     function run()
     {
-		$widget = WidgetLoader::load('PrettyPhoto');
+		$widget = AssetLoader::load('PrettyPhoto');
         foreach( range(1,5) as $i ) {
             $widget->addImage( array( 
                 'image' => $widget->baseUrl() . '/images/fullscreen/'. $i .'.jpg', 

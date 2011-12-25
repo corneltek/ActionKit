@@ -1,10 +1,10 @@
 <?php
 
-namespace Phifty\Widgets;
+namespace Phifty\Assets;
 
-use Phifty\Widget;
+use Phifty\Asset\Asset;
 
-class Galleria extends Widget
+class Galleria extends Asset
 {
 	public $width = 400;
 	public $height = 400;
@@ -41,15 +41,15 @@ class Galleria extends Widget
 
 	<script type="text/javascript">
 	jQuery(document.body).ready(function() {
-		Galleria.loadTheme('{{ Widget.baseUrl }}/themes/twelve/galleria.twelve.min.js');
-		jQuery('#gallery').height( {{ Widget.height }} );
+		Galleria.loadTheme('{{ Asset.baseUrl }}/themes/twelve/galleria.twelve.min.js');
+		jQuery('#gallery').height( {{ Asset.height }} );
 		jQuery('#gallery').galleria();   
 	}
 	);
 	</script>
 
 	<div id="gallery">
-	{% for image in Widget.images %}
+	{% for image in Asset.images %}
 		<img src="{{ image.path }}"/>
 	{% endfor %}
 	</div>
