@@ -23,7 +23,7 @@ class BenchmarkController extends Controller
         $db = $m->benchmarks;
         // select a collection (analogous to a relational database's table)
         $collection = $db->phifty;
-        $cursor = $collection->find( array('task' => 'autoload') )->sort(array('created_on' => -1))->limit(40);
+        $cursor = $collection->find( array('task' => 'autoload') )->sort(array('created_on' => -1)); // ->limit(100);
 
         $series = array();
 
