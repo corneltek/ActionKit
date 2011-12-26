@@ -6,5 +6,9 @@ require 'autoload.php';
 // xxx: trigger console event to plugins ...
 
 
-$console = Phifty\Console::getInstance();
-$console->run( $argv );
+try {
+    $console = Phifty\Console::getInstance();
+    $console->run( $argv );
+} catch ( Exception $e ) {
+    die( $e->getMessage() );
+}
