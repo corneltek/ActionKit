@@ -23,7 +23,6 @@ class Application extends \Phifty\MicroApp
     function js()
     {
         return array(
-            'js/jquery/jquery-1.6.2.min.js',
             'js/json2.js',
             'js/webtoolkit.aim.js',
             'js/minilocale.js',
