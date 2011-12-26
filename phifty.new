@@ -1,0 +1,9 @@
+#!/usr/bin/env
+<?php
+require 'autoload.php';
+
+// xxx: trigger console event to plugins ...
+
+
+$console = Phifty\Console::getInstance();
+$console->run( $argv );
