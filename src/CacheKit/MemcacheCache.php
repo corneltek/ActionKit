@@ -44,5 +44,10 @@ class MemcacheCache
         $this->handle->delete($key);
     }
 
+    function clear()
+    {
+        $this->handle->flush();
+    }
+
 }
 

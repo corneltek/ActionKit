@@ -34,6 +34,11 @@ class ApcCache
     {
         apc_delete( $this->namespace . ':' . $key );
     }
+
+    function clear()
+    {
+        apc_clear_cache();
+    }
 }
 
 
