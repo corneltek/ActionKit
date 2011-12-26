@@ -1,7 +1,7 @@
 #!/usr/bin/env
 <?php
 # vim:filetype=php:
-require 'autoload.php';
+require 'main.php';
 
 // xxx: trigger console event to plugins ...
 
