@@ -23,7 +23,7 @@ class BenchmarkController extends Controller
         $db = $m->benchmarks;
         // select a collection (analogous to a relational database's table)
         $collection = $db->phifty;
-        $cursor = $collection->find( array('task' => 'autoload') )->sort(array('created_on' => 1))->limit(30);
+        $cursor = $collection->find( array('task' => 'autoload') )->sort(array('created_on' => -1)); // ->limit(100);
 
         $series = array();
 
@@ -34,6 +34,9 @@ class BenchmarkController extends Controller
             $categories[] = substr($item['commit'],0,5);
             $list['data'][] = $item['duration'];
         }
+
+        $categories = array_reverse( $categories );
+        $list['data'] = array_reverse( $list['data'] );
 
         $series[] = $list;
         AssetLoader::load('HighCharts');
