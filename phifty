@@ -212,8 +212,7 @@ if( ! file_exists('define.php') )
 }
 
 namespace main;
-
-include('autoload.php');
+include 'autoload.php';
 use \Phifty\Commander;
 
 try {
