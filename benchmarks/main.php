@@ -1,8 +1,8 @@
 <?php
-$taskName = 'autoload';
+$taskName = 'main';
 
 $t1 = microtime(true);
-require 'autoload.php';
+require 'main.php';
 $t2 = (microtime(true) - $t1);
 echo $t2 * 1000 . " milliseconds.\n";
 
@@ -13,7 +13,8 @@ $collection = $db->phifty;
 
 $commit = system('git rev-parse HEAD');
 
-# echo "git commit:" . $commit . "\n";
+// echo "git commit:" . $commit . "\n";
+
 #  // add a record
 $obj = array( 'task' => $taskName , 'duration' => $t2 * 1000 , 'unit' => 'ms' , 'commit' => $commit , 'created_on' => new MongoDate(time()) ); // microseconds
 $collection->insert($obj);
