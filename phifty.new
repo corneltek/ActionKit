@@ -7,7 +7,7 @@ require 'main.php';
 
 
 try {
-    $console = Phifty\Console::getInstance();
+    $console = \Phifty\Console::getInstance();
 
     webapp()->event->trigger( 'console.init_commands' , $console );
 
