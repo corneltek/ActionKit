@@ -1,0 +1,14 @@
+#!/usr/bin/env
+<?php
+# vim:filetype=php:
+require 'autoload.php';
+
+// xxx: trigger console event to plugins ...
+
+
+try {
+    $console = Phifty\Console::getInstance();
+    $console->run( $argv );
+} catch ( Exception $e ) {
+    die( $e->getMessage() );
+}

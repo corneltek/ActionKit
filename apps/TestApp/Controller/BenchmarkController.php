@@ -23,11 +23,13 @@ class BenchmarkController extends Controller
         $db = $m->benchmarks;
         // select a collection (analogous to a relational database's table)
         $collection = $db->phifty;
-        $cursor = $collection->find( array('task' => 'autoload') )->sort(array('created_on' => -1)); // ->limit(100);
 
-        $series = array();
 
         $categories = array();
+        $series = array();
+
+        // load task
+        $cursor = $collection->find( array('task' => 'autoload') )->sort(array('created_on' => -1)); // ->limit(100);
         $list = array( 'name' => 'autoload' , 'data' => array() );
         foreach( $cursor as $item ) {
             // $item['created_on']->sec,
@@ -35,10 +37,30 @@ class BenchmarkController extends Controller
             $list['data'][] = $item['duration'];
         }
 
-        $categories = array_reverse( $categories );
-        $list['data'] = array_reverse( $list['data'] );
 
+        // load task
+        $cursor = $collection->find( array('task' => 'main') )->sort(array('created_on' => -1)); // ->limit(100);
+        $list2 = array( 'name' => 'main' , 'data' => array() );
+        foreach( $cursor as $item ) {
+            // $item['created_on']->sec,
+            // $categories[] = substr($item['commit'],0,5);
+            $list2['data'][] = @$item['duration'];
+        }
+
+        // pad for task1
+        {
+            $size = count($list['data']);
+            $list2['data'] = array_pad($list2['data'], $size , 0 );
+        }
+
+        $list['data'] = array_reverse( $list['data'] );
         $series[] = $list;
+
+        $list2['data'] = array_reverse( $list2['data'] );
+        $series[] = $list2;
+
+        $categories = array_reverse( $categories );
+
         AssetLoader::load('HighCharts');
         return $this->render('apps/TestApp/template/benchmark/index.html', array( 
             'categories' => $categories,

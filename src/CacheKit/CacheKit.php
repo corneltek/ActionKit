@@ -47,5 +47,17 @@ class CacheKit
             $b->remove( $key );
         }
     }
-}
 
+    function clear()
+    {
+        foreach( $this->backends as $b ) {
+            $b->clear();
+        }
+    }
+
+    function getBackends()
+    {
+        return $this->backends;
+    }
+
+}
