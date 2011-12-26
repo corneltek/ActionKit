@@ -90,7 +90,7 @@ ActionResult
 To get an action result
 
     
-    $runner = Phifty\Action\Runner::one();
+    $runner = Phifty\Action\Runner::getInstance();
     $result = $runner->getResult( 'Login::...' );
 
 
