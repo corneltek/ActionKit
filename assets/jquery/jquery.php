@@ -1,7 +1,7 @@
 <?php
 namespace Phifty\Assets;
 
-class jquery extends Phifty\Asset\Asset
+class jquery extends \Phifty\Asset\Asset
 {
     function js()
     {
