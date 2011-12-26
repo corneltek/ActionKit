@@ -12,10 +12,10 @@ vim:filetype=jinja:
     <meta name="keywords" content="{{ Page.Keywords }}" />
     <meta name="description" content="{{ Page.Description }}"/>
     <title>{% block title %} {{ title|default(appname) }} {% endblock %}</title>
+    {{ Web.include_assets|raw }}
     {{ Web.include_core_js|raw }}
     {{ Web.include_core_css|raw }}
     {{ Web.include_plugins|raw }}
-    {{ Web.include_assets|raw }}
     {% endblock %}
 </head>
 <body>
