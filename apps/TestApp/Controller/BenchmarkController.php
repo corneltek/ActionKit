@@ -61,6 +61,7 @@ class BenchmarkController extends Controller
 
         $categories = array_reverse( $categories );
 
+        AssetLoader::load('jquery');
         AssetLoader::load('HighCharts');
         return $this->render('apps/TestApp/template/benchmark/index.html', array( 
             'categories' => $categories,
