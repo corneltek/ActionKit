@@ -54,5 +54,10 @@ class CacheKit
             $b->clear();
         }
     }
-}
 
+    function getBackends()
+    {
+        return $this->backends;
+    }
+
+}
