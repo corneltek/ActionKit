@@ -48,13 +48,13 @@ input.text,
 input.email, 
 input.password,
 textarea.uniform {
-  font-size: 12px;
+  font-size: 16px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: normal;
   padding: 3px;
   color: #777;
-  background: url('../images/bg-input-focus.png') repeat-x 0px 0px;
-  background: url('../images/bg-input.png') repeat-x 0px 0px;
+  background: url('../images/bg-input-focus.png') repeat-x 0px 0px #fff;
+  background: url('../images/bg-input.png') repeat-x 0px 0px #fff;
   border-top: solid 1px #aaa;
   border-left: solid 1px #aaa;
   border-bottom: solid 1px #ccc;
