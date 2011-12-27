@@ -11,27 +11,26 @@ echo "Sending job\n";
 # Send reverse job
 do
 {
-  $result = $gmclient->do("reverse", "Hello!");
+    $result = $gmclient->do("reverse", "Hello!");
 
-  # Check for various return packets and errors.
-  switch($gmclient->returnCode())
-  {
+    # Check for various return packets and errors.
+    switch($gmclient->returnCode())
+    {
     case GEARMAN_WORK_DATA:
-      echo "Data: $result\n";
-      break;
+        echo "Data: $result\n";
+        break;
     case GEARMAN_WORK_STATUS:
-      list($numerator, $denominator)= $gmclient->doStatus();
-      echo "Status: $numerator/$denominator complete\n";
-      break;
+        list($numerator, $denominator)= $gmclient->doStatus();
+        echo "Status: $numerator/$denominator complete\n";
+        break;
     case GEARMAN_WORK_FAIL:
-      echo "Failed\n";
-      exit;
+        echo "Failed\n";
+        exit;
     case GEARMAN_SUCCESS:
-      break;
+        break;
     default:
-      echo "RET: " . $gmclient->returnCode() . "\n";
-      exit;
-  }
+        echo "RET: " . $gmclient->returnCode() . "\n";
+        exit;
+    }
 }
 while($gmclient->returnCode() != GEARMAN_SUCCESS);
-
