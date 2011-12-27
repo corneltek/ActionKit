@@ -1,7 +1,10 @@
 
 # Changes
-#
-#
+
+二 12/27 14:38:33 2011
+
+- Remove webapp()->currentUser() usage.
+
 六 11/26 03:24:25 2011
 
 News plugin:
