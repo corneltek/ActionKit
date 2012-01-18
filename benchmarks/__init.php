@@ -1,2 +1,2 @@
 <?php
-require 'autoload.php';
+require 'main.php';
