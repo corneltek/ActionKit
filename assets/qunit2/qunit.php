@@ -3,7 +3,7 @@ namespace Phifty\Assets;
 
 use Phifty\Asset;
 
-class QUnit extends Asset 
+class qunit extends Asset 
 {
 
     public function js()
