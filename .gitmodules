@@ -10,3 +10,6 @@
 [submodule "vendor/webdriver"]
 	path = vendor/webdriver
 	url = git://github.com/facebook/php-webdriver.git
+[submodule "vendor/yahoo/yos"]
+	path = vendor/yahoo/yos
+	url = https://github.com/yahoo/yos-social-php.git
