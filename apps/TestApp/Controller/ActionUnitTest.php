@@ -8,7 +8,7 @@ class ActionUnitTest extends \Phifty\Controller
 {
     function run()
     {
-        $w = AssetLoader::load('QUnit');
+        $w = AssetLoader::load('qunit');
         return $this->render('TestApp/template/tests_action.html');
     }
 }
