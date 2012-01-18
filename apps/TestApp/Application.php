@@ -1,5 +1,4 @@
 <?php
-
 namespace TestApp;
 
 class Application extends \Phifty\MicroApp
