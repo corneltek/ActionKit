@@ -1,15 +1,15 @@
-[submodule "src/Symfony/Component/Finder"]
-	path = src/Symfony/Component/Finder
+[submodule "vendor/Symfony/Component/Finder"]
+	path = vendor/Symfony/Component/Finder
 	url = git://github.com/symfony/Finder.git
-[submodule "dists/Twig-extensions"]
-	path = dists/Twig-extensions
+[submodule "vendor/Symfony/Twig-extensions"]
+	path = vendor/Symfony/Twig-extensions
 	url = git://github.com/fabpot/Twig-extensions.git
-[submodule "dists/fabpot-yaml"]
-	path = dists/fabpot-yaml
+[submodule "vendor/Symfony/fabpot-yaml"]
+	path = vendor/fabpot-yaml
 	url = https://github.com/fabpot/yaml.git
-[submodule "dists/firephp"]
-	path = dists/firephp
+[submodule "vendor/firephp"]
+	path = vendor/firephp
 	url = https://github.com/firephp/firephp.git
-[submodule "dists/WebDriver"]
-	path = dists/WebDriver
+[submodule "vendor/WebDriver"]
+	path = vendor/WebDriver
 	url = git://github.com/facebook/php-webdriver.git
