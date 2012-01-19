@@ -16,3 +16,4 @@ docs/_build/
 build
 vendor/pear
 minified
+.onion/
