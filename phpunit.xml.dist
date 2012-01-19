@@ -2,13 +2,13 @@
 <phpunit bootstrap="tests/bootstrap.php"
          backupGlobals="false"
          stderr="true"
-         debug="true"
          colors="true"
+         verbose="true">
+         <!--
+         debug="true"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
-         verbose="true">
-         <!--
          -->
 
   <testsuites>
@@ -36,6 +36,7 @@
     <log type="junit" target="build/logs/junit.xml" logIncompleteSkipped="false"/>
   </logging>
   -->
+
   <php>
         <const name="PHPUNIT_TESTSUITE" value="true"/>
   </php>
