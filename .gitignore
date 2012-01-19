@@ -14,5 +14,5 @@ docs/_build/
 *.tbz
 *.rar
 build
-# vendor
+vendor/pear
 minified
