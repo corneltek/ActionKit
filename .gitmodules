@@ -13,3 +13,6 @@
 [submodule "vendor/yahoo/yos"]
 	path = vendor/yahoo/yos
 	url = https://github.com/yahoo/yos-social-php.git
+[submodule "pear/lazy"]
+	path = pear/lazy
+	url = git@git.corneltek.com:php/LazyRecord.git
