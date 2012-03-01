@@ -3,6 +3,7 @@
          backupGlobals="false"
          stderr="true"
          colors="true"
+         convertNoticesToExceptions="false"
          verbose="true">
          <!--
          debug="true"
