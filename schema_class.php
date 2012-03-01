@@ -1,6 +1,4 @@
 <?php
-# require 'autoload.php';
-
 use Phifty\AppClassKit;
 
 AppClassKit::loadCoreModels();
