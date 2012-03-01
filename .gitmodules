@@ -16,3 +16,6 @@
 [submodule "pear/lazy"]
 	path = pear/lazy
 	url = git@git.corneltek.com:php/LazyRecord.git
+[submodule "vendor/xhprof"]
+	path = vendor/xhprof
+	url = git://github.com/facebook/xhprof.git
