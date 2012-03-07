@@ -57,7 +57,6 @@
             <table class="result" width="100%">
                 <thead>
                     <tr>
-
                         {% block prepend_thead %}
 
                         {% endblock %}
@@ -65,7 +64,7 @@
                         {% for column in CRUD.Columns %}
 
                             <th class="column-header"> 
-                                {% set label = CRUD.Object.model.getColumn(column).getLabel %}
+                                {% set label = CRUD.Object.model.getColumn(column).label %}
                                 <span class="column-name">{{ label }}</span> 
 
                                 {% if order_column == column and order_by == "desc" %}
