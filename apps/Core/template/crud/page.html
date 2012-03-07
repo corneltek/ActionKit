@@ -9,8 +9,8 @@
 
         <div class="section">
             <input type="button" 
-            value="{% trans 'Create' %} New {{ CRUD.object.model.label }}" 
-                onclick=" Region.after( $(this).parents('.section').get(0) , '/bs/{{ CRUD.object.crudId }}/crud/create' ); return false;"/>
+            value="{% trans 'Create' %} New {{ CRUD.Object.model.getLabel() }}" 
+                onclick=" Region.after( $(this).parents('.section').get(0) , '/bs/{{ CRUD.Object.crudId }}/crud/create' ); return false;"/>
         </div>
     {% endif %}
 

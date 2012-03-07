@@ -4,7 +4,7 @@
 {# /bs/news/crud/list #}
 <div class="section">
     <div class="hd">
-        {{ CRUD.List.title }}
+        {{ CRUD.Title }}
 
         {% if Kernel.getPlugin('I18N') %}
             {% for key,lang in Web.langs %}
@@ -18,7 +18,7 @@
     <div class="bd">
 		{% block controll %}
             {# list I18n selector #}
-            {% if Kernel.getPlugin('I18N') and CRUD.object.model.getColumn('lang') %}
+            {% if Kernel.getPlugin('I18N') and CRUD.Object.model.getColumn('lang') %}
                 <div class="corner-controll" style="display: inline;">
                     {% trans 'Language' %}: <select name="_data_lang" id="lang-chooser" onchange=" return (function(o) { 
                                     Region.of(o).refreshWith({ _data_lang: o.value });
@@ -39,7 +39,7 @@
 
         {% block order_by %} {% endblock %}
 
-        {{ CRUD.List.pager | raw }}
+        {{ CRUD.Pager | raw }}
 
         <script>
             function column_sort( o, name , sort_by ) {
@@ -62,10 +62,10 @@
 
                         {% endblock %}
 
-                        {% for column in CRUD.List.columns %}
+                        {% for column in CRUD.Columns %}
 
                             <th class="column-header"> 
-                                {% set label = CRUD.object.model.getColumn(column).getLabel %}
+                                {% set label = CRUD.Object.model.getColumn(column).getLabel %}
                                 <span class="column-name">{{ label }}</span> 
 
                                 {% if order_column == column and order_by == "desc" %}
@@ -81,12 +81,12 @@
                 </thead>
                 <tbody>
 
-                {% if not CRUD.List.items %}
+                {% if not CRUD.Items %}
 
                     <tr> <td> {% trans 'No Data' %} </td> </tr>
                 {% endif %}
 
-                {% for item in CRUD.List.items %}
+                {% for item in CRUD.Items %}
 
                     {% block row %}
 
@@ -100,7 +100,7 @@
 
                             {% endblock %}
 
-                            {% for column in CRUD.List.columns %}
+                            {% for column in CRUD.Columns %}
                                 <td> {{ item.display( column ) }} </td>
                             {% endfor %}
 
@@ -109,11 +109,11 @@
                                 {# --- javascript buttons --- #}
                                 <input type="button" 
                                     value="{% trans "Edit" %}"
-                                    onclick=" Region.before( this , '/bs/{{ CRUD.object.crudId }}/crud/edit' , { id:  {{ item.data.id }}  } ); "/>
+                                    onclick=" Region.before( this , '/bs/{{ CRUD.Object.crudId }}/crud/edit' , { id:  {{ item.id }}  } ); "/>
 
                                 <input type="button" 
                                     value="{% trans "Delete" %}"
-                                    onclick=" runAction( '{{ CRUD.object.namespace }}::Action::Delete{{ CRUD.object.modelName }}' , { id: {{ item.data.id }}  } , { confirm: '確認刪除? ', removeTr: this } ); "/>
+                                    onclick=" runAction( '{{ CRUD.Object.namespace }}::Action::Delete{{ CRUD.Object.modelName }}' , { id: {{ item.id }}  } , { confirm: '確認刪除? ', removeTr: this } ); "/>
 
                                 {% block extra_buttons %}
 
@@ -128,7 +128,7 @@
             </table>
         {% endblock %}
 
-        {{ CRUD.List.pager | raw }}
+        {{ CRUD.Pager | raw }}
 
     </div>
 </div>
