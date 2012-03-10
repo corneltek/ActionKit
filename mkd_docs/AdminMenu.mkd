@@ -2,7 +2,7 @@
 
 # AdminUI Menu Usage
 
-    $menu = AdminUI\Menu::one();
+    $menu = AdminUI\Menu::getInstance();
     $section = $menu->addSection( 'section title' , 'section_id' );
     $section->addItem( $label , array( ... href => ... ) );
     $section->addItem( $label , array( ... href => ... ) )

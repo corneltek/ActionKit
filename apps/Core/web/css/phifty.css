@@ -4,7 +4,7 @@
 @import "common.css";
 
 /* ------ reset ------ */
-caption, th, td { text-align: center; font-weight:400; }
+/* caption, th, td { text-align: center; font-weight:400; } */
 
 
 h1,h2,h3,h4,h5,h6 { margin: 0; padding: 0; }
