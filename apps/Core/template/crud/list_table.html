@@ -7,25 +7,25 @@
 <table class="result" width="100%">
     <thead>
         <tr>
-            {% for column in CRUD.List.columns %}
-                <th> {{ CRUD.object.model.getColumn(column).getLabel() }} </th>
+            {% for column in CRUD.Columns %}
+                <th> {{ CRUD.Object.model.getColumn(column).getLabel() }} </th>
             {% endfor %}
             <th> - - - -  </th>
         </tr>
     </thead>
     <tbody>
 
-    {% if not CRUD.List.items %}
+    {% if not CRUD.Items %}
         <tr> <td> {% trans 'No Data' %} </td> </tr>
     {% endif %}
 
-    {% for item in CRUD.List.items %}
+    {% for item in CRUD.Items %}
 
         {% block row %}
 
             {% if loop.index is even %} <tr class="even"> {% else %} <tr class="old"> {% endif %}
 
-                {% for column in CRUD.List.columns %}
+                {% for column in CRUD.Columns %}
                     <td> {{ item.display( column ) }} </td>
                 {% endfor %}
 
@@ -34,11 +34,11 @@
                     {# --- javascript buttons --- #}
                     <input type="button" 
                         value="{% trans "Edit" %}"
-                        onclick=" Region.before( this , '/bs/{{ CRUD.object.crudId }}/crud/edit' , { id:  {{ item.data.id }}  } ); "/>
+                        onclick=" Region.before( this , '/bs/{{ CRUD.Object.crudId }}/crud/edit' , { id:  {{ item.id }}  } ); "/>
 
                     <input type="button" 
                         value="{% trans "Delete" %}"
-                        onclick=" runAction( '{{ CRUD.object.namespace }}::Action::Delete{{ CRUD.object.modelName }}' , { id: {{ item.data.id }}  } , { confirm: '確認刪除? ', removeTr: this } ); "/>
+                        onclick=" runAction( '{{ CRUD.Object.namespace }}::Action::Delete{{ CRUD.Object.modelName }}' , { id: {{ item.id }}  } , { confirm: '確認刪除? ', removeTr: this } ); "/>
 
                     {% block extra_buttons %}
 

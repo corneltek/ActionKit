@@ -1,17 +1,8 @@
 #!/usr/bin/env
 <?php
 # vim:filetype=php:
-require 'main.php';
+require __DIR__ . '/main.php';
 
-// xxx: trigger console event to plugins ...
-
-
-try {
-    $console = \Phifty\Console::getInstance();
-
-    webapp()->event->trigger( 'console.init_commands' , $console );
-
-    $console->run( $argv );
-} catch ( Exception $e ) {
-    die( $e->getMessage() );
-}
+$console = \Phifty\Console::getInstance();
+webapp()->event->trigger( 'console.init_commands' , $console );
+$console->run( $argv );
