@@ -6,5 +6,11 @@
     {% else %}
         <input class="button" type="submit" value="{% trans 'Create' %}"/>
     {% endif %}
-    <input class="button" type="button" value="{% trans "Close" %}" onclick=" Region.of(this).fadeRemove();"/>
+    <input class="button" type="button" value="{% trans "Close" %}" onclick=" 
+        {% if Env.request.in_window %}
+            window.close();
+        {% else %}
+            Region.of(this).fadeRemove();
+        {% endif %}
+    "/>
 </div>
