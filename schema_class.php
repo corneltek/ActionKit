@@ -5,5 +5,5 @@ AppClassKit::loadCoreModels();
 AppClassKit::loadAppModels();
 AppClassKit::loadPluginModels();
 
-$finder = new Lazy\Schema\SchemaFinder;
+$finder = new LazyRecord\Schema\SchemaFinder;
 return $finder->getSchemaClasses();
