@@ -5,7 +5,7 @@ class Application extends \Phifty\MicroApp
 {
     function init()
     {
-        $this->route( '/' , 'Index' );
+        // $this->route( '/' , 'Index' );
         $this->route( '/not_found' , 'NotFound' );
     }
 

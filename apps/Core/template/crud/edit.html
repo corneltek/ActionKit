@@ -4,7 +4,7 @@ vim:filetype=jinja:
 {% import 'Core/template/phifty/forms.html' as forms %}
 
 <div class="section w-90p center">
-    <div class="hd">{{ CRUD.Edit.title }}</div>
+    <div class="hd">{{ CRUD.Title }}</div>
     <div class="bd">
 
         {% block section_body %}
@@ -12,7 +12,7 @@ vim:filetype=jinja:
         <form method="post">
             
             <div class="button-group">
-                {% if record.data.id %}
+                {% if record.id %}
                     <input class="button create" type="submit" value="{% trans 'Save' %}"/>
                 {% else %}
                     <input class="button" type="submit" value="{% trans 'Create' %}"/>

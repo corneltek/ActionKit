@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/vendor/pear/swift_required.php';
+
 # require 'autoload.php';
 
 //Create the Transport
