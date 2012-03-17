@@ -9,7 +9,6 @@ URL mapping:
     /bs/news/crud/create
     /bs/news/crud/edit
 
-
 ### Steps
 
 Add Admin menu item:
@@ -39,12 +38,6 @@ and template scope
 
 
 
-
-
-
 CRUD Action
 ===========
-
-
-
 
