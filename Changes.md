@@ -1,6 +1,12 @@
 
 # Changes
 
+六  3/17 13:53:37 2012
+
+- Rename plugins CRUD to {crud id}/edit.html 
+- Rename widgets to assets
+- Change CRUD.Edit.Record => CRUD.Record
+
 二 12/27 14:38:33 2011
 
 - Remove webapp()->currentUser() usage.
