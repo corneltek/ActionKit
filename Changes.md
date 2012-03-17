@@ -43,6 +43,7 @@ News plugin:
 三  9/28 13:50:17 2011
 
 ### Feature-iconnews branch
+
 - Change plugin config setter, getter: {{plugin}}::getInstance()->config( "key" );
   - Add {{plugin}}::getInstance()->configHash
   - Since static variable doesn't work for subclasses...
