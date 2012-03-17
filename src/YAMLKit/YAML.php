@@ -3,9 +3,9 @@ namespace YamlKit;
 use Spyc;
 
 /* Integrate differnet yaml backend */
-
 class YAML 
 {
+
     static function detectBackend()
     {
         if( extension_loaded( 'yaml' ) ) {
