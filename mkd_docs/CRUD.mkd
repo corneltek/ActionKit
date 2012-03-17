@@ -14,7 +14,7 @@ URL mapping:
 
 Add Admin menu item:
 
-	$menu = \AdminUI\Menu::one();
+	$menu = \AdminUI\Menu::getInstance();
 	$menu->add('News', array( 'href' => '/bs/news'));
 
 

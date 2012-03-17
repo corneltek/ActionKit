@@ -9,7 +9,7 @@
 
 
 {% macro action(class) %}
-    <input type="hidden" name="action" value="{{class|e}}"/>
+    <input type="hidden" name="action" value="{{ class }}"/>
 {% endmacro %}
 
 
@@ -18,7 +18,7 @@
 {% endmacro %}
 
 {% macro input(name, value, type, size) %}
-    <input type="{{ type|default('text') }}" name="{{ name }}" value="{{ value|e }}" size="{{ size|default(20) }}" />
+    <input type="{{ type|default('text') }}" name="{{ name }}" value="{{ value }}" size="{{ size|default(20) }}" />
 {% endmacro %}
 
 {% macro label( label ) %}
@@ -30,7 +30,7 @@
 {% endmacro %}
 
 {% macro textarea( name, value, rows, cols ) %}
-    <textarea class="mceEditor" name="{{ name }}" rows="{{ rows|default(10) }}" cols="{{ cols|default(40) }}">{{ value|e }}</textarea>
+    <textarea class="mceEditor" name="{{ name }}" rows="{{ rows|default(10) }}" cols="{{ cols|default(40) }}">{{ value }}</textarea>
 {% endmacro %}
 
 {% macro select( name, options, selected ) %}

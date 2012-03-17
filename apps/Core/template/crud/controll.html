@@ -1,0 +1,16 @@
+
+
+<div class="button-group">
+    {% if CRUD.Record.id %}
+        <input class="button create" type="submit" value="{% trans 'Save' %}"/>
+    {% else %}
+        <input class="button" type="submit" value="{% trans 'Create' %}"/>
+    {% endif %}
+    <input class="button" type="button" value="{% trans "Close" %}" onclick=" 
+        {% if Env.request.in_window %}
+            window.close();
+        {% else %}
+            Region.of(this).fadeRemove();
+        {% endif %}
+    "/>
+</div>

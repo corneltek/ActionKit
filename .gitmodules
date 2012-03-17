@@ -1,18 +1,18 @@
-[submodule "src/Symfony/Component/Finder"]
-	path = src/Symfony/Component/Finder
+[submodule "vendor/symfony-finder"]
+	path = vendor/symfony-finder
 	url = git://github.com/symfony/Finder.git
-[submodule "dists/Twig-extensions"]
-	path = dists/Twig-extensions
+[submodule "vendor/twig-extensions"]
+	path = vendor/twig-extensions
 	url = git://github.com/fabpot/Twig-extensions.git
-[submodule "dists/fabpot-yaml"]
-	path = dists/fabpot-yaml
-	url = https://github.com/fabpot/yaml.git
-[submodule "dists/firephp"]
-	path = dists/firephp
+[submodule "vendor/firephp"]
+	path = vendor/firephp
 	url = https://github.com/firephp/firephp.git
-[submodule "assets/QUnit/web/qunit"]
-	path = assets/QUnit/web/qunit
-	url = https://github.com/jquery/qunit.git
-[submodule "dists/WebDriver"]
-	path = dists/WebDriver
+[submodule "vendor/webdriver"]
+	path = vendor/webdriver
 	url = git://github.com/facebook/php-webdriver.git
+[submodule "vendor/yahoo/yos"]
+	path = vendor/yahoo/yos
+	url = https://github.com/yahoo/yos-social-php.git
+[submodule "vendor/xhprof"]
+	path = vendor/xhprof
+	url = git://github.com/facebook/xhprof.git

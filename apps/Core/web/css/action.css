@@ -86,7 +86,7 @@
 
 
 
-
+/* action highlight plugin */
 .highlight { display: table; table-layout: auto; }
 .highlight-error { border: 1px solid red; }
 .highlight-success { border: 1px solid #D4E593; }

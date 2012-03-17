@@ -3,7 +3,6 @@
 webroot/ph/
 webroot/static/upload/
 cache/
-coverage/
 .DS_Store
 .svn
 tests/tmp/
@@ -14,4 +13,6 @@ docs/_build/
 *.tbz
 *.rar
 build
-vendor
+vendor/pear
+minified
+.onion/
