@@ -22,6 +22,3 @@ Example:
     $view->books = $data;
     $view->render( 'admin/login_page.tpl');
 
-
-
-
