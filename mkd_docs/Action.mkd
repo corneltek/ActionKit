@@ -37,7 +37,7 @@ Action Schema
                 ->type('file')              # Image and File column class will auto set type = 'file'
                 ->validExtension(array('jpg','png'))
                 ->resize( 100 , 100 )
-                ->putIn( webapp()->getAppWebDir() . DIR_SEP . 'public' );
+                ->putIn( webapp()->getAppWebDir() . DS . 'public' );
         }
     }
 
