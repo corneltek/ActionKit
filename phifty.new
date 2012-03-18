@@ -1,8 +1,0 @@
-#!/usr/bin/env
-<?php
-# vim:filetype=php:
-require __DIR__ . '/main.php';
-
-$console = \Phifty\Console::getInstance();
-webapp()->event->trigger( 'console.init_commands' , $console );
-$console->run( $argv );
