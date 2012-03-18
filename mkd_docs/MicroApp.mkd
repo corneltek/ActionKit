@@ -42,7 +42,7 @@ In your MicroApp class, like App or Core or Plugin..:
 
     class Core {
         $this->route( '/admin' , array( 'routerset' => 'SampleRouterSet' ) );
-        $this->routeToSet( '/admin' , 'RouterSet' );
+        $this->expandRoute( '/admin' , 'RouterSet' );
     }
 
 

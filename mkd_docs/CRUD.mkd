@@ -19,7 +19,7 @@ Add Admin menu item:
 
 mount CRUDRouterSet in your router table.
 
-	$this->routeToSet( '/bs/news', 'News_CRUDRouterSet' );
+	$this->expandRoute( '/bs/news', 'News_CRUDRouterSet' );
 
 define CRUD attributes
 
