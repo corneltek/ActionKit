@@ -50,7 +50,7 @@ class UploadImageAction extends Action
 
 	function run( )
 	{
-        $cuser = webapp()->currentUser;
+        $cuser = kernel()->currentUser;
         if( ! $cuser->id )
             return $this->report_error( _("You need to login to upload image.") );
 

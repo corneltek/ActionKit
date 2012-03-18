@@ -23,7 +23,7 @@ Form
 
 
 
-$view = webapp();
+$view = kernel();
 $view->add( '/tile1' , 'tile1.tpl' , function() {  /* preprocess */   } );
 $view->add( '/tile1' , 'tile2.tpl' , function() {  /* preprocess */  }  );
 $view->add_tile( '/tile1' , 'blah blah' );

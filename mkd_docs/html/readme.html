@@ -334,16 +334,16 @@ $ ./phifty plugin SB -M=Product -M=Order -M=Cart ....</blockquote>
 <div class="section" id="synopsis">
 <h2>Synopsis</h2>
 <blockquote>
-<p>webapp()-&gt;init(); // run</p>
-<p>webapp()-&gt;use('form_widget');
-webapp()-&gt;use('smarty');
-webapp()-&gt;view();
-webapp()-&gt;db();
-webapp()-&gt;cache();
-webapp()-&gt;currentUser();
-webapp()-&gt;config();</p>
-<p>$result = webapp()-&gt;actionResult('Result');</p>
-<p>webapp()-&gt;model('User');</p>
+<p>kernel()-&gt;init(); // run</p>
+<p>kernel()-&gt;use('form_widget');
+kernel()-&gt;use('smarty');
+kernel()-&gt;view();
+kernel()-&gt;db();
+kernel()-&gt;cache();
+kernel()-&gt;currentUser();
+kernel()-&gt;config();</p>
+<p>$result = kernel()-&gt;actionResult('Result');</p>
+<p>kernel()-&gt;model('User');</p>
 <!-- or -->
 <p>$u = model('User');
 $users = coln('User');</p>
