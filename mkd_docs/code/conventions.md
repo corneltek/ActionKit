@@ -15,7 +15,7 @@ Strings
 When a string is literal (contains no variable substitutions), the apostrophe
 or "single quote" should always be used to demarcate the string:
 
-<?
+<?php
 $a = 'Example String';
 ?>
 
@@ -24,7 +24,7 @@ contains apostrophes, it is permitted to demarcate the string with
 quotation marks or "double quotes". This is especially useful for SQL
 statements:
 
-<?
+<?php
     $sql = "SELECT `id`, `name` from `people` "
         . "WHERE `name`='Fred' OR `name`='Susan'";
 ?>
