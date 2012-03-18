@@ -7,18 +7,6 @@ Phifty export commmand
 
 init command should parse dirs from `plugins` dir and `app`, `core` dirs.
 
-Problems
-========
-
-* How to map plugin static files to web path ?
-
-
-
-
-
-
-
-
 AppSpace
 =================
 

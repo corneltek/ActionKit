@@ -1,4 +1,6 @@
-Index
-=====
+Phifty Web Framework
+====================
 
-[[Main]]
+[[Setup]]
+
+[[Action.js]]

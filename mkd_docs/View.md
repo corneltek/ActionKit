@@ -1,5 +1,3 @@
-
-
 # Phifty View Class
 
 ## Basic View Class

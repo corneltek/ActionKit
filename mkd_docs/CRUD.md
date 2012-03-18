@@ -16,13 +16,11 @@ Add Admin menu item:
 	$menu = \AdminUI\Menu::getInstance();
 	$menu->add('News', array( 'href' => '/bs/news'));
 
-
 mount CRUDRouterSet in your router table.
 
 	$this->expandRoute( '/bs/news', 'News_CRUDRouterSet' );
 
 define CRUD attributes
-
 
 	class YourCRUDRouterSet ... 
 	{
@@ -35,7 +33,6 @@ define CRUD attributes
 and template scope
 
     public $templateScope = array('plugin:News' , 'plugins:AdminUI' );
-
 
 
 CRUD Action
