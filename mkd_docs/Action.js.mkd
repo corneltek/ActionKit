@@ -1,6 +1,3 @@
-
-
-
 Frontend Action.js
 ==================
 
