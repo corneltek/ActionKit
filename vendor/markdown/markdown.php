@@ -1698,7 +1698,7 @@ class MarkdownExtra_Parser extends Markdown_Parser {
 		$this->escape_chars .= ':|';
 
 		if ($this->el_local_domain === null) {
-			$this->el_local_domain = $_SERVER['SERVER_NAME'];
+			$this->el_local_domain = @$_SERVER['SERVER_NAME'];
 		}
 
 		# Insert extra document, block, and span transformations.
