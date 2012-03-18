@@ -70,7 +70,7 @@ Associative Arrays
 When declaring associative arrays with the Array construct, breaking the
 statement into multiple lines is encouraged.
 
-<?
+<?php
     $sampleArray = array('firstKey'  => 'firstValue',
                          'secondKey' => 'secondValue');
 
@@ -221,7 +221,7 @@ The opening brace is written on the same line as the conditional statement. The
 closing brace is always written on its own line. Any content within the braces
 must be indented using four spaces.
 
-<?
+<?php
     if ($a != 2) {
         $a = 2;
     }
@@ -229,7 +229,7 @@ must be indented using four spaces.
 
 ### Switch
 
-<?
+<?php
     switch ($numPeople) {
         case 1:
             break;
