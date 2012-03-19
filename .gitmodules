@@ -1,6 +1,3 @@
-[submodule "vendor/symfony-finder"]
-	path = vendor/symfony-finder
-	url = git://github.com/symfony/Finder.git
 [submodule "vendor/twig-extensions"]
 	path = vendor/twig-extensions
 	url = git://github.com/fabpot/Twig-extensions.git
