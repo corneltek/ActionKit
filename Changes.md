@@ -10,7 +10,13 @@
 
 - Rename plugins CRUD to {crud id}/edit.html 
 - Rename widgets to assets
-- Change CRUD.Edit.Record => CRUD.Record
+- Change CRUD.Edit.Record => CRUD.Record 
+- Move CRUD templates out, into plugins/CRUD/
+- Use SessionKit for session.
+- Enabled file field validation.
+- Added crud_controll block
+- Added Excel Import Action and Controller
+- Added MemcacheService
 
 二 12/27 14:38:33 2011
 
