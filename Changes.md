@@ -1,4 +1,9 @@
 
+# Deprecations
+
+    webapp() => kernel()
+    kernel()->lang() => kernel()->locale
+
 # Changes
 
 六  3/17 13:53:37 2012
