@@ -1,9 +1,9 @@
 <?php
-namespace Phifty\Action;
+namespace ActionKit;
 use Exception;
 
 /*
-    use Phifty\Action\RecordAction;
+    use ActionKit\RecordAction;
 
 
     # returns CreateRecordAction
@@ -16,7 +16,7 @@ use Exception;
     XXX: validation should be built-in in Model
 
 */
-abstract class RecordAction extends \Phifty\Action
+abstract class RecordAction extends \ActionKit
 {
     public $record; // record schema object
     public $recordClass;
@@ -34,13 +34,13 @@ abstract class RecordAction extends \Phifty\Action
         $class = $this->recordClass;
         $this->record = $record ? $record : new $class;
 
-        if( is_a( $this , 'Phifty\Action\CreateRecordAction' ) ) {
+        if( is_a( $this , 'ActionKit\CreateRecordAction' ) ) {
             $this->type = 'create';
         }
-        elseif( is_a( $this, 'Phifty\Action\UpdateRecordAction' ) ) {
+        elseif( is_a( $this, 'ActionKit\UpdateRecordAction' ) ) {
             $this->type = 'update';
         }
-        elseif( is_a( $this, 'Phifty\Action\DeleteRecordAction' ) ) {
+        elseif( is_a( $this, 'ActionKit\DeleteRecordAction' ) ) {
             $this->type = 'delete';
         } else {
             throw new Exception( sprintf('Unknown Record Action Type: %s' , get_class($this) ));
@@ -69,7 +69,7 @@ abstract class RecordAction extends \Phifty\Action
         if( $this->record ) {
             foreach( $this->record->getColumns() as $column ) {
 				if( ! isset($this->params[$column->name] ) ) {
-					$this->params[ $column->name ] = \Phifty\Action\ColumnConvert::toParam( $column , $this->record );
+					$this->params[ $column->name ] = \ActionKit\ColumnConvert::toParam( $column , $this->record );
 				}
             }
         }
@@ -175,7 +175,7 @@ abstract class RecordAction extends \Phifty\Action
     {
         $modelClass  = '\\' . $ns . '\Model\\' . $modelName;
         $actionName  = $type . $modelName;
-        $baseAction  = '\Phifty\Action\\' . $type . 'RecordAction';
+        $baseAction  = '\ActionKit\\' . $type . 'RecordAction';
         $code =<<<CODE
 namespace $ns\\Action {
     class $actionName extends $baseAction

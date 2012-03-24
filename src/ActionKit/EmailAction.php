@@ -1,8 +1,8 @@
 <?
-namespace Phifty\Action;
+namespace ActionKit;
 
 use Phifty\Email;
-use Phifty\Action;
+use ActionKit;
 /*
 
 

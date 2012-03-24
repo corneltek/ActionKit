@@ -1,6 +1,6 @@
 <?php
 
-namespace Phifty\Action;
+namespace ActionKit;
 use Phifty\StringUtils;
 
 /*
@@ -18,7 +18,7 @@ use Phifty\StringUtils;
         {App}::Action::Signup
 
 
-    $runner = Phifty\Action\ActionRunner::getInstance();
+    $runner = ActionKit\ActionRunner::getInstance();
     $result = $runner->run();
     if( $result ) {
         if( $runner->isAjax() ) {

@@ -1,7 +1,7 @@
 <?php
 
-namespace Phifty\Action;
-use Phifty\Action\RecordAction;
+namespace ActionKit;
+use ActionKit\RecordAction;
 
 class CreateRecordAction 
     extends RecordAction

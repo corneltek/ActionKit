@@ -1,6 +1,6 @@
 <?php
 
-namespace Phifty\Action;
+namespace ActionKit;
 
 define('NL',"\n");
 

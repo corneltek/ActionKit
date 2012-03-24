@@ -1,10 +1,10 @@
 <?php
 
-namespace Phifty\Action;
-use Phifty\Action\RecordAction;
+namespace ActionKit;
+use ActionKit\RecordAction;
 
 class UpdateRecordAction 
-    extends \Phifty\Action\RecordAction
+    extends \ActionKit\RecordAction
 {
 
     function update( $args )

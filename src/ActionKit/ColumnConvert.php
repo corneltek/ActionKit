@@ -1,5 +1,5 @@
 <?php
-namespace Phifty\Action;
+namespace ActionKit;
 
 /**
  * Convert LazyORM column to Action column, 
@@ -12,7 +12,7 @@ class ColumnConvert
     {
 		$name = $column->name;
 
-        $param = new \Phifty\Action\Column( $name );
+        $param = new \ActionKit\Column( $name );
 
         foreach( $column->attributes as $k => $v ) {
             $param->$k = $v;

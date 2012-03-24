@@ -1,6 +1,6 @@
 <?php
-namespace Phifty\Action\Column;
-use Phifty\Action\Column;
+namespace ActionKit\Column;
+use ActionKit\Column;
 use Phifty\UploadFile;
 use Exception;
 use Phifty\SimpleImage;

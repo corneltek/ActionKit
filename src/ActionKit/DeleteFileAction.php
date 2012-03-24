@@ -1,7 +1,7 @@
 <?php
 
-namespace Phifty\Action;
-use Phifty\Action;
+namespace ActionKit;
+use ActionKit;
 
 /*
 DeleteFileAction (abstract class)

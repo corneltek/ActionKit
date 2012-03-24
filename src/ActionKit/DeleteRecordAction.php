@@ -1,7 +1,7 @@
 <?php
 
-namespace Phifty\Action;
-use Phifty\Action\RecordAction;
+namespace ActionKit;
+use ActionKit\RecordAction;
 use Exception;
 
 class DeleteRecordAction 
