@@ -1,7 +1,5 @@
 <?php
-
 namespace ActionKit;
-use Phifty\StringUtils;
 
 /*
 
