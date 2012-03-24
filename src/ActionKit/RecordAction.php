@@ -16,7 +16,7 @@ use Exception;
     XXX: validation should be built-in in Model
 
 */
-abstract class RecordAction extends \ActionKit
+abstract class RecordAction extends Action
 {
     public $record; // record schema object
     public $recordClass;
