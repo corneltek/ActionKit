@@ -13,9 +13,6 @@ class Column extends \CascadingAttribute
     /* action param type */
     public $type;
 
-    /* action field label */
-    public $label;
-
     /* is a required column ? */
     public $required;
 
@@ -51,16 +48,16 @@ class Column extends \CascadingAttribute
 
     public $completer;
 
-
-    function __construct( $name , $action = null ) 
+    public function __construct( $name , $action = null ) 
     {
 		$this->name = $name;
 		$this->action = $action;
-
-		// var_dump( array( $name , get_class($this) ) ); 
+        $this->build();
 	}
 
-
+    public function build()
+    {
+    }
 
     /** We dont save any value here,
      * The value's should be passed from outside.

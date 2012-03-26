@@ -14,10 +14,16 @@ class File extends Column
 	public $sizeLimit;
 	public $sourceField;  /* If field is not defined, use this source field */
 
-	protected $attrs = array( 'validExtensions' => self::TypeArray );
+    public function build()
+    {
+        $this->supportedAttributes['validExtensions'] = self::ATTR_ARRAY;
+        $this->supportedAttributes['putIn'] = self::ATTR_STRING;
+        $this->supportedAttributes['renameFile'] = self::ATTR_ANY;
+    }
 
 	public function preinit( & $args )
 	{
+
 		/* For safety , remove the POST, GET field !! should only keep $_FILES ! */
 		if( isset( $args[ $this->name ] ) ) {
 			unset( $_GET[ $this->name ]  );

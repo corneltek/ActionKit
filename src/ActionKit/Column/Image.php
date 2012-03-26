@@ -21,14 +21,19 @@ class Image extends Column
 	public $sizeLimit;
 	public $sourceField;  /* If field is not defined, use this source field */
 
-	protected $attrs = array( 'validExtensions' => self::TypeArray );
 
-	function getImager()
+    public function build()
+    {
+        $this->supportedAttributes[ 'validExtensions' ] = self::ATTR_ARRAY;
+        $this->supportedAttributes[ 'putIn' ] = self::ATTR_STRING;
+    }
+
+	public function getImager()
 	{
 		return new SimpleImage;
 	}
 
-	function getFile( $name )
+	public function getFile( $name )
 	{
 		return $_FILES[ $name ];
 	}
