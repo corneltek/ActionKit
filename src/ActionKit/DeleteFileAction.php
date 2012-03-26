@@ -24,7 +24,7 @@ Usage:
     }
 
 */
-abstract class DeleteFileAction extends Action 
+abstract class DeleteFileAction extends \ActionKit\Action 
 {
 
     public $modelClass;
