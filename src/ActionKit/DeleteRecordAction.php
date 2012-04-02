@@ -23,7 +23,7 @@ class DeleteRecordAction
 
     function deleteSuccess() 
     {
-        return $this->success( __('%1 record has been deleted.' , $this->record->getLabel() ) , array( 'id' => $this->record->id) );
+        return $this->success( __('%1 record is deleted.' , $this->record->getLabel() ) , array( 'id' => $this->record->id) );
     }
 
     function deleteError() 

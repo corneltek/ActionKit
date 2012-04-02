@@ -134,7 +134,7 @@ class EmailAction extends \ActionKit\Action
         } catch ( Exception $e ) {
             return $this->error( $e->getMessage() );
         }
-        return $this->success(_('Email has been sent.'));
+        return $this->success(_('Email is sent.'));
     }
 
 }

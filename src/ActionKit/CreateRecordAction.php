@@ -30,7 +30,7 @@ class CreateRecordAction
 
     function createSuccess($ret) 
     {
-        return $this->success( __("%1 Record has been created." , $this->record->getLabel() ) , array( 
+        return $this->success( __("%1 Record is created." , $this->record->getLabel() ) , array( 
             'id' => $this->record->id
         ));
     }
