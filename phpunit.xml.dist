@@ -12,19 +12,12 @@
          -->
 
   <testsuites>
-
-        <testsuite name="Selenium">
-            <directory suffix="Test.php">selenium</directory>
+        <testsuite name="Functional">
+            <directory suffix="Test.php">tests/functional</directory>
         </testsuite>
-
-        <testsuite name="LazyRecord">
-            <directory suffix="Test.php">tests/lazyrecord</directory>
-        </testsuite>
-
         <testsuite name="Phifty">
-            <directory suffix="Test.php">tests</directory>
+            <directory suffix="Test.php">tests/Phifty</directory>
         </testsuite>
-
   </testsuites>
 
   <!--
