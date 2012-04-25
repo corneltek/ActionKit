@@ -1,4 +1,0 @@
-
-# Bugs
-
-* addtest command, can't take -d for directory.

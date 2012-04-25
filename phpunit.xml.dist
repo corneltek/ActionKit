@@ -3,11 +3,11 @@
          backupGlobals="false"
          stderr="true"
          colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
          verbose="true">
          <!--
          debug="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          -->
 
