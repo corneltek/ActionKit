@@ -13,3 +13,6 @@
 [submodule "assets"]
 	path = assets
 	url = git@git.corneltek.com:assets.git
+[submodule "vendor/assetkit"]
+	path = vendor/assetkit
+	url = git@git.corneltek.com:php/AssetKit.git
