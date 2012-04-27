@@ -10,3 +10,6 @@
 [submodule "vendor/xhprof"]
 	path = vendor/xhprof
 	url = https://github.com/facebook/xhprof.git
+[submodule "assets"]
+	path = assets
+	url = git@git.corneltek.com:assets.git
