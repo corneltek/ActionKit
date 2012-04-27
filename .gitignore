@@ -14,5 +14,5 @@ docs/_build/
 *.rar
 build
 vendor/pear
-minified
+webroot/assets
 .onion/
