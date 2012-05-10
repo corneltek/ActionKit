@@ -1,1 +1,0 @@
-<html><body>You are being <a href="http://cloud.github.com/downloads/danvk/dygraphs/dygraph-combined.js">redirected</a>.</body></html>

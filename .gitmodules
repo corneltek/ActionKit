@@ -1,6 +1,6 @@
 [submodule "vendor/twig-extensions"]
 	path = vendor/twig-extensions
-	url = git://github.com/fabpot/Twig-extensions.git
+	url = https://github.com/fabpot/Twig-extensions.git
 [submodule "vendor/firephp"]
 	path = vendor/firephp
 	url = https://github.com/firephp/firephp.git
@@ -9,4 +9,13 @@
 	url = https://github.com/yahoo/yos-social-php.git
 [submodule "vendor/xhprof"]
 	path = vendor/xhprof
-	url = git://github.com/facebook/xhprof.git
+	url = https://github.com/facebook/xhprof.git
+[submodule "assets"]
+	path = assets
+	url = git@git.corneltek.com:assets.git
+[submodule "vendor/assetkit"]
+	path = vendor/assetkit
+	url = git@git.corneltek.com:php/AssetKit.git
+[submodule "vendor/lazyrecord"]
+	path = vendor/lazyrecord
+	url = git@git.corneltek.com:php/LazyRecord.git
