@@ -40,7 +40,7 @@ class UpdateRecordAction
 
     function successMessage($ret) 
     {
-        return __('%1 updated.', $this->record->getLabel() ) , array( 'id' => $this->record->id );
+        return __('%1 updated.', $this->record->getLabel() );
     }
 
     function errorMessage($ret) 
@@ -50,12 +50,12 @@ class UpdateRecordAction
 
     function updateSuccess($ret)
     {
-        return $this->success( $this->successMessage($ret) , array( 'id' => $this->record->id ) );
+        return $this->success($this->successMessage($ret) , array( 'id' => $this->record->id ));
     }
 
     function updateError($ret)
     {
-        return $this->error( $this->errorMessage($ret) );
+        return $this->error($this->errorMessage($ret));
     }
 
 
