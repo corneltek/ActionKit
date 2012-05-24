@@ -28,16 +28,26 @@ class CreateRecordAction
         return $this->create( $this->args );
     }
 
-    function createSuccess($ret) 
+    public function successMessage($ret)
     {
-        return $this->success( __("%1 Record is created." , $this->record->getLabel() ) , array( 
+        return __("%1 Record is created." , $this->record->getLabel() );
+    }
+
+    public function errorMessage($ret)
+    {
+        return __('Can not create %1 record' , $this->record->getLabel() );
+    }
+
+    public function createSuccess($ret) 
+    {
+        return $this->success( $this->successMessage($ret) , array( 
             'id' => $this->record->id
         ));
     }
 
-    function createError($ret) 
+    public function createError($ret) 
     {
-        return $this->error( __('Can not create %1 record' , $this->record->getLabel() ) );
+        return $this->error( $this->errorMessage($ret) );
     }
 
 }
