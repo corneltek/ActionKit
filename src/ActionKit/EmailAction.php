@@ -30,7 +30,7 @@ use ActionKit\Action;
     }
 */
 
-class EmailAction extends \ActionKit 
+class EmailAction extends ActionKit\Action
 {
     /* email object */
     public $email;
