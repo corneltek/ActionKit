@@ -37,14 +37,25 @@ class UpdateRecordAction
         return $this->error( __("%1 not found, can not update.", $this->record->getLabel()  ) );
     }
 
+
+    function successMessage($ret) 
+    {
+        return __('%1 updated.', $this->record->getLabel() );
+    }
+
+    function errorMessage($ret) 
+    {
+        return __('%1 update failed.', $this->record->getLabel() );
+    }
+
     function updateSuccess($ret)
     {
-        return $this->success( __('%1 updated.', $this->record->getLabel() ) , array( 'id' => $this->record->id ) );
+        return $this->success($this->successMessage($ret) , array( 'id' => $this->record->id ));
     }
 
     function updateError($ret)
     {
-        return $this->error(  __('%1 update failed.') , $this->record->getLabel() );
+        return $this->error($this->errorMessage($ret));
     }
 
 

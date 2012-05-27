@@ -18,4 +18,4 @@
 	url = git@git.corneltek.com:php/AssetKit.git
 [submodule "vendor/lazyrecord"]
 	path = vendor/lazyrecord
-	url = git@git.corneltek.com:php/LazyRecord.git
+    url = git@git.corneltek.com:php/LazyRecord.git
