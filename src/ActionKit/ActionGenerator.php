@@ -29,11 +29,20 @@ class ActionGenerator
     }
 
     function generateClassCode( $modelClass , $type ) {
+        if( $this->cache && $code = apc_fetch( 'action:' . $modelClass . ':' . $type) ) {
+            return $code;
+        }
+
         $p = strpos( $modelClass , '\\' );
         $bp = strrpos( $modelClass , '\\' );
         $ns = substr($modelClass,0,$p);
         $modelName = substr($modelClass, $bp + 1 );
-        return $this->generateClassCodeWithNamespace( $ns , $modelName, $type );
+        $code = $this->generateClassCodeWithNamespace( $ns , $modelName, $type );
+
+        if( $this->cache ) {
+            apc_store( 'action:' . $modelClass . ':' . $type , $code );
+        }
+        return $code;
     }
 
     function generateClassCodeWithNamespace( $ns , $modelName , $type )
