@@ -120,12 +120,12 @@ class ActionRunner extends Singleton
 
     function hasRequest() 
     {
-        return @$_REQUEST['action'];
+        return isset($_REQUEST['action']);
     }
 
     function getCurrentActionName() 
     {
-        return @$_REQUEST['action'];
+        return isset($_REQUEST['action']) ?: $_REQUEST['action'];
     }
 
 
@@ -142,14 +142,8 @@ class ActionRunner extends Singleton
 
     function tryLoad( $class ) 
     {
-        // try to call autoload function
-        // to load action class.
-        spl_autoload_call( $class );
-
-        # if class load success.
-        if( class_exists( $class ) )
-            return true;
-        return false;
+        # if class load success, try to load if not exist.
+        return class_exists( $class , true );
     }
 
     public function getAction( $class ) 
