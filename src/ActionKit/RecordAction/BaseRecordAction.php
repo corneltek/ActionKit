@@ -105,6 +105,12 @@ abstract class BaseRecordAction extends Action
         return true;
     }
 
+
+    /**
+     * Convert record validation object to action validation result.
+     *
+     * @param LazyRecord\OperationResult $ret
+     */
     function convertRecordValidation( $ret ) 
     {
         if( $ret->validations ) {
