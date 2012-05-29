@@ -105,7 +105,8 @@ abstract class BaseRecordAction extends Action
         return true;
     }
 
-    function convertRecordValidation( $ret ) {
+    function convertRecordValidation( $ret ) 
+    {
         if( $ret->validations ) {
             foreach( $ret->validations as $vld ) {
                 if( $vld->success ) {
@@ -115,54 +116,6 @@ abstract class BaseRecordAction extends Action
                 }
             }
         }
-    }
-
-
-    /**
-     * TODO: seperate this to CRUD actions 
-     */
-    function runUpdateValidate()
-    {
-        // validate from args 
-        $error = false;
-        foreach( $this->args as $key => $value ) {
-            /* skip action column */
-            if( $key === 'action' || $key === '__ajax_request' )
-                continue;
-
-            $hasError = $this->validateparam( $key );
-            if( $hasError )
-                $error = true;
-        }
-        if( $error )
-            $this->result->error( _('Validation Error') );
-        return $error;
-    }
-
-
-    /* just run throgh all params */
-    function runCreateValidate()
-    {
-        return parent::runValidate();
-    }
-
-    function runDeleteValidate()
-    {
-        if( isset( $this->args['id'] ) )
-            return false;
-        return true;
-    }
-
-    function runValidate()
-    {
-        if( $this->type == 'delete' )
-            return $this->runDeleteValidate();
-        elseif( $this->type == 'update' )
-            return $this->runUpdateValidate();
-        elseif( $this->type == 'create' )
-            return $this->runCreateValidate();
-        else
-            return parent::runValidate();
     }
 
 

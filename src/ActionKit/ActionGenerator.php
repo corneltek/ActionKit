@@ -38,6 +38,20 @@ class ActionGenerator
         return $this->generateClassCodeWithNamespace($ns, $modelName, $type);
     }
 
+
+    /**
+     * Generate record action class dynamically.
+     *
+     * generate( 'PluginName' , 'News' , 'Create' );
+     * will generate:
+     * PluginName\Action\CreateNews
+     *
+     * @param string $ns
+     * @param string $modelName
+     * @param string $type
+     *
+     * @return string class code
+     */
     function generateClassCodeWithNamespace( $ns , $modelName , $type )
     {
         $actionClass  = $type . $modelName;

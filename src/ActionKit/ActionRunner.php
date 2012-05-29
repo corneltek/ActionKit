@@ -167,10 +167,11 @@ class ActionRunner
             $args = $this->crudActions[$class];
 
             // please see registerCRUD method
-            $code = BaseRecordAction::generate( $args['ns'] , $args['model_name'] , $args['type'] );
+            $gen = new ActionGenerator(array( 'cache' => true ));
+            $code = $gen->generateClassCodeWithNamespace( $args['ns'], $args['model_name'], $args['type'] )->code;
 
-            // XXX: eval is slower than require
-            //      use a better code generator
+            // TODO: eval is slower than require
+            //       use a better code generator
             eval( $code );
             return new $class( $_REQUEST );
         }

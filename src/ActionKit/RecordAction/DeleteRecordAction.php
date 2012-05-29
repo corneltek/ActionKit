@@ -20,6 +20,13 @@ class DeleteRecordAction
         return $this->doDelete( $this->args );
     }
 
+    function runValidate()
+    {
+        if( isset( $this->args['id'] ) )
+            return false;
+        return true;
+    }
+
     function deleteSuccess() 
     {
         return $this->success( __('%1 record is deleted.' , $this->record->getLabel() ) , array( 'id' => $this->record->id) );

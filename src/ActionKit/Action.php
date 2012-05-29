@@ -97,14 +97,21 @@ abstract class Action
         return false;
     }
 
+
+    /**
+     * Run validates
+     *
+     * Foreach parameters, validate the parameter through validateParam method.
+     *
+     * @return bool error flag.
+     */
     function runValidate()
     {
         /* it's different behavior when running validation for create,update,delete,
          *
          * for generic action, just traverse all params. */
         $error = false;
-        foreach( $this->params as $name => $param ) 
-        {
+        foreach( $this->params as $name => $param ) {
             $hasError = $this->validateParam( $name );
             if( $hasError )
                 $error = true;

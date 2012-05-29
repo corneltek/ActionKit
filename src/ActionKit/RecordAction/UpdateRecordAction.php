@@ -30,6 +30,27 @@ class UpdateRecordAction
         return $this->update( $this->args );
     }
 
+    /**
+     * TODO: seperate this to CRUD actions 
+     */
+    function runValidate()
+    {
+        // validate from args 
+        $error = false;
+        foreach( $this->args as $key => $value ) {
+            /* skip action column */
+            if( $key === 'action' || $key === '__ajax_request' )
+                continue;
+
+            $hasError = $this->validateparam( $key );
+            if( $hasError )
+                $error = true;
+        }
+        if( $error )
+            $this->result->error( _('Validation Error') );
+        return $error;
+    }
+
     function recordNotFound()
     {
         return $this->error( __("%1 not found, can not update.", $this->record->getLabel()  ) );

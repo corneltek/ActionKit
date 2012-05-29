@@ -17,6 +17,11 @@ class CreateRecordAction
         return $this->createSuccess( $ret );
     }
 
+
+    /**
+     * runValidate inherited from parent class.
+     * */
+
     public function run()
     {
         /* default run method , to run create action */
