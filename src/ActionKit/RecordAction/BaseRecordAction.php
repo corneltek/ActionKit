@@ -2,6 +2,7 @@
 namespace ActionKit\RecordAction;
 use Exception;
 use ActionKit\Action;
+use ActionKit\ActionGenerator;
 
 /*
     use ActionKit\RecordAction;
@@ -175,38 +176,20 @@ abstract class BaseRecordAction extends Action
     static function generate( $ns , $modelName , $type )
     {
         $gen = new ActionGenerator(array( 'cache' => true ));
-        $gen->generateClassCodeWithNamespace( );
-
-        $modelClass  = '\\' . $ns . '\Model\\' . $modelName;
-        $actionName  = $type . $modelName;
-        $baseAction  = '\ActionKit\\RecordAction\\' . $type . 'RecordAction';
-        $code =<<<CODE
-namespace $ns\\Action {
-    class $actionName extends $baseAction
-    {
-        public \$recordClass = '$modelClass';
-    }
-}
-CODE;
-        return $code;
+        return $gen->generateClassCodeWithNamespace( $ns, $modelName, $type )->code;
     }
 
     static function createCRUDClass( $recordClass , $type ) 
     {
-        /* split class to ns, model name */
-        if( preg_match( '/(\w+)\\\Model\\\(\w+)/' , $recordClass , $regs ) ) 
-        {
-            list( $orig, $ns , $modelName ) = $regs;
-            $class = '\\' . $ns . '\Action\\' . $type . $modelName;
-            if( class_exists( $class, true) )
-                return $class;
+        $gen = new ActionGenerator(array( 'cache' => true ));
+        $ret = $gen->generateClassCode( $recordClass , $type );
 
-            $code = self::generate( $ns , $modelName , $type );
-            eval( $code );
-            return $class;
+        if( class_exists($ret->action_class,true) ) {
+            return $ret->action_class;
         }
+        eval( $ret->code );
+        return $ret->action_class;
     }
 
 }
 
-?>

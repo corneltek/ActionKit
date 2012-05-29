@@ -28,24 +28,28 @@ class ActionGenerator
         $this->cache = isset($options['cache']) && extension_loaded('apc');
     }
 
-    function generateClassCode( $modelClass , $type ) {
-        $p         = strpos($modelClass, '\\');
-        $bp        = strrpos($modelClass, '\\');
-        $ns        = substr($modelClass, 0, $p);
-        $modelName = substr($modelClass, $bp + 1 );
-        return $this->generateClassCodeWithNamespace( $ns , $modelName, $type );
+    function generateClassCode( $modelClass , $type ) 
+    {
+        $modelClass = ltrim($modelClass, '\\');
+        $p          = strpos($modelClass, '\\');
+        $bp         = strrpos($modelClass, '\\');
+        $ns         = substr($modelClass, 0, $p);
+        $modelName  = substr($modelClass, $bp + 1 );
+        return $this->generateClassCodeWithNamespace($ns, $modelName, $type);
     }
 
     function generateClassCodeWithNamespace( $ns , $modelName , $type )
     {
         $actionClass  = $type . $modelName;
         $actionFullClass = $ns . '\\Action\\'  . $actionClass;
-
         if( $this->cache && $code = apc_fetch( 'action:' . $actionFullClass ) ) {
-            return $code;
+            return (object) array(
+                'action_class' => $actionFullClass,
+                'code' => $code
+            );
         }
 
-        $recordClass  = '\\' . $ns . '\Model\\' . $modelName;
+        $recordClass  = $ns . '\\Model\\' . $modelName;
         $baseAction   = $type . 'RecordAction';
         $code =<<<CODE
 namespace $ns\\Action {
@@ -58,9 +62,13 @@ namespace $ns\\Action {
 namespace { return 1; }
 CODE;
         if( $this->cache ) {
-            apc_store('action:' . $actionFullClass , $code ) or die('can not store action class code');
+            apc_store('action:' . $actionFullClass , $code)
+                or die('Can not store action class code.');
         }
-        return $code;
+        return (object) array( 
+            'action_class' => $actionFullClass,
+            'code' => $code,
+        );
     }
 
 
