@@ -1,34 +1,37 @@
 <?php
 namespace ActionKit;
 
-/*
-
-    ActionRunner:
-
-        full-qualified action name in web form:
-
-        Yasumi::Action::Login
-        Phifty::Action::Login
-
-        names like "Login", "Signup" should refer to 
-
-        {App}::Action::Login or 
-        {App}::Action::Signup
-
-
-    $runner = ActionKit\ActionRunner::getInstance();
-    $result = $runner->run();
-    if( $result ) {
-        if( $runner->isAjax() ) {
-            echo $result;
-        }
-    }
-
-*/
+/**
+ * Run actions!
+ *
+ *
+ *      full-qualified action name in web form:
+ *              Yasumi::Action::Login
+ *              Phifty::Action::Login
+ *      names like "Login", "Signup" should refer to 
+ *              {App}::Action::Login or 
+ *              {App}::Action::Signup
+ *
+ *  $runner = ActionKit\ActionRunner::getInstance();
+ *  $result = $runner->run();
+ *  if( $result ) {
+ *      if( $runner->isAjax() ) {
+ *          echo $result;
+ *      }
+ *  }
+ *
+ * Iterator support:
+ *
+ *  foreach( $runner as $name => $result ) {
+ *
+ *  }
+ *
+ */
 use Exception;
-use Phifty\Singleton;
+use IteratorAggregate;
 
 class ActionRunner
+    implements IteratorAggregate
 {
     /**
      * Abstract CRUD action pool 
@@ -129,7 +132,13 @@ class ActionRunner
         }
     }
 
-    public function getAction( $class ) 
+
+    /**
+     * Create action object
+     *
+     * @param string $class
+     */
+    public function createAction( $class ) 
     {
         $args = array_merge( array() , $_REQUEST );
 
@@ -161,7 +170,7 @@ class ActionRunner
 
     public function dispatch( $class ) 
     {
-        $act = $this->getAction( $class );
+        $act = $this->createAction( $class );
         if( $act !== false ) {
             $act();
             return $act->getResult();
@@ -209,13 +218,18 @@ class ActionRunner
     }
 
 
-
     static function getInstance()
     {
         static $self;
         if( $self )
             return $self;
         return $self = new static;
+    }
+
+
+    public function getIterator() 
+    {
+        return new ArrayIterator($this->results);
     }
 
 }
