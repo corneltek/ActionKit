@@ -5,7 +5,7 @@ namespace ActionKit;
 class Column extends \CascadingAttribute
 {
     /* action object referenece */
-	public $action;
+    public $action;
 
     /* action param name */
     public $name;
@@ -50,10 +50,10 @@ class Column extends \CascadingAttribute
 
     public function __construct( $name , $action = null ) 
     {
-		$this->name = $name;
-		$this->action = $action;
+        $this->name = $name;
+        $this->action = $action;
         $this->build();
-	}
+    }
 
     public function build()
     {
@@ -72,11 +72,11 @@ class Column extends \CascadingAttribute
         if( $this->type == 'file' ) {
             if( $this->required && ! isset($_FILES[ $this->name ]['tmp_name']) ) {
                 return array(false, __('Field %1 is required.' , $this->getLabel()  ) );
-			}
+            }
         } else {
             if( $this->required && ! isset($_REQUEST[ $this->name ]) && ! $this->default ) {
                 return array(false, __('Field %1 is required.' , $this->getLabel()  ) );
-			}
+            }
         }
 
         if( $this->validator ) {
