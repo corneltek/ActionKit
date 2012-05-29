@@ -8,17 +8,18 @@ class DeleteRecordAction
     extends RecordAction
 {
 
-    function delete($args)
+    function doDelete($args)
     {
-        $this->record->delete();
-        return $this->deleteSuccess();
-        // return $this->deleteError();
+        $ret = $this->record->delete();
+        if( $ret->success )
+            return $this->deleteSuccess();
+        return $this->deleteError();
     }
 
     function run( ) 
     {
         /* default run method , to run create action */
-        return $this->delete( $this->args );
+        return $this->doDelete( $this->args );
     }
 
     function deleteSuccess() 
