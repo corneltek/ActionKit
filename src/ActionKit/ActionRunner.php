@@ -171,6 +171,13 @@ class ActionRunner extends Singleton
         }
     }
 
+
+
+    /**
+     * Get all results
+     *
+     * @return ActionKit\Result[]
+     */
     public function getResults()
     {
         return $this->results;
@@ -184,8 +191,21 @@ class ActionRunner extends Singleton
      */
     public function getResult( $name )
     {
-        return @$this->results[ $name ];
+        return isset($this->results[ $name ]) ?
+                $this->results[ $name ] : null;
+                
     }
+
+    /**
+     * Check if we have action result
+     *
+     * @param string $name Action name
+     */
+    public function hasResult($name) 
+    {
+        return isset($this->results[$name]);
+    }
+
 
 }
 
