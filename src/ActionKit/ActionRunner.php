@@ -30,11 +30,19 @@ use Phifty\Singleton;
 
 class ActionRunner extends Singleton
 {
-    /* abstract CRUD actions */
+    /**
+     * Abstract CRUD action pool 
+     *
+     * @var array
+     */
     public $crudActions = array();
 
-    /* result pool */
-	public $results = array();
+    /**
+     * Result pool 
+     *
+     * @var array
+     */
+    public $results = array();
 
     /*
      * Check if action request, then dispatch the action class.
@@ -65,12 +73,17 @@ class ActionRunner extends Singleton
         }
     }
 
-    /* 
-     * News model in News plugin.
+    /**
+     * Add CRUD action class to pool, so we can generate these class later 
+     * if needed. (lazy)
      *
-     * addCRUD( 'News' , 'News' , array('create') );
-    */
-    function addCRUD( $ns , $modelName , $types ) 
+     *   - registerCRUD( 'News' , 'News' , array('create') );
+     * 
+     * @param string $ns namespace name
+     * @param string $modelName model name
+     * @param array $types action types
+     */
+    function registerCRUD( $ns , $modelName , $types ) 
     {
         foreach( (array) $types as $type ) {
             $class = $ns . '\Action\\' . $type . $modelName;
@@ -159,7 +172,7 @@ class ActionRunner extends Singleton
             /* generate the crud action */
             $args = $this->crudActions[$class];
 
-            // please see addCRUD method
+            // please see registerCRUD method
             $code = RecordAction::generate( $args['ns'] , $args['model_name'] , $args['type'] );
             eval( $code );
             return new $class( $_REQUEST );
@@ -177,15 +190,15 @@ class ActionRunner extends Singleton
         }
     }
 
-	function getResults()
-	{
-		return $this->results;
-	}
+    function getResults()
+    {
+        return $this->results;
+    }
 
-	function getResult( $name )
-	{
-		return @$this->results[ $name ];
-	}
+    function getResult( $name )
+    {
+        return @$this->results[ $name ];
+    }
 
 }
 
