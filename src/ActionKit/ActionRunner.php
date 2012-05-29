@@ -115,7 +115,7 @@ class ActionRunner extends Singleton
 
     function isAjax() 
     {
-        return (bool) @$_REQUEST['__ajax_request'];
+        return isset($_REQUEST['__ajax_request']);
     }
 
     function getCurrentActionName() 
