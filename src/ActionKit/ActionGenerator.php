@@ -29,26 +29,23 @@ class ActionGenerator
     }
 
     function generateClassCode( $modelClass , $type ) {
-        if( $this->cache && $code = apc_fetch( 'action:' . $modelClass . ':' . $type) ) {
-            return $code;
-        }
-
         $p = strpos( $modelClass , '\\' );
         $bp = strrpos( $modelClass , '\\' );
         $ns = substr($modelClass,0,$p);
         $modelName = substr($modelClass, $bp + 1 );
-        $code = $this->generateClassCodeWithNamespace( $ns , $modelName, $type );
-
-        if( $this->cache ) {
-            apc_store( 'action:' . $modelClass . ':' . $type , $code );
-        }
-        return $code;
+        return $this->generateClassCodeWithNamespace( $ns , $modelName, $type );
     }
 
     function generateClassCodeWithNamespace( $ns , $modelName , $type )
     {
-        $recordClass  = '\\' . $ns . '\Model\\' . $modelName;
         $actionClass  = $type . $modelName;
+        $actionFullClass = $ns . '\\Action\\'  . $actionClass;
+
+        if( $this->cache && $code = apc_fetch( 'action:' . $actionFullClass ) ) {
+            return $code;
+        }
+
+        $recordClass  = '\\' . $ns . '\Model\\' . $modelName;
         $baseAction   = $type . 'RecordAction';
         $code =<<<CODE
 namespace $ns\\Action {
@@ -60,6 +57,10 @@ namespace $ns\\Action {
 }
 namespace { return 1; }
 CODE;
+
+        if( $this->cache ) {
+            apc_store('action:' . $actionFullClass , $code );
+        }
         return $code;
     }
 

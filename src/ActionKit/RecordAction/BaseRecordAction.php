@@ -174,6 +174,9 @@ abstract class BaseRecordAction extends Action
      */
     static function generate( $ns , $modelName , $type )
     {
+        $gen = new ActionGenerator(array( 'cache' => true ));
+        $gen->generateClassCodeWithNamespace( );
+
         $modelClass  = '\\' . $ns . '\Model\\' . $modelName;
         $actionName  = $type . $modelName;
         $baseAction  = '\ActionKit\\RecordAction\\' . $type . 'RecordAction';
