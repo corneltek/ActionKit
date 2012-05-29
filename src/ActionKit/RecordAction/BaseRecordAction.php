@@ -35,13 +35,13 @@ abstract class BaseRecordAction extends Action
         $class = $this->recordClass;
         $this->record = $record ? $record : new $class;
 
-        if( is_a( $this , 'ActionKit\CreateRecordAction' ) ) {
+        if( is_a( $this , 'ActionKit\RecordAction\CreateRecordAction' ) ) {
             $this->type = 'create';
         }
-        elseif( is_a( $this, 'ActionKit\UpdateRecordAction' ) ) {
+        elseif( is_a( $this, 'ActionKit\RecordAction\UpdateRecordAction' ) ) {
             $this->type = 'update';
         }
-        elseif( is_a( $this, 'ActionKit\DeleteRecordAction' ) ) {
+        elseif( is_a( $this, 'ActionKit\RecordAction\DeleteRecordAction' ) ) {
             $this->type = 'delete';
         } else {
             throw new Exception( sprintf('Unknown Record Action Type: %s' , get_class($this) ));
@@ -69,9 +69,9 @@ abstract class BaseRecordAction extends Action
     {
         if( $this->record ) {
             foreach( $this->record->getColumns() as $column ) {
-				if( ! isset($this->params[$column->name] ) ) {
-					$this->params[ $column->name ] = \ActionKit\ColumnConvert::toParam( $column , $this->record );
-				}
+                if( ! isset($this->params[$column->name] ) ) {
+                    $this->params[ $column->name ] = \ActionKit\ColumnConvert::toParam( $column , $this->record );
+                }
             }
         }
     }
@@ -202,7 +202,7 @@ CODE;
             eval( $code );
             return $class;
         }
-	}
+    }
 
 }
 
