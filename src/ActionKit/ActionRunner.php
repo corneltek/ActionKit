@@ -49,9 +49,9 @@ class ActionRunner extends Singleton
      *
      * @return return result array if there is such an action.
      * */
-    function run() 
+    public function run() 
     {
-        if( $this->hasRequest() ) 
+        if( isset($_REQUEST['action']) ) 
         {
             $actionName = $this->getCurrentActionName(); // without postfix "Action".
 
@@ -118,11 +118,6 @@ class ActionRunner extends Singleton
         return (bool) @$_REQUEST['__ajax_request'];
     }
 
-    function hasRequest() 
-    {
-        return isset($_REQUEST['action']);
-    }
-
     function getCurrentActionName() 
     {
         return isset($_REQUEST['action']) ?: $_REQUEST['action'];
@@ -144,32 +139,33 @@ class ActionRunner extends Singleton
     {
         $args = array_merge( array() , $_REQUEST );
 
-        if( isset($args['__ajax_request']) ) 
+        if( isset($args['__ajax_request']) ) {
             unset( $args['__ajax_request'] );
-        if( isset($args['action']) )
+        }
+        if( isset($args['action']) ) {
             unset( $args['action'] );
+        }
 
-        if( class_exists($class) )
+        if( class_exists($class,true) )
             return new $class( $args );
 
         /* check if action is in CRUD list */
         if( isset( $this->crudActions[$class] ) ) {
-
-            
 
             /* generate the crud action */
             $args = $this->crudActions[$class];
 
             // please see registerCRUD method
             $code = RecordAction::generate( $args['ns'] , $args['model_name'] , $args['type'] );
+
+            // XXX: eval is slower than require
             eval( $code );
             return new $class( $_REQUEST );
         }
-
         return new $class( $_REQUEST );
     }
 
-    function dispatch( $class ) 
+    public function dispatch( $class ) 
     {
         $act = $this->getAction( $class );
         if( $act !== false ) {
@@ -178,16 +174,21 @@ class ActionRunner extends Singleton
         }
     }
 
-    function getResults()
+    public function getResults()
     {
         return $this->results;
     }
 
-    function getResult( $name )
+
+    /**
+     * Get Action result by action name
+     *
+     * @param string $name action name (format: App::Action::ActionName)
+     */
+    public function getResult( $name )
     {
         return @$this->results[ $name ];
     }
 
 }
 
-?>
