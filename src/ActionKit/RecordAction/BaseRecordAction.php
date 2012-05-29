@@ -20,12 +20,12 @@ use ActionKit\ActionGenerator;
 */
 abstract class BaseRecordAction extends Action
 {
+    const TYPE = 'base';
 
     public $record; // record schema object
 
     public $recordClass;
 
-    public $type;  // action type (create,update,delete...)
 
     public function __construct( $args = array(), $record = null, $currentUser = null ) 
     {
@@ -77,7 +77,7 @@ abstract class BaseRecordAction extends Action
 
     function getType() 
     {
-        return $this->type;
+        return static::TYPE;
     }
 
     function getRecord() 

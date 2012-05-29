@@ -5,9 +5,7 @@ namespace ActionKit\RecordAction;
 abstract class CreateRecordAction 
     extends BaseRecordAction
 {
-
-    public $type = 'create';
-
+    const TYPE = 'create';
 
     function create($args)
     {

@@ -3,8 +3,7 @@ namespace ActionKit\RecordAction;
 
 abstract class BulkDeleteRecordAction extends DeleteRecordAction
 {
-
-    public $type = 'bulk_delete';
+    const TYPE = 'bulk_delete';
 
     public function runValidate() 
     {
