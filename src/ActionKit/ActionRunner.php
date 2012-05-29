@@ -55,7 +55,7 @@ class ActionRunner
      * */
     public function run() 
     {
-        if( isset($_REQUEST['action']) ) 
+        if( isset($_REQUEST['action']) )
         {
             $actionName = $this->getCurrentActionName(); // without postfix "Action".
 
@@ -65,12 +65,11 @@ class ActionRunner
             /* translate :: into php namespace */
             $class = $this->getActionClass( $actionName );
             if( ! class_exists($class,true) && ! $this->isCRUDAction( $class ) ) {
-
                 throw new Exception( "Action class not found: $actionName $class." );
             }
 
             /* register results into hash */
-            $this->results[ $actionName ] = $this->dispatch( $class );
+            return $this->results[ $actionName ] = $this->dispatch( $class );
         }
     }
 
@@ -101,7 +100,7 @@ class ActionRunner
         $class = is_object($model) ? get_class($model) : $model;
         $nsParts = explode('\\',$class);
         if( count($nsParts) >= 3 ) {
-
+            // XXX:
         }
     }
 
@@ -181,10 +180,11 @@ class ActionRunner
     public function dispatch( $class ) 
     {
         $act = $this->createAction( $class );
-        if( $act !== false ) {
-            $act();
-            return $act->getResult();
+        if( ! $act ) {
+            throw new Exception( "Can not create action class $class" );
         }
+        $act();
+        return $act->getResult();
     }
 
 

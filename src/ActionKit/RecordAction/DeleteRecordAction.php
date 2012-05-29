@@ -1,5 +1,4 @@
 <?php
-
 namespace ActionKit\RecordAction;
 use Exception;
 
@@ -15,7 +14,7 @@ class DeleteRecordAction
         return $this->deleteError();
     }
 
-    function run( ) 
+    function run()
     {
         /* default run method , to run create action */
         return $this->doDelete( $this->args );

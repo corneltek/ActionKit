@@ -1,5 +1,5 @@
 <?php
-namespace ActionKit;
+namespace ActionKit\RecordAction;
 use Exception;
 use ActionKit\Action;
 
@@ -23,7 +23,7 @@ abstract class BaseRecordAction extends Action
     public $recordClass;
     public $type;  // action type (create,update,delete...)
 
-    function __construct( $args = array(), $record = null, $currentUser = null ) 
+    public function __construct( $args = array(), $record = null, $currentUser = null ) 
     {
         /* run schema , init base action stuff */
         parent::__construct( $args , $currentUser );
@@ -176,12 +176,12 @@ abstract class BaseRecordAction extends Action
     {
         $modelClass  = '\\' . $ns . '\Model\\' . $modelName;
         $actionName  = $type . $modelName;
-        $baseAction  = '\ActionKit\\' . $type . 'RecordAction';
+        $baseAction  = '\ActionKit\\RecordAction\\' . $type . 'RecordAction';
         $code =<<<CODE
 namespace $ns\\Action {
     class $actionName extends $baseAction
     {
-        var \$recordClass = '$modelClass';
+        public \$recordClass = '$modelClass';
     }
 }
 CODE;
@@ -195,9 +195,9 @@ CODE;
         {
             list( $orig, $ns , $modelName ) = $regs;
             $class = '\\' . $ns . '\Action\\' . $type . $modelName;
-            if( class_exists( $class ) )
+            if( class_exists( $class, true) )
                 return $class;
-            
+
             $code = self::generate( $ns , $modelName , $type );
             eval( $code );
             return $class;
