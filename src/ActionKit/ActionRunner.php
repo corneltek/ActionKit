@@ -162,6 +162,7 @@ class ActionRunner
             $code = RecordAction::generate( $args['ns'] , $args['model_name'] , $args['type'] );
 
             // XXX: eval is slower than require
+            //      use a better code generator
             eval( $code );
             return new $class( $_REQUEST );
         }
