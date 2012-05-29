@@ -1,10 +1,8 @@
 <?php
-
-namespace ActionKit;
-use ActionKit\RecordAction;
+namespace ActionKit\RecordAction;
 
 class UpdateRecordAction 
-    extends \ActionKit\RecordAction
+    extends BaseRecordAction
 {
 
     function update( $args )

@@ -1,6 +1,7 @@
 <?php
 namespace ActionKit;
 use Exception;
+use ActionKit\Action;
 
 /*
     use ActionKit\RecordAction;
@@ -16,7 +17,7 @@ use Exception;
     XXX: validation should be built-in in Model
 
 */
-abstract class RecordAction extends \ActionKit\Action
+abstract class BaseRecordAction extends Action
 {
     public $record; // record schema object
     public $recordClass;

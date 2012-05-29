@@ -1,10 +1,9 @@
 <?php
 
-namespace ActionKit;
-use ActionKit\RecordAction;
+namespace ActionKit\RecordAction;
 
 class CreateRecordAction 
-    extends RecordAction
+    extends BaseRecordAction
 {
     function create($args)
     {
@@ -13,16 +12,12 @@ class CreateRecordAction
         /* error checking */
         if( false === $ret->success ) {
             $this->convertRecordValidation( $ret );
-
-            var_dump( $ret->sql ); 
-            var_dump( $ret ); 
-
             return $this->createError( $ret );
         }
         return $this->createSuccess( $ret );
     }
 
-    function run()
+    public function run()
     {
         /* default run method , to run create action */
         return $this->create( $this->args );

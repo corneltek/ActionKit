@@ -95,6 +95,15 @@ class ActionRunner
         }
     }
 
+    public function registerCRUDFromModel( $model , $types ) 
+    {
+        $class = is_object($model) ? get_class($model) : $model;
+        $nsParts = explode('\\',$class);
+        if( count($nsParts) >= 3 ) {
+
+        }
+    }
+
     public function isCRUDAction($class)
     {
         return isset( $this->crudActions[$class] );

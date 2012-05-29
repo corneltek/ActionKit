@@ -1,11 +1,10 @@
 <?php
 
-namespace ActionKit;
-use ActionKit\RecordAction;
+namespace ActionKit\RecordAction;
 use Exception;
 
 class DeleteRecordAction 
-    extends RecordAction
+    extends BaseRecordAction
 {
 
     function doDelete($args)
