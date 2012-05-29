@@ -6,64 +6,64 @@ use Exception;
 // Action {{{
 /*
 
-	$a = new Action( .. parameters ... )
-	$a->run();
+    $a = new Action( .. parameters ... )
+    $a->run();
 
-	$rs = $a->result();
+    $rs = $a->result();
 
 
 Step1
 
 class ...
 
-	function schema() {
-		$this->param( 'username' )
-			->label( _('Username') )
-			->useSuggestion();
+    function schema() {
+        $this->param( 'username' )
+            ->label( _('Username') )
+            ->useSuggestion();
 
-		$this->param( 'password' )
-			->useValidator();
+        $this->param( 'password' )
+            ->useValidator();
 
-		$this->param( 'country' )
-			->useCompleter();
-	}
+        $this->param( 'country' )
+            ->useCompleter();
+    }
 
-	function validatePassword( $value , $args ) {
+    function validatePassword( $value , $args ) {
 
-		return $this->valid( $message );
+        return $this->valid( $message );
 
-		# or
-		return $this->invalid( $message );
-	}
+        # or
+        return $this->invalid( $message );
+    }
 
-	function suggestUsername( $value , $args ) {
-		return;  # not to suggest
-		return $this->suggest( "$value is used. use: " , array( ... ) );
-	}
+    function suggestUsername( $value , $args ) {
+        return;  # not to suggest
+        return $this->suggest( "$value is used. use: " , array( ... ) );
+    }
 
-	function completeCountry( $value , $args ) {
+    function completeCountry( $value , $args ) {
 
-		...
-	}
+        ...
+    }
 
  */
 abstract class Action 
 {
-	public $currentUser;
-	public $args = array();   // post,get args for action
-	public $result; // action result
-	protected $params = array(); // parameter column objects
+    public $currentUser;
+    public $args = array();   // post,get args for action
+    public $result; // action result
+    protected $params = array(); // parameter column objects
 
     function __construct( $args = array() , $currentUser = null ) 
     {
         $this->args = $args;
-		$this->result = new \ActionKit\Result;
+        $this->result = new \ActionKit\Result;
         if( $currentUser )
             $this->currentUser = $currentUser;
-		$this->schema();
+        $this->schema();
         $this->result->args( $this->args );
         $this->init();
-	}
+    }
 
     function getFileArg( $name )
     {
@@ -241,7 +241,7 @@ abstract class Action
             // default column
             return $this->params[ $name ] = new \ActionKit\Column( $name , $this );
         }
-	}
+    }
 
     function schema() 
     {
@@ -263,37 +263,37 @@ abstract class Action
         $this->result->addData( $key , $val );
     }
 
-	function success( $message , $data = null ) {
+    function success( $message , $data = null ) {
         $this->result->success( $message );
         if( $data )
             $this->result->mergeData( $data );
         return true;
-	}
+    }
 
     function beforeRun() {  }
 
     function afterRun()  {  }
 
-	/* run */
+    /* run */
     function run() 
     {
         return true;
     }
 
 
-	/* complete field */
-	public function complete( $field ) {
-		$param = $this->getParam( $field );
-		if( ! $param )
-			die( 'action param not found.' );
-		$ret = $param->complete();
+    /* complete field */
+    public function complete( $field ) {
+        $param = $this->getParam( $field );
+        if( ! $param )
+            die( 'action param not found.' );
+        $ret = $param->complete();
 
-		if( ! is_array( $ret ) )
-			throw new Exception( "Completer doesnt return array. [type,list]\n" );
+        if( ! is_array( $ret ) )
+            throw new Exception( "Completer doesnt return array. [type,list]\n" );
 
-		// [ type , list ]
-		$this->result->completion( $field , $ret[0], $ret[1] );
-	}
+        // [ type , list ]
+        $this->result->completion( $field , $ret[0], $ret[1] );
+    }
 
     public function getResult() 
     {
