@@ -28,7 +28,7 @@ namespace ActionKit;
 use Exception;
 use Phifty\Singleton;
 
-class ActionRunner extends Singleton
+class ActionRunner
 {
     /**
      * Abstract CRUD action pool 
@@ -96,8 +96,6 @@ class ActionRunner extends Singleton
     {
         return isset( $this->crudActions[$class] );
     }
-
-
 
     public function isInvalidActionName( $actionName ) 
     {
@@ -205,6 +203,20 @@ class ActionRunner extends Singleton
         return isset($this->results[$name]);
     }
 
+    public function removeResult($name)
+    {
+        unset( $this->results[$name] );
+    }
+
+
+
+    static function getInstance()
+    {
+        static $self;
+        if( $self )
+            return $self;
+        return $self = new static;
+    }
 
 }
 
