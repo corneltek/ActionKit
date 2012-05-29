@@ -73,7 +73,6 @@ namespace $ns\\Action {
         public \$recordClass = '$recordClass';
     }
 }
-namespace { return 1; }
 CODE;
         if( $this->cache ) {
             apc_store('action:' . $actionFullClass , $code)
