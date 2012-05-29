@@ -10,7 +10,7 @@ class ColumnConvert
 
     static function toParam( $column , $record = null )
     {
-		$name = $column->name;
+        $name = $column->name;
 
         $param = new \ActionKit\Column( $name );
 
@@ -20,9 +20,9 @@ class ColumnConvert
 
         $param->name  = $name;
 
-		if( $record ) {
+        if( $record ) {
             $param->value = $record->{$name};
-		}
+        }
 
         /**
          * Convert column type to param type
