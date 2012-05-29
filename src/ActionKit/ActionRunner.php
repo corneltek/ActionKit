@@ -61,15 +61,12 @@ class ActionRunner extends Singleton
             /* translate :: into php namespace */
             $class = $this->getActionClass( $actionName );
 
-            if( ! class_exists($class,true) ) {
-                if( ! $this->isCRUD( $class ) ) {
-                    throw new \Exception( "Action class not found: $actionName $class." );
-                }
+            if( ! class_exists($class,true) && ! $this->isCRUD( $class ) ) {
+                throw new \Exception( "Action class not found: $actionName $class." );
             }
 
             /* register results into hash */
-            $result = $this->dispatch( $class );
-            return $this->results[ $actionName ] = $result;
+            $this->results[ $actionName ] = $this->dispatch( $class );
         }
     }
 
