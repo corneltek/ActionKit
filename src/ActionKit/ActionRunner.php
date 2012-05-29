@@ -1,5 +1,7 @@
 <?php
 namespace ActionKit;
+use Exception;
+use IteratorAggregate;
 
 /**
  * Run actions!
@@ -27,8 +29,6 @@ namespace ActionKit;
  *  }
  *
  */
-use Exception;
-use IteratorAggregate;
 
 class ActionRunner
     implements IteratorAggregate
@@ -59,13 +59,13 @@ class ActionRunner
             $actionName = $this->getCurrentActionName(); // without postfix "Action".
 
             if( $this->isInvalidActionName( $actionName ) )
-                throw new \Exception( "Invalid action name: $actionName." );
+                throw new Exception( "Invalid action name: $actionName." );
 
             /* translate :: into php namespace */
             $class = $this->getActionClass( $actionName );
-
             if( ! class_exists($class,true) && ! $this->isCRUDAction( $class ) ) {
-                throw new \Exception( "Action class not found: $actionName $class." );
+
+                throw new Exception( "Action class not found: $actionName $class." );
             }
 
             /* register results into hash */
@@ -126,7 +126,8 @@ class ActionRunner
 
     public function getCurrentActionName() 
     {
-        return isset($_REQUEST['action']) ?: $_REQUEST['action'];
+        return isset($_REQUEST['action']) ? 
+            $_REQUEST['action'] : null;
     }
 
 
@@ -136,9 +137,7 @@ class ActionRunner
     public function getActionClass( $actionName ) 
     {
         // replace :: with '\'
-        if( $this->isFullQualifiedName( $actionName ) ) {
-            return str_replace( '::' , '\\' , $actionName );
-        }
+        return str_replace( '::' , '\\' , $actionName );
     }
 
 
