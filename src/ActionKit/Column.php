@@ -59,12 +59,13 @@ class Column extends \CascadingAttribute
     {
     }
 
-    /** We dont save any value here,
+    /** 
+     * We dont save any value here,
      * The value's should be passed from outside.
      *
      * Supported validations:
      *   * required
-     * */
+     */
     function validate( $value )
     {
 
@@ -103,6 +104,13 @@ class Column extends \CascadingAttribute
         return ucfirst($this->name);
     }
 
+
+
+
+    /**************************
+     * Widget related methods
+     **************************/
+
     public function renderAs( $type ) 
     {
         $this->widgetClass = 
@@ -113,7 +121,7 @@ class Column extends \CascadingAttribute
     {
         $class = $this->widgetClass;
         if( ! $class )
-            $class = '\Phifty\FormWidget\Text';  # default class
+            $class = 'Phifty\FormWidget\Text';  # default class
         return new $class( $this );
     }
 
