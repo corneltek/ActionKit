@@ -172,6 +172,12 @@ abstract class BaseRecordAction extends Action
      * RecordAction::generate( 'PluginName' , 'News' , 'Create' );
      * will generate:
      * PluginName\Action\CreateNews
+     *
+     * @param string $ns
+     * @param string $modelName
+     * @param string $type
+     *
+     * @return string class code
      */
     static function generate( $ns , $modelName , $type )
     {
@@ -179,6 +185,15 @@ abstract class BaseRecordAction extends Action
         return $gen->generateClassCodeWithNamespace( $ns, $modelName, $type )->code;
     }
 
+
+    /**
+     * Create CRUD class
+     *
+     * @param string $recordClass
+     * @param string $type
+     *
+     * @return string class code
+     */
     static function createCRUDClass( $recordClass , $type ) 
     {
         $gen = new ActionGenerator(array( 'cache' => true ));
