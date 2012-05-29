@@ -5,6 +5,10 @@ namespace ActionKit\RecordAction;
 abstract class CreateRecordAction 
     extends BaseRecordAction
 {
+
+    public $type = 'create';
+
+
     function create($args)
     {
         $ret = $this->record->create( $args );

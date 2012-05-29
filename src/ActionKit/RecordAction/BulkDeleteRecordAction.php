@@ -4,14 +4,16 @@ namespace ActionKit\RecordAction;
 abstract class BulkDeleteRecordAction extends DeleteRecordAction
 {
 
-    function runValidate() 
+    public $type = 'bulk_delete';
+
+    public function runValidate() 
     {
         if( isset( $this->args['items'] ) )
             return false;  // no error
         return true;
     }
 
-    function run()
+    public function run()
     {
         try {
             $items = $this->arg('items');

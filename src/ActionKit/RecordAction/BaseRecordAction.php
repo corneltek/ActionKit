@@ -20,8 +20,11 @@ use ActionKit\ActionGenerator;
 */
 abstract class BaseRecordAction extends Action
 {
+
     public $record; // record schema object
+
     public $recordClass;
+
     public $type;  // action type (create,update,delete...)
 
     public function __construct( $args = array(), $record = null, $currentUser = null ) 
@@ -35,19 +38,6 @@ abstract class BaseRecordAction extends Action
         // record name is in Camel case
         $class = $this->recordClass;
         $this->record = $record ? $record : new $class;
-
-        if( is_a( $this , 'ActionKit\RecordAction\CreateRecordAction' ) ) {
-            $this->type = 'create';
-        }
-        elseif( is_a( $this, 'ActionKit\RecordAction\UpdateRecordAction' ) ) {
-            $this->type = 'update';
-        }
-        elseif( is_a( $this, 'ActionKit\RecordAction\DeleteRecordAction' ) ) {
-            $this->type = 'delete';
-        } else {
-            throw new Exception( sprintf('Unknown Record Action Type: %s' , get_class($this) ));
-        }
-
         $this->initRecord();
         $this->initRecordColumn();
     }

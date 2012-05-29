@@ -5,6 +5,7 @@ use Exception;
 abstract class DeleteRecordAction 
     extends BaseRecordAction
 {
+    public $type = 'delete';
 
     public function run()
     {

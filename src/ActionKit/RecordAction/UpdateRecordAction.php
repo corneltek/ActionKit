@@ -4,6 +4,7 @@ namespace ActionKit\RecordAction;
 abstract class UpdateRecordAction 
     extends BaseRecordAction
 {
+    public $type = 'update';
 
     function update( $args )
     {
