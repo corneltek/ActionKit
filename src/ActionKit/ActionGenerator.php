@@ -29,9 +29,9 @@ class ActionGenerator
     }
 
     function generateClassCode( $modelClass , $type ) {
-        $p = strpos( $modelClass , '\\' );
-        $bp = strrpos( $modelClass , '\\' );
-        $ns = substr($modelClass,0,$p);
+        $p         = strpos($modelClass, '\\');
+        $bp        = strrpos($modelClass, '\\');
+        $ns        = substr($modelClass, 0, $p);
         $modelName = substr($modelClass, $bp + 1 );
         return $this->generateClassCodeWithNamespace( $ns , $modelName, $type );
     }
@@ -57,9 +57,8 @@ namespace $ns\\Action {
 }
 namespace { return 1; }
 CODE;
-
         if( $this->cache ) {
-            apc_store('action:' . $actionFullClass , $code );
+            apc_store('action:' . $actionFullClass , $code ) or die('can not store action class code');
         }
         return $code;
     }
