@@ -61,7 +61,7 @@ class ActionRunner extends Singleton
             /* translate :: into php namespace */
             $class = $this->getActionClass( $actionName );
 
-            if( ! $this->tryLoad( $class ) ) {
+            if( ! class_exists($class,true) ) {
                 if( ! $this->isCRUD( $class ) ) {
                     throw new \Exception( "Action class not found: $actionName $class." );
                 }
@@ -138,12 +138,6 @@ class ActionRunner extends Singleton
         if( $this->isFullQualifiedName( $actionName ) ) {
             return str_replace( '::' , '\\' , $actionName );
         }
-    }
-
-    function tryLoad( $class ) 
-    {
-        # if class load success, try to load if not exist.
-        return class_exists( $class , true );
     }
 
     public function getAction( $class ) 
