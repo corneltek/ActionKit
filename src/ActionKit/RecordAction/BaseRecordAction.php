@@ -8,10 +8,10 @@ use ActionKit\Action;
 
 
     # returns CreateRecordAction
-    $createAction = RecordAction::generate( 'RecordName' , 'Create' );
+    $createAction = BaseRecordAction::generate( 'RecordName' , 'Create' );
 
     # returns UpdateRecordAction
-    $updateAction = RecordAction::generate( 'RecordName' , 'Update' );
+    $updateAction = BaseRecordAction::generate( 'RecordName' , 'Update' );
 
 
     XXX: validation should be built-in in Model

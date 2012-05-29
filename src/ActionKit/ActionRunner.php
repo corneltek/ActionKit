@@ -2,6 +2,7 @@
 namespace ActionKit;
 use Exception;
 use IteratorAggregate;
+use ActionKit\RecordAction\BaseRecordAction;
 
 /**
  * Run actions!
@@ -167,7 +168,7 @@ class ActionRunner
             $args = $this->crudActions[$class];
 
             // please see registerCRUD method
-            $code = RecordAction::generate( $args['ns'] , $args['model_name'] , $args['type'] );
+            $code = BaseRecordAction::generate( $args['ns'] , $args['model_name'] , $args['type'] );
 
             // XXX: eval is slower than require
             //      use a better code generator
