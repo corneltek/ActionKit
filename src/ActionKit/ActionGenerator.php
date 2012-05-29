@@ -85,13 +85,15 @@ CODE;
         );
     }
 
+
     function generateActionClassCode($namespaceName,$actionName) {
         $actionNamespace = $namespaceName . '\\Action';
         $actionClass = $actionNamespace . '\\' . $actionName;
         $code =<<<CODE
 namespace $actionNamespace {
     use ActionKit\\Action;
-    class $actionName extends Action {
+    class $actionName extends Action 
+    {
 
         function schema() {
 
@@ -99,12 +101,10 @@ namespace $actionNamespace {
 
         function run() {
             return \$this->success('Success!!');
-            return \$this->success('Error!!');
         }
 
     }
 }
-namespace { return 1; }
 CODE;
         return (object) array(
             'action_class' => $actionClass,
