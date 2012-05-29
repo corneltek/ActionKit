@@ -1,7 +1,7 @@
 <?php
 namespace ActionKit\RecordAction;
 
-class UpdateRecordAction 
+abstract class UpdateRecordAction 
     extends BaseRecordAction
 {
 

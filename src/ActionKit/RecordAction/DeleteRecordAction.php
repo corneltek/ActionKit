@@ -2,37 +2,42 @@
 namespace ActionKit\RecordAction;
 use Exception;
 
-class DeleteRecordAction 
+abstract class DeleteRecordAction 
     extends BaseRecordAction
 {
 
-    function doDelete($args)
-    {
-        $ret = $this->record->delete();
-        if( $ret->success )
-            return $this->deleteSuccess();
-        return $this->deleteError();
-    }
-
-    function run()
+    public function run()
     {
         /* default run method , to run create action */
         return $this->doDelete( $this->args );
     }
 
-    function runValidate()
+    public function doDelete($args)
+    {
+        if( $this->record->delete()->success ) {
+            return $this->deleteSuccess();
+        } else {
+            return $this->deleteError();
+        }
+    }
+
+
+    /**
+     * @inherit
+     */
+    public function runValidate()
     {
         if( isset( $this->args['id'] ) )
             return false;
         return true;
     }
 
-    function deleteSuccess() 
+    public function deleteSuccess() 
     {
         return $this->success( __('%1 record is deleted.' , $this->record->getLabel() ) , array( 'id' => $this->record->id) );
     }
 
-    function deleteError() 
+    public function deleteError() 
     {
         return $this->error( __('Can not delete %1 record.' , $this->record->getLabel() ) );
     }

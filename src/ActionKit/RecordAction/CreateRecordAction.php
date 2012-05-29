@@ -2,7 +2,7 @@
 
 namespace ActionKit\RecordAction;
 
-class CreateRecordAction 
+abstract class CreateRecordAction 
     extends BaseRecordAction
 {
     function create($args)
