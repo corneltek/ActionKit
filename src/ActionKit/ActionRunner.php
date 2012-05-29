@@ -61,7 +61,7 @@ class ActionRunner extends Singleton
             /* translate :: into php namespace */
             $class = $this->getActionClass( $actionName );
 
-            if( ! class_exists($class,true) && ! $this->isCRUD( $class ) ) {
+            if( ! class_exists($class,true) && ! $this->isCRUDAction( $class ) ) {
                 throw new \Exception( "Action class not found: $actionName $class." );
             }
 
@@ -80,7 +80,7 @@ class ActionRunner extends Singleton
      * @param string $modelName model name
      * @param array $types action types
      */
-    function registerCRUD( $ns , $modelName , $types ) 
+    public function registerCRUD( $ns , $modelName , $types ) 
     {
         foreach( (array) $types as $type ) {
             $class = $ns . '\Action\\' . $type . $modelName;
@@ -92,30 +92,29 @@ class ActionRunner extends Singleton
         }
     }
 
-
-    function isCRUD($class)
+    public function isCRUDAction($class)
     {
-        return ( isset( $this->crudActions[$class] ) );
+        return isset( $this->crudActions[$class] );
     }
 
 
 
-    function isInvalidActionName( $actionName ) 
+    public function isInvalidActionName( $actionName ) 
     {
         return preg_match( '/[^A-Za-z0-9:]/i' , $actionName  );
     }
 
-    function isFullQualifiedName( $actionName )
+    public function isFullQualifiedName( $actionName )
     {
         return strpos( $actionName, '::' ) != -1;
     }
 
-    function isAjax() 
+    public function isAjax() 
     {
         return isset($_REQUEST['__ajax_request']);
     }
 
-    function getCurrentActionName() 
+    public function getCurrentActionName() 
     {
         return isset($_REQUEST['action']) ?: $_REQUEST['action'];
     }
@@ -124,7 +123,7 @@ class ActionRunner extends Singleton
     /*
      * replace action name "::" charactors with "\"
      * */
-    function getActionClass( $actionName ) 
+    public function getActionClass( $actionName ) 
     {
         // replace :: with '\'
         if( $this->isFullQualifiedName( $actionName ) ) {
