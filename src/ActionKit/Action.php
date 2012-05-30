@@ -214,7 +214,9 @@ abstract class Action
 
     public function getParam( $field ) 
     {
-        return @$this->params[ $field ];
+        return isset($this->params[ $field ])
+                ? $this->params[ $field ]
+                : null;
     }
 
     public function hasParam( $field ) 
@@ -292,19 +294,28 @@ abstract class Action
         return $this; 
     }
 
-    public function param( $name , $type = null ) 
+
+    /**
+     * Define or get column object from Action.
+     *
+     * @param string $field Field name
+     * @param string $type Field Type (will be Column Type)
+     *
+     * @return ActionKit\Column
+     */
+    public function param( $field , $type = null ) 
     {
-        if( isset($this->params[ $name ]) ) {
-            return $this->params[ $name ];
+        if( isset($this->params[ $field ]) ) {
+            return $this->params[ $field ];
         }
 
         if( $type ) {
             $class = 'ActionKit\\Column\\' . $type;
-            return $this->params[ $name ] = new $class( $name , $this );
+            return $this->params[ $field ] = new $class( $field , $this );
         }
 
         // default column
-        return $this->params[ $name ] = new Column( $name , $this );
+        return $this->params[ $field ] = new Column( $field , $this );
     }
 
     function schema() 
