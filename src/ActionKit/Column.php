@@ -1,8 +1,9 @@
 <?php
-
 namespace ActionKit;
+use CascadingAttribute;
 
-class Column extends \CascadingAttribute
+
+class Column extends CascadingAttribute
 {
     /* action object referenece */
     public $action;
@@ -110,7 +111,6 @@ class Column extends \CascadingAttribute
     /**************************
      * Widget related methods
      **************************/
-
     public function renderAs( $type ) 
     {
         $this->widgetClass = 

@@ -1,52 +1,65 @@
 <?php
+/* vim:fdm=marker: */
 namespace ActionKit;
 use Exception;
 
-// vim:fdm=marker:
-// Action {{{
-/*
+/**
 
-    $a = new Action( .. parameters ... )
-    $a->run();
+    Action schema:
 
-    $rs = $a->result();
+        $this->param('id')
+            ->renderAs('HiddenInput');
+
+        $this->param('password')
+            ->renderAs('PasswordInput');
+
+    Action Synopsis:
+
+        $a = new Action( .. parameters ... )
+        $a->run();
+
+        $rs = $a->result();
+
+    Render Action:
+
+        $a = new UpdatePasswordAction;
+        $a->field('username')->render(array( 
+       
+        ));
+
+    Class:
+
+        function schema() {
+            $this->param( 'username' )
+                ->label( _('Username') )
+                ->useSuggestion();
+
+            $this->param( 'password' )
+                ->useValidator();
+
+            $this->param( 'country' )
+                ->useCompleter();
+        }
 
 
-Step1
+        function validatePassword( $value , $args ) 
+        {
+            return $this->valid( $message );
 
-class ...
+            # or
+            return $this->invalid( $message );
+        }
 
-    function schema() {
-        $this->param( 'username' )
-            ->label( _('Username') )
-            ->useSuggestion();
+        function suggestUsername( $value , $args ) {
+            return;  # not to suggest
+            return $this->suggest( "$value is used. use: " , array( ... ) );
+        }
 
-        $this->param( 'password' )
-            ->useValidator();
+        function completeCountry( $value , $args ) {
 
-        $this->param( 'country' )
-            ->useCompleter();
-    }
-
-    function validatePassword( $value , $args ) {
-
-        return $this->valid( $message );
-
-        # or
-        return $this->invalid( $message );
-    }
-
-    function suggestUsername( $value , $args ) {
-        return;  # not to suggest
-        return $this->suggest( "$value is used. use: " , array( ... ) );
-    }
-
-    function completeCountry( $value , $args ) {
-
-        ...
-    }
-
- */
+            ...
+        }
+    */
 abstract class Action 
 {
     public $currentUser;
