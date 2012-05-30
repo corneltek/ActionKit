@@ -7,11 +7,15 @@ use ActionKit\ActionGenerator;
 /*
     use ActionKit\RecordAction;
 
+    $a = new User\Action\UpdateUser(array( 'field' => 'new_data' ) , $record );
+    $a->run();
 
-    # returns CreateRecordAction
+Generate CreateRecordAction
+
     $createAction = BaseRecordAction::generate( 'RecordName' , 'Create' );
 
-    # returns UpdateRecordAction
+Generate UpdateRecordAction
+
     $updateAction = BaseRecordAction::generate( 'RecordName' , 'Update' );
 
 

@@ -1,7 +1,10 @@
 <?php
-/* vim:fdm=marker: */
+/*
+    vim:fdm=marker:
+ */
 namespace ActionKit;
 use Exception;
+use ActionKit\Column;
 
 /**
 
@@ -23,13 +26,38 @@ use Exception;
     Render Action:
 
         $a = new UpdatePasswordAction;
-        $a->field('username')->render(array( 
-       
+        $a->widget('username')->render(array( 
+            'class' => 'extra-class'
+            'id' => 'field-id'
         ));
+
+        $a->widget('user_type')->render(array( 
+            'options' => array( .... )
+        ));
+
+        // force widget type
+        $a->widget('confirmed','RadioInput')->render(array(
+            'false', 'true'
+        ));
+
+
+    In Twig template, we can render action widget:
+
+        {{ 
+            a.widget('username').render({ 
+                class: 'extra-class',
+                id: 'field-id' }) 
+        |raw}}
+
+    Render field by Action render method:
+
+        {{ CRUD.Action.render('link',{ 'size': 60 }) | raw }}
+
 
     Class:
 
         function schema() {
+
             $this->param( 'username' )
                 ->label( _('Username') )
                 ->useSuggestion();
@@ -184,7 +212,6 @@ abstract class Action
         return $this->params;
     }
 
-
     public function getParam( $field ) 
     {
         return @$this->params[ $field ];
@@ -195,6 +222,20 @@ abstract class Action
         return @$this->params[ $field ] ? true : false; 
     }
 
+
+    /**
+     * Return column widget object
+     *
+     * @param string $field field name
+     *
+     * @return FormKit\Widget
+     */
+    public function widget($field, $widgetClass = null) 
+    {
+        $param = $this->param($field);
+        $widget = $param->createWidget( $widgetClass );
+        return $widget;
+    }
 
     public function isAjax()
     {  
@@ -253,14 +294,17 @@ abstract class Action
 
     public function param( $name , $type = null ) 
     {
+        if( isset($this->params[ $name ]) ) {
+            return $this->params[ $name ];
+        }
+
         if( $type ) {
-            $cls = '\ActionKit\Column\\' . $type;
-            return $this->params[ $name ] = new $cls( $name , $this );
+            $class = 'ActionKit\\Column\\' . $type;
+            return $this->params[ $name ] = new $class( $name , $this );
         }
-        else {
-            // default column
-            return $this->params[ $name ] = new \ActionKit\Column( $name , $this );
-        }
+
+        // default column
+        return $this->params[ $name ] = new Column( $name , $this );
     }
 
     function schema() 
@@ -273,22 +317,13 @@ abstract class Action
 
     }
 
-    function error( $message ) { 
-        $this->result->error( $message );
-        return false;
-    }
 
     function addData( $key , $val )
     {
         $this->result->addData( $key , $val );
     }
 
-    function success( $message , $data = null ) {
-        $this->result->success( $message );
-        if( $data )
-            $this->result->mergeData( $data );
-        return true;
-    }
+
 
     function beforeRun() {  }
 
@@ -301,7 +336,11 @@ abstract class Action
     }
 
 
-    /* complete field */
+    /**
+     * Complete action field 
+     *
+     * @param string $field field name
+     * */
     public function complete( $field ) {
         $param = $this->getParam( $field );
         if( ! $param )
@@ -370,6 +409,28 @@ abstract class Action
         }
     }
 
+    /** 
+     * Report success
+     *
+     * @param string $message Success message
+     * @param mixed $data
+     */
+    function success( $message , $data = null ) {
+        $this->result->success( $message );
+        if( $data )
+            $this->result->mergeData( $data );
+        return true;
+    }
+
+    /**
+     * Report error
+     *
+     * @param string $message Error message
+     */
+    function error( $message ) {
+        $this->result->error( $message );
+        return false;
+    }
+
 }
 
-?>

@@ -138,8 +138,7 @@ class Column extends CascadingAttribute
         /* it's full-qualified name */
         // $widgetClass = ( $widgetType[0] == '\\' ) ? $widgetType : '\Phifty\Widget\\' . $widgetType;
         // $widget = new $class( $this );
-        $widget = $this->_newWidget();
-        return $widget->render( $attrs );
+        return $this->_newWidget()->render($attrs);
     }
 
 
