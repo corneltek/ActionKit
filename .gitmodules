@@ -19,3 +19,6 @@
 [submodule "vendor/lazyrecord"]
 	path = vendor/lazyrecord
     url = git@git.corneltek.com:php/LazyRecord.git
+[submodule "vendor/formkit"]
+	path = vendor/formkit
+	url = git@git.corneltek.com:php/FormKit.git
