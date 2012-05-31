@@ -395,6 +395,11 @@ abstract class Action
         }
     }
 
+    public function getSignature()
+    {
+        return str_replace( '\\' , '::' , get_class($this) );
+    }
+
     public function renderWidget( $name , $type , $attrs = array() )
     {
         $param = $this->getParam( $name );
@@ -403,15 +408,22 @@ abstract class Action
 
     public function renderSubmitWidget($attrs = array() )
     {
-        $submit = FormKit\Widget\SubmitInput;
+        $submit = new FormKit\Widget\SubmitInput;
         return $submit->render($attrs);
     }
 
     public function renderButtonWidget($attrs = array() )
     {
-        $button = FormKit\Widget\ButtonInput;
+        $button = new FormKit\Widget\ButtonInput;
         return $button->render($attrs);
     }
+
+    public function renderSignatureWidget()
+    {
+        $hidden = new FormKit\Widget\HiddenInput('action', array( 'value' => $this->getSignature() ));
+        return $hidden->render();
+    }
+
 
     public function render( $name = null , $attrs = array() ) 
     {
