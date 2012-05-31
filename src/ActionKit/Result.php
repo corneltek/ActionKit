@@ -26,23 +26,28 @@ class Result
     /* Completion data, (Only when doing completion) */
     public $completion;
 
-
+    /**
+     *
+     * @param string $type Action result type, 'success', 'error', 'valid', 'invalid', 'completion', 'redirect'
+     */
     function __construct( $type = null ) 
     {
-        if( $type ) 
+        if( $type ) {
             $this->type($type);
+        }
     }
 
     function type( $type ) 
     {
         // check type
-        if( $type != "completion"
-            && $type != "success"
-            && $type != "error"
-            && $type != "valid"
-            && $type != "invalid"
-            && $type != "redirect" )
+        if( $type != 'completion'
+            && $type != 'success'
+            && $type != 'error'
+            && $type != 'valid'
+            && $type != 'invalid'
+            && $type != 'redirect' ) {
             throw new Exception( _('Wrong ActionResult Type, Line ') . __LINE__ );
+        }
         $this->type = $type;
     }
 
@@ -88,14 +93,14 @@ class Result
 
     function completion( $field, $type, $list , $style = 'default' )
     {
-        $this->type('completion');
+        $this->type = 'completion';
         $this->checkCompType( $type );
         $this->checkCompList( $list );
         $this->completion = array(
-            "field" => $field,
-            "style" => $style,
-            "list" => $list,
-            "type" => $type
+            'field' => $field,
+            'style' => $style,
+            'list' => $list,
+            'type' => $type
         );
         return $this;
     }
@@ -110,23 +115,24 @@ class Result
 
     private function checkCompList( $list )
     {
-        if( ! is_array( $list ) ) 
+        if( ! is_array( $list ) ) {
             throw new Exception( _('Invalid completion data type, should be array.') );
+        }
     }
 
     function completer( $field, $func, $args, $style = 'default' )
     {
-        $this->type("completion");
+        $this->type = 'completion';
         $ret = call_user_func_array( $func , $args );
         $comp_type = $ret[0];
         $comp_list = $ret[1];
         $this->checkCompType( $comp_type );
         $this->checkCompList( $comp_list );
         $this->completion = array( 
-            "field" => $field,
-            "style" => $style,
-            "type" => $comp_type,
-            "list" => $comp_list
+            'field' => $field,
+            'style' => $style,
+            'type' => $comp_type,
+            'list' => $comp_list
         );
         return $this;
     }
@@ -136,8 +142,8 @@ class Result
     {
         $errors = array();
         foreach( $this->validations as $field => $attrs ) {
-            if( @$attrs["invalid"] && is_string( @$attrs['invalid'] ) ) {
-                array_push( $errors , $attrs["invalid"] );
+            if( @$attrs['invalid'] && is_string( @$attrs['invalid'] ) ) {
+                array_push( $errors , $attrs['invalid'] );
             }
         }
         return $errors;
