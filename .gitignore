@@ -16,3 +16,4 @@ build
 vendor/pear
 webroot/assets
 .onion/
+config/*.php
