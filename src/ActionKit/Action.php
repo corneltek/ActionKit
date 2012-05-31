@@ -425,11 +425,18 @@ abstract class Action
     }
 
 
+    /**
+     * Render a field or render all fields
+     *
+     * @param string $name  field name (optional, when omit this, Action renders all fields)
+     * @param array $attrs  field attributes
+     * @return string HTML string
+     */
     public function render( $name = null , $attrs = array() ) 
     {
         if( $name ) {
-            if( $param = $this->getParam( $name ) )
-                return $param->render( $attrs );
+            if( $widget = $this->widget( $name ) )
+                return $widget->render( $attrs );
             else {
                 throw new Exception("parameter $name is not defined.");
             }
