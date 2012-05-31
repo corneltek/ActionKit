@@ -5,16 +5,24 @@ use CascadingAttribute;
 
 class Column extends CascadingAttribute
 {
-    /* action object referenece */
+    /**
+     * @var ActionKit\Action action object referenece
+     * */
     public $action;
 
-    /* action param name */
+    /**
+     * @var string action param name 
+     */
     public $name;
 
-    /* action param type */
+    /**
+     * @var string action param type 
+     */
     public $type;
 
-    /* is a required column ? */
+    /**
+     * @var boolean is a required column ? 
+     */
     public $required;
 
     /* current value ? */
@@ -35,11 +43,11 @@ class Column extends CascadingAttribute
     /* refer class *? */
     public $refer;
 
-
-    public $renderAs;
-
     /* default render Widget */
-    public $widgetClass = '\Phifty\FormWidget\Text';
+    public $widgetClass = 'TextInput';
+
+    /* default widget namespace */
+    public $widgetNamespace = 'FormKit\\Widget\\';
 
     public $validator;
 
@@ -111,13 +119,10 @@ class Column extends CascadingAttribute
     /**************************
      * Widget related methods
      **************************/
-    public function renderAs( $type ) 
+    public function renderAs( $widgetType ) 
     {
-        $this->widgetClass = 
-            ( $type[0] == '\\' ) ? $type : '\Phifty\FormWidget\\' . $type;
+        $this->widgetClass = $widgetType;
     }
-
-
 
     /**
      * A simple widget factory for Action Column
@@ -126,7 +131,6 @@ class Column extends CascadingAttribute
      */
     public function createWidget( $widgetClass = null , $attributes = null )
     {
-        $widgetNs = 'FormKit\\Widget\\';
         $class = $widgetClass ?: $this->widgetClass;
 
         // convert attributes into widget style attributes
@@ -144,32 +148,9 @@ class Column extends CascadingAttribute
         // if it's not a full-qualified class name
         // we should concat class name with default widget namespace
         if( '+' !== $class[0] ) {
-            $class = $widgetNs . $class;
+            $class = $this->widgetNamespace . $class;
         }
         return new $class( $this->name , $newAttributes );
     }
-
-#      protected function _newWidget()
-#      {
-#          $class = $this->widgetClass;
-#          if( ! $class )
-#              $class = 'Phifty\FormWidget\Text';  # default class
-#          return new $class( $this );
-#      }
-    /* render as other widget */
-#      public function renderWidget( $type , $attrs = array() ) 
-#      {
-#          $this->renderAs( $type );
-#          return $this->render( $attrs );
-#      }
-#      public function render( $attrs = array() )
-#      {
-#          /* it's full-qualified name */
-#          // $widgetClass = ( $widgetType[0] == '\\' ) ? $widgetType : '\Phifty\Widget\\' . $widgetType;
-#          // $widget = new $class( $this );
-#          return $this->_newWidget()->render($attrs);
-#      }
-
-
 }
 
