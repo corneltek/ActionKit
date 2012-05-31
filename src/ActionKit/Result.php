@@ -1,7 +1,6 @@
 <?php
-
 namespace ActionKit;
-
+use Exception;
 
 class Result 
 {
@@ -50,22 +49,23 @@ class Result
     /* is_* helper functions */
     function isSuccess() 
     { 
-        return $this->type == "success"; 
+        return 'success' === $this->type;
     }
 
     function isError() 
     {
-        return $this->type == "error"; 
+        return 'error' === $this->type;
     }
 
     function isValidation() 
     {
-        return $this->type == "valid" || $this->type == "invalid"; 
+        return 'valid' === $this->type 
+                || 'invalid' === $this->type;
     } 
 
     function isCompletion() 
     {  
-        return $this->type == "completion"; 
+        return 'completion' === $this->type;
     }
 
 
@@ -78,8 +78,6 @@ class Result
     {
         return $this->message;
     }
-
-
 
     function action( $action )
     {
@@ -104,9 +102,10 @@ class Result
 
     private function checkCompType( $type )
     {
-        if( $type != "dict" 
-            && $type != "list" ) 
+        if( 'dict' !== $type
+            && 'list' !== $type ) {
             throw new Exception( _('Invalid completion type, should be "dict" or "list".') );
+        }
     }
 
     private function checkCompList( $list )
@@ -175,7 +174,7 @@ class Result
 
     function success( $message = null )
     {
-        $this->type('success');
+        $this->type = 'success';
         if( $message )
             $this->message = $message;
         return $this;
@@ -183,7 +182,7 @@ class Result
 
     function error( $message = null )
     {
-        $this->type('error');
+        $this->type = 'error';
         if( $message )
             $this->message = $message;
         return $this;
@@ -191,7 +190,7 @@ class Result
 
     function valid( $message = null )
     {
-        $this->type("valid");
+        $this->type = 'valid';
         if( $message )
             $this->message = $message;
         return $this;
@@ -199,7 +198,7 @@ class Result
 
     function invalid( $message = null )
     {
-        $this->type("invalid");
+        $this->type = 'invalid';
         if( $message )
             $this->message = $message;
         return $this;
@@ -215,8 +214,9 @@ class Result
     {
         $ret = array( );
 
-        if( $this->args ) 
+        if( $this->args ) {
             $ret['args'] = $this->args;
+        }
 
         isset($this->type) or die("ActionResult type undefined.");
 
