@@ -4,6 +4,7 @@
  */
 namespace ActionKit;
 use Exception;
+use FormKit;
 use ActionKit\Column;
 
 /**
@@ -397,7 +398,19 @@ abstract class Action
     public function renderWidget( $name , $type , $attrs = array() )
     {
         $param = $this->getParam( $name );
-        return $param->renderWidget( $type, $attrs );
+        return $param->render( $type, $attrs );
+    }
+
+    public function renderSubmitWidget($attrs = array() )
+    {
+        $submit = FormKit\Widget\SubmitInput;
+        return $submit->render($attrs);
+    }
+
+    public function renderButtonWidget($attrs = array() )
+    {
+        $button = FormKit\Widget\ButtonInput;
+        return $button->render($attrs);
     }
 
     public function render( $name = null , $attrs = array() ) 

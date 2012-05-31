@@ -1,6 +1,7 @@
 <?php
 namespace ActionKit;
 use CascadingAttribute;
+use FormKit;
 
 
 class Column extends CascadingAttribute
