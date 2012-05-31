@@ -94,7 +94,7 @@ abstract class Action
     public $currentUser;
     public $args = array();   // post,get args for action
     public $result; // action result
-    protected $params = array(); // parameter column objects
+    public $params = array(); // parameter column objects
 
     function __construct( $args = array() , $currentUser = null ) 
     {

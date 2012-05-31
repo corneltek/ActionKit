@@ -14,8 +14,6 @@ class StackView extends BaseView
 {
     public $layout;
 
-
-
     function option($key) {
         if( isset($this->options[$key]) ) {
             return $this->options[$key];
@@ -26,22 +24,22 @@ class StackView extends BaseView
     {
         $this->layout = new FormKit\Layout\GenericLayout;
         if( $width = $this->option('width') ) {
-            $layout->width( $width );
+            $this->layout->width( $width );
         }
         if( $padding = $this->option('cellpadding') ) {
-            $layout->cellpadding( $padding );
+            $this->layout->cellpadding( $padding );
         }
         if( $spacing = $this->option('cellspacing') ) {
-            $layout->cellspacing( $spacing );
+            $this->layout->cellspacing( $spacing );
         }
         if( $border = $this->option('border') ) {
-            $layout->border(0);
+            $this->layout->border(0);
         }
 
         // for each widget, push it into stack
         foreach( $this->action->params as $param ) {
             $widget = $param->createWidget();
-            $layout->addWidget( $widget );
+            $this->layout->addWidget( $widget );
         }
     }
 
@@ -49,11 +47,9 @@ class StackView extends BaseView
     {
         $form = new FormKit\Element\Form;
         $form->method('post');
-        $form->addChild( $layout );
+        $form->addChild( $this->layout );
         return $form->render();
     }
-
 }
-
 
 

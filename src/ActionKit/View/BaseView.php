@@ -1,7 +1,7 @@
 <?php
 namespace ActionKit\View;
 
-class BaseView
+abstract class BaseView
 {
 
     public $action;
@@ -15,12 +15,12 @@ class BaseView
     function __construct($action, $options = array() ) {
         $this->action = $action;
         $this->options = $options;
+        $this->build();
     }
 
     abstract function build();
 
     abstract function render();
-
 }
 
 
