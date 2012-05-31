@@ -63,12 +63,16 @@ class Column extends CascadingAttribute
 
     }
 
-    /** 
+    /**
      * We dont save any value here,
      * The value's should be passed from outside.
      *
      * Supported validations:
      *   * required
+     *
+     * @param mixed $value
+     *
+     * @return array|true Returns error with message or true
      */
     function validate( $value )
     {
@@ -108,9 +112,6 @@ class Column extends CascadingAttribute
         return ucfirst($this->name);
     }
 
-
-
-
     /**************************
      * Widget related methods
      **************************/
@@ -131,6 +132,10 @@ class Column extends CascadingAttribute
 
         // convert attributes into widget style attributes
         $newAttributes = array();
+
+        if( $label = $this->getLabel() ) {
+            $newAttributes['label'] = $label;
+        }
         if( $this->validValues ) {
             $newAttributes['options'] = $this->validValues;
         }
@@ -139,6 +144,11 @@ class Column extends CascadingAttribute
         }
         if( $this->defaultValue ) {
             $newAttributes['value'] = $this->defaultValue;
+        }
+
+        // merge override attributes
+        if( $attributes ) {
+            $newAttributes = array_merge( $newAttributes , $attributes );
         }
 
         // if it's not a full-qualified class name
