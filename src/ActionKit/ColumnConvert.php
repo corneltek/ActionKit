@@ -30,14 +30,14 @@ class ColumnConvert
          * set default render widget
          */
         if( $param->validValues || $param->validPairs ) {
-            $param->renderAs( 'Select' );
+            $param->renderAs( 'SelectInput' );
         }
 
 
         if( ! $param->widgetClass ) {
             $param->renderAs( 'Text' );
         } elseif( $param->renderAs ) {
-            $param->widgetClass = '\Phifty\FormWidget\\' . $param->renderAs;
+            $param->renderAs($param->renderAs );
         }
         return $param;
     }
