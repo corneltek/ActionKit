@@ -145,6 +145,9 @@ class Column extends CascadingAttribute
         if( $this->defaultValue ) {
             $newAttributes['value'] = $this->defaultValue;
         }
+        if( $this->placeholder ) {
+            $newAttributes['placeholder'] = $this->placeholder;
+        }
 
         // merge override attributes
         if( $attributes ) {
