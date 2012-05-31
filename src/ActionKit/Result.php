@@ -156,21 +156,21 @@ class Result
 
     function data( $data ) 
     { 
-		$this->data = $data; 
-		return $this; 
+        $this->data = $data; 
+        return $this; 
     }
 
-	function addData( $key, $value )
-	{
-		$this->data[ $key ] = $value;
-		return $this;
-	}
+    function addData( $key, $value )
+    {
+        $this->data[ $key ] = $value;
+        return $this;
+    }
 
-	function mergeData( $data )
-	{
-		$this->data = array_merge( $this->data , $data );
-		return $this;
-	}
+    function mergeData( $data )
+    {
+        $this->data = array_merge( $this->data , $data );
+        return $this;
+    }
 
     function success( $message = null )
     {
