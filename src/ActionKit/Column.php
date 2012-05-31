@@ -51,12 +51,6 @@ class Column extends CascadingAttribute
 
     public $validator;
 
-    public $sanitizer;
-
-    public $filter;
-
-    public $completer;
-
     public function __construct( $name , $action = null ) 
     {
         $this->name = $name;
@@ -66,6 +60,7 @@ class Column extends CascadingAttribute
 
     public function build()
     {
+
     }
 
     /** 
@@ -122,6 +117,7 @@ class Column extends CascadingAttribute
     public function renderAs( $widgetType ) 
     {
         $this->widgetClass = $widgetType;
+        return $this;
     }
 
     /**
