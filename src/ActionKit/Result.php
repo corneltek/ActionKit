@@ -231,25 +231,25 @@ class Result
         if( $this->message )
             $ret[ 'message' ] = $this->message;
 
-        if( $this->type == "success" ) {
+        if( 'success' === $this->type ) {
             $ret['data'] = $this->data;
         }
-        elseif ( $this->type == "error" ) {
+        elseif ( 'error' === $this->type ) {
             $ret['data']  = $this->data;
             $ret['validations'] = $this->validations;
         }
-        elseif ( $this->type == "valid" ) {
+        elseif ( 'valid' === $this->type ) {
             $ret['validations'] = $this->validations;
         }
-        elseif ( $this->type == "invalid" ) {
+        elseif ( 'invalid' === $this->type ) {
             $ret['validations'] = $this->validations;
         }
-        elseif ( $this->type == "completion" ) {
+        elseif ( 'completion' === $this->type ) {
             $ret = array_merge( $ret , $this->completion );
         }
 
         if( $this->redirect ) 
-            $ret[ 'redirect'] = $this->redirect;
+            $ret['redirect'] = $this->redirect;
 
         return $ret;
     }
