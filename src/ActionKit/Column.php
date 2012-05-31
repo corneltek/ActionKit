@@ -134,17 +134,19 @@ class Column extends CascadingAttribute
         if( $this->validValues ) {
             $newAttributes['options'] = $this->validValues;
         }
+        if( $this->immutable ) {
+            $newAttributes['readonly'] = true;
+        }
         if( $this->defaultValue ) {
             $newAttributes['value'] = $this->defaultValue;
         }
 
-        // if it a full-qualified class name ?
+        // if it's not a full-qualified class name
+        // we should concat class name with default widget namespace
         if( '+' !== $class[0] ) {
             $class = $widgetNs . $class;
         }
-
-        $widget = new $class( $this->name , $newAttributes );
-        return $widget;
+        return new $class( $this->name , $newAttributes );
     }
 
 #      protected function _newWidget()
