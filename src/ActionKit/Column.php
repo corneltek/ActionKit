@@ -117,29 +117,56 @@ class Column extends CascadingAttribute
             ( $type[0] == '\\' ) ? $type : '\Phifty\FormWidget\\' . $type;
     }
 
-    protected function _newWidget()
+
+
+    /**
+     * A simple widget factory for Action Column
+     *
+     * @param string $widgetClass Widget Class.
+     */
+    public function createWidget( $widgetClass = null , $attributes = null )
     {
-        $class = $this->widgetClass;
-        if( ! $class )
-            $class = 'Phifty\FormWidget\Text';  # default class
-        return new $class( $this );
+        $widgetNs = 'FormKit\\Widget\\';
+        $class = $widgetClass ?: $this->widgetClass;
+
+        // convert attributes into widget style attributes
+        $newAttributes = array();
+        if( $this->validValues ) {
+            $newAttributes['options'] = $this->validValues;
+        }
+        if( $this->defaultValue ) {
+            $newAttributes['value'] = $this->defaultValue;
+        }
+
+        // if it a full-qualified class name ?
+        if( '+' !== $class[0] ) {
+            $class = $widgetNs . $class;
+        }
+
+        $widget = new $class( $this->name , $newAttributes );
+        return $widget;
     }
 
-
+#      protected function _newWidget()
+#      {
+#          $class = $this->widgetClass;
+#          if( ! $class )
+#              $class = 'Phifty\FormWidget\Text';  # default class
+#          return new $class( $this );
+#      }
     /* render as other widget */
-    public function renderWidget( $type , $attrs = array() ) 
-    {
-        $this->renderAs( $type );
-        return $this->render( $attrs );
-    }
-
-    public function render( $attrs = array() )
-    {
-        /* it's full-qualified name */
-        // $widgetClass = ( $widgetType[0] == '\\' ) ? $widgetType : '\Phifty\Widget\\' . $widgetType;
-        // $widget = new $class( $this );
-        return $this->_newWidget()->render($attrs);
-    }
+#      public function renderWidget( $type , $attrs = array() ) 
+#      {
+#          $this->renderAs( $type );
+#          return $this->render( $attrs );
+#      }
+#      public function render( $attrs = array() )
+#      {
+#          /* it's full-qualified name */
+#          // $widgetClass = ( $widgetType[0] == '\\' ) ? $widgetType : '\Phifty\Widget\\' . $widgetType;
+#          // $widget = new $class( $this );
+#          return $this->_newWidget()->render($attrs);
+#      }
 
 
 }

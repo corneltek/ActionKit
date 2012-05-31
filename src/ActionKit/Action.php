@@ -232,11 +232,10 @@ abstract class Action
      *
      * @return FormKit\Widget
      */
-    public function widget($field, $widgetClass = null) 
+    public function widget($field, $widgetClass = null)
     {
         $param = $this->param($field);
-        $widget = $param->createWidget( $widgetClass );
-        return $widget;
+        return $param->createWidget( $widgetClass );
     }
 
     public function isAjax()
