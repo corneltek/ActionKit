@@ -1,6 +1,7 @@
 <?php
 namespace ActionKit\View;
 use FormKit;
+use ActionKit\View\BaseView;
 
 /**
  * Action View Synopsis
@@ -9,26 +10,26 @@ use FormKit;
  *      $view = new ActionKit\View\StackView($action, $options );
  *      $view->render();
  *
+ *
  * Example:
  *
  *      $action = new User\Action\ChangePassword;
  *      $view = new ActionKit\View\StackView( $action );
  *      echo $view->render();
  *
+ * Or you can render action view via Action's `asView` method:
+ *
+ *      echo $action->asView('ActionKit\View\StackView')->render();
  *
  */
 class StackView extends BaseView
 {
     public $layout;
-
-    function option($key) {
-        if( isset($this->options[$key]) ) {
-            return $this->options[$key];
-        }
-    }
+    public $form;
 
     function build()
     {
+        // Use Generic Table Layout
         $this->layout = new FormKit\Layout\GenericLayout;
         if( $width = $this->option('width') ) {
             $this->layout->width( $width );
@@ -54,10 +55,7 @@ class StackView extends BaseView
 
         $submit = new FormKit\Widget\SubmitInput;
         $this->layout->addWidget($submit);
-    }
 
-    function render() 
-    {
         $form = new FormKit\Element\Form;
         $form->method('post');
 
@@ -73,6 +71,11 @@ class StackView extends BaseView
         $form->addChild( $signature );
         $form->addChild( $hiddenId );
         $form->addChild( $this->layout );
+        $this->form = $form;
+    }
+
+    function render() 
+    {
         return $form->render();
     }
 }
