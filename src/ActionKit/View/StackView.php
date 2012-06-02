@@ -8,8 +8,15 @@ use FormKit;
  *      $action =  ....
  *      $view = new ActionKit\View\StackView($action, $options );
  *      $view->render();
+ *
+ * Example:
+ *
+ *      $action = new User\Action\ChangePassword;
+ *      $view = new ActionKit\View\StackView( $action );
+ *      echo $view->render();
+ *
+ *
  */
-
 class StackView extends BaseView
 {
     public $layout;
@@ -38,15 +45,33 @@ class StackView extends BaseView
 
         // for each widget, push it into stack
         foreach( $this->action->params as $param ) {
+            if( 'id' === $param->name ) {
+                continue;
+            }
             $widget = $param->createWidget();
             $this->layout->addWidget( $widget );
         }
+
+        $submit = new FormKit\Widget\SubmitInput;
+        $this->layout->addWidget($submit);
     }
 
     function render() 
     {
         $form = new FormKit\Element\Form;
         $form->method('post');
+
+        $id = $this->action->param('id');
+        $hiddenId  = new FormKit\Widget\HiddenInput('id',array( 
+            'value' => $id,
+        ));
+
+        $signature = new FormKit\Widget\HiddenInput('action',array(
+            'value' => $this->action->getSignature()
+        ));
+        
+        $form->addChild( $signature );
+        $form->addChild( $hiddenId );
         $form->addChild( $this->layout );
         return $form->render();
     }
