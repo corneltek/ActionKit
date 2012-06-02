@@ -134,6 +134,7 @@ class Column extends CascadingAttribute
     public function createWidget( $widgetClass = null , $attributes = null ) {
         $class = $widgetClass ?: $this->widgetClass;
 
+
         // convert attributes into widget style attributes
         $newAttributes = array();
 
@@ -146,9 +147,18 @@ class Column extends CascadingAttribute
         if( $this->immutable ) {
             $newAttributes['readonly'] = true;
         }
-        if( $this->defaultValue ) {
-            $newAttributes['value'] = $this->defaultValue;
+
+
+        // for password input, we should not render value
+        if( false === stripos( $class , 'Password' ) ) {
+            if( $this->value ) {
+                $newAttributes['value'] = $this->value;
+            }
+            elseif( $this->defaultValue ) {
+                $newAttributes['value'] = $this->defaultValue;
+            }
         }
+
         if( $this->placeholder ) {
             $newAttributes['placeholder'] = $this->placeholder;
         }
