@@ -95,19 +95,44 @@ abstract class Action
     public $currentUser;
     public $args = array();   // post,get args for action
     public $result; // action result
-    public $params = array(); // parameter column objects
 
+
+    /**
+     * @var ActionKit\Column[string Column name]
+     */
+    public $params = array();
+
+
+    /**
+     * @var Universal\Http\HttpRequest request object
+     */
     public $request;
 
+
+    /**
+     *
+     * @param array $args The request arguments
+     * @param mixed $currentUser
+     */
     function __construct( $args = array() , $currentUser = null ) 
     {
-        $this->request = \Universal\Http\HttpRequest;
+        $this->request = new HttpRequest;
         $this->args = $args;
         $this->result = new \ActionKit\Result;
         if( $currentUser ) {
             $this->currentUser = $currentUser;
         }
+
+        // initialize parameter objects
         $this->schema();
+
+        // load param values from $arguments
+        foreach( $args as $key => $val ) {
+            if( $param = $this->param($key) ) {
+                $param->value( $val );
+            }
+        }
+
         $this->result->args( $this->args );
         $this->init();
     }
@@ -119,6 +144,7 @@ abstract class Action
 
     protected function validateParam( $name )
     {
+        // skip __ajax_request field
         if( $name == '__ajax_request' )
             return;
 
