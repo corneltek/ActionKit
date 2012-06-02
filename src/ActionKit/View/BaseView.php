@@ -18,6 +18,12 @@ abstract class BaseView
         $this->build();
     }
 
+    function option($key) {
+        if( isset($this->options[$key]) ) {
+            return $this->options[$key];
+        }
+    }
+
     abstract function build();
 
     abstract function render();
