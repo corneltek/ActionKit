@@ -426,6 +426,21 @@ abstract class Action
         }
     }
 
+
+    /**
+     * Create an Action View instance for Action.
+     *
+     * @param string $class View class
+     * @param array $attributes View options
+     *
+     * @return ActionKit\View\BaseView View object
+     */
+    public function asView($class, $options = array())
+    {
+        return new $class( $this, $options );
+    }
+
+
     public function getSignature()
     {
         return str_replace( '\\' , '::' , get_class($this) );
@@ -443,17 +458,32 @@ abstract class Action
         return $submit->render($attrs);
     }
 
+
+
+    /**
+     * Render Button wigdet HTML
+     */
     public function renderButtonWidget($attrs = array() )
     {
         $button = new FormKit\Widget\ButtonInput;
         return $button->render($attrs);
     }
 
+
+    /**
+     * Render action hidden field for signature
+     *
+     *      <input type="hidden" name="action" value="User::Action::UpdateUser"/>
+     *
+     * @return string Hidden input HTML
+     */
     public function renderSignatureWidget()
     {
         $hidden = new FormKit\Widget\HiddenInput('action', array( 'value' => $this->getSignature() ));
         return $hidden->render();
     }
+
+
 
 
     /**
@@ -481,6 +511,10 @@ abstract class Action
             return $html;
         }
     }
+
+
+
+
 
     /** 
      * Report success
