@@ -6,6 +6,7 @@ namespace ActionKit;
 use Exception;
 use FormKit;
 use ActionKit\Column;
+use Universal\Http\HttpRequest;
 
 /**
 
@@ -96,12 +97,16 @@ abstract class Action
     public $result; // action result
     public $params = array(); // parameter column objects
 
+    public $request;
+
     function __construct( $args = array() , $currentUser = null ) 
     {
+        $this->request = \Universal\Http\HttpRequest;
         $this->args = $args;
         $this->result = new \ActionKit\Result;
-        if( $currentUser )
+        if( $currentUser ) {
             $this->currentUser = $currentUser;
+        }
         $this->schema();
         $this->result->args( $this->args );
         $this->init();
