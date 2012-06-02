@@ -4,6 +4,17 @@ use ActionKit\Column;
 use Phifty\UploadFile;
 use Exception;
 
+
+/**
+ * Preprocess image data fields
+ *
+ * You can easily describe process and options for uploaded files
+ *
+ *    $this->param('file')
+ *          ->putIn('path/to/pool')
+ *          ->validExtension( array('png') )
+ *          ->renameFile(function() {  })
+ */
 class File extends Column
 {
     public $type = 'file';
@@ -16,6 +27,7 @@ class File extends Column
 
     public function build()
     {
+        // XXX: use CascadingAttribute class setter instead.
         $this->supportedAttributes['validExtensions'] = self::ATTR_ARRAY;
         $this->supportedAttributes['putIn'] = self::ATTR_STRING;
         $this->supportedAttributes['renameFile'] = self::ATTR_ANY;
