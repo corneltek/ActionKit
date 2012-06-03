@@ -173,7 +173,12 @@ abstract class Action
      */
     protected function filterOut($fields) 
     {
-        $this->filterOutFields = (array) $fields;
+        $args = func_get_args();
+        if( count($args) > 1 ) {
+            $this->filterOutFields = (array) $args;
+        } else {
+            $this->filterOutFields = (array) $fields;
+        }
         return $this;
     }
 
