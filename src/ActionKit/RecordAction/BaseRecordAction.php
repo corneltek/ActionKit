@@ -2,6 +2,7 @@
 namespace ActionKit\RecordAction;
 use Exception;
 use ActionKit\Action;
+use ActionKit\ColumnConvert;
 use ActionKit\ActionGenerator;
 
 /*
@@ -30,19 +31,24 @@ abstract class BaseRecordAction extends Action
 
     public $recordClass;
 
-
     public function __construct( $args = array(), $record = null, $currentUser = null ) 
     {
         // record name is in Camel case
-        $class = $this->recordClass;
-        $this->record = $record ? $record : new $class;
-        $this->initRecord();
-
-        /* run schema , init base action stuff */
-        parent::__construct( $args , $currentUser );
         if( ! $this->recordClass ) {
             throw new Exception( sprintf('Record class of "%s" is not specified.' , get_class($this) ));
         }
+        $this->record = $record ?: new $this->recordClass;
+        $this->loadRecordFromArguments( $args );
+
+        /* init id column */
+        if( $column = $this->record->getColumn('id') ) {
+            if( ! isset($this->params[$column->name] ) ) {
+                $this->params[ $column->name ] = ColumnConvert::toParam( $column , $this->record );
+            }
+        }
+
+        /* run schema , init base action stuff */
+        parent::__construct( $args , $currentUser );
     }
 
     protected function useRecordSchema()
@@ -54,10 +60,13 @@ abstract class BaseRecordAction extends Action
     /**
      * Load record from arguments (by id)
      */
-    function initRecord() 
+    public function loadRecordFromArguments($args) 
     {
-        if( isset( $this->args['id'] ) && ! $this->record->id ) {
-            $this->record->load( $this->args['id'] );
+        if( isset( $args['id'] ) && ! $this->record->id ) {
+            $ret = $this->record->load( $args['id'] );
+            if( ! $ret->success ) {
+                throw new Exception("Record load failed " . $ret->message );
+            }
         }
     }
 
@@ -70,7 +79,7 @@ abstract class BaseRecordAction extends Action
             return;
         foreach( $this->record->getColumns() as $column ) {
             if( ! isset($this->params[$column->name] ) ) {
-                $this->params[ $column->name ] = \ActionKit\ColumnConvert::toParam( $column , $this->record );
+                $this->params[ $column->name ] = ColumnConvert::toParam( $column , $this->record );
             }
         }
     }
@@ -86,17 +95,17 @@ abstract class BaseRecordAction extends Action
         return static::TYPE;
     }
 
-    function getRecord() 
+    public function getRecord() 
     {
         return $this->record; 
     }
 
-    function setRecord($record)
+    public function setRecord($record)
     {
         $this->record = $record;
     }
 
-    function currentUserCan( $user )
+    public function currentUserCan( $user )
     {
         return true;
     }

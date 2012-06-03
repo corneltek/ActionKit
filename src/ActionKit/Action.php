@@ -153,7 +153,8 @@ abstract class Action
 
         // load param values from $arguments
         foreach( $this->args as $key => $val ) {
-            if( $param = $this->param($key) ) {
+            if( $this->hasParam($key) ) {
+                $param = $this->param($key);
                 $param->value( $val );
             }
         }
@@ -180,11 +181,6 @@ abstract class Action
             $this->filterOutFields = (array) $fields;
         }
         return $this;
-    }
-
-    function getFileArg( $name )
-    {
-
     }
 
     protected function validateParam( $name )
@@ -215,13 +211,12 @@ abstract class Action
         return false;
     }
 
-
     /**
      * Run validates
      *
      * Foreach parameters, validate the parameter through validateParam method.
      *
-     * @return bool error flag.
+     * @return bool error flag, returns TRUE on error.
      */
     function runValidate()
     {
@@ -298,7 +293,14 @@ abstract class Action
 
     public function hasParam( $field ) 
     {
-        return @$this->params[ $field ] ? true : false; 
+        return isset($this->params[ $field ]);
+    }
+
+    public function removeParam($field) 
+    {
+        $param = @$this->params[$field];
+        unset($this->params[$field]);
+        return $param;
     }
 
 

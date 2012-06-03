@@ -33,9 +33,10 @@ class ColumnConvert
             $param->renderAs( 'SelectInput' );
         }
 
-
-        if( ! $param->widgetClass ) {
-            $param->renderAs( 'Text' );
+        if( $param->name === 'id' ) {
+            $param->renderAs( 'HiddenInput' );
+        } elseif( ! $param->widgetClass ) {
+            $param->renderAs( 'TextInput' );
         } elseif( $param->renderAs ) {
             $param->renderAs($param->renderAs );
         }

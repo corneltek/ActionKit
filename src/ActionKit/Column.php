@@ -116,8 +116,8 @@ class Column extends CascadingAttribute
     /**************************
      * Widget related methods
      **************************/
-    public function renderAs( $widgetType ) {
-        $this->widgetClass = $widgetType;
+    public function renderAs( $type ) {
+        $this->widgetClass = $type;
         return $this;
     }
 
@@ -133,7 +133,6 @@ class Column extends CascadingAttribute
      */
     public function createWidget( $widgetClass = null , $attributes = null ) {
         $class = $widgetClass ?: $this->widgetClass;
-
 
         // convert attributes into widget style attributes
         $newAttributes = array();
