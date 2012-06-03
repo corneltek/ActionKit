@@ -76,7 +76,7 @@ class StackView extends BaseView
 
     function render() 
     {
-        return $form->render();
+        return $this->form->render();
     }
 }
 
