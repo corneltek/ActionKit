@@ -145,8 +145,14 @@ abstract class Action
         // initialize parameter objects
         $this->schema();
 
+        if( !empty($this->filterOutFields) ) {
+            foreach( $this->filterOutFields as $field ) {
+                unset( $this->args[ $field ] );
+            }
+        }
+
         // load param values from $arguments
-        foreach( $args as $key => $val ) {
+        foreach( $this->args as $key => $val ) {
             if( $param = $this->param($key) ) {
                 $param->value( $val );
             }
