@@ -45,7 +45,7 @@ use Universal\Http\HttpRequest;
 
     In Twig template, we can render action widget:
 
-        {{ 
+        {{
             a.widget('username').render({ 
                 class: 'extra-class',
                 id: 'field-id' }) 
@@ -55,10 +55,12 @@ use Universal\Http\HttpRequest;
 
         {{ CRUD.Action.render('link',{ 'size': 60 }) | raw }}
 
-
     Class:
 
-        function schema() {
+        function schema() 
+        {
+            // For record actions, we can convert the record columns
+            $this->useRecordSchema();
 
             $this->param( 'username' )
                 ->label( _('Username') )
@@ -69,6 +71,17 @@ use Universal\Http\HttpRequest;
 
             $this->param( 'country' )
                 ->useCompleter();
+
+            //    For record actions, sometimes we don't want 
+            //    some parameter come into database operation,
+            //    we can use ->filter() method to filter out parameters
+            //    
+            //    By doing this, when an action is created,
+            //    this parameter is filtered out from arguments.
+            //    
+            //    When rendering action view with this action, 
+            //    do not render these fields.
+            $this->filterOut(array('auth_token'));
         }
 
 
@@ -104,10 +117,16 @@ abstract class Action
 
 
     /**
-     * @var Universal\Http\HttpRequest request object
+     * @public Universal\Http\HttpRequest request object
      */
     public $request;
 
+
+
+    /**
+     * @public array filter out fields
+     */
+    public $filterOutFields = array();
 
     /**
      *
@@ -135,6 +154,21 @@ abstract class Action
 
         $this->result->args( $this->args );
         $this->init();
+    }
+
+
+    /**
+     * Setup filter out fields,
+     * When filterOut fields is set, 
+     * Action will filter out those columns when executing action
+     * Action View will skip rendering these column
+     *
+     * @param array $fields Field names
+     */
+    protected function filterOut($fields) 
+    {
+        $this->filterOutFields = (array) $fields;
+        return $this;
     }
 
     function getFileArg( $name )
@@ -333,6 +367,11 @@ abstract class Action
      * @param string $type Field Type (will be Column Type)
      *
      * @return ActionKit\Column
+     *
+     *     $this->param('username'); // use ActionKit\Column
+     *     $this->param('file', 'file' ); // use ActionKit\Column\File
+     *     $this->param('image', 'image' ); // use ActionKit\Column\Image
+     *
      */
     public function param( $field , $type = null ) 
     {
@@ -341,7 +380,11 @@ abstract class Action
         }
 
         if( $type ) {
-            $class = 'ActionKit\\Column\\' . $type;
+            $class = 'ActionKit\\Column\\' . ucfirst($type);
+
+            if( ! class_exists($class,true) ) {
+                throw new Exception("Action param($field): column class $class not found.");
+            }
             return $this->params[ $field ] = new $class( $field , $this );
         }
 
@@ -360,6 +403,13 @@ abstract class Action
     }
 
 
+
+    /**
+     * Add data to result object
+     *
+     * @param string $key
+     * @param mixed $val
+     */
     function addData( $key , $val )
     {
         $this->result->addData( $key , $val );

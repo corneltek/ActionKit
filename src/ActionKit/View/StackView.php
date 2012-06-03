@@ -26,6 +26,7 @@ class StackView extends BaseView
 {
     public $layout;
     public $form;
+    public $method = 'POST';
 
     function build()
     {
@@ -57,7 +58,7 @@ class StackView extends BaseView
         $this->layout->addWidget($submit);
 
         $form = new FormKit\Element\Form;
-        $form->method('post');
+        $form->method($this->method);
 
         $id = $this->action->param('id');
         $hiddenId  = new FormKit\Widget\HiddenInput('id',array( 

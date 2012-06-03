@@ -33,22 +33,26 @@ abstract class BaseRecordAction extends Action
 
     public function __construct( $args = array(), $record = null, $currentUser = null ) 
     {
+        // record name is in Camel case
+        $class = $this->recordClass;
+        $this->record = $record ? $record : new $class;
+        $this->initRecord();
+
         /* run schema , init base action stuff */
         parent::__construct( $args , $currentUser );
         if( ! $this->recordClass ) {
             throw new Exception( sprintf('Record class of "%s" is not specified.' , get_class($this) ));
         }
+    }
 
-        // record name is in Camel case
-        $class = $this->recordClass;
-        $this->record = $record ? $record : new $class;
-        $this->initRecord();
+    protected function useRecordSchema()
+    {
         $this->initRecordColumn();
     }
 
 
     /**
-     * load record
+     * Load record from arguments (by id)
      */
     function initRecord() 
     {
@@ -62,21 +66,19 @@ abstract class BaseRecordAction extends Action
      */
     function initRecordColumn()
     {
-        if( $this->record ) {
-            foreach( $this->record->getColumns() as $column ) {
-                if( ! isset($this->params[$column->name] ) ) {
-                    $this->params[ $column->name ] = \ActionKit\ColumnConvert::toParam( $column , $this->record );
-                }
+        if( ! $this->record )
+            return;
+        foreach( $this->record->getColumns() as $column ) {
+            if( ! isset($this->params[$column->name] ) ) {
+                $this->params[ $column->name ] = \ActionKit\ColumnConvert::toParam( $column , $this->record );
             }
         }
     }
 
-    // the schema of record action is from record class.
-    function schema() 
+
+    public function schema() 
     {
-        /*
-        $this->record->actionSchema( $this , $this->getType() );
-        */
+        $this->useRecordSchema();
     }
 
     function getType() 
