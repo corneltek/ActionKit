@@ -47,6 +47,9 @@ class Column extends CascadingAttribute
     /* default render Widget */
     public $widgetClass = 'TextInput';
 
+    /* default widget attributes */
+    public $widgetAttributes;
+
     /* default widget namespace */
     public $widgetNamespace = 'FormKit\\Widget\\';
 
@@ -116,11 +119,31 @@ class Column extends CascadingAttribute
     /**************************
      * Widget related methods
      **************************/
-    public function renderAs( $type ) {
+
+
+    /**
+     * Render action column as {Type}Widget, with extra options/attributes
+     *
+     * @param string $type Widget type
+     * @param array $attributes
+     *
+     * @return self
+     */
+    public function renderAs( $type , $attributes = null ) {
         $this->widgetClass = $type;
+        if( $attributes ) {
+            $this->widgetAttributes = $attributes;
+        }
         return $this;
     }
 
+
+    /**
+     * Render current parameter column to HTML
+     *
+     * @param array|null $attributes
+     * @return string
+     */
     public function render($attributes = null) {
         $widget = $this->createWidget( null , $attributes );
         return $widget->render();
@@ -130,6 +153,8 @@ class Column extends CascadingAttribute
      * A simple widget factory for Action Column
      *
      * @param string $widgetClass Widget Class.
+     * @param array  $attributes Widget attributes.
+     * @return FormKit\Widget\BaseWidget
      */
     public function createWidget( $widgetClass = null , $attributes = null ) {
         $class = $widgetClass ?: $this->widgetClass;
@@ -147,7 +172,6 @@ class Column extends CascadingAttribute
             $newAttributes['readonly'] = true;
         }
 
-
         // for password input, we should not render value
         if( false === stripos( $class , 'Password' ) ) {
             if( $this->value ) {
@@ -163,6 +187,9 @@ class Column extends CascadingAttribute
         }
 
         // merge override attributes
+        if( $this->widgetAttributes ) {
+            $newAttributes = array_merge( $newAttributes , $this->widgetAttributes );
+        }
         if( $attributes ) {
             $newAttributes = array_merge( $newAttributes , $attributes );
         }
