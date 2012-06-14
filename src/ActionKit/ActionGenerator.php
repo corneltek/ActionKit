@@ -75,8 +75,7 @@ namespace $ns\\Action {
 }
 CODE;
         if( $this->cache ) {
-            apc_store('action:' . $actionFullClass , $code)
-                or die('Can not store action class code.');
+            apc_store('action:' . $actionFullClass , $code);
         }
         return (object) array( 
             'action_class' => $actionFullClass,
