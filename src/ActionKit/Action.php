@@ -509,12 +509,27 @@ abstract class Action
         return str_replace( '\\' , '::' , get_class($this) );
     }
 
+
+    /**
+     * Render widget 
+     *
+     * @param string $name Field name
+     * @param string $type Widget type, Input, Password ... etc
+     * @param array $attrs Attributes
+     * @return string HTML string
+     */
     public function renderWidget( $name , $type , $attrs = array() )
     {
         $param = $this->getParam( $name );
         return $param->render( $type, $attrs );
     }
 
+    /**
+     * Render submit button widget
+     *
+     * @param array $attrs Attributes
+     * @return string HTML string
+     */
     public function renderSubmitWidget($attrs = array() )
     {
         $submit = new FormKit\Widget\SubmitInput;
