@@ -518,10 +518,25 @@ abstract class Action
      * @param array $attrs Attributes
      * @return string HTML string
      */
-    public function renderWidget( $name , $type , $attrs = array() )
+    public function renderField( $name , $type = null , $attrs = array() )
     {
-        $param = $this->getParam( $name );
-        return $param->render( $type, $attrs );
+        return $this->getParam( $name )->render($type, $attrs );
+    }
+
+
+    /**
+     * A quick helper for rendering multiple fields
+     *
+     * @param string[] $fields Field names
+     * @return string
+     */
+    public function renderFields( $fields , $type = null, $attributes = array() )
+    {
+        $html = '';
+        foreach( $fields as $field ) {
+            $html .= $this->getParam($field)->render(null,$attributes);
+        }
+        return $html;
     }
 
     /**
