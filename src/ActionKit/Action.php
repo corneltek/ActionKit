@@ -268,15 +268,17 @@ abstract class Action
 
 
     /* **** value getters **** */
-    public function getClass() { 
-        return get_class($this);
-    }
 
+    /**
+     * Get Action name
+     *
+     * @return string
+     */
     public function getName()
     {
-        $class = $this->getClass();
-        $pos = strpos( $class, '::Action::' );
-        return substr( $class , $pos + strlen('::Action::') );
+        $sig = $this->getSignature();
+        $pos = strpos( $sig, '::Action::' );
+        return substr( $sig , $pos + strlen('::Action::') );
     }
 
     public function params() 
@@ -313,8 +315,7 @@ abstract class Action
      */
     public function widget($field, $widgetClass = null)
     {
-        $param = $this->param($field);
-        return $param->createWidget( $widgetClass );
+        return $this->param($field)->createWidget( $widgetClass );
     }
 
     public function isAjax()
@@ -322,44 +323,97 @@ abstract class Action
         return isset( $_REQUEST['__ajax_request'] );
     }
 
+
+    /**
+     * Get current user
+     */
     public function getCurrentUser() 
     {
         if( $this->currentUser )
             return $this->currentUser;
     }
 
+
+    /**
+     * Set current user
+     *
+     * @param mixed Current user object.
+     */
     public function setCurrentUser( $user ) 
     {
         $this->currentUser = $user;
     }
 
 
+    /**
+     * Pass current user object to check permission.
+     *
+     * @return bool 
+     */
     public function currentUserCan( $user ) 
     {
         return $this->record->currentUserCan( $this->type , $this->args , $user );
     }
 
-    public function arg( $name ) 
+
+
+    /**
+     * Set/Get argument
+     *
+     * @param string $name Argument key
+     * @param mixed  $value (optional)
+     *
+     * @return mixed Argument value
+     */
+    public function arg( $name )
     {
-        return @$this->args[ $name ]; 
+        $args = func_get_args();
+        if( 1 === count($args) ) {
+            return isset($this->args[ $name ]) ?
+                         $this->args[ $name ]  : null;
+        }
+        elseif( 2 === count($args) ) {
+            // set value
+            return $this->args[ $name ] = $args[1];
+        }
+        else { die('arg error.'); }
     }
 
+
+    /**
+     * @return array
+     */
     public function getArgs() 
     {
         return $this->args; 
     }
 
+    /**
+     * TODO: we should use the file payload from Universal\Http\HttpRequest.
+     *
+     * @return array
+     */
     public function getFile( $name )
     {
         return @$_FILES[ $name ];
     }
 
+    
     public function getFiles() 
     {
         return @$_FILES;
     }
 
 
+
+    /**
+     * Set argument
+     *
+     * @param string $name argument key.
+     * @param mixed $value argument value.
+     *
+     * @return this
+     */
     public function setArg($name,$value) 
     { 
         $this->args[ $name ] = $value ; 
@@ -459,11 +513,23 @@ abstract class Action
         $this->result->completion( $field , $ret[0], $ret[1] );
     }
 
+    /**
+     * Returns Action result, result is empty before running.
+     *
+     * @return ActionKit\Result
+     */
     public function getResult() 
     {
         return $this->result; 
     }
 
+
+
+    /**
+     * Redirect 
+     *
+     * @param string $path
+     */
     public function redirect( $path ) {
 
         /* for ajax request, we should redirect by json result,
@@ -478,6 +544,13 @@ abstract class Action
         }
     }
 
+
+    /**
+     * Redirect to path with a delay
+     *
+     * @param string $path
+     * @param integer $secs
+     */
     public function redirectLater( $path , $secs = 1 )
     {
         if( $this->isAjax() ) {
@@ -504,6 +577,12 @@ abstract class Action
     }
 
 
+
+    /**
+     * Get action signature, this signature is for dispatching
+     *
+     * @return string Signature string
+     */
     public function getSignature()
     {
         return str_replace( '\\' , '::' , get_class($this) );
@@ -528,7 +607,7 @@ abstract class Action
      * A quick helper for rendering multiple fields
      *
      * @param string[] $fields Field names
-     * @return string
+     * @return string HTML string
      */
     public function renderFields( $fields , $type = null, $attributes = array() )
     {
@@ -555,6 +634,9 @@ abstract class Action
 
     /**
      * Render Button wigdet HTML
+     *
+     * @param array $attrs Attributes
+     * @return string HTML string
      */
     public function renderButtonWidget($attrs = array() )
     {
@@ -572,7 +654,8 @@ abstract class Action
      */
     public function renderSignatureWidget()
     {
-        $hidden = new FormKit\Widget\HiddenInput('action', array( 'value' => $this->getSignature() ));
+        $hidden = new FormKit\Widget\HiddenInput('action', 
+                array( 'value' => $this->getSignature() ));
         return $hidden->render();
     }
 
