@@ -422,7 +422,7 @@ abstract class Action
 
     public function setArgs($args) 
     { 
-        $this->args = $args;
+        $this->args = array_merge($this->args , $args );
         return $this; 
     }
 
