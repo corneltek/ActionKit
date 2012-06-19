@@ -446,17 +446,20 @@ abstract class Action
             return $this->params[ $field ];
         }
 
+        // default column class
+        $class = 'ActionKit\\Column';
         if( $type ) {
-            $class = 'ActionKit\\Column\\' . ucfirst($type);
-
-            if( ! class_exists($class,true) ) {
-                throw new Exception("Action param($field): column class $class not found.");
+            if( $type[0] !== '+' ) {
+                $class .= '\\' . ucfirst($type);
+            } else {
+                $class = substr($type,1);
             }
-            return $this->params[ $field ] = new $class( $field , $this );
         }
 
-        // default column
-        return $this->params[ $field ] = new Column( $field , $this );
+        if( ! class_exists($class,true) ) { // trigger spl class autoloader to load class file.
+            throw new Exception("Action param($field): column class $class not found.");
+        }
+        return $this->params[ $field ] = new $class( $field , $this );
     }
 
     function schema() 
