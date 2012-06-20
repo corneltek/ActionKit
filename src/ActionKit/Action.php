@@ -10,21 +10,6 @@ use Universal\Http\HttpRequest;
 
 /**
 
-    Action schema:
-
-        $this->param('id')
-            ->renderAs('HiddenInput');
-
-        $this->param('password')
-            ->renderAs('PasswordInput');
-
-    Action Synopsis:
-
-        $a = new Action( .. parameters ... )
-        $a->run();
-
-        $rs = $a->result();
-
     Render Action:
 
         $a = new UpdatePasswordAction;

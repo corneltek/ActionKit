@@ -5,22 +5,6 @@ use FormKit\Layout\FieldsetLayout;
 use ActionKit\View\BaseView;
 
 /**
- * Action View Synopsis
- *
- *      $action =  ....
- *      $view = new ActionKit\View\StackView($action, $options );
- *      $view->render();
- *
- *
- * Example:
- *
- *      $action = new User\Action\ChangePassword;
- *      $view = new ActionKit\View\StackView( $action );
- *      echo $view->render();
- *
- * Or you can render action view via Action's `asView` method:
- *
- *      echo $action->asView('ActionKit\View\StackView')->render();
  *
  */
 class StackView extends BaseView
@@ -99,5 +83,4 @@ class StackView extends BaseView
         return $this->form->render();
     }
 }
-
 
