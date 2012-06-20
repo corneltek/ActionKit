@@ -3,7 +3,7 @@ namespace ActionKit\View;
 use FormKit;
 use FormKit\Layout\FieldsetLayout;
 use ActionKit\View\BaseView;
-use HiddenInput;
+use FormKit\Widget\HiddenInput;
 
 class StackView extends BaseView
 {
