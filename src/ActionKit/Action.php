@@ -580,14 +580,42 @@ abstract class Action
     /**
      * Render widget 
      *
-     * @param string $name Field name
+     * @param string $name column name
      * @param string $type Widget type, Input, Password ... etc
      * @param array $attrs Attributes
      * @return string HTML string
      */
-    public function renderField( $name , $type = null , $attrs = array() )
+    public function renderWidget( $name , $type = null , $attrs = array() )
     {
-        return $this->getParam( $name )->render($type, $attrs );
+        return $this->getParam( $name )->createWidget($type,$attrs)->render();
+    }
+
+
+
+    /**
+     * Render column with field view class
+     *
+     * @param string $name column name
+     * @param string $fieldViewClass
+     * @param array $attrs 
+     */
+    public function renderField( $name , $fieldViewClass , $attrs = array() )
+    {
+
+    }
+
+
+    /**
+     * Render the label of a action parameter
+     *
+     * @param string $name parameter name
+     * @param array $attrs
+     */
+    public function renderLabel( $name , $attrs = array() ) 
+    {
+        $param = $this->getParam( $name );
+        $label = new FormKit\Widget\Label( $param->getLabel() );
+        return $label->render( $attrs );
     }
 
 
@@ -597,11 +625,11 @@ abstract class Action
      * @param string[] $fields Field names
      * @return string HTML string
      */
-    public function renderFields( $fields , $type = null, $attributes = array() )
+    public function renderWidgets( $fields , $type = null, $attributes = array() )
     {
         $html = '';
         foreach( $fields as $field ) {
-            $html .= $this->getParam($field)->render(null,$attributes);
+            $html .= $this->getParam($field)->render(null,$attributes) . "\n";
         }
         return $html;
     }
