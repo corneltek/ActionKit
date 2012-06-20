@@ -640,11 +640,11 @@ abstract class Action
      *
      * @return string Hidden input HTML
      */
-    public function renderSignatureWidget()
+    public function renderSignatureWidget($attrs = array() )
     {
         $hidden = new FormKit\Widget\HiddenInput('action', 
                 array( 'value' => $this->getSignature() ));
-        return $hidden->render();
+        return $hidden->render( $attrs );
     }
 
 
