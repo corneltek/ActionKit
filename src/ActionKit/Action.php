@@ -599,9 +599,11 @@ abstract class Action
      * @param string $fieldViewClass
      * @param array $attrs 
      */
-    public function renderField( $name , $fieldViewClass , $attrs = array() )
+    public function renderField( $name , $fieldViewClass = 'ActionKit\FieldView\DivFieldView' , $attrs = array() )
     {
-
+        $column = $this->getParam($name);
+        $view = new $fieldViewClass($column);
+        return $view->render();
     }
 
 
@@ -613,8 +615,7 @@ abstract class Action
      */
     public function renderLabel( $name , $attrs = array() ) 
     {
-        $param = $this->getParam( $name );
-        $label = new FormKit\Widget\Label( $param->getLabel() );
+        $label = $this->getParam( $name )->createLabelWidget();
         return $label->render( $attrs );
     }
 

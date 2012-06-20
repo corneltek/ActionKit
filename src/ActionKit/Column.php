@@ -149,6 +149,14 @@ class Column extends CascadingAttribute
         return $widget->render();
     }
 
+
+    public function createLabelWidget($widgetClass = null , $attributes = array() )
+    {
+        $class = $widgetClass ?: 'FormKit\Widget\Label';
+        $widget = new $class( $this->getLabel() );
+        return $widget;
+    }
+
     /**
      * A simple widget factory for Action Column
      *

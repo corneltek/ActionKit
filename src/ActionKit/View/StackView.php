@@ -3,10 +3,8 @@ namespace ActionKit\View;
 use FormKit;
 use FormKit\Layout\FieldsetLayout;
 use ActionKit\View\BaseView;
+use HiddenInput;
 
-/**
- *
- */
 class StackView extends BaseView
 {
     public $layout;
@@ -50,7 +48,7 @@ class StackView extends BaseView
         $form->method($this->method);
 
         if( $this->ajax ) {
-            $ajaxFlag  = new FormKit\Widget\HiddenInput('__ajax_request',array( 'value' => '1' ));
+            $ajaxFlag  = new HiddenInput('__ajax_request',array( 'value' => '1' ));
             $form->addChild( $ajaxFlag );
         }
 
@@ -63,13 +61,13 @@ class StackView extends BaseView
 
                 // if id field is defined, and the record exists.
                 if( $recordId && $paramId->value ) {
-                    $hiddenInput = new FormKit\Widget\HiddenInput('id',array('value' => $paramId->value ));
+                    $hiddenInput = new HiddenInput('id',array('value' => $paramId->value ));
                     $form->addChild($hiddenInput);
                 }
             }
         }
 
-        $signature = new FormKit\Widget\HiddenInput('action',array(
+        $signature = new HiddenInput('action',array(
             'value' => $this->action->getSignature()
         ));
         
