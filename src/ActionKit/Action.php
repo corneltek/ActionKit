@@ -186,7 +186,7 @@ abstract class Action
     protected function validateParam( $name )
     {
         // skip __ajax_request field
-        if( $name == '__ajax_request' )
+        if( $name === '__ajax_request' )
             return;
 
         if( ! isset($this->params[ $name ] ) ) {
