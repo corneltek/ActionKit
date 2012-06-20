@@ -31,14 +31,23 @@ class ColumnConvert
          */
         if( $param->validValues || $param->validPairs ) {
             $param->renderAs( 'SelectInput' );
-        }
-
-        if( $param->name === 'id' ) {
+        } elseif( $param->name === 'id' ) {
             $param->renderAs( 'HiddenInput' );
-        } elseif( ! $param->widgetClass ) {
-            $param->renderAs( 'TextInput' );
         } elseif( $param->renderAs ) {
             $param->renderAs($param->renderAs );
+        } else {
+            // guess input widget from data type
+            $typeMapping = array(
+                'date' => 'DateInput',
+                'datetime' => 'DateTimeInput',
+                'text' => 'TextareaInput',
+            );
+            if( isset($typeMapping[ $param->type ]) ) {
+                $widgetType = $typeMapping[$param->type];
+                $param->renderAs($widgetType);
+            } else {
+                $param->renderAs( 'TextInput' );
+            }
         }
         return $param;
     }
