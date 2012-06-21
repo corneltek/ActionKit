@@ -156,16 +156,15 @@ class Column extends CascadingAttribute
      * @return string
      */
     public function render($attributes = null) {
-        $widget = $this->createWidget( null , $attributes );
-        return $widget->render();
+        return $this->createWidget( null , $attributes )
+            ->render();
     }
 
 
     public function createLabelWidget($widgetClass = null , $attributes = array() )
     {
         $class = $widgetClass ?: 'FormKit\Widget\Label';
-        $widget = new $class( $this->getLabel() );
-        return $widget;
+        return new $class( $this->getLabel() );
     }
 
     /**
