@@ -116,6 +116,14 @@ class Column extends CascadingAttribute
         return ucfirst($this->name);
     }
 
+    public function getDefaultValue()
+    {
+        if( is_callable($this->default) ) {
+            return call_user_func($this->default);
+        }
+        return $this->default;
+    }
+
     /**************************
      * Widget related methods
      **************************/
@@ -185,8 +193,8 @@ class Column extends CascadingAttribute
             if( $this->value ) {
                 $newAttributes['value'] = $this->value;
             }
-            elseif( $this->defaultValue ) {
-                $newAttributes['value'] = $this->defaultValue;
+            elseif( $this->default ) {
+                $newAttributes['value'] = $this->getDefaultValue();
             }
         }
 

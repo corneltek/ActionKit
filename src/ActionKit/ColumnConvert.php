@@ -20,6 +20,7 @@ class ColumnConvert
 
         $param->name  = $name;
 
+        // load record value
         if( $record ) {
             $param->value = $record->{$name};
         }
