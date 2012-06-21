@@ -132,6 +132,9 @@ class Column extends CascadingAttribute
     /**
      * Render action column as {Type}Widget, with extra options/attributes
      *
+     *     $this->column('created_on')
+     *         ->renderAs('DateInput', array( 'format' => 'yy-mm-dd' ))
+     *
      * @param string $type Widget type
      * @param array $attributes
      *
