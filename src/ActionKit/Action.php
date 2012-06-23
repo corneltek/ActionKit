@@ -602,8 +602,12 @@ abstract class Action
      */
     public function renderField( $name , $fieldViewClass = 'ActionKit\FieldView\DivFieldView' , $attrs = array() )
     {
+        if( ! $fieldViewClass ) {
+            $fieldViewClass = 'ActionKit\FieldView\DivFieldView';
+        }
         $column = $this->getParam($name);
         $view = new $fieldViewClass($column);
+        $view->setWidgetAttributes($attrs);
         return $view->render();
     }
 

@@ -174,7 +174,7 @@ class Column extends CascadingAttribute
      * @param array  $attributes Widget attributes.
      * @return FormKit\Widget\BaseWidget
      */
-    public function createWidget( $widgetClass = null , $attributes = null ) {
+    public function createWidget( $widgetClass = null , $attributes = array() ) {
         $class = $widgetClass ?: $this->widgetClass;
 
         // convert attributes into widget style attributes

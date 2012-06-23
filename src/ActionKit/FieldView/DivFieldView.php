@@ -18,10 +18,15 @@ class DivFieldView
 
     public $container;
 
+    public $widgetAttributes = array();
+
     public function __construct($column, $options = array()) 
     {
         $this->column = $column;
-        $this->container = $this->build();
+    }
+
+    public function setWidgetAttributes($attrs) {
+        $this->widgetAttributes = $attrs;
     }
 
 
@@ -48,7 +53,7 @@ class DivFieldView
         $inputDiv = new FormKit\Element\Div(array( 'class' => $this->inputClass ));
 
         $label = $this->column->createLabelWidget();
-        $widget = $this->column->createWidget();
+        $widget = $this->column->createWidget(null, $this->widgetAttributes);
 
         $labelDiv->append( $label );
         $inputDiv->append( $widget );
@@ -60,7 +65,7 @@ class DivFieldView
 
     public function render()
     {
-        return $this->container->render();
+        return $this->build()->render();
     }
 }
 
