@@ -15,7 +15,6 @@ abstract class CreateRecordAction
         if( false === $ret->success ) {
             $this->convertRecordValidation( $ret );
             if( function_exists('fb') ) {
-                var_dump( $ret->exception ); 
                 fb( $ret->message );
                 fb( $ret->exception );
                 fb( $ret->sql );
