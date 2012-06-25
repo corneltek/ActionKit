@@ -116,6 +116,14 @@ class Column extends CascadingAttribute
         return ucfirst($this->name);
     }
 
+    public function getDefaultValue()
+    {
+        if( is_callable($this->default) ) {
+            return call_user_func($this->default);
+        }
+        return $this->default;
+    }
+
     /**************************
      * Widget related methods
      **************************/
@@ -123,6 +131,9 @@ class Column extends CascadingAttribute
 
     /**
      * Render action column as {Type}Widget, with extra options/attributes
+     *
+     *     $this->column('created_on')
+     *         ->renderAs('DateInput', array( 'format' => 'yy-mm-dd' ))
      *
      * @param string $type Widget type
      * @param array $attributes
@@ -145,8 +156,15 @@ class Column extends CascadingAttribute
      * @return string
      */
     public function render($attributes = null) {
-        $widget = $this->createWidget( null , $attributes );
-        return $widget->render();
+        return $this->createWidget( null , $attributes )
+            ->render();
+    }
+
+
+    public function createLabelWidget($widgetClass = null , $attributes = array() )
+    {
+        $class = $widgetClass ?: 'FormKit\Widget\Label';
+        return new $class( $this->getLabel() );
     }
 
     /**
@@ -156,7 +174,7 @@ class Column extends CascadingAttribute
      * @param array  $attributes Widget attributes.
      * @return FormKit\Widget\BaseWidget
      */
-    public function createWidget( $widgetClass = null , $attributes = null ) {
+    public function createWidget( $widgetClass = null , $attributes = array() ) {
         $class = $widgetClass ?: $this->widgetClass;
 
         // convert attributes into widget style attributes
@@ -177,8 +195,8 @@ class Column extends CascadingAttribute
             if( $this->value ) {
                 $newAttributes['value'] = $this->value;
             }
-            elseif( $this->defaultValue ) {
-                $newAttributes['value'] = $this->defaultValue;
+            elseif( $this->default ) {
+                $newAttributes['value'] = $this->getDefaultValue();
             }
         }
 
