@@ -4,7 +4,7 @@ use CascadingAttribute;
 use FormKit;
 
 
-class Column extends CascadingAttribute
+class Param extends CascadingAttribute
 {
     /**
      * @var ActionKit\Action action object referenece
