@@ -1,8 +1,9 @@
 <?php
 namespace ActionKit;
+use ActionKit\Param;
 
 /**
- * Convert LazyORM column to Action column, 
+ * Convert LazyORM column to Action param, 
  * so that we can render with widget (currently).
  */
 class ColumnConvert 
@@ -12,7 +13,7 @@ class ColumnConvert
     {
         $name = $column->name;
 
-        $param = new \ActionKit\Column( $name );
+        $param = new Param( $name );
 
         foreach( $column->attributes as $k => $v ) {
             $param->$k = $v;

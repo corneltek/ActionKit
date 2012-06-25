@@ -6,7 +6,7 @@ class DivFieldView
 {
 
     /**
-     * @var Action Column object
+     * @var ActionKit\Param object
      */
     public $column;
 

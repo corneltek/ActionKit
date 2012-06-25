@@ -168,7 +168,7 @@ class Param extends CascadingAttribute
     }
 
     /**
-     * A simple widget factory for Action Column
+     * A simple widget factory for Action Param
      *
      * @param string $widgetClass Widget Class.
      * @param array  $attributes Widget attributes.

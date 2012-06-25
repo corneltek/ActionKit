@@ -5,7 +5,7 @@
 namespace ActionKit;
 use Exception;
 use FormKit;
-use ActionKit\Column;
+use ActionKit\Param;
 use ActionKit\Result;
 use Universal\Http\HttpRequest;
 
@@ -97,7 +97,7 @@ abstract class Action
 
 
     /**
-     * @var ActionKit\Column[string Column name]
+     * @var ActionKit\Param[string Prama name]
      */
     public $params = array();
 
@@ -417,13 +417,13 @@ abstract class Action
      * Define or get column object from Action.
      *
      * @param string $field Field name
-     * @param string $type Field Type (will be Column Type)
+     * @param string $type Field Type (will be Param Type)
      *
-     * @return ActionKit\Column
+     * @return ActionKit\Param
      *
-     *     $this->param('username'); // use ActionKit\Column
-     *     $this->param('file', 'file' ); // use ActionKit\Column\File
-     *     $this->param('image', 'image' ); // use ActionKit\Column\Image
+     *     $this->param('username'); // use ActionKit\Param
+     *     $this->param('file', 'file' ); // use ActionKit\Param\File
+     *     $this->param('image', 'image' ); // use ActionKit\Param\Image
      *
      */
     public function param( $field , $type = null ) 
@@ -433,7 +433,7 @@ abstract class Action
         }
 
         // default column class
-        $class = 'ActionKit\\Column';
+        $class = 'ActionKit\\Param';
         if( $type ) {
             if( $type[0] !== '+' ) {
                 $class .= '\\' . ucfirst($type);

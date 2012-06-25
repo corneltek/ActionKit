@@ -1,6 +1,6 @@
 <?php
-namespace ActionKit\Column;
-use ActionKit\Column;
+namespace ActionKit\Param;
+use ActionKit\Param;
 use Phifty\UploadFile;
 use Exception;
 use Phifty\SimpleImage;
@@ -9,7 +9,7 @@ use Phifty\SimpleImage;
 /**
  * Preprocess image data fields
  */
-class Image extends Column
+class Image extends Param
 {
 
     // XXX: think about me.

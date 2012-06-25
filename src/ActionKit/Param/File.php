@@ -1,6 +1,6 @@
 <?php
-namespace ActionKit\Column;
-use ActionKit\Column;
+namespace ActionKit\Param;
+use ActionKit\Param;
 use Phifty\UploadFile;
 use Exception;
 
@@ -15,7 +15,7 @@ use Exception;
  *          ->validExtension( array('png') )
  *          ->renameFile(function() {  })
  */
-class File extends Column
+class File extends Param
 {
     public $type = 'file';
 
