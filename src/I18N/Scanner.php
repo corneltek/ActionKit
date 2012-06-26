@@ -8,9 +8,12 @@ use I18N\Exceptions\EncodingException;
 class Scanner
 {
     public $logger;
+
     public $paths = array();
 
     public $plugins = array();
+
+    public $messages = array();
 
     function __construct()
     {
@@ -41,6 +44,10 @@ class Scanner
         }
     }
 
+    public function addMessage($msgId,$msgStr) {
+        $this->messages[ $msgId ] = $msgStr;
+    }
+
     public function scanFile($file) {
         $content = file_get_contents($file);
         // detect encoding
@@ -54,7 +61,7 @@ class Scanner
         $utf8Content = mb_convert_encoding( $content, 'UTF-8' , $encoding );
 
         foreach( $this->plugins as $plugin ) {
-
+            $plugin->scan( $utf8Content, $this );
         }
     }
 }
