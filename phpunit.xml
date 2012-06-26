@@ -17,8 +17,8 @@
             <directory suffix="Test.php">tests/ActionKit</directory>
         </testsuite>
 
-        <testsuite name="I18N">
-            <directory suffix="Test.php">tests/I18N</directory>
+        <testsuite name="I18NKit">
+            <directory suffix="Test.php">tests/I18NKit</directory>
         </testsuite>
 
         <!--
