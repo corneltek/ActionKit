@@ -1,8 +1,9 @@
 <?php
 namespace ActionKit;
+use ActionKit\Param;
 
 /**
- * Convert LazyORM column to Action column, 
+ * Convert LazyORM column to Action param, 
  * so that we can render with widget (currently).
  */
 class ColumnConvert 
@@ -12,7 +13,7 @@ class ColumnConvert
     {
         $name = $column->name;
 
-        $param = new \ActionKit\Column( $name );
+        $param = new Param( $name );
 
         foreach( $column->attributes as $k => $v ) {
             $param->$k = $v;
@@ -20,6 +21,7 @@ class ColumnConvert
 
         $param->name  = $name;
 
+        // load record value
         if( $record ) {
             $param->value = $record->{$name};
         }
@@ -31,14 +33,23 @@ class ColumnConvert
          */
         if( $param->validValues || $param->validPairs ) {
             $param->renderAs( 'SelectInput' );
-        }
-
-        if( $param->name === 'id' ) {
+        } elseif( $param->name === 'id' ) {
             $param->renderAs( 'HiddenInput' );
-        } elseif( ! $param->widgetClass ) {
-            $param->renderAs( 'TextInput' );
         } elseif( $param->renderAs ) {
             $param->renderAs($param->renderAs );
+        } else {
+            // guess input widget from data type
+            $typeMapping = array(
+                'date' => 'DateInput',
+                'datetime' => 'DateTimeInput',
+                'text' => 'TextareaInput',
+            );
+            if( isset($typeMapping[ $param->type ]) ) {
+                $widgetType = $typeMapping[$param->type];
+                $param->renderAs($widgetType);
+            } else {
+                $param->renderAs( 'TextInput' );
+            }
         }
         return $param;
     }
