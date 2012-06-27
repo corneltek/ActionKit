@@ -4,7 +4,15 @@
     webapp() => kernel()
     kernel()->lang() => kernel()->locale
 
+
 # Changes
+
+- kernel()->web is deprecated.
+- CurrentUser config is migrated to service config.
+- build.xml is now ready for Jenkins-CI and Apache ANT
+- scripts/install-deps.sh is updated.
+- phifty.php is moved to bin/phifty from scripts/phifty.php
+- bootstrap script is moved to src/Phifty/Bootstrap.php
 
 六  3/17 13:53:37 2012
 
