@@ -156,7 +156,7 @@ abstract class Action
      *
      * @param array $fields Field names
      */
-    protected function filterOut($fields) 
+    public function filterOut($fields) 
     {
         $args = func_get_args();
         if( count($args) > 1 ) {
@@ -556,7 +556,7 @@ abstract class Action
      */
     public function asView($class, $options = array())
     {
-        return new $class( $this, $options );
+        return new $class($this, $options);
     }
 
 

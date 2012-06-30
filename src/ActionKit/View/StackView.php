@@ -12,7 +12,8 @@ class StackView extends BaseView
     public $method = 'POST';
     public $ajax = false;
 
-    function build()
+
+    public function build()
     {
         // Use Generic Table Layout
         $this->layout = new FormKit\Layout\GenericLayout;
@@ -32,12 +33,18 @@ class StackView extends BaseView
 
         // for each widget, push it into stack
         foreach( $this->action->params as $param ) {
-            if( 'id' === $param->name)
+            if( 'id' === $param->name) {
                 continue;
-            if( in_array($param->name,$this->action->filterOutFields) ) 
+            }
+
+            if( in_array($param->name,$this->action->filterOutFields) ) {
                 continue;
-            $widget = $param->createWidget();
-            $this->layout->addWidget( $widget );
+            }
+
+            if( $this->fields && ! in_array($param->name,$this->fields) ) {
+                continue;
+            }
+            $this->layout->addWidget( $param->createWidget() );
         }
 
         // Add control buttons
@@ -76,8 +83,9 @@ class StackView extends BaseView
         $this->form = $form;
     }
 
-    function render() 
+    public function render() 
     {
+        $this->build();
         return $this->form->render();
     }
 }

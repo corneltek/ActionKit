@@ -56,8 +56,6 @@ class ColumnConvert
         }
         return $param;
     }
-
-
 }
 
 

@@ -8,6 +8,8 @@ abstract class BaseView
 
     public $options;
 
+
+    public $fields;
     /**
      *
      * @param ActionKit\Action $action
@@ -15,27 +17,33 @@ abstract class BaseView
     function __construct($action, $options = array() ) {
         $this->action = $action;
         $this->options = $options;
-        $this->build();
+        if( isset($options['fields']) ) {
+            $this->fields = $options['fields'];
+        }
     }
 
-    function action($action) { 
+    public function fields($fields) {
+        $this->fields = $fields;
+        return $this;
+    }
+
+    public function action($action) { 
         $this->action = $action;
         return $this;
     }
 
-    function options($options) {
+    public function options($options) {
         $this->options = $options;
         return $this;
     }
 
-    function option($key) {
+    public function option($key) {
         if( isset($this->options[$key]) ) {
             return $this->options[$key];
         }
     }
 
     abstract function build();
-
     abstract function render();
 }
 
