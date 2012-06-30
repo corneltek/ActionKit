@@ -73,6 +73,33 @@ class ActionRunner
         }
     }
 
+    public function autoload($class) 
+    {
+        if( ! $this->isCRUDAction($class) )
+            return false;
+
+        /* check if action is in CRUD list */
+        if( isset( $this->crudActions[$class] ) ) {
+            // Generate the crud action
+            //
+            // @see registerCRUD method
+            $gen = new ActionGenerator(array( 'cache' => true ));
+
+            $args = $this->crudActions[$class];
+            $code = $gen->generateClassCodeWithNamespace( $args['ns'], $args['model_name'], $args['type'] )->code;
+
+            // TODO: eval is slower than require
+            //       use a better code generator
+            eval( $code );
+            return true;
+        }
+    }
+
+    public function registerAutoloader() 
+    {
+        spl_autoload_register(array($this,'autoload'));
+    }
+
     /**
      * Add CRUD action class to pool, so we can generate these class later 
      * if needed. (lazy)
