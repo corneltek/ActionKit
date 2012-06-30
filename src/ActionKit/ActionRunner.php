@@ -64,8 +64,8 @@ class ActionRunner
 
             /* translate :: into php namespace */
             $class = $this->getActionClass( $actionName );
-            if( ! class_exists($class,true) && ! $this->isCRUDAction( $class ) ) {
-                throw new Exception( "Action class not found: $actionName $class." );
+            if( ! class_exists($class,true) ) {
+                throw new Exception( "Action class not found: $actionName $class, you might need to setup action autoloader" );
             }
 
             /* register results into hash */
@@ -75,24 +75,22 @@ class ActionRunner
 
     public function autoload($class) 
     {
-        if( ! $this->isCRUDAction($class) )
+        /* check if action is in CRUD list */
+        if( ! isset( $this->crudActions[$class] ) )
             return false;
 
-        /* check if action is in CRUD list */
-        if( isset( $this->crudActions[$class] ) ) {
-            // Generate the crud action
-            //
-            // @see registerCRUD method
-            $gen = new ActionGenerator(array( 'cache' => true ));
+        // Generate the crud action
+        //
+        // @see registerCRUD method
+        $gen = new ActionGenerator(array( 'cache' => true ));
 
-            $args = $this->crudActions[$class];
-            $code = $gen->generateClassCodeWithNamespace( $args['ns'], $args['model_name'], $args['type'] )->code;
+        $args = $this->crudActions[$class];
+        $code = $gen->generateClassCodeWithNamespace( $args['ns'], $args['model_name'], $args['type'] )->code;
 
-            // TODO: eval is slower than require
-            //       use a better code generator
-            eval( $code );
-            return true;
-        }
+        // TODO: eval is slower than require
+        //       use a better code generator
+        eval( $code );
+        return true;
     }
 
     public function registerAutoloader() 
@@ -129,11 +127,6 @@ class ActionRunner
         if( count($nsParts) >= 3 ) {
             // XXX:
         }
-    }
-
-    public function isCRUDAction($class)
-    {
-        return isset( $this->crudActions[$class] );
     }
 
     public function isInvalidActionName( $actionName ) 
