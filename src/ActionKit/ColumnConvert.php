@@ -31,12 +31,18 @@ class ColumnConvert
          *
          * set default render widget
          */
-        if( $param->validValues || $param->validPairs ) {
+
+        // copy widget attributes
+        if( $column->widgetAttributes ) {
+            $param->widgetAttributes = $column->widgetAttributes;
+        }
+
+        if( $column->validValues || $column->validPairs ) {
             $param->renderAs( 'SelectInput' );
-        } elseif( $param->name === 'id' ) {
+        } elseif( $column->name === 'id' ) {
             $param->renderAs( 'HiddenInput' );
-        } elseif( $param->renderAs ) {
-            $param->renderAs($param->renderAs );
+        } elseif( $column->renderAs ) {
+            $param->renderAs( $column->renderAs );
         } else {
             // guess input widget from data type
             $typeMapping = array(
