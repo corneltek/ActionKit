@@ -91,10 +91,8 @@ class Param extends CascadingAttribute
                 return array(false, __('Field %1 is required.' , $this->getLabel()  ) );
             }
         }
-
         if( $this->validator ) {
-            $func = $this->validator;
-            return $func( $value );
+            return call_user_func($this->validator,$value);
         }
         return true;
     }

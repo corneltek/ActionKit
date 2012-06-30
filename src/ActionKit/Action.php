@@ -390,8 +390,6 @@ abstract class Action
         return @$_FILES;
     }
 
-
-
     /**
      * Set argument
      *
@@ -400,9 +398,12 @@ abstract class Action
      *
      * @return this
      */
-    public function setArg($name,$value) 
+    public function setArgument($name,$value) 
     { 
         $this->args[ $name ] = $value ; 
+        if( $param = $this->getParam( $name ) ) {
+            $param->value = $value;
+        }
         return $this; 
     }
 
@@ -710,7 +711,15 @@ abstract class Action
         }
     }
 
+    public function __set($name,$value) 
+    {
+        $this->setArgument($name,$value);
+    }
 
+    public function __get($name)
+    {
+        return $this->arg($name);
+    }
 
 
 
