@@ -12,14 +12,11 @@ class ColumnConvert
     static function toParam( $column , $record = null )
     {
         $name = $column->name;
-
         $param = new Param( $name );
-
         foreach( $column->attributes as $k => $v ) {
             $param->$k = $v;
         }
 
-        $param->name  = $name;
 
         // load record value
         if( $record ) {
@@ -27,9 +24,9 @@ class ColumnConvert
         }
 
         /**
-         * Convert column type to param type
+         * Convert column type to param type.
          *
-         * set default render widget
+         * Set default render widget.
          */
 
         // copy widget attributes
