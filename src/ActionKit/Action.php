@@ -1,13 +1,11 @@
 <?php
-/*
-    vim:fdm=marker:
- */
 namespace ActionKit;
 use Exception;
 use FormKit;
 use ActionKit\Param;
 use ActionKit\Result;
 use Universal\Http\HttpRequest;
+use InvalidArgumentException;
 
 /**
 
@@ -228,7 +226,7 @@ abstract class Action
         }
     }
 
-    function runInit()
+    public function runInit()
     {
         foreach( $this->params as $key => $param ) {
             $param->init( $this->args );
@@ -241,12 +239,10 @@ abstract class Action
         /* run column methods */
         // XXX: merge them all...
         $this->runPreinit();
-        $error = $this->runValidate();
-        if( $error )
+        if( $this->runValidate() )  // if found error, return false;
             return false;
 
         $this->runInit();
-
         $this->beforeRun();
         $this->run();
         $this->afterRun();
@@ -401,9 +397,6 @@ abstract class Action
     public function setArgument($name,$value) 
     { 
         $this->args[ $name ] = $value ; 
-        if( $param = $this->getParam( $name ) ) {
-            $param->value = $value;
-        }
         return $this; 
     }
 
@@ -713,15 +706,25 @@ abstract class Action
 
     public function __set($name,$value) 
     {
-        $this->setArgument($name,$value);
+        if( $param = $this->getParam( $name ) ) {
+            $param->value = $value;
+        }
+        else {
+            throw new InvalidArgumentException("Parameter $name not found.");
+        }
+    }
+
+    public function __isset($name)
+    {
+        return isset($this->params[$name]);
     }
 
     public function __get($name)
     {
-        return $this->arg($name);
+        if( $param = $this->getParam($name) ) {
+            return $param;
+        }
     }
-
-
 
     /** 
      * Report success
