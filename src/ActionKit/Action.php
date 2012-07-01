@@ -1,13 +1,11 @@
 <?php
-/*
-    vim:fdm=marker:
- */
 namespace ActionKit;
 use Exception;
 use FormKit;
 use ActionKit\Param;
 use ActionKit\Result;
 use Universal\Http\HttpRequest;
+use InvalidArgumentException;
 
 /**
 
@@ -158,7 +156,7 @@ abstract class Action
      *
      * @param array $fields Field names
      */
-    protected function filterOut($fields) 
+    public function filterOut($fields) 
     {
         $args = func_get_args();
         if( count($args) > 1 ) {
@@ -228,7 +226,7 @@ abstract class Action
         }
     }
 
-    function runInit()
+    public function runInit()
     {
         foreach( $this->params as $key => $param ) {
             $param->init( $this->args );
@@ -241,12 +239,10 @@ abstract class Action
         /* run column methods */
         // XXX: merge them all...
         $this->runPreinit();
-        $error = $this->runValidate();
-        if( $error )
+        if( $this->runValidate() )  // if found error, return false;
             return false;
 
         $this->runInit();
-
         $this->beforeRun();
         $this->run();
         $this->afterRun();
@@ -390,8 +386,6 @@ abstract class Action
         return @$_FILES;
     }
 
-
-
     /**
      * Set argument
      *
@@ -400,7 +394,7 @@ abstract class Action
      *
      * @return this
      */
-    public function setArg($name,$value) 
+    public function setArgument($name,$value) 
     { 
         $this->args[ $name ] = $value ; 
         return $this; 
@@ -562,7 +556,7 @@ abstract class Action
      */
     public function asView($class, $options = array())
     {
-        return new $class( $this, $options );
+        return new $class($this, $options);
     }
 
 
@@ -710,9 +704,27 @@ abstract class Action
         }
     }
 
+    public function __set($name,$value) 
+    {
+        if( $param = $this->getParam( $name ) ) {
+            $param->value = $value;
+        }
+        else {
+            throw new InvalidArgumentException("Parameter $name not found.");
+        }
+    }
 
+    public function __isset($name)
+    {
+        return isset($this->params[$name]);
+    }
 
-
+    public function __get($name)
+    {
+        if( $param = $this->getParam($name) ) {
+            return $param;
+        }
+    }
 
     /** 
      * Report success
