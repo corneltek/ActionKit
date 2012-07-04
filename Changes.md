@@ -7,6 +7,17 @@
 
 # Changes
 
+
+## develop branch
+
+- Move CurrentUser to Phifty\Security\CurrentUser
+- Update current user service config
+
+  CurrentUserService:
+    Class: \Phifty\Security\CurrentUser
+    Model: \User\Model\User
+
+
 - kernel()->web is deprecated.
 - CurrentUser config is migrated to service config.
 - build.xml is now ready for Jenkins-CI and Apache ANT
