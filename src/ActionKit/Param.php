@@ -91,10 +91,8 @@ class Param extends CascadingAttribute
                 return array(false, __('Field %1 is required.' , $this->getLabel()  ) );
             }
         }
-
         if( $this->validator ) {
-            $func = $this->validator;
-            return $func( $value );
+            return call_user_func($this->validator,$value);
         }
         return true;
     }
@@ -167,6 +165,14 @@ class Param extends CascadingAttribute
         return new $class( $this->getLabel() );
     }
 
+    public function getValidValues() 
+    {
+        if( is_callable($this->validValues) ) {
+            return call_user_func($this->validValues);
+        }
+        return $this->validValues;
+    }
+
     /**
      * A simple widget factory for Action Param
      *
@@ -184,7 +190,7 @@ class Param extends CascadingAttribute
             $newAttributes['label'] = $label;
         }
         if( $this->validValues ) {
-            $newAttributes['options'] = $this->validValues;
+            $newAttributes['options'] = $this->getValidValues();
         }
         if( $this->immutable ) {
             $newAttributes['readonly'] = true;

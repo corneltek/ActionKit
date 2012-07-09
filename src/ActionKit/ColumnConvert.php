@@ -12,14 +12,11 @@ class ColumnConvert
     static function toParam( $column , $record = null )
     {
         $name = $column->name;
-
         $param = new Param( $name );
-
         foreach( $column->attributes as $k => $v ) {
             $param->$k = $v;
         }
 
-        $param->name  = $name;
 
         // load record value
         if( $record ) {
@@ -27,16 +24,22 @@ class ColumnConvert
         }
 
         /**
-         * Convert column type to param type
+         * Convert column type to param type.
          *
-         * set default render widget
+         * Set default render widget.
          */
-        if( $param->validValues || $param->validPairs ) {
+
+        // copy widget attributes
+        if( $column->widgetAttributes ) {
+            $param->widgetAttributes = $column->widgetAttributes;
+        }
+
+        if( $column->validValues || $column->validPairs ) {
             $param->renderAs( 'SelectInput' );
-        } elseif( $param->name === 'id' ) {
+        } elseif( $column->name === 'id' ) {
             $param->renderAs( 'HiddenInput' );
-        } elseif( $param->renderAs ) {
-            $param->renderAs($param->renderAs );
+        } elseif( $column->renderAs ) {
+            $param->renderAs( $column->renderAs );
         } else {
             // guess input widget from data type
             $typeMapping = array(
@@ -53,8 +56,6 @@ class ColumnConvert
         }
         return $param;
     }
-
-
 }
 
 

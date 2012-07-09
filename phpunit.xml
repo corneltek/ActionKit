@@ -16,6 +16,11 @@
         <testsuite name="ActionKit">
             <directory suffix="Test.php">tests/ActionKit</directory>
         </testsuite>
+
+        <testsuite name="I18NKit">
+            <directory suffix="Test.php">tests/I18NKit</directory>
+        </testsuite>
+
         <!--
         <testsuite name="Functional">
             <directory suffix="Test.php">tests/functional</directory>
