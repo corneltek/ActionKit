@@ -6,6 +6,12 @@
          convertWarningsToExceptions="true"
          verbose="true">
 
+  <filter>
+    <whitelist>
+        <directory suffix=".php">src/</directory>
+    </whitelist>
+  </filter>
+
   <testsuites>
 
         <testsuite name="Phifty">
@@ -36,4 +42,6 @@
     <log type="junit" target="build/logs/junit.xml"
         logIncompleteSkipped="false"/>
   </logging>
+
+
 </phpunit>
