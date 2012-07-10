@@ -184,6 +184,10 @@ abstract class Action
         }
     }
 
+    public function isAjax()
+    {  
+        return isset( $_REQUEST['__ajax_request'] );
+    }
 
     public function __invoke() 
     {
@@ -214,8 +218,21 @@ abstract class Action
         return substr( $sig , $pos + strlen('::Action::') );
     }
 
-    public function params() 
+    public function params($all = false) 
     {
+        return $this->getParams($all);
+    }
+
+    public function getParams( $all = false ) {
+        $self = $this;
+        if( $all )
+            return $this->params;
+
+        if( $this->filterOutFields ) {
+            return array_diff_key( $this->params, $this->filterOutFields); // diff keys by blacklist
+        } elseif ( $this->takeFields ) {
+            return array_intersect_key($this->params,$this->takeFields );  // find white list
+        }
         return $this->params;
     }
 
@@ -251,10 +268,36 @@ abstract class Action
         return $this->param($field)->createWidget( $widgetClass );
     }
 
-    public function isAjax()
-    {  
-        return isset( $_REQUEST['__ajax_request'] );
+
+    /**
+     * Create and get displayable widgets 
+     */
+    public function getWidgets($all = false) 
+    {
+        $widgets = array();
+        // for each widget, push it into stack
+        foreach( $this->params as $param ) {
+            // we ignore id column, 
+            // because we need to render the id field with 
+            // HiddenInput manually.
+            if( 'id' === $param->name) {
+                continue;
+            }
+
+            if( $this->filterOutFields && in_array($param->name,$action->filterOutFields) ) {
+                continue;
+            }
+
+            if( $this->fields && ! in_array($param->name,$this->fields) ) {
+                continue;
+            }
+
+            $widgets[] = $param->createWidget();
+        }
+        return $widgets;
+
     }
+
 
 
     /**
