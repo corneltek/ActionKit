@@ -134,10 +134,10 @@ abstract class Action
         $param = $this->params[ $name ];
         $ret = (array) $param->validate( @$this->args[$name] );
         if( is_array($ret) ) {
-            if( $ret[0] ) {
+            if( $ret[0] ) { // success
                 # $this->result->addValidation( $name, array( "valid" => $ret[1] ));
             } else {
-                $this->result->addValidation( $name, array( 'invalid' => @$ret[1] ));
+                $this->result->addValidation( $name, array( 'invalid' => @$ret[1] ));  // $ret[1] = message
                 return true;
             }
         } else {
@@ -231,7 +231,7 @@ abstract class Action
         if( $this->filterOutFields ) {
             return array_diff_key( $this->params, $this->filterOutFields); // diff keys by blacklist
         } elseif ( $this->takeFields ) {
-            return array_intersect_key($this->params,$this->takeFields );  // find white list
+            return array_intersect_key($this->params,$this->takeFields);  // find white list
         }
         return $this->params;
     }
@@ -250,9 +250,11 @@ abstract class Action
 
     public function removeParam($field) 
     {
-        $param = @$this->params[$field];
-        unset($this->params[$field]);
-        return $param;
+        if( isset($this->params[$field]) ) {
+            $param = $this->params[$field];
+            unset($this->params[$field]);
+            return $param;
+        }
     }
 
 
