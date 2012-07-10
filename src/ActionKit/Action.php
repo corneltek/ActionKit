@@ -14,6 +14,8 @@ abstract class Action
     public $result; // action result
 
 
+    public $ignoreParamsForView = array();
+
     /**
      * @var ActionKit\Param[string Prama name]
      */
@@ -70,7 +72,19 @@ abstract class Action
 
 
     /**
-     * Setup filter out fields,
+     * For Schema, setup to bypass specific widgets for form 
+     * rendering
+     *
+     * @param array $paramNames 
+     */
+    public function ignoreParamsForView($paramNames) {
+        $this->ignoreParamsForView = (array) $paramNames;
+        return $this;
+    }
+
+
+    /**
+     * For Schema, Setup filter out fields,
      * When filterOut fields is set, 
      * Action will filter out those columns when executing action
      * Action View will skip rendering these column
@@ -87,6 +101,10 @@ abstract class Action
         }
         return $this;
     }
+
+
+
+
 
     protected function validateParam( $name )
     {
