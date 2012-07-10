@@ -9,36 +9,6 @@ use InvalidArgumentException;
 
 /**
 
-    Render Action:
-
-        $a = new UpdatePasswordAction;
-        $a->widget('username')->render(array( 
-            'class' => 'extra-class'
-            'id' => 'field-id'
-        ));
-
-        $a->widget('user_type')->render(array( 
-            'options' => array( .... )
-        ));
-
-        // force widget type
-        $a->widget('confirmed','RadioInput')->render(array(
-            'false', 'true'
-        ));
-
-
-    In Twig template, we can render action widget:
-
-        {{
-            a.widget('username').render({ 
-                class: 'extra-class',
-                id: 'field-id' }) 
-        |raw}}
-
-    Render field by Action render method:
-
-        {{ CRUD.Action.render('link',{ 'size': 60 }) | raw }}
-
     Class:
 
         function schema() 
