@@ -14,8 +14,6 @@ abstract class Action
     public $result; // action result
 
 
-    public $ignoreParamsForView = array();
-
     /**
      * @var ActionKit\Param[string Prama name]
      */
@@ -30,9 +28,15 @@ abstract class Action
 
 
     /**
-     * @public array filter out fields
+     * @public array filter out fields (blacklist)
      */
-    public $filterOutFields = array();
+    public $filterOutFields;
+
+
+    /**
+     * @public array take these fields only.
+     */
+    public $takeFields;
 
     /**
      * Constructing Action objects
@@ -52,9 +56,19 @@ abstract class Action
         // initialize parameter objects
         $this->schema();
 
-        if( !empty($this->filterOutFields) ) {
+
+        if( $this->takeFields ) {
+            // take these fields only
+            $newArgs = array();
+            foreach( $this->takeFields as $field ) {
+                $newArgs[ $field ] = $this->arg($field);
+            }
+            $this->args = $newArgs;
+        }
+        elseif( $this->filterOutFields ) {
             foreach( $this->filterOutFields as $field ) {
-                unset( $this->args[ $field ] );
+                if( isset($this->args[$field]))
+                    unset($this->args[ $field ]);
             }
         }
 
@@ -71,14 +85,13 @@ abstract class Action
     }
 
 
-    /**
-     * For Schema, setup to bypass specific widgets for form 
-     * rendering
-     *
-     * @param array $paramNames 
-     */
-    public function ignoreParamsForView($paramNames) {
-        $this->ignoreParamsForView = (array) $paramNames;
+    protected function takes($fields) {
+        $args = func_get_args();
+        if( count($args) > 1 ) {
+            $this->takeFields = (array) $args;
+        } else {
+            $this->takeFields = (array) $fields;
+        }
         return $this;
     }
 
