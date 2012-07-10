@@ -56,7 +56,6 @@ abstract class Action
         // initialize parameter objects
         $this->schema();
 
-
         if( $this->takeFields ) {
             // take these fields only
             $newArgs = array();
@@ -104,7 +103,7 @@ abstract class Action
      *
      * @param array $fields Field names
      */
-    public function filterOut($fields) 
+    protected function filterOut($fields) 
     {
         $args = func_get_args();
         if( count($args) > 1 ) {
