@@ -7,86 +7,6 @@ use ActionKit\Result;
 use Universal\Http\HttpRequest;
 use InvalidArgumentException;
 
-/**
-
-    Render Action:
-
-        $a = new UpdatePasswordAction;
-        $a->widget('username')->render(array( 
-            'class' => 'extra-class'
-            'id' => 'field-id'
-        ));
-
-        $a->widget('user_type')->render(array( 
-            'options' => array( .... )
-        ));
-
-        // force widget type
-        $a->widget('confirmed','RadioInput')->render(array(
-            'false', 'true'
-        ));
-
-
-    In Twig template, we can render action widget:
-
-        {{
-            a.widget('username').render({ 
-                class: 'extra-class',
-                id: 'field-id' }) 
-        |raw}}
-
-    Render field by Action render method:
-
-        {{ CRUD.Action.render('link',{ 'size': 60 }) | raw }}
-
-    Class:
-
-        function schema() 
-        {
-            // For record actions, we can convert the record columns
-            $this->useRecordSchema();
-
-            $this->param( 'username' )
-                ->label( _('Username') )
-                ->useSuggestion();
-
-            $this->param( 'password' )
-                ->useValidator();
-
-            $this->param( 'country' )
-                ->useCompleter();
-
-            //    For record actions, sometimes we don't want 
-            //    some parameter come into database operation,
-            //    we can use ->filter() method to filter out parameters
-            //    
-            //    By doing this, when an action is created,
-            //    this parameter is filtered out from arguments.
-            //    
-            //    When rendering action view with this action, 
-            //    do not render these fields.
-            $this->filterOut(array('auth_token'));
-        }
-
-
-        function validatePassword( $value , $args ) 
-        {
-            return $this->valid( $message );
-
-            # or
-            return $this->invalid( $message );
-        }
-
-        function suggestUsername( $value , $args ) {
-            return;  # not to suggest
-            return $this->suggest( "$value is used. use: " , array( ... ) );
-        }
-
-        function completeCountry( $value , $args ) {
-
-            ...
-        }
-    */
 abstract class Action 
 {
     public $currentUser;
@@ -113,6 +33,7 @@ abstract class Action
     public $filterOutFields = array();
 
     /**
+     * Constructing Action objects
      *
      * @param array $args The request arguments
      * @param mixed $currentUser
