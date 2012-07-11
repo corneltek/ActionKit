@@ -34,7 +34,7 @@ class StackView extends BaseView
         $form->method($this->method);
 
         if( $formId = $this->option('form_id') ) {
-            $form->setId( $formId );
+            $form->addId( $formId );
         }
 
         if( $formClass = $this->option('form_class') ) {

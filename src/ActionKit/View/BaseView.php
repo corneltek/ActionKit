@@ -6,8 +6,7 @@ abstract class BaseView
 
     public $action;
 
-    public $options;
-
+    public $options = array();
 
     public $fields;
     /**
