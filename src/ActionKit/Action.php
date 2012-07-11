@@ -237,8 +237,9 @@ abstract class Action
 
     public function getParams( $all = false ) {
         $self = $this;
-        if( $all )
+        if( $all ) {
             return $this->params;
+        }
 
         if( $this->filterOutFields ) {
             return array_diff_key( $this->params, $this->filterOutFields); // diff keys by blacklist
