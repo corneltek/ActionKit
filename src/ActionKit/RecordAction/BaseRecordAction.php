@@ -33,7 +33,8 @@ abstract class BaseRecordAction extends Action
             }
         }
 
-        /* init id column */
+        // Convert id column object from record schema to
+        // Action param object.
         if( $column = $this->record->getColumn('id') ) {
             if( ! isset($this->params[$column->name] ) ) {
                 $this->params[ $column->name ] = ColumnConvert::toParam( $column , $this->record );
@@ -44,6 +45,11 @@ abstract class BaseRecordAction extends Action
         parent::__construct( $args , $currentUser );
     }
 
+
+    /**
+     * This method takes column objects from record schema,
+     * and convert them into param objects.
+     */
     protected function useRecordSchema()
     {
         $this->initRecordColumn();

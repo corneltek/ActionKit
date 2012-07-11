@@ -18,17 +18,13 @@ class ColumnConvert
         }
 
 
-        // load record value
+        // if we got record, load the value from it.
         if( $record ) {
-            $param->value = $record->{$name};
+            // $param->value = $record->{$name};
+            $param->default = $record->{$name};
         }
 
-        /**
-         * Convert column type to param type.
-         *
-         * Set default render widget.
-         */
-
+        //  Convert column type to param type.
         // copy widget attributes
         if( $column->widgetAttributes ) {
             $param->widgetAttributes = $column->widgetAttributes;
