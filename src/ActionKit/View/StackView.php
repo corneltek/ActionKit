@@ -37,6 +37,9 @@ class StackView extends BaseView
 
         // add widgets to layout.
         foreach( $widgets as $widget ) {
+
+            // put HiddenInput widget out of table,
+            // so that we don't have empty cells.
             if( is_a($widget,'FormKit\Widget\HiddenInput') ) {
                 $form->append($widget);
             } else {

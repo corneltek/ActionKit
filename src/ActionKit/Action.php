@@ -179,12 +179,8 @@ abstract class Action
 
     function runPreinit()
     {
-        $self = $this;
-        return array_map(function($param) use($self) { 
-            $self->preinit($self->args);
-        }, $this->params);
-
-        foreach( $this->params as $key => $param ) {
+        // foreach is always faster than array_map
+        foreach( $this->params as $param ) {
             $param->preinit( $this->args );
         }
     }
