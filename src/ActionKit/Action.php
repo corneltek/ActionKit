@@ -6,8 +6,9 @@ use ActionKit\Param;
 use ActionKit\Result;
 use Universal\Http\HttpRequest;
 use InvalidArgumentException;
+use IteratorAggregate;
 
-abstract class Action 
+abstract class Action implements IteratorAggregate
 {
     public $currentUser;
 
@@ -399,13 +400,13 @@ abstract class Action
      *
      * @return this
      */
-    public function setArgument($name,$value) 
+    function setArgument($name,$value) 
     { 
         $this->args[ $name ] = $value ; 
         return $this; 
     }
 
-    public function setArgs($args) 
+    function setArgs($args) 
     { 
         $this->args = array_merge($this->args , $args );
         return $this; 
@@ -425,7 +426,7 @@ abstract class Action
      *     $this->param('image', 'image' ); // use ActionKit\Param\Image
      *
      */
-    public function param( $field , $type = null ) 
+    function param( $field , $type = null ) 
     {
         if( isset($this->params[ $field ]) ) {
             return $this->params[ $field ];
@@ -488,7 +489,7 @@ abstract class Action
      *
      * @param string $field field name
      * */
-    public function complete( $field ) {
+    function complete( $field ) {
         $param = $this->getParam( $field );
         if( ! $param )
             die( 'action param not found.' );
@@ -506,7 +507,7 @@ abstract class Action
      *
      * @return ActionKit\Result
      */
-    public function getResult() 
+    function getResult() 
     {
         return $this->result; 
     }
@@ -518,7 +519,7 @@ abstract class Action
      *
      * @param string $path
      */
-    public function redirect( $path ) {
+    function redirect( $path ) {
 
         /* for ajax request, we should redirect by json result,
          * for normal post, we should redirect directly. */
@@ -539,7 +540,7 @@ abstract class Action
      * @param string $path
      * @param integer $secs
      */
-    public function redirectLater( $path , $secs = 1 )
+    function redirectLater( $path , $secs = 1 )
     {
         if( $this->isAjax() ) {
             // XXX: more support.
@@ -559,7 +560,7 @@ abstract class Action
      *
      * @return ActionKit\View\BaseView View object
      */
-    public function asView($class, $options = array())
+    function asView($class, $options = array())
     {
         return new $class($this, $options);
     }
@@ -571,7 +572,7 @@ abstract class Action
      *
      * @return string Signature string
      */
-    public function getSignature()
+    function getSignature()
     {
         return str_replace( '\\' , '::' , get_class($this) );
     }
@@ -585,7 +586,7 @@ abstract class Action
      * @param array $attrs Attributes
      * @return string HTML string
      */
-    public function renderWidget( $name , $type = null , $attrs = array() )
+    function renderWidget( $name , $type = null , $attrs = array() )
     {
         return $this->getParam( $name )->createWidget($type,$attrs)->render();
     }
@@ -599,7 +600,7 @@ abstract class Action
      * @param string $fieldViewClass
      * @param array $attrs 
      */
-    public function renderField( $name , $fieldViewClass = 'ActionKit\FieldView\DivFieldView' , $attrs = array() )
+    function renderField( $name , $fieldViewClass = 'ActionKit\FieldView\DivFieldView' , $attrs = array() )
     {
         if( ! $fieldViewClass ) {
             $fieldViewClass = 'ActionKit\FieldView\DivFieldView';
@@ -617,7 +618,7 @@ abstract class Action
      * @param string $name parameter name
      * @param array $attrs
      */
-    public function renderLabel( $name , $attrs = array() ) 
+    function renderLabel( $name , $attrs = array() ) 
     {
         $label = $this->getParam( $name )->createLabelWidget();
         return $label->render( $attrs );
@@ -630,7 +631,7 @@ abstract class Action
      * @param string[] $fields Field names
      * @return string HTML string
      */
-    public function renderWidgets( $fields , $type = null, $attributes = array() )
+    function renderWidgets( $fields , $type = null, $attributes = array() )
     {
         $html = '';
         foreach( $fields as $field ) {
@@ -645,7 +646,7 @@ abstract class Action
      * @param array $attrs Attributes
      * @return string HTML string
      */
-    public function renderSubmitWidget($attrs = array() )
+    function renderSubmitWidget($attrs = array() )
     {
         $submit = new FormKit\Widget\SubmitInput;
         return $submit->render($attrs);
@@ -659,7 +660,7 @@ abstract class Action
      * @param array $attrs Attributes
      * @return string HTML string
      */
-    public function renderButtonWidget($attrs = array() )
+    function renderButtonWidget($attrs = array() )
     {
         $button = new FormKit\Widget\ButtonInput;
         return $button->render($attrs);
@@ -673,7 +674,7 @@ abstract class Action
      *
      * @return string Hidden input HTML
      */
-    public function renderSignatureWidget($attrs = array() )
+    function renderSignatureWidget($attrs = array() )
     {
         $hidden = new FormKit\Widget\HiddenInput('action', 
                 array( 'value' => $this->getSignature() ));
@@ -690,7 +691,7 @@ abstract class Action
      * @param array $attrs  field attributes
      * @return string HTML string
      */
-    public function render( $name = null , $attrs = array() ) 
+    function render( $name = null , $attrs = array() ) 
     {
         if( $name ) {
             if( $widget = $this->widget( $name ) )
@@ -709,7 +710,7 @@ abstract class Action
         }
     }
 
-    public function __set($name,$value) 
+    function __set($name,$value) 
     {
         if( $param = $this->getParam( $name ) ) {
             $param->value = $value;
@@ -719,16 +720,19 @@ abstract class Action
         }
     }
 
-    public function __isset($name)
+    function __isset($name)
     {
         return isset($this->params[$name]);
     }
 
-    public function __get($name)
+    function __get($name)
     {
-        if( $param = $this->getParam($name) ) {
-            return $param;
-        }
+        return $this->getParam($name);
+    }
+
+
+    function getIterator() { 
+        return new ArrayIterator($this->params);
     }
 
     /** 
