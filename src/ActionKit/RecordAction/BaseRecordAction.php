@@ -1,26 +1,35 @@
 <?php
 namespace ActionKit\RecordAction;
-use Exception;
 use ActionKit\Action;
 use ActionKit\ColumnConvert;
 use ActionKit\ActionGenerator;
+use ActionKit\Exception\ActionException;
 
 abstract class BaseRecordAction extends Action
 {
     const TYPE = 'base';
 
+
+    /**
+     *
+     * @var Phifty\Model
+     */
     public $record; // record schema object
 
+
+    /**
+     * @var string Record class
+     */
     public $recordClass;
 
     public function __construct( $args = array(), $record = null, $currentUser = null ) 
     {
         // record name is in Camel case
         if( ! $this->recordClass ) {
-            throw new Exception( sprintf('Record class of "%s" is not specified.' , get_class($this) ));
+            throw new ActionException( sprintf('Record class is not specified.' , $this ));
         }
         if( $record && ! is_a($record,'LazyRecord\BaseModel') ) {
-            throw new Exception( 'The record object you specified is not a BaseModel object.' );
+            throw new ActionException( 'The record object you specified is not a BaseModel object.' , $this );
         }
 
         $this->record = $record ?: new $this->recordClass;
@@ -28,7 +37,7 @@ abstract class BaseRecordAction extends Action
         if( ! $record ) {   // for create action, we don't need to create record
             if( $this->getType() !== 'create' ) {
                 if( ! $this->loadRecordFromArguments( $args ) ) {
-                    throw new Exception('Record action ' . $this->getSignature() . ' can not load record');
+                    throw new ActionException('Record action can not load record', $this );
                 }
             }
         }
@@ -75,7 +84,7 @@ abstract class BaseRecordAction extends Action
     function initRecordColumn()
     {
         if( ! $this->record ) {
-            throw new Exception('Record object is empty.');
+            throw new ActionException('Record object is empty.', $this );
         }
 
         foreach( $this->record->getColumns() as $column ) {
