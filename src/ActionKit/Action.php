@@ -295,16 +295,13 @@ abstract class Action
 
     /**
      * Create and get displayable widgets 
+     *
+     * @param boolean $all get all parameters ? or filter paramemters
      */
     function getWidgets($all = false) 
     {
         $widgets = array();
-
-        // for each widget, push it into stack
         foreach( $this->getParams() as $param ) {
-            // we ignore id column, 
-            // because we need to render the id field with 
-            // HiddenInput manually.
             $widgets[] = $param->createWidget();
         }
         return $widgets;
