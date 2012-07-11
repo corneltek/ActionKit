@@ -12,36 +12,6 @@ class StackView extends BaseView
     public $method = 'POST';
     public $ajax = false;
 
-
-
-    /**
-     * Get Widgets from action
-     */
-    public function getActionWidgets($action)
-    {
-        $widgets = array();
-        // for each widget, push it into stack
-        foreach( $action->params as $param ) {
-            // we ignore id column, 
-            // because we need to render the id field with 
-            // HiddenInput manually.
-            if( 'id' === $param->name) {
-                continue;
-            }
-
-            if( $action->filterOutFields && in_array($param->name,$action->filterOutFields) ) {
-                continue;
-            }
-
-            if( $this->fields && ! in_array($param->name,$this->fields) ) {
-                continue;
-            }
-
-            $widgets[] = $param->createWidget();
-        }
-        return $widgets;
-    }
-
     public function build()
     {
         // Use Generic Table Layout
@@ -63,7 +33,7 @@ class StackView extends BaseView
         $form = new FormKit\Element\Form;
         $form->method($this->method);
 
-        $widgets = $this->getActionWidgets( $this->action );
+        $widgets = $this->action->getWidgets();
 
         // add widgets to layout.
         foreach( $widgets as $widget ) {

@@ -172,6 +172,11 @@ abstract class Action
 
     function runPreinit()
     {
+        $self = $this;
+        return array_map(function($param) use($self) { 
+            $self->preinit($self->args);
+        }, $this->params);
+
         foreach( $this->params as $key => $param ) {
             $param->preinit( $this->args );
         }
@@ -277,8 +282,10 @@ abstract class Action
     public function getWidgets($all = false) 
     {
         $widgets = array();
+
         // for each widget, push it into stack
-        foreach( $this->params as $param ) {
+        foreach( $this->getParams() as $name => $param ) {
+            
             // we ignore id column, 
             // because we need to render the id field with 
             // HiddenInput manually.
@@ -299,8 +306,6 @@ abstract class Action
         return $widgets;
 
     }
-
-
 
     /**
      * Get current user
