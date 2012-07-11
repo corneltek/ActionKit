@@ -10,7 +10,16 @@ use InvalidArgumentException;
 abstract class Action 
 {
     public $currentUser;
+
+    /**
+     * @var array
+     */
     public $args = array();   // post,get args for action
+
+
+    /**
+     * @var ActionKit\Result
+     */
     public $result; // action result
 
 
@@ -72,14 +81,12 @@ abstract class Action
         }
 
         // load param values from $arguments
-        foreach( $this->args as $key => $val ) {
-            if( $this->hasParam($key) ) {
-                $param = $this->param($key);
-                $param->value( $val );
-            }
+        $overlap = array_intersect_key($this->args,$this->params);
+        foreach( $overlap as $name => $val ) {
+            $this->param($name)->value($val);
         }
-
-        $this->result->args( $this->args );
+        
+        $this->result->args( $this->args ); // save request arguments
         $this->init();
     }
 
