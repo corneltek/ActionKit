@@ -241,11 +241,12 @@ abstract class Action
             return $this->params;
         }
 
-        if( $this->filterOutFields ) {
-            return array_diff_key( $this->params, $this->filterOutFields); // diff keys by blacklist
-        } elseif ( $this->takeFields ) {
-            return array_intersect_key($this->params,$this->takeFields);  // find white list
+        if ( $this->takeFields ) {
+            return array_intersect_key($this->params, array_fill_keys($this->takeFields,1) );  // find white list
         }
+        elseif( $this->filterOutFields ) {
+            return array_diff_key( $this->params, array_fill_keys($this->filterOutFields,1) ); // diff keys by blacklist
+        } 
         return $this->params;
     }
 
@@ -302,10 +303,6 @@ abstract class Action
             }
 
             if( $this->filterOutFields && in_array($param->name,$action->filterOutFields) ) {
-                continue;
-            }
-
-            if( $this->fields && ! in_array($param->name,$this->fields) ) {
                 continue;
             }
 
