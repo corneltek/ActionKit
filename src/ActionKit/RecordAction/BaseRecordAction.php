@@ -131,6 +131,8 @@ abstract class BaseRecordAction extends Action
 
     /**
      * Set record 
+     *
+     * @param Phifty\Model $record
      */
     function setRecord($record)
     {
