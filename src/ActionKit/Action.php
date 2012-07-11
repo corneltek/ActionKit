@@ -381,11 +381,6 @@ abstract class Action
         return @$_FILES[ $name ];
     }
 
-    
-    public function getFiles() 
-    {
-        return @$_FILES;
-    }
 
     /**
      * Set argument
