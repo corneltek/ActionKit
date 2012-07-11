@@ -174,6 +174,7 @@ abstract class BaseRecordAction extends Action
         $gen = new ActionGenerator(array( 'cache' => true ));
         $ret = $gen->generateClassCode( $recordClass , $type );
 
+        // trigger spl classloader if needed.
         if( class_exists($ret->action_class,true) ) {
             return $ret->action_class;
         }
