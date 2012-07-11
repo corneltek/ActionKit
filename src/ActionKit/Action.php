@@ -89,6 +89,13 @@ abstract class Action
     }
 
     function _filterArguments($args) {
+        // find immutable params and unset them
+        foreach( $this->params as $name => $param ) {
+            if( $param->immutable ) {
+                unset($args[$name]);
+            }
+        }
+
         if( $this->takeFields ) {
             // take these fields only
             return array_intersect_key( $args , array_fill_keys($this->takeFields,1) );
