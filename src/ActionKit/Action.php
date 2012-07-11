@@ -65,20 +65,7 @@ abstract class Action
         // initialize parameter objects
         $this->schema();
 
-        if( $this->takeFields ) {
-            // take these fields only
-            $newArgs = array();
-            foreach( $this->takeFields as $field ) {
-                $newArgs[ $field ] = $this->arg($field);
-            }
-            $this->args = $newArgs;
-        }
-        elseif( $this->filterOutFields ) {
-            foreach( $this->filterOutFields as $field ) {
-                if( isset($this->args[$field]))
-                    unset($this->args[ $field ]);
-            }
-        }
+        $this->args = $this->_filterArguments($args);
 
         // load param values from $arguments
         $overlap = array_intersect_key($this->args,$this->params);
@@ -101,6 +88,16 @@ abstract class Action
         return $this;
     }
 
+    function _filterArguments($args) {
+        if( $this->takeFields ) {
+            // take these fields only
+            return array_intersect_key( $args , array_fill_keys($this->takeFields,1) );
+        }
+        elseif( $this->filterOutFields ) {
+            return array_diff_key( $args , array_fill_keys($this->filterOutFields,1) );
+        }
+        return $args;
+    }
 
     /**
      * For Schema, Setup filter out fields,
