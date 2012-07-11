@@ -210,6 +210,10 @@ class Param extends CascadingAttribute
             $newAttributes['placeholder'] = $this->placeholder;
         }
 
+        if( $this->immutable ) {
+            $newAttributes['readonly'] = true;
+        }
+
         // merge override attributes
         if( $this->widgetAttributes ) {
             $newAttributes = array_merge( $newAttributes , $this->widgetAttributes );
