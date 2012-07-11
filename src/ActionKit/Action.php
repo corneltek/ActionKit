@@ -209,7 +209,8 @@ abstract class Action
         return isset( $_REQUEST['__ajax_request'] );
     }
 
-    function __invoke() 
+
+    function invoke() 
     {
         /* run column methods */
         // XXX: merge them all...
@@ -219,8 +220,14 @@ abstract class Action
 
         $this->runInit();
         $this->beforeRun();
-        $this->run();
+        $ret = $this->run();
         $this->afterRun();
+        return $ret;
+    }
+
+    function __invoke() 
+    {
+        return $this->invoke();
     }
 
 

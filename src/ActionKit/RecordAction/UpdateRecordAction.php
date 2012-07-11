@@ -18,11 +18,10 @@ abstract class UpdateRecordAction
             return $this->recordNotFound();
 
         $ret = $record->update( $args );
-        if( false === $ret->success ) {
+        if( ! $ret->success ) {
             $this->convertRecordValidation( $ret );
             return $this->updateError( $ret );
         }
-
         return $this->updateSuccess($ret);
     }
 
@@ -77,8 +76,6 @@ abstract class UpdateRecordAction
     {
         return $this->error($this->errorMessage($ret));
     }
-
-
 }
 
 
