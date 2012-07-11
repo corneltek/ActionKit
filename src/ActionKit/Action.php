@@ -293,19 +293,10 @@ abstract class Action
         $widgets = array();
 
         // for each widget, push it into stack
-        foreach( $this->getParams() as $name => $param ) {
-            
+        foreach( $this->getParams() as $param ) {
             // we ignore id column, 
             // because we need to render the id field with 
             // HiddenInput manually.
-            if( 'id' === $param->name) {
-                continue;
-            }
-
-            if( $this->filterOutFields && in_array($param->name,$action->filterOutFields) ) {
-                continue;
-            }
-
             $widgets[] = $param->createWidget();
         }
         return $widgets;
