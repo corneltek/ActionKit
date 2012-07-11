@@ -5,24 +5,6 @@ use ActionKit\Action;
 use ActionKit\ColumnConvert;
 use ActionKit\ActionGenerator;
 
-/*
-    use ActionKit\RecordAction;
-
-    $a = new User\Action\UpdateUser(array( 'field' => 'new_data' ) , $record );
-    $a->run();
-
-Generate CreateRecordAction
-
-    $createAction = BaseRecordAction::generate( 'RecordName' , 'Create' );
-
-Generate UpdateRecordAction
-
-    $updateAction = BaseRecordAction::generate( 'RecordName' , 'Update' );
-
-
-    XXX: validation should be built-in in Model
-
-*/
 abstract class BaseRecordAction extends Action
 {
     const TYPE = 'base';
