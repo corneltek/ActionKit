@@ -378,9 +378,10 @@ abstract class Action
      */
     function getFile( $name )
     {
-        return @$_FILES[ $name ];
+        return isset($_FILES[ $name ])
+                ? $_FILES[ $name ]
+                : null;
     }
-
 
     /**
      * Set argument
