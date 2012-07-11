@@ -1,5 +1,6 @@
 <?php
 namespace ActionKit\Exception;
+use Exception;
 
 class ActionException extends Exception
 {
