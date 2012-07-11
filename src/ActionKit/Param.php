@@ -185,10 +185,8 @@ class Param extends CascadingAttribute
 
         // convert attributes into widget style attributes
         $newAttributes = array();
+        $newAttributes['label'] = $this->getLabel();
 
-        if( $label = $this->getLabel() ) {
-            $newAttributes['label'] = $label;
-        }
         if( $this->validValues ) {
             $newAttributes['options'] = $this->getValidValues();
         }
