@@ -74,8 +74,10 @@ abstract class BaseRecordAction extends Action
      */
     function initRecordColumn()
     {
-        if( ! $this->record )
-            return;
+        if( ! $this->record ) {
+            throw new Exception('Record object is empty.');
+        }
+
         foreach( $this->record->getColumns() as $column ) {
             if( ! isset($this->params[$column->name] ) ) {
                 $this->params[ $column->name ] = ColumnConvert::toParam( $column , $this->record );
@@ -84,34 +86,65 @@ abstract class BaseRecordAction extends Action
     }
 
 
-    public function schema() 
+
+    /**
+     * Default base record action schema 
+     *
+     * Inherits columns from record schema.
+     * In this method, we use column converter to 
+     * convert record columns into action param objects.
+     */
+    function schema() 
     {
         $this->useRecordSchema();
     }
 
+
+    /**
+     * Get current action type
+     *
+     * @return string 'create','update','delete','bulk_delete'
+     */
     function getType() 
     {
         return static::TYPE;
     }
 
-    public function getRecord() 
+
+    /**
+     * Get current record
+     */
+    function getRecord() 
     {
         return $this->record; 
     }
 
-    public function setRecord($record)
+
+    /**
+     * Set record 
+     */
+    function setRecord($record)
     {
         $this->record = $record;
     }
 
-    public function currentUserCan( $user )
+
+    /**
+     * Permission check method
+     *
+     * We should call model's currentUserCan method
+     * 
+     * @see Phifty\Model
+     */
+    function currentUserCan( $user )
     {
         return true;
     }
 
 
     /**
-     * Convert record validation object to action validation result.
+     * Convert record validation object to action validation 
+     * result.
      *
      * @param LazyRecord\OperationResult $ret
      */
@@ -119,11 +152,9 @@ abstract class BaseRecordAction extends Action
     {
         if( $ret->validations ) {
             foreach( $ret->validations as $vld ) {
-                if( $vld->success ) {
-                    $this->result->addValidation( $vld->field , array( "valid" => $vld->message )); 
-                } else {
-                    $this->result->addValidation( $vld->field , array( "invalid" => $vld->message ));
-                }
+                $this->result->addValidation( $vld->field , array( 
+                    ( $vld->success ? 'valid' : 'invalid' ) => $vld->message 
+                )); 
             }
         }
     }
