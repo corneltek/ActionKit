@@ -33,6 +33,14 @@ class StackView extends BaseView
         $form = new FormKit\Element\Form;
         $form->method($this->method);
 
+        if( $formId = $this->option('form_id') ) {
+            $form->setId( $formId );
+        }
+
+        if( $formClass = $this->option('form_class') ) {
+            $form->addClass( $formClass );
+        }
+
         $widgets = $this->action->getWidgets();
 
         // add widgets to layout.
