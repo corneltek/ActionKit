@@ -51,7 +51,7 @@ class Param extends CascadingAttribute
     public $widgetAttributes;
 
     /* default widget namespace */
-    public $widgetNamespace = 'FormKit\\Widget\\';
+    public $widgetNamespace = 'FormKit\\Widget';
 
     public $validator;
 
@@ -226,7 +226,7 @@ class Param extends CascadingAttribute
         // if it's not a full-qualified class name
         // we should concat class name with default widget namespace
         if( '+' !== $class[0] ) {
-            $class = $this->widgetNamespace . $class;
+            $class = $this->widgetNamespace . '\\' . $class;
         }
         return new $class( $this->name , $newAttributes );
     }
