@@ -194,18 +194,21 @@ class Param extends CascadingAttribute
             $newAttributes['readonly'] = true;
         }
 
-        // for password input, we should not render value
+        // for inputs (except password input), 
+        // we should render the value (or default value)
         if( false === stripos( $class , 'Password' ) ) {
             if( $this->value ) {
                 $newAttributes['value'] = $this->value;
-            }
-            elseif( $this->default ) {
+            } elseif( $this->default ) {
                 $newAttributes['value'] = $this->getDefaultValue();
             }
         }
 
         if( $this->placeholder ) {
             $newAttributes['placeholder'] = $this->placeholder;
+        } 
+        if( $this->hint ) {
+            $newAttributes['hint'] = $this->hint;
         }
 
         if( $this->immutable ) {
