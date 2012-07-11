@@ -59,6 +59,8 @@ class Param extends CascadingAttribute
     {
         $this->name = $name;
         $this->action = $action;
+
+        $this->setAttributeType('immutable', static::ATTR_FLAG);
         $this->build();
     }
 
