@@ -19,8 +19,19 @@ abstract class BaseRecordAction extends Action
         if( ! $this->recordClass ) {
             throw new Exception( sprintf('Record class of "%s" is not specified.' , get_class($this) ));
         }
+        if( $record && ! is_a($record,'LazyRecord\BaseModel') ) {
+            throw new Exception( 'The record object you specified is not a BaseModel object.' );
+        }
+
         $this->record = $record ?: new $this->recordClass;
-        $this->loadRecordFromArguments( $args );
+
+        if( ! $record ) {   // for create action, we don't need to create record
+            if( $this->getType() !== 'create' ) {
+                if( ! $this->loadRecordFromArguments( $args ) ) {
+                    throw new Exception('Record action can not load record');
+                }
+            }
+        }
 
         /* init id column */
         if( $column = $this->record->getColumn('id') ) {
@@ -40,16 +51,16 @@ abstract class BaseRecordAction extends Action
 
 
     /**
-     * Load record from arguments (by id)
+     * Load record from arguments (by primary key: id)
+     *
+     * @return boolean
      */
     public function loadRecordFromArguments($args) 
     {
-        if( isset( $args['id'] ) && ! $this->record->id ) {
-            $ret = $this->record->load( $args['id'] );
-            if( ! $ret->success ) {
-                throw new Exception("Record load failed " . $ret->message );
-            }
+        if( isset( $args['id'] )) {
+            return $this->record->load( $args['id'] )->success;
         }
+        return false;
     }
 
     /**
