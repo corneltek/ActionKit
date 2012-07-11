@@ -28,7 +28,7 @@ abstract class BaseRecordAction extends Action
         if( ! $record ) {   // for create action, we don't need to create record
             if( $this->getType() !== 'create' ) {
                 if( ! $this->loadRecordFromArguments( $args ) ) {
-                    throw new Exception('Record action can not load record');
+                    throw new Exception('Record action ' . $this->getSignature() . ' can not load record');
                 }
             }
         }
