@@ -17,3 +17,5 @@ vendor/pear
 webroot/assets
 .onion/
 config/*.php
+.gitmodules
+vendor/
