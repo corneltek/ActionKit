@@ -177,6 +177,10 @@ abstract class Action
         return $error;
     }
 
+
+    /**
+     * Run preinit method of each param
+     */
     function runPreinit()
     {
         // foreach is always faster than array_map
@@ -185,19 +189,23 @@ abstract class Action
         }
     }
 
-    public function runInit()
+
+    /**
+     * Run init method of each param
+     */
+    function runInit()
     {
-        foreach( $this->params as $key => $param ) {
+        foreach( $this->params as $param ) {
             $param->init( $this->args );
         }
     }
 
-    public function isAjax()
+    function isAjax()
     {  
         return isset( $_REQUEST['__ajax_request'] );
     }
 
-    public function __invoke() 
+    function __invoke() 
     {
         /* run column methods */
         // XXX: merge them all...
@@ -219,19 +227,19 @@ abstract class Action
      *
      * @return string
      */
-    public function getName()
+    function getName()
     {
         $sig = $this->getSignature();
         $pos = strpos( $sig, '::Action::' );
         return substr( $sig , $pos + strlen('::Action::') );
     }
 
-    public function params($all = false) 
+    function params($all = false) 
     {
         return $this->getParams($all);
     }
 
-    public function getParams( $all = false ) {
+    function getParams( $all = false ) {
         $self = $this;
         if( $all ) {
             return $this->params;
@@ -246,19 +254,19 @@ abstract class Action
         return $this->params;
     }
 
-    public function getParam( $field ) 
+    function getParam( $field ) 
     {
         return isset($this->params[ $field ])
                 ? $this->params[ $field ]
                 : null;
     }
 
-    public function hasParam( $field ) 
+    function hasParam( $field ) 
     {
         return isset($this->params[ $field ]);
     }
 
-    public function removeParam($field) 
+    function removeParam($field) 
     {
         if( isset($this->params[$field]) ) {
             $param = $this->params[$field];
@@ -275,7 +283,7 @@ abstract class Action
      *
      * @return FormKit\Widget
      */
-    public function widget($field, $widgetClass = null)
+    function widget($field, $widgetClass = null)
     {
         return $this->param($field)->createWidget( $widgetClass );
     }
@@ -284,7 +292,7 @@ abstract class Action
     /**
      * Create and get displayable widgets 
      */
-    public function getWidgets($all = false) 
+    function getWidgets($all = false) 
     {
         $widgets = array();
 
@@ -302,7 +310,7 @@ abstract class Action
     /**
      * Get current user
      */
-    public function getCurrentUser() 
+    function getCurrentUser() 
     {
         if( $this->currentUser )
             return $this->currentUser;
@@ -314,7 +322,7 @@ abstract class Action
      *
      * @param mixed Current user object.
      */
-    public function setCurrentUser( $user ) 
+    function setCurrentUser( $user ) 
     {
         $this->currentUser = $user;
     }
@@ -325,7 +333,7 @@ abstract class Action
      *
      * @return bool 
      */
-    public function currentUserCan( $user ) 
+    function currentUserCan( $user ) 
     {
         return $this->record->currentUserCan( $this->type , $this->args , $user );
     }
@@ -340,7 +348,7 @@ abstract class Action
      *
      * @return mixed Argument value
      */
-    public function arg( $name )
+    function arg( $name )
     {
         $args = func_get_args();
         if( 1 === count($args) ) {
@@ -358,7 +366,7 @@ abstract class Action
     /**
      * @return array
      */
-    public function getArgs() 
+    function getArgs() 
     {
         return $this->args; 
     }
@@ -368,7 +376,7 @@ abstract class Action
      *
      * @return array
      */
-    public function getFile( $name )
+    function getFile( $name )
     {
         return @$_FILES[ $name ];
     }
