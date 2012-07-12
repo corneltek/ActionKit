@@ -560,10 +560,23 @@ abstract class Action implements IteratorAggregate
      *
      * @return ActionKit\View\BaseView View object
      */
-    function asView($class = null, $options = array())
+    function asView()
     {
-        if( ! $class ) {
-            return new \ActionKit\View\StackView($this,$options);
+        $options = array();
+        $class = 'ActionKit\View\StackView';
+        $args = func_get_args();
+
+        // got one argument
+        if( count($args) < 2 && isset($args[0]) ) {
+            if( is_string($args[0]) ) {
+                $class = $args[0];
+            } elseif( is_array($args[0]) ) {
+                $options = $args[0];
+            }
+        }
+        elseif( count($args) == 2 ) {
+            $class = $args[0];
+            $options = $args[1];
         }
         return new $class($this, $options);
     }
