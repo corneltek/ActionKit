@@ -5,25 +5,40 @@ use Exception;
 class Result 
 {
     public $type;  // success, error, valid, invalid, completion, redirect
+
     public $args;  // arguments to actions.
 
-    public $action;  // action name
-    public $actionClass;
 
+    /**
+     * @var string ActionKit\Action
+     */
+    public $action;  // action object
+
+    /**
+     * @var array Validation Results
+     */
     public $validations = array();  // validation data
 
 
-    /* main success message , error message */
+    /**
+     * @var string main success message , error message
+     */
     public $message;
 
 
-    /* should we redirect ? this is usually needed in ajax */
+    /**
+     * @var boolean should we redirect ? this is usually needed in ajax 
+     */
     public $redirect;
 
-    /* action can return data, for ajax applicatino */
+    /** 
+     * @var array action can return data. 
+     * */
     public $data = array();
 
-    /* Completion data, (Only when doing completion) */
+    /**
+     * @var array Completion data, (Only when doing completion) 
+     */
     public $completion;
 
     /**
@@ -86,7 +101,6 @@ class Result
 
     function action( $action )
     {
-        $this->actionClass = get_class( $action );
         $this->action = $action;
         return $this;
     }
