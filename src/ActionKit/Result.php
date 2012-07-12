@@ -27,9 +27,17 @@ class Result
 
 
     /**
+     * @var string can descrbie the result.
+     */
+    public $description;
+
+    /**
      * @var boolean should we redirect ? this is usually needed in ajax 
      */
     public $redirect;
+
+
+
 
     /** 
      * @var array action can return data. 
@@ -173,6 +181,12 @@ class Result
         $this->args = $args; 
         return $this; 
     }
+
+    function describe($description) {
+        $this->description = $description;
+        return $this;
+    }
+
 
     function data( $data ) 
     { 
