@@ -555,6 +555,11 @@ abstract class Action implements IteratorAggregate
     /**
      * Create an Action View instance for Action.
      *
+     *      ->asView()
+     *      ->asView('ViewClass')
+     *      ->asView(array( .. view options ..))
+     *      ->asView('ViewClass', array( .. view options ..))
+     *
      * @param string $class View class
      * @param array $attributes View options
      *
