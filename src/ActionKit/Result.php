@@ -244,7 +244,7 @@ class Result
         return $this;
     }
 
-    function getJsonData()
+    function toArray()
     {
         $ret = array( );
 
@@ -256,8 +256,13 @@ class Result
 
         $ret[ $this->type ] = true;
 
-        if( $this->message )
+        if( $this->description ) {
+            $ret['description'] = $this->description;
+        }
+
+        if( $this->message ) {
             $ret[ 'message' ] = $this->message;
+        }
 
         if( 'success' === $this->type ) {
             $ret['data'] = $this->data;
@@ -276,16 +281,15 @@ class Result
             $ret = array_merge( $ret , $this->completion );
         }
 
-        if( $this->redirect ) 
+        if( $this->redirect ) {
             $ret['redirect'] = $this->redirect;
-
+        }
         return $ret;
     }
 
     public function __toString()
     {
-        $data = $this->getJsonData();
-        return json_encode( $data );
+        return json_encode( $this->toArray() );
     }
 
 }
