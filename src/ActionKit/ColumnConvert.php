@@ -24,7 +24,36 @@ class ColumnConvert
             $param->default = $record->{$name};
         }
 
-        // var_dump( $param->refer ); 
+        if( $param->refer ) {
+            if( class_exists($param->refer,true) ) {
+                $class = $param->refer;
+
+
+                // it's a `has many`-like relationship
+                if( is_subclass_of($class,'LazyRecord\\BaseCollection', true) ) {
+                    $collection = new $class;
+                    $options = array();
+                    foreach( $collection as $item ) {
+                        $options[ $item->dataLabel() ] = $item->id;
+                    }
+                    $param->validValues = $options;
+                } 
+                // it's a `belongs-to`-like relationship
+                elseif( is_subclass_of($class,'LazyRecord\\BaseModel', true) ) {
+                    $class = $class . 'Collection';
+                    $collection = new $class;
+                    $options = array();
+                    foreach( $collection as $item ) {
+                        $options[ $item->dataLabel() ] = $item->id;
+                    }
+                    $param->validValues = $options;
+                }
+            }
+            elseif( $relation = $record->getSchema()->getRelation($param->refer) ) {
+                // so it's a relationship reference
+                // TODO: implement this
+            }
+        }
 
         //  Convert column type to param type.
         // copy widget attributes
@@ -32,13 +61,16 @@ class ColumnConvert
             $param->widgetAttributes = $column->widgetAttributes;
         }
 
-        if( $column->validValues || $column->validPairs ) {
+        if( $param->validValues || $param->validPairs ) {
             $param->renderAs( 'SelectInput' );
-        } elseif( $column->name === 'id' ) {
+        } 
+        elseif( $param->name === 'id' ) {
             $param->renderAs( 'HiddenInput' );
-        } elseif( $column->renderAs ) {
+        } 
+        elseif( $column->renderAs ) {
             $param->renderAs( $column->renderAs );
-        } else {
+        } 
+        else {
             // guess input widget from data type
             $typeMapping = array(
                 'date' => 'DateInput',
