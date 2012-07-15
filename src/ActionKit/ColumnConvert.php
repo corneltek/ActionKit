@@ -24,6 +24,8 @@ class ColumnConvert
             $param->default = $record->{$name};
         }
 
+        // var_dump( $param->refer ); 
+
         //  Convert column type to param type.
         // copy widget attributes
         if( $column->widgetAttributes ) {
@@ -44,10 +46,9 @@ class ColumnConvert
                 'text' => 'TextareaInput',
             );
             if( isset($typeMapping[ $param->type ]) ) {
-                $widgetType = $typeMapping[$param->type];
-                $param->renderAs($widgetType);
+                $param->renderAs($typeMapping[$param->type]);
             } else {
-                $param->renderAs( 'TextInput' );
+                $param->renderAs('TextInput');
             }
         }
         return $param;
