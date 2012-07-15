@@ -34,7 +34,10 @@ class ColumnConvert
                     $collection = new $class;
                     $options = array();
                     foreach( $collection as $item ) {
-                        $options[ $item->dataLabel() ] = $item->id;
+                        $label = method_exists($item,'dataLabel') 
+                                ? $item->dataLabel()
+                                : $item->id;
+                        $options[ $label ] = $item->id;
                     }
                     $param->validValues = $options;
                 } 
@@ -44,7 +47,10 @@ class ColumnConvert
                     $collection = new $class;
                     $options = array();
                     foreach( $collection as $item ) {
-                        $options[ $item->dataLabel() ] = $item->id;
+                        $label = method_exists($item,'dataLabel') 
+                                ? $item->dataLabel()
+                                : $item->id;
+                        $options[ $label ] = $item->id;
                     }
                     $param->validValues = $options;
                 }
