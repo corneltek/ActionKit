@@ -17,7 +17,7 @@ use Exception;
  */
 class File extends Param
 {
-    public $type = 'file';
+    public $paramType = 'file';
 
     public $validExtensions;
     public $putIn;

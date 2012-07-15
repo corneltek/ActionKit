@@ -13,7 +13,7 @@ class Image extends Param
 {
 
     // XXX: think about me.
-    public $type = 'file';
+    public $paramType = 'file';
 
     /* image column attributes */
     public $resizeWidth;
