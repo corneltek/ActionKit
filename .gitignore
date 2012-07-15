@@ -3,7 +3,6 @@
 webroot/ph/
 webroot/static/upload/
 cache/
-coverage/
 .DS_Store
 .svn
 tests/tmp/
@@ -13,3 +12,10 @@ docs/_build/
 *.tar
 *.tbz
 *.rar
+build
+vendor/pear
+webroot/assets
+.onion/
+config/*.php
+.gitmodules
+vendor/
