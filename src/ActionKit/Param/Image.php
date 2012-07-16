@@ -19,7 +19,7 @@ class Image extends Param
     public $resizeWidth;
     public $resizeHeight;
 
-    public $validExtensions;
+    public $validExtensions = array('jpg','jpeg','png','gif');
     public $putIn;
     public $renameFile;
     public $sizeLimit;
