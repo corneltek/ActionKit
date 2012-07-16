@@ -700,10 +700,10 @@ abstract class Action implements IteratorAggregate
     }
 
 
-
-
     /**
-     * Render a field or render all fields
+     * Render a field or render all fields,
+     *
+     * Note: this was kept for old version templates.
      *
      * @param string $name  field name (optional, when omit this, Action renders all fields)
      * @param array $attrs  field attributes
@@ -719,7 +719,7 @@ abstract class Action implements IteratorAggregate
             }
         }
         else {
-            /* render all */
+            /* Render all widgets */
             $html = '';
             foreach( $this->params as $param ) {
                 $html .= $param->render( $attrs );

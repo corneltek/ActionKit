@@ -5,10 +5,11 @@ use ActionKit\Param;
 /**
  * Convert LazyORM column to Action param, 
  * so that we can render with widget (currently).
+ *
+ * XXX: refactor this column converter
  */
 class ColumnConvert 
 {
-
     static function toParam( $column , $record = null )
     {
         $name = $column->name;
