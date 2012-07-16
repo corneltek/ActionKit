@@ -28,7 +28,6 @@ class ColumnConvert
             if( class_exists($param->refer,true) ) {
                 $class = $param->refer;
 
-
                 // it's a `has many`-like relationship
                 if( is_subclass_of($class,'LazyRecord\\BaseCollection', true) ) {
                     $collection = new $class;
@@ -53,11 +52,15 @@ class ColumnConvert
                         $options[ $label ] = $item->id;
                     }
                     $param->validValues = $options;
+                } 
+                else {
+                    throw new Exception('Unsupported refer type');
                 }
             }
             elseif( $relation = $record->getSchema()->getRelation($param->refer) ) {
                 // so it's a relationship reference
                 // TODO: implement this
+                throw new Exception('Unsupported refer type');
             }
         }
 
@@ -69,7 +72,7 @@ class ColumnConvert
 
         if( $param->validValues || $param->validPairs ) {
             $param->renderAs( 'SelectInput' );
-        } 
+        }
         elseif( $param->name === 'id' ) {
             $param->renderAs( 'HiddenInput' );
         } 

@@ -71,7 +71,7 @@ abstract class Action implements IteratorAggregate
         // load param values from $arguments
         $overlap = array_intersect_key($this->args,$this->params);
         foreach( $overlap as $name => $val ) {
-            $this->param($name)->value($val);
+            $this->getParam($name)->value($val);
         }
         
         $this->result->args( $this->args ); // save request arguments
@@ -297,7 +297,7 @@ abstract class Action implements IteratorAggregate
      */
     function widget($field, $widgetClass = null)
     {
-        return $this->param($field)->createWidget( $widgetClass );
+        return $this->getParam($field)->createWidget( $widgetClass );
     }
 
 
@@ -712,9 +712,9 @@ abstract class Action implements IteratorAggregate
     function render( $name = null , $attrs = array() ) 
     {
         if( $name ) {
-            if( $widget = $this->widget( $name ) )
+            if( $widget = $this->widget( $name ) ) {
                 return $widget->render( $attrs );
-            else {
+            } else {
                 throw new Exception("parameter $name is not defined.");
             }
         }
