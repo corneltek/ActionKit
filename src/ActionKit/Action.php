@@ -618,13 +618,24 @@ abstract class Action implements IteratorAggregate
      * @param string $fieldViewClass
      * @param array $attrs 
      */
-    function renderField( $name , $fieldViewClass = 'ActionKit\FieldView\DivFieldView' , $attrs = array() )
+    function renderField( $name )
     {
-        if( ! $fieldViewClass ) {
-            $fieldViewClass = 'ActionKit\FieldView\DivFieldView';
+        $args = func_get_args();
+        $fieldViewClass = 'ActionKit\FieldView\DivFieldView';
+        $attrs = array();
+        if( count($args) == 2 ) {
+            if( is_string($args[1]) ) {
+                $fieldViewClass = $args[1];
+            } elseif( is_array($args[1]) ) {
+                $attrs = $args[1];
+            }
         }
-        $column = $this->getParam($name);
-        $view = new $fieldViewClass($column);
+        elseif( count($args) == 3 ) {
+            $fieldViewClass = $args[1];
+            $attrs = $args[2];
+        }
+        $param = $this->getParam($name);
+        $view = new $fieldViewClass($param);
         $view->setWidgetAttributes($attrs);
         return $view->render();
     }

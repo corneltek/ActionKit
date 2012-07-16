@@ -71,14 +71,14 @@ class ColumnConvert
             $param->widgetAttributes = $column->widgetAttributes;
         }
 
-        if( $param->validValues || $param->validPairs ) {
+        if( $column->renderAs ) {
+            $param->renderAs( $column->renderAs );
+        }
+        elseif( $param->validValues || $param->validPairs ) {
             $param->renderAs( 'SelectInput' );
         }
         elseif( $param->name === 'id' ) {
             $param->renderAs( 'HiddenInput' );
-        } 
-        elseif( $column->renderAs ) {
-            $param->renderAs( $column->renderAs );
         } 
         else {
             // guess input widget from data type
