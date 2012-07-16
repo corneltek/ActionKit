@@ -22,6 +22,11 @@ abstract class BaseRecordAction extends Action
      */
     public $recordClass;
 
+
+    abstract function successMessage($ret);
+
+    abstract function errorMessage($ret);
+
     public function __construct( $args = array(), $record = null, $currentUser = null ) 
     {
         // record name is in Camel case

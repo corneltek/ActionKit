@@ -414,7 +414,10 @@ abstract class Action implements IteratorAggregate
 
 
     /**
-     * Define or get column object from Action.
+     * Define a param object from Action,
+     *
+     * Note: when using this method, a param that is already 
+     * defined will be override.
      *
      * @param string $field Field name
      * @param string $type Field Type (will be Param Type)
@@ -428,18 +431,12 @@ abstract class Action implements IteratorAggregate
      */
     function param( $field , $type = null ) 
     {
-        if( isset($this->params[ $field ]) ) {
-            return $this->params[ $field ];
-        }
-
         // default column class
         $class = 'ActionKit\\Param';
         if( $type ) {
-            if( $type[0] !== '+' ) {
-                $class .= '\\' . ucfirst($type);
-            } else {
-                $class = substr($type,1);
-            }
+            $class = ( $type[0] !== '+' ) 
+                ? $class . '\\' . ucfirst($type)
+                : substr($type,1);
         }
 
         if( ! class_exists($class,true) ) { // trigger spl class autoloader to load class file.
