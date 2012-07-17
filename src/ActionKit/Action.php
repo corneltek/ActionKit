@@ -530,7 +530,6 @@ abstract class Action implements IteratorAggregate
     }
 
 
-
     /**
      * Redirect 
      *
@@ -567,7 +566,6 @@ abstract class Action implements IteratorAggregate
             header("Refresh: $secs; url=$path");
         }
     }
-
 
     /**
      * Create an Action View instance for Action.
