@@ -19,3 +19,4 @@ webroot/assets
 config/*.php
 .gitmodules
 vendor/
+utils/selenium-server.jar
