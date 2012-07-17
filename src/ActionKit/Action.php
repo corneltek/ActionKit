@@ -129,7 +129,11 @@ abstract class Action implements IteratorAggregate
 
 
 
-
+    /**
+     * Run parameter validator to validate argument.
+     *
+     * @param string $name is a parameter name
+     */
     protected function validateParam( $name )
     {
         // skip __ajax_request field
