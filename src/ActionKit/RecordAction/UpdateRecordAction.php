@@ -57,23 +57,19 @@ abstract class UpdateRecordAction
     }
 
 
-    function successMessage($ret) 
-    {
+    function successMessage($ret) {
         return __('%1 updated.', $this->record->getLabel() );
     }
 
-    function errorMessage($ret) 
-    {
+    function errorMessage($ret) {
         return __('%1 update failed.', $this->record->getLabel() );
     }
 
-    function updateSuccess($ret)
-    {
+    function updateSuccess($ret) {
         return $this->success($this->successMessage($ret) , array( 'id' => $this->record->id ));
     }
 
-    function updateError($ret)
-    {
+    function updateError($ret) {
         return $this->error($this->errorMessage($ret));
     }
 }

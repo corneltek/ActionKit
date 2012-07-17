@@ -17,7 +17,7 @@ use Exception;
  */
 class File extends Param
 {
-    public $type = 'file';
+    public $paramType = 'file';
 
     public $validExtensions;
     public $putIn;
@@ -31,6 +31,7 @@ class File extends Param
         $this->supportedAttributes['validExtensions'] = self::ATTR_ARRAY;
         $this->supportedAttributes['putIn'] = self::ATTR_STRING;
         $this->supportedAttributes['renameFile'] = self::ATTR_ANY;
+        $this->renderAs('FileInput');
     }
 
     public function preinit( & $args )

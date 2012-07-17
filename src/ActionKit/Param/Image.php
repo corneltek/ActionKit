@@ -13,13 +13,13 @@ class Image extends Param
 {
 
     // XXX: think about me.
-    public $type = 'file';
+    public $paramType = 'file';
 
     /* image column attributes */
     public $resizeWidth;
     public $resizeHeight;
 
-    public $validExtensions;
+    public $validExtensions = array('jpg','jpeg','png','gif');
     public $putIn;
     public $renameFile;
     public $sizeLimit;
@@ -30,6 +30,7 @@ class Image extends Param
     {
         $this->supportedAttributes[ 'validExtensions' ] = self::ATTR_ARRAY;
         $this->supportedAttributes[ 'putIn' ] = self::ATTR_STRING;
+        $this->renderAs('FileInput');
     }
 
     public function getImager()

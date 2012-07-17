@@ -13,6 +13,10 @@
             <exclude>_old</exclude>
         </testsuite>
 
+        <testsuite name="Plugins">
+            <directory suffix="Test.php">plugins</directory>
+        </testsuite>
+
         <testsuite name="ActionKit">
             <directory suffix="Test.php">tests/ActionKit</directory>
         </testsuite>

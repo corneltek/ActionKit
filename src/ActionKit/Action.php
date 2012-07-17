@@ -71,7 +71,7 @@ abstract class Action implements IteratorAggregate
         // load param values from $arguments
         $overlap = array_intersect_key($this->args,$this->params);
         foreach( $overlap as $name => $val ) {
-            $this->param($name)->value($val);
+            $this->getParam($name)->value($val);
         }
         
         $this->result->args( $this->args ); // save request arguments
@@ -297,7 +297,7 @@ abstract class Action implements IteratorAggregate
      */
     function widget($field, $widgetClass = null)
     {
-        return $this->param($field)->createWidget( $widgetClass );
+        return $this->getParam($field)->createWidget( $widgetClass );
     }
 
 
@@ -414,7 +414,10 @@ abstract class Action implements IteratorAggregate
 
 
     /**
-     * Define or get column object from Action.
+     * Define a param object from Action,
+     *
+     * Note: when using this method, a param that is already 
+     * defined will be override.
      *
      * @param string $field Field name
      * @param string $type Field Type (will be Param Type)
@@ -428,18 +431,12 @@ abstract class Action implements IteratorAggregate
      */
     function param( $field , $type = null ) 
     {
-        if( isset($this->params[ $field ]) ) {
-            return $this->params[ $field ];
-        }
-
         // default column class
         $class = 'ActionKit\\Param';
         if( $type ) {
-            if( $type[0] !== '+' ) {
-                $class .= '\\' . ucfirst($type);
-            } else {
-                $class = substr($type,1);
-            }
+            $class = ( $type[0] !== '+' ) 
+                ? $class . '\\' . ucfirst($type)
+                : substr($type,1);
         }
 
         if( ! class_exists($class,true) ) { // trigger spl class autoloader to load class file.
@@ -621,13 +618,24 @@ abstract class Action implements IteratorAggregate
      * @param string $fieldViewClass
      * @param array $attrs 
      */
-    function renderField( $name , $fieldViewClass = 'ActionKit\FieldView\DivFieldView' , $attrs = array() )
+    function renderField( $name )
     {
-        if( ! $fieldViewClass ) {
-            $fieldViewClass = 'ActionKit\FieldView\DivFieldView';
+        $args = func_get_args();
+        $fieldViewClass = 'ActionKit\FieldView\DivFieldView';
+        $attrs = array();
+        if( count($args) == 2 ) {
+            if( is_string($args[1]) ) {
+                $fieldViewClass = $args[1];
+            } elseif( is_array($args[1]) ) {
+                $attrs = $args[1];
+            }
         }
-        $column = $this->getParam($name);
-        $view = new $fieldViewClass($column);
+        elseif( count($args) == 3 ) {
+            $fieldViewClass = $args[1];
+            $attrs = $args[2];
+        }
+        $param = $this->getParam($name);
+        $view = new $fieldViewClass($param);
         $view->setWidgetAttributes($attrs);
         return $view->render();
     }
@@ -703,10 +711,10 @@ abstract class Action implements IteratorAggregate
     }
 
 
-
-
     /**
-     * Render a field or render all fields
+     * Render a field or render all fields,
+     *
+     * Note: this was kept for old version templates.
      *
      * @param string $name  field name (optional, when omit this, Action renders all fields)
      * @param array $attrs  field attributes
@@ -715,14 +723,14 @@ abstract class Action implements IteratorAggregate
     function render( $name = null , $attrs = array() ) 
     {
         if( $name ) {
-            if( $widget = $this->widget( $name ) )
+            if( $widget = $this->widget( $name ) ) {
                 return $widget->render( $attrs );
-            else {
+            } else {
                 throw new Exception("parameter $name is not defined.");
             }
         }
         else {
-            /* render all */
+            /* Render all widgets */
             $html = '';
             foreach( $this->params as $param ) {
                 $html .= $param->render( $attrs );
