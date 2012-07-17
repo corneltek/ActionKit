@@ -410,6 +410,12 @@ abstract class Action implements IteratorAggregate
         return $this; 
     }
 
+
+    /**
+     * Set arguments
+     *
+     * @param array
+     */
     function setArgs($args) 
     { 
         $this->args = array_merge($this->args , $args );
@@ -449,11 +455,18 @@ abstract class Action implements IteratorAggregate
         return $this->params[ $field ] = new $class( $field , $this );
     }
 
+    /**
+     * Action schema is defined here.
+     */
     function schema() 
     {
 
     }
 
+
+    /**
+     * Initialize action
+     */
     function init()
     {
 
@@ -478,7 +491,10 @@ abstract class Action implements IteratorAggregate
 
     function afterRun()  {  }
 
-    /* run */
+    /**
+     * Run method, contains the main logics
+     *
+     **/
     function run() 
     {
         return true;
