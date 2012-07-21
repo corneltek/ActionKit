@@ -41,7 +41,13 @@ class StackView extends BaseView
             $form->addClass( $formClass );
         }
 
-        $widgets = $this->action->getWidgets();
+        $widgets = array();
+        if( $fields = $this->option('fields') ) {
+            $widgets = $this->action->getWidgetsByNames($fields);
+        } else {
+            $widgets = $this->action->getWidgets();
+        }
+        
 
         // add widgets to layout.
         foreach( $widgets as $widget ) {

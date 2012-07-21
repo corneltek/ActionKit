@@ -319,11 +319,22 @@ abstract class Action implements IteratorAggregate
     function getWidgets($all = false) 
     {
         $widgets = array();
-        foreach( $this->getParams() as $param ) {
+        foreach( $this->getParams($all) as $param ) {
             $widgets[] = $param->createWidget();
         }
         return $widgets;
 
+    }
+
+
+    function getWidgetsByNames($names, $all = false) {
+        $widgets = array();
+        foreach( $names as $name ) {
+            if( $param = $this->getParam($name) ) {
+                $widgets[] = $param->createWidget();
+            }
+        }
+        return $widgets;
     }
 
     /**
