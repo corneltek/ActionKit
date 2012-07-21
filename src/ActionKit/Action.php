@@ -44,9 +44,16 @@ abstract class Action implements IteratorAggregate
 
 
     /**
-     * @public array take these fields only.
+     * @var array take these fields only.
      */
     public $takeFields;
+
+    /**
+     * @var boolean enable validatation ?
+     */
+    public $enableValidation = true;
+
+
 
     /**
      * Constructing Action objects
@@ -220,11 +227,10 @@ abstract class Action implements IteratorAggregate
         /* run column methods */
         // XXX: merge them all...
         $this->runPreinit();
-        if( $this->runValidate() )  // if found error, return false;
-            return false;
-
         $this->runInit();
         $this->beforeRun();
+        if( $this->enableValidation and $this->runValidate() )  // if found error, return false;
+            return false;
         $ret = $this->run();
         $this->afterRun();
         return $ret;
@@ -587,7 +593,7 @@ abstract class Action implements IteratorAggregate
         $args = func_get_args();
 
         // got one argument
-        if( count($args) < 2 && isset($args[0]) ) {
+        if( count($args) < 2 and isset($args[0]) ) {
             if( is_string($args[0]) ) {
                 $class = $args[0];
             } elseif( is_array($args[0]) ) {
