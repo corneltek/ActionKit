@@ -1,0 +1,43 @@
+This is ApacheBench, Version 2.3 <$Revision: 655654 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient).....done
+
+
+Server Software:        lighttpd/1.4.28
+Server Hostname:        localhost
+Server Port:            8888
+
+Document Path:          /git/lart/basic_app/phifty/autoload.php
+Document Length:        0 bytes
+
+Concurrency Level:      5
+Time taken for tests:   0.495 seconds
+Complete requests:      100
+Failed requests:        0
+Write errors:           0
+Total transferred:      36400 bytes
+HTML transferred:       0 bytes
+Requests per second:    201.97 [#/sec] (mean)
+Time per request:       24.756 [ms] (mean)
+Time per request:       4.951 [ms] (mean, across all concurrent requests)
+Transfer rate:          71.80 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.3      0       2
+Processing:     5   22  15.0     18     100
+Waiting:        4   21  15.1     17     100
+Total:          5   22  15.0     18     100
+
+Percentage of the requests served within a certain time (ms)
+  50%     18
+  66%     23
+  75%     26
+  80%     27
+  90%     38
+  95%     45
+  98%     95
+  99%    100
+ 100%    100 (longest request)
