@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="tests/bootstrap.php"
+         backupGlobals="false"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         verbose="true">
+  <testsuites>
+
+        <testsuite name="Phifty">
+            <directory suffix="Test.php">tests/Phifty</directory>
+            <exclude>_old</exclude>
+        </testsuite>
+
+        <testsuite name="Plugins">
+            <directory suffix="Test.php">plugins</directory>
+        </testsuite>
+
+        <testsuite name="ActionKit">
+            <directory suffix="Test.php">tests/ActionKit</directory>
+        </testsuite>
+
+        <testsuite name="I18NKit">
+            <directory suffix="Test.php">tests/I18NKit</directory>
+        </testsuite>
+
+        <!--
+        <testsuite name="Functional">
+            <directory suffix="Test.php">tests/functional</directory>
+        </testsuite>
+        -->
+  </testsuites>
+
+  <!--
+  <groups>
+        <include>
+            <group>ActionKit</group>
+        </include>
+  </groups>
+  -->
+</phpunit>
