@@ -672,7 +672,9 @@ abstract class Action implements IteratorAggregate
                 $attrs = $args[2];
         }
         $param = $this->getParam($name);
-
+        if( ! $param ) {
+            throw new Exception( "Param $name is not defined." );
+        }
         $view = new $fieldViewClass($param);
         $view->setWidgetAttributes($attrs);
         return $view->render();
