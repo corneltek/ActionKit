@@ -666,10 +666,13 @@ abstract class Action implements IteratorAggregate
             }
         }
         elseif( count($args) == 3 ) {
-            $fieldViewClass = $args[1];
-            $attrs = $args[2];
+            if( $args[1] )
+                $fieldViewClass = $args[1];
+            if( $args[2] )
+                $attrs = $args[2];
         }
         $param = $this->getParam($name);
+
         $view = new $fieldViewClass($param);
         $view->setWidgetAttributes($attrs);
         return $view->render();
