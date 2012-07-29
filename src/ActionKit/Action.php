@@ -649,6 +649,11 @@ abstract class Action implements IteratorAggregate
     /**
      * Render column with field view class
      *
+     * renderField( 'name' )
+     * renderField( 'name' , null , {  } )
+     * renderField( 'name' , {  } )
+     *
+     *
      * @param string $name column name
      * @param string $fieldViewClass
      * @param array $attrs 
@@ -666,7 +671,7 @@ abstract class Action implements IteratorAggregate
             }
         }
         elseif( count($args) == 3 ) {
-            if( $args[1] )
+            if( $args[1] ) 
                 $fieldViewClass = $args[1];
             if( $args[2] )
                 $attrs = $args[2];
