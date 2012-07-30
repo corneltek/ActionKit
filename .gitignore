@@ -20,3 +20,9 @@ config/*.php
 .gitmodules
 vendor/
 utils/selenium-server.jar
+
+.lazy.php
+assets/
+config/application.yml
+config/database.yml
+config/framework.yml
