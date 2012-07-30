@@ -1,0 +1,21 @@
+
+
+{% macro id_field(id) %}
+    {% if id %}
+        <input type="hidden" name="id" value="{{ id }}"/>
+    {% endif %}
+{% endmacro %}
+
+{% macro create_and_save(is_update,is_ajax) %}
+    <div class="button-group">
+        {% if is_update %}
+            <input class="button create" type="submit" value="{% trans 'Save' %}"/>
+        {% else %}
+            <input class="button" type="submit" value="{% trans 'Create' %}"/>
+        {% endif %}
+        {% if is_ajax %}
+        <input class="button" type="button" value="{% trans 'Close' %}" 
+            onclick=" Region.of(this).fadeRemove();"/>
+        {% endif %}
+    </div>
+{% endmacro %}
