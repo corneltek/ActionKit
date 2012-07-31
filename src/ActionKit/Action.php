@@ -649,6 +649,11 @@ abstract class Action implements IteratorAggregate
     /**
      * Render column with field view class
      *
+     * renderField( 'name' )
+     * renderField( 'name' , null , {  } )
+     * renderField( 'name' , {  } )
+     *
+     *
      * @param string $name column name
      * @param string $fieldViewClass
      * @param array $attrs 
@@ -666,10 +671,15 @@ abstract class Action implements IteratorAggregate
             }
         }
         elseif( count($args) == 3 ) {
-            $fieldViewClass = $args[1];
-            $attrs = $args[2];
+            if( $args[1] ) 
+                $fieldViewClass = $args[1];
+            if( $args[2] )
+                $attrs = $args[2];
         }
         $param = $this->getParam($name);
+        if( ! $param ) {
+            throw new Exception( "Param $name is not defined." );
+        }
         $view = new $fieldViewClass($param);
         $view->setWidgetAttributes($attrs);
         return $view->render();
