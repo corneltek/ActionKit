@@ -65,7 +65,6 @@ class StackView extends BaseView
         $submit = new FormKit\Widget\SubmitInput;
         $this->layout->addWidget($submit);
 
-
         if( $this->ajax ) {
             $ajaxFlag  = new HiddenInput('__ajax_request',array( 'value' => '1' ));
             $form->append( $ajaxFlag );
