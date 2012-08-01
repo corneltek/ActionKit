@@ -16,7 +16,7 @@ config/*.php
 coverage/
 docs/_build/
 tests/tmp/
-utils/selenium-server.jar
+utils/Selenium/
 .lazy.php
 assets/
 config/application.yml
