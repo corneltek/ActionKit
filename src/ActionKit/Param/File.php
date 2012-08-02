@@ -24,6 +24,7 @@ class File extends Param
     public $renameFile;
     public $sizeLimit;
     public $sourceField;  /* If field is not defined, use this source field */
+    public $widgetClass = 'FileInput';
 
     public function build()
     {
@@ -31,7 +32,6 @@ class File extends Param
         $this->supportedAttributes['validExtensions'] = self::ATTR_ARRAY;
         $this->supportedAttributes['putIn'] = self::ATTR_STRING;
         $this->supportedAttributes['renameFile'] = self::ATTR_ANY;
-        $this->renderAs('FileInput');
     }
 
     public function preinit( & $args )
