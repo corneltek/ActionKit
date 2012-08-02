@@ -58,7 +58,6 @@ class ActionRunner
         if( isset($_REQUEST['action']) )
         {
             $actionName = $this->getCurrentActionName(); // without postfix "Action".
-
             if( $this->isInvalidActionName( $actionName ) )
                 throw new Exception( "Invalid action name: $actionName." );
 
