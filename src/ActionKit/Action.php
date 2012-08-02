@@ -266,12 +266,11 @@ abstract class Action implements IteratorAggregate
         if( $all ) {
             return $this->params;
         }
-
         if ( $this->takeFields ) {
             return array_intersect_key($this->params, array_fill_keys($this->takeFields,1) );  // find white list
         }
         elseif( $this->filterOutFields ) {
-            return array_diff_key( $this->params, array_fill_keys($this->filterOutFields,1) ); // diff keys by blacklist
+            return array_diff_key($this->params, array_fill_keys($this->filterOutFields,1) ); // diff keys by blacklist
         } 
         return $this->params;
     }
