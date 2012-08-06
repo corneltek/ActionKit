@@ -79,7 +79,8 @@ abstract class BaseRecordAction extends Action
         if( $this->record->id ) {
             foreach( $this->record->getColumns(true) as $column ) {
                 if( $val = $this->record->{ $column->name } ) {
-                    $this->params[ $column->name ]->value = $val;
+                    if( isset($this->params[ $column->name ]) )
+                        $this->params[ $column->name ]->value = $val;
                 }
             }
         }
