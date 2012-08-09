@@ -4,6 +4,7 @@
 *.tar.bz2
 *.tbz
 *.zip
+*.jar
 .DS_Store
 .gitmodules
 .hg
