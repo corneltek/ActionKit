@@ -23,6 +23,7 @@ assets/
 config/application.yml
 config/database.yml
 config/framework.yml
+config/testing.yml
 vendor/
 vendor/pear
 webroot/assets
