@@ -17,6 +17,7 @@ config/*.php
 coverage/
 docs/_build/
 tests/tmp/
+tests/screenshots/*
 utils/Selenium/
 .lazy.php
 assets/
