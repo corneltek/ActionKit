@@ -1,6 +1,7 @@
 <?php
 namespace ActionKit;
 use ActionKit\Param;
+use Exception;
 
 /**
  * Convert LazyORM column to Action param, 
@@ -52,7 +53,7 @@ class ColumnConvert
                         $options[ $label ] = $item->id;
                     }
                     $param->validValues = $options;
-                } 
+                }
                 else {
                     throw new Exception('Unsupported refer type');
                 }
