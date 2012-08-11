@@ -30,7 +30,7 @@
         </testsuite>
 
         <testsuite name="Functional">
-            <directory suffix="Test.php">tests/functional</directory>
+            <file>tests/functional/NewsTest.php</file>
         </testsuite>
         
   </testsuites>
