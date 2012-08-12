@@ -5,8 +5,27 @@
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
+         stopOnError="true"
+         stopOnFailure="true"
          verbose="true">
   <testsuites>
+
+      <!-- Environment variable for testing -->
+      <!--
+        <php>
+        <includePath>.</includePath>
+        <ini name="foo" value="bar"/>
+        <const name="foo" value="bar"/>
+        <var name="foo" value="bar"/>
+        <env name="foo" value="bar"/>
+        <post name="foo" value="bar"/>
+        <get name="foo" value="bar"/>
+        <cookie name="foo" value="bar"/>
+        <server name="foo" value="bar"/>
+        <files name="foo" value="bar"/>
+        <request name="foo" value="bar"/>
+        </php>
+      -->
 
         <testsuite name="Phifty">
             <directory suffix="Test.php">tests/Phifty</directory>
@@ -25,11 +44,10 @@
             <directory suffix="Test.php">tests/I18NKit</directory>
         </testsuite>
 
-        <!--
         <testsuite name="Functional">
             <directory suffix="Test.php">tests/functional</directory>
         </testsuite>
-        -->
+        
   </testsuites>
 
   <!--
