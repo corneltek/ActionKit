@@ -30,8 +30,7 @@
         </testsuite>
 
         <testsuite name="Functional">
-            <file>tests/functional/NewsTest.php</file>
-            <file>tests/functional/ProductTest.php</file>
+            <directory suffix="Test.php">tests/functional</directory>
         </testsuite>
         
   </testsuites>
