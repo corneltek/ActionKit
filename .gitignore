@@ -22,3 +22,12 @@ vendor/pear
 webroot/assets
 webroot/ph/
 webroot/static/upload/
+
+.lazy.php
+assets/
+cache/
+config/application.yml
+config/database.yml
+config/framework.yml
+tests/screenshots/
+utils/Selenium/
