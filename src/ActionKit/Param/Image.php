@@ -24,13 +24,13 @@ class Image extends Param
     public $renameFile;
     public $sizeLimit;
     public $sourceField;  /* If field is not defined, use this source field */
-
+    public $widgetClass = 'FileInput';
 
     public function build()
     {
         $this->supportedAttributes[ 'validExtensions' ] = self::ATTR_ARRAY;
         $this->supportedAttributes[ 'putIn' ] = self::ATTR_STRING;
-        $this->renderAs('FileInput');
+        $this->supportedAttributes[ 'prefix' ] = self::ATTR_STRING;
     }
 
     public function getImager()
@@ -108,8 +108,6 @@ class Image extends Param
 
         if( $file && $file->found() )
         {
-
-            
             $newName = null;
             if( $this->renameFile ) {
                 $cb = $this->renameFile;
@@ -119,8 +117,15 @@ class Image extends Param
             /* if we use sourceField, than use Copy */
             $file->putIn( $this->putIn , $newName , $this->sourceField ? true : false );
 
-            $args[ $this->name ] = $file->getSavedPath();
-            $this->action->addData( $this->name , $file->getSavedPath() );
+            $args[ $this->name ] = $this->prefixPath
+                    ? $this->prefixPath . $file->getSavedPath()
+                    : $file->getSavedPath()
+                    ;
+            $this->action->addData( $this->name , 
+                $this->prefixPath
+                    ? $this->prefixPath . $file->getSavedPath() 
+                    : $file->getSavedPath()
+            );
 
             // resize image and save back.
             if( $this->resizeWidth ) {

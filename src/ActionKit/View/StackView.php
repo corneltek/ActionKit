@@ -41,7 +41,13 @@ class StackView extends BaseView
             $form->addClass( $formClass );
         }
 
-        $widgets = $this->action->getWidgets();
+        $widgets = array();
+        if( $fields = $this->option('fields') ) {
+            $widgets = $this->action->getWidgetsByNames($fields);
+        } else {
+            $widgets = $this->action->getWidgets();
+        }
+        
 
         // add widgets to layout.
         foreach( $widgets as $widget ) {
@@ -58,7 +64,6 @@ class StackView extends BaseView
         // Add control buttons
         $submit = new FormKit\Widget\SubmitInput;
         $this->layout->addWidget($submit);
-
 
         if( $this->ajax ) {
             $ajaxFlag  = new HiddenInput('__ajax_request',array( 'value' => '1' ));

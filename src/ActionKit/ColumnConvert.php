@@ -1,6 +1,7 @@
 <?php
 namespace ActionKit;
 use ActionKit\Param;
+use Exception;
 
 /**
  * Convert LazyORM column to Action param, 
@@ -18,10 +19,9 @@ class ColumnConvert
             $param->$k = $v;
         }
 
-
         // if we got record, load the value from it.
         if( $record ) {
-            // $param->value = $record->{$name};
+            $param->value   = $record->{$name};
             $param->default = $record->{$name};
         }
 
@@ -53,7 +53,7 @@ class ColumnConvert
                         $options[ $label ] = $item->id;
                     }
                     $param->validValues = $options;
-                } 
+                }
                 else {
                     throw new Exception('Unsupported refer type');
                 }
@@ -67,6 +67,9 @@ class ColumnConvert
 
         //  Convert column type to param type.
         // copy widget attributes
+        if( $column->widgetClass ) {
+            $param->widgetClass = $column->widgetClass;
+        }
         if( $column->widgetAttributes ) {
             $param->widgetAttributes = $column->widgetAttributes;
         }

@@ -44,9 +44,16 @@ abstract class Action implements IteratorAggregate
 
 
     /**
-     * @public array take these fields only.
+     * @var array take these fields only.
      */
     public $takeFields;
+
+    /**
+     * @var boolean enable validatation ?
+     */
+    public $enableValidation = true;
+
+
 
     /**
      * Constructing Action objects
@@ -220,11 +227,10 @@ abstract class Action implements IteratorAggregate
         /* run column methods */
         // XXX: merge them all...
         $this->runPreinit();
-        if( $this->runValidate() )  // if found error, return false;
-            return false;
-
         $this->runInit();
         $this->beforeRun();
+        if( $this->enableValidation and $this->runValidate() )  // if found error, return false;
+            return false;
         $ret = $this->run();
         $this->afterRun();
         return $ret;
@@ -260,12 +266,11 @@ abstract class Action implements IteratorAggregate
         if( $all ) {
             return $this->params;
         }
-
         if ( $this->takeFields ) {
             return array_intersect_key($this->params, array_fill_keys($this->takeFields,1) );  // find white list
         }
         elseif( $this->filterOutFields ) {
-            return array_diff_key( $this->params, array_fill_keys($this->filterOutFields,1) ); // diff keys by blacklist
+            return array_diff_key($this->params, array_fill_keys($this->filterOutFields,1) ); // diff keys by blacklist
         } 
         return $this->params;
     }
@@ -313,11 +318,22 @@ abstract class Action implements IteratorAggregate
     function getWidgets($all = false) 
     {
         $widgets = array();
-        foreach( $this->getParams() as $param ) {
+        foreach( $this->getParams($all) as $param ) {
             $widgets[] = $param->createWidget();
         }
         return $widgets;
 
+    }
+
+
+    function getWidgetsByNames($names, $all = false) {
+        $widgets = array();
+        foreach( $names as $name ) {
+            if( $param = $this->getParam($name) ) {
+                $widgets[] = $param->createWidget();
+            }
+        }
+        return $widgets;
     }
 
     /**
@@ -587,7 +603,7 @@ abstract class Action implements IteratorAggregate
         $args = func_get_args();
 
         // got one argument
-        if( count($args) < 2 && isset($args[0]) ) {
+        if( count($args) < 2 and isset($args[0]) ) {
             if( is_string($args[0]) ) {
                 $class = $args[0];
             } elseif( is_array($args[0]) ) {
@@ -632,6 +648,11 @@ abstract class Action implements IteratorAggregate
     /**
      * Render column with field view class
      *
+     * renderField( 'name' )
+     * renderField( 'name' , null , {  } )
+     * renderField( 'name' , {  } )
+     *
+     *
      * @param string $name column name
      * @param string $fieldViewClass
      * @param array $attrs 
@@ -649,10 +670,15 @@ abstract class Action implements IteratorAggregate
             }
         }
         elseif( count($args) == 3 ) {
-            $fieldViewClass = $args[1];
-            $attrs = $args[2];
+            if( $args[1] ) 
+                $fieldViewClass = $args[1];
+            if( $args[2] )
+                $attrs = $args[2];
         }
         $param = $this->getParam($name);
+        if( ! $param ) {
+            throw new Exception( "Param $name is not defined." );
+        }
         $view = new $fieldViewClass($param);
         $view->setWidgetAttributes($attrs);
         return $view->render();
