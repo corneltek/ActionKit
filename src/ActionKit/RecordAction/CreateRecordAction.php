@@ -7,6 +7,8 @@ abstract class CreateRecordAction
 {
     const TYPE = 'create';
 
+    public $enableLoadRecord = false;
+
     function create($args)
     {
         $ret = $this->record->create( $args );
