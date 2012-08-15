@@ -23,6 +23,7 @@ webroot/assets
 webroot/ph/
 webroot/static/upload/
 
+route
 .lazy.php
 assets/
 cache/
