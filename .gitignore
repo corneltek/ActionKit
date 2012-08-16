@@ -31,3 +31,4 @@ webroot/assets
 webroot/ph/
 webroot/static/upload/
 cache.properties
+*SchemaProxy.php
