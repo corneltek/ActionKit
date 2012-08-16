@@ -41,3 +41,4 @@ config/framework.yml
 tests/screenshots/
 utils/Selenium/
 cache.properties
+*SchemaProxy.php
