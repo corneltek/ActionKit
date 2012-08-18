@@ -1,16 +1,16 @@
 <?php
 /**
- *  use ConfigKit\ConfigLoader;
- *  $compiled = ConfigLoader::compile('source_file.yml' , 'compiled_file.php');
- *  $config = ConfigLoader::load('source_file.yml', 'compiled_file.php');
- *  $config = ConfigLoader::load('source_file.yml');
+ *  use ConfigKit\ConfigCompiler;
+ *  $compiled = ConfigCompiler::compile('source_file.yml' , 'compiled_file.php');
+ *  $config = ConfigCompiler::load('source_file.yml', 'compiled_file.php');
+ *  $config = ConfigCompiler::load('source_file.yml');
  */
 namespace ConfigKit;
 use Exception;
 
 class ConfigFileException extends Exception {  }
 
-class ConfigLoader
+class ConfigCompiler
 {
     public static function _compile_file($sourceFile,$compiledFile) {
         $config = yaml_parse( file_get_contents( $sourceFile ) );
