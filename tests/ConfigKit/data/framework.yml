@@ -1,0 +1,80 @@
+---
+ApplicationName: Phifty
+ApplicationID:   phifty
+ApplicationUUID: 9fc933c0-70f9-11e1-9095-3c07541dfc0c
+Domain: phifty.dev
+Mail:
+  NoReply: "\"No Reply\" <no-reply@corneltek.com>"
+  admin: "\"Admin\" <cornelius.howl@gmail.com>"
+Requirement:
+  Extensions:
+    - mbstring
+    - apc
+Applications:
+  Core:
+  TestApp:
+View:
+  Backend: twig
+  Class: \Phifty\View
+  TemplateDirs: {  }
+Locale:
+  LocaleDir: locale
+  Default: zh_TW
+  Langs:
+    - en
+    - zh_TW
+Services:
+  CurrentUserService:
+    Class: Phifty\Security\CurrentUser
+    Model: User\Model\User
+  ActionService: {  }
+  RouterService: {  }
+  MailerService:
+    Transport: MailTransport
+    Plugins:
+      AntiFloodPlugin: { EmailLimit: 10, PauseSeconds: 30 }
+  CacheService:   {  }
+  SessionService: {  }
+  LocaleService:  {  }
+  TwigService: {  }
+  AssetService: { }
+  PluginService: {  }
+Plugins:
+  I18N:
+  AdminUI:
+  CRUD: {  }
+  User: { allow_signup: 0 }
+  News:
+    with_icon: 1
+    with_image: 1
+    with_category: 1
+    with_external_link: 1
+    with_brief: 1
+    with_cover_option: 1
+    with_event:
+      with_image: 1
+      with_brief: 1
+      with_external_link: 1
+  Product:
+    with_category: 1
+    with_subcategory: 1
+    with_private: 1
+    with_price: 1
+    with_types: 1
+    with_images: 1
+    with_features: 1
+    with_spec: 1
+    with_resources: 1
+    with_cover_option: 1
+    with_cover_image: 1
+    image:
+      size_limit: 600
+      resize_width: 600
+    thumb:
+      size_limit: 600
+      resize_width: 300
+    upload_dir: static/upload
+  ImageData: {  }
+  DMenu:
+  HotelBundle:
+  TourBundle:
