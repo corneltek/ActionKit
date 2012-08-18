@@ -13,7 +13,7 @@ class ConfigFileException extends Exception {  }
 class ConfigLoader
 {
     public static function _compile_file($sourceFile,$compiledFile) {
-        $config = yaml_parse($sourceFile);
+        $config = yaml_parse( file_get_contents( $sourceFile ) );
         if( file_put_contents( $compiledFile , '<?php return ' . var_export($config,true) . ';' ) === false ) {
             throw new ConfigFileException("Can not write config file.");
         }
@@ -34,5 +34,15 @@ class ConfigLoader
             self::_compile_file($sourceFile,$compiledFile);
         }
         return $compiledFile;
+    }
+
+    public static function load($sourceFile,$compiledFile = null) {
+        $file = self::compile($sourceFile,$compiledFile);
+        return require $file;
+    }
+
+    public static function unlink($sourceFile,$compiledFile = null) {
+        $file = self::compile($sourceFile,$compiledFile);
+        return unlink($file);
     }
 }
