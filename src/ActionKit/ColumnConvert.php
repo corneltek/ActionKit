@@ -21,11 +21,15 @@ class ColumnConvert
 
         // if we got record, load the value from it.
         if( $record ) {
-            $param->value   = $record->{$name};
+            $val = $record->{$name};
+            $val = is_a($val,'LazyRecord\BaseModel') ? $val->dataKeyValue() : $val;
+
+            // var_dump( $name, $val, $val->results[0] );
+            $param->value   = $val;
 
             // XXX: should get default value (from column definition)
             //      default value is only used in create action.
-            $param->default = $record->{$name};
+            $param->default = $val;
         }
 
         if( $param->refer ) {
