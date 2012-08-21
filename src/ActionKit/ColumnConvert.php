@@ -40,7 +40,7 @@ class ColumnConvert
                         $label = method_exists($item,'dataLabel') 
                                 ? $item->dataLabel()
                                 : $item->id;
-                        $options[ $label ] = $item->id;
+                        $options[ $label ] = $item->dataKeyValue();
                     }
                     $param->validValues = $options;
                 } 
@@ -53,7 +53,7 @@ class ColumnConvert
                         $label = method_exists($item,'dataLabel') 
                                 ? $item->dataLabel()
                                 : $item->id;
-                        $options[ $label ] = $item->id;
+                        $options[ $label ] = $item->dataKeyValue();
                     }
                     $param->validValues = $options;
                 }
