@@ -10,11 +10,11 @@ class RuleLoader
 
     public function load($rule) {
         if( is_string($rule) ) {
-            $rule = str_replace('::','\\',$rule);
-            if( ! class_exists($rule,true) ) {
+            $class = str_replace('::','\\',$rule);
+            if( ! class_exists($class,true) ) {
                 throw new Exception("Rule class $rule not found.");
             }
-            return $this->rules[] = new $rule;
+            return $this->rules[] = new $class;
         } else {
             return $this->rules[] = $rule;
         }

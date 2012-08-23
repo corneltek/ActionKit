@@ -34,10 +34,11 @@
 
         <testsuite name="PluginTests">
             <directory suffix="Test.php">plugins</directory>
+            <directory suffix="Test.php">tests/plugins</directory>
         </testsuite>
 
-        <testsuite name="PluginsTests">
-            <directory suffix="Test.php">tests/plugins</directory>
+        <testsuite name="Kendo">
+            <directory suffix="Test.php">tests/Kendo</directory>
         </testsuite>
 
         <testsuite name="ActionKit">
