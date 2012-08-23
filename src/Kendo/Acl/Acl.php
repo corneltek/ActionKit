@@ -38,39 +38,43 @@ class Acl
         }
     }
 
-    public function allow() {
-        $this->notifyAllow();
+    public function allow($notify = false) {
+        if($notify) {
+            $this->notifyAllow();
+        }
         return true;
     }
 
-    public function deny()
+    public function deny($notify = false)
     {
-        $this->notifyDeny();
+        if($notify) {
+            $this->notifyDeny();
+        }
         return false;
     }
 
-    public function can($user,$resource,$operation)
+    public function can($user,$resource,$operation,$notify = true)
     {
         if( is_string($user) ) {
             $role = $user;
             if( true === $this->loader->authorize($role,$resource,$operation) ) 
-                return $this->allow();
-            return $this->deny();
+                return $this->allow($notify);
+            return $this->deny($notify);
         }
         elseif( $user instanceof MultiRoleInterface || method_exists($user,'getRoles') ) {
             foreach( $user->getRoles() as $role ) {
                 if( true === $this->loader->authorize($role,$resource,$operation) ) {
-                    return $this->allow();
+                    return $this->allow($notify);
                 }
             }
-            return $this->deny();
+            return $this->deny($notify);
         } else {
             throw new InvalidArgumentException;
         }
     }
 
-    public function cannot($user,$resource,$operation) {
-        return ! $this->can($user,$resource,$operation);
+    public function cannot($user,$resource,$operation,$notify = true) {
+        return ! $this->can($user,$resource,$operation,$notify);
     }
 
     static public function getInstance($loader = null)

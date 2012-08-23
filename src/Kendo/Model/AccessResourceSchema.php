@@ -14,7 +14,11 @@ class AccessResourceSchema extends SchemaDeclare
 
         $this->column('description')
             ->text();
+
+        $this->many('access_rules','Kendo\Model\AccessRuleSchema','resource','name');
     }
+
+
 }
 
 
