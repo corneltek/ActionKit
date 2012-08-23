@@ -71,12 +71,16 @@ abstract class BaseRules
         if( $this->order[0] == 'allow' ) {
             if( $this->hasRule( $this->allowRules, $roleId, $resourceId, $operationId ) )
                 return true;
-            return false;
+            if( $this->hasRule( $this->denyRules, $roleId, $resourceId, $operationId ) )
+                return false;
+            return;
         }
         elseif( $this->order[0] == 'deny' ) {
             if( $this->hasRule( $this->denyRules, $roleId, $resourceId, $operationId ) )
                 return false;
-            return true;
+            if( $this->hasRule( $this->allowRules, $roleId, $resourceId, $operationId ) )
+                return true;
+            return;
         }
         else {
             throw new RuleOrderException('authorize order is not defined.');
