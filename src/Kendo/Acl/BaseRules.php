@@ -4,13 +4,17 @@ use Exception;
 
 class RuleOrderException extends Exception { }
 
-class BaseRules
+abstract class BaseRules
 {
     public $allowRules = array();
     public $denyRules = array();
     public $order = array('allow','deny');
 
-    public function __construct() { }
+    public function __construct() {
+        $this->build();
+    }
+
+    abstract function build();
 
     public function add($roleId, $resourceId, $operationId, $allow )
     {
@@ -65,14 +69,14 @@ class BaseRules
         }
     }
 
-    public function import($stash) 
+    public function import($stash)
     {
         $this->allowRules = $stash['allow'];
         $this->denyRules = $stash['deny'];
         $this->order = $stash['order'];
     }
 
-    public function export() 
+    public function export()
     {
         return array(
             'allow' => $this->allowRules,
