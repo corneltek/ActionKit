@@ -10,7 +10,7 @@ class AccessControlSchema extends SchemaDeclare
         $this->column('role')
             ->varchar(32);
 
-        $this->column('resource_id')
+        $this->column('rule_id')
             ->integer()
             ->required();
 
@@ -18,7 +18,7 @@ class AccessControlSchema extends SchemaDeclare
             ->boolean()
             ->default(false);
 
-        $this->belongsTo('resource','Kendo\Model\AccessResourceSchema','id','resource_id');
+        $this->belongsTo('resource','Kendo\Model\AccessResourceSchema','id','rule_id');
     }
 }
 

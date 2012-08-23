@@ -55,7 +55,7 @@ abstract class DatabaseRules extends BaseRules
 
         $ac = new AccessControl;
         $ret = $ac->loadOrCreate(array( 
-            'resource_id' => $ar->id,
+            'rule_id' => $ar->id,
             'role' => $rule->role,
             'allow' => $rule->allow,
         ));
@@ -69,14 +69,12 @@ abstract class DatabaseRules extends BaseRules
     public function syncResource($res)
     {
         $resource = new AccessResource;
-        $resource->createOrUpdate( array(
+        $ret = $resource->createOrUpdate( array(
             'name' => $res->name,
             'label' => $res->label,
         ),array('name'));
-
-        if( ! $resource->id ) {
-            throw new Exception("Can not write AccessResource to database");
-        }
+        if( ! $ret->success )
+            throw $ret->exception;
     }
 
     public function buildAndSync() {
