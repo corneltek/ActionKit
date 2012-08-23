@@ -17,6 +17,8 @@ class AccessControlSchema extends SchemaDeclare
         $this->column('allow')
             ->boolean()
             ->default(false);
+
+        $this->belongsTo('resource','Kendo\Model\AccessResourceSchema','id','resource_id');
     }
 }
 
