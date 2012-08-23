@@ -13,13 +13,13 @@ use Exception;
  */
 abstract class DatabaseRules extends BaseRules
 {
-
     public function __construct() {
         $this->cacheSupport = extension_loaded('apc');
         if( $this->cacheSupport ) {
             $key = get_class($this);
             if( $cache = apc_fetch($key) ) {
                 $this->import($cache);
+                $this->cacheLoaded = true;
                 return;
             } else {
                 $this->buildAndSync();
@@ -85,7 +85,6 @@ abstract class DatabaseRules extends BaseRules
             $this->write();  // write back to database
         }
     }
-
 
     public function getAccessRuleRecords()
     {
