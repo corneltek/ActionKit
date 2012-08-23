@@ -33,6 +33,7 @@ abstract class DatabaseRules extends BaseRules
     public function getRuleRecordArguments($rule)
     {
         $args = array( 
+            'rules_class' => get_class($this),
             'resource' => $rule->resource,
             'operation' => $rule->operation['id'],
             'description' => $rule->desc,
@@ -78,17 +79,47 @@ abstract class DatabaseRules extends BaseRules
     }
 
     public function buildAndSync() {
-        $this->build();
-        $this->write();
+        // load rules from database
+        if( ! $this->load() ) {
+            $this->build();  // initialize rules from code
+            $this->write();  // write back to database
+        }
     }
 
+
+    public function getAccessRuleRecords()
+    {
+        $rules = new AccessRuleCollection;
+        $rules->where()
+            ->equal('rules_class',get_class($this));
+        return $rules;
+    }
 
     /**
      * Load rules from database.
      */
     public function load() 
     {
+        $rules = $this->getAccessRuleRecords();
+        $loaded = false;
+        foreach($rules as $rule) {
+            $control = $rule->control;
+            if( $control->allow ) {
+                $this->addAllowRule($control->role,$rule->resource,$rule->operation);
+            } else {
+                $this->addDenyRule($control->role,$rule->resource,$rule->operation);
+            }
+            $loaded = true;
+        }
+        return $loaded;
+    }
 
+    public function clean() 
+    {
+        $rules = $this->getAccessRuleRecords();
+        foreach( $rules as $rule ) {
+            $rule->delete();
+        }
     }
 
     public function write() {

@@ -6,7 +6,7 @@ class AccessRuleSchema extends SchemaDeclare
 {
     function schema() 
     {
-        $this->column('rule_class')
+        $this->column('rules_class')
             ->varchar(64);
 
         $this->column('resource')
