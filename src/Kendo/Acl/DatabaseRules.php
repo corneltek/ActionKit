@@ -153,7 +153,7 @@ abstract class DatabaseRules extends BaseRules
             ->label('User Management');
 
         $this->add('admin','users','create',true)
-            ->operationLabel( 'Create User' );
+            ->label( 'Create User' );
     }
     */
 

@@ -20,7 +20,7 @@ class Rule
         $this->allow = $allow;
     }
 
-    public function operationLabel($label) {
+    public function label($label) {
         $this->operation['label'] = $label;
         return $this;
     }
