@@ -9,9 +9,23 @@ abstract class BaseRules
     public $allowRules = array();
     public $denyRules = array();
     public $order = array('allow','deny');
+    public $cacheSupport = false;
+    public $cacheExpiry = 1200;
 
     public function __construct() {
-        $this->build();
+        $this->cacheSupport = extension_loaded('apc');
+        if( $this->cacheSupport ) {
+            $key = get_class($this);
+            if( $cache = apc_fetch($key) ) {
+                $this->import($cache);
+                return;
+            } else {
+                $this->build();
+                apc_store($key,$this->export, $this->cacheExpiry);
+            }
+        } else {
+            $this->build();
+        }
     }
 
     abstract function build();
