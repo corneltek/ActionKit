@@ -63,6 +63,10 @@ class Rule {
         $this->allow = $allow;
     }
 
+
+    /**
+     * Sync Rule item to database.
+     */
     public function sync() {
         // sync resource operation table
         $ar = new AR;
