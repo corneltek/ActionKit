@@ -1,8 +1,10 @@
 <?php
 namespace Kendo\Acl;
-use Kendo\Model\AccessResource as AR;
+use Kendo\Model\AccessResource;
 use Kendo\Model\AccessResourceCollection as ARCollection;
-use Kendo\Model\AccessControl as AC;
+use Kendo\Model\AccessRule;
+use Kendo\Model\AccessRuleCollection;
+use Kendo\Model\AccessControl;
 use Kendo\Model\AccessControlCollection as ACCollection;
 use Exception;
 
@@ -28,7 +30,7 @@ abstract class DatabaseRules extends BaseRules
         }
     }
 
-    public function getARRecordArguments($rule)
+    public function getRuleRecordArguments($rule)
     {
         $args = array( 
             'resource' => $rule->resource['id'],
@@ -46,12 +48,12 @@ abstract class DatabaseRules extends BaseRules
      */
     public function syncRule($rule) {
         // sync resource operation table
-        $ar = new AR;
-        $ret = $ar->createOrUpdate( $this->getARRecordArguments($rule) ,array('resource','operation'));
+        $ar = new AccessRule;
+        $ret = $ar->createOrUpdate( $this->getRuleRecordArguments($rule) ,array('resource','operation'));
         if( ! $ret->success )
             throw new $ret->exception;
 
-        $ac = new AC;
+        $ac = new AccessControl;
         $ret = $ac->loadOrCreate(array( 
             'resource_id' => $ar->id,
             'role' => $rule->role,
@@ -59,29 +61,46 @@ abstract class DatabaseRules extends BaseRules
         ));
         if( ! $ret->success )
             throw new $ret->exception;
+
+        // override default allow values
+        $rule->allow = $ac->allow;
     }
 
     public function syncResource($res)
     {
+        $resource = new AccessResource;
+        $resource->createOrUpdate( array(
+            'name' => $res->name,
+            'label' => $res->label,
+        ),array('name'));
 
+        if( ! $resource->id ) {
+            throw new Exception("Can not write AccessResource to database");
+        }
     }
 
     public function buildAndSync() {
         $this->build();
-        foreach( $this->rules as $rule ) {
-            $this->syncRule($rule);
-        }
+        $this->write();
+    }
+
+    public function write() {
         foreach( $this->resources as $res ) {
             $this->syncResource($res);
+        }
+        foreach( $this->rules as $rule ) {
+            $this->syncRule($rule);
         }
     }
 
     /*
-        function build() {
-            $this->add('admin','users','create',true)
-                ->resourceLabel( 'Users' );
-                ->operationLabel( 'Create User' );
-        }
+    function build() {
+        $this->resource( 'users' )
+            ->label('User Management');
+
+        $this->add('admin','users','create',true)
+            ->operationLabel( 'Create User' );
+    }
     */
 
 }

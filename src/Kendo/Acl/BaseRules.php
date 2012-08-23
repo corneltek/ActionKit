@@ -39,20 +39,20 @@ abstract class BaseRules
 
     abstract function build();
 
-    public function resource($resourceId)
+    public function resource($resource)
     {
-        return $this->resources[ $resourceId ] = new Resource($resourceId);
+        return $this->resources[ $resource ] = new Resource($resource);
     }
 
-    public function hasResource($resourceId) 
+    public function hasResource($resource) 
     {
-        return isset($this->resources[ $resourceId ]);
+        return isset($this->resources[ $resource ]);
     }
 
-    public function getResource($resourceId)
+    public function getResource($resource)
     {
-        if( isset($this->resources[ $resourceId ]) ) {
-            return $this->resources[ $resourceId ];
+        if( isset($this->resources[ $resource ]) ) {
+            return $this->resources[ $resource ];
         }
     }
 
