@@ -65,10 +65,19 @@ class BaseRules
         }
     }
 
-    public function export() {
+    public function import($stash) 
+    {
+        $this->allowRules = $stash['allow'];
+        $this->denyRules = $stash['deny'];
+        $this->order = $stash['order'];
+    }
+
+    public function export() 
+    {
         return array(
             'allow' => $this->allowRules,
             'deny'  => $this->denyRules,
+            'order' => $this->order,
         );
     }
 }
