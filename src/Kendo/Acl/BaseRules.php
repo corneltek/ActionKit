@@ -63,9 +63,9 @@ abstract class BaseRules
     public function rule($roleId, $resourceId, $operationId, $allow )
     {
         if( $allow ) {
-            $this->addAllowRule($roleId,$resourceId,$operationId);
+            return $this->addAllowRule($roleId,$resourceId,$operationId);
         } else {
-            $this->addDenyRule($roleId,$resourceId,$operationId);
+            return $this->addDenyRule($roleId,$resourceId,$operationId);
         }
     }
 
