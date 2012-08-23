@@ -4,6 +4,7 @@ use Kendo\Model\AccessResource as AR;
 use Kendo\Model\AccessResourceCollection as ARCollection;
 use Kendo\Model\AccessControl as AC;
 use Kendo\Model\AccessControlCollection as ACCollection;
+use Exception;
 
 class Resource {
 
@@ -72,7 +73,7 @@ class Rule {
     public function sync() {
         // sync resource operation table
         $ar = new AR;
-        $ar->createOrUpdate(array( 
+        $ret = $ar->createOrUpdate(array( 
             'resource' => $this->resource->id,
             'resource_label' => $this->resource->label,
             'operation' => $this->operation->id,
@@ -80,11 +81,21 @@ class Rule {
             'description' => $this->desc,
         ),array('resource','operation'));
 
-        $ac = 
+        if( ! $ret->success )
+            throw new $ret->exception;
+
+        $ac = new AC;
+        $ret = $ac->loadOrCreate(array( 
+            'resource_id' => $ar->id,
+            'role' => $this->role,
+            'allow' => $this->allow,
+        ));
+        if( ! $ret->success )
+            throw new $ret->exception;
     }
 
     public function toArray() {
-        return array( 
+        return array(
             'role' => $this->role,
             'operation' => $this->operation->toArray(),
             'resource' => $this->resource->toArray(),
@@ -99,7 +110,6 @@ class Rule {
  */
 abstract class DatabaseRules extends BaseRules
 {
-
 
 
 }
