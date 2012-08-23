@@ -66,10 +66,20 @@ abstract class BaseRules
         return isset( $rules[ $roleId ][ $resourceId ][ $operationId ] );
     }
 
-    public function get($rules,$roleId,$resourceId,$operationId)
+    public function getRule($rules,$roleId,$resourceId,$operationId)
     {
         if( isset( $rules[ $roleId ][ $resourceId ][ $operationId ] ) )
             return $rules[ $roleId ][ $resourceId ][ $operationId ];
+    }
+
+    public function getAllowRule($roleId,$resourceId,$operationId) 
+    {
+        return $this->getRule( $this->allowRules , $roleId, $resourceId, $operationId);
+    }
+
+    public function getDenyRule($roleId,$resourceId,$operationId)
+    {
+        return $this->getRule( $this->denyRules, $roleId, $resourceId, $operationId);
     }
 
     public function authorize($roleId, $resourceId, $operationId)
