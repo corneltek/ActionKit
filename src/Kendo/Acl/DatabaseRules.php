@@ -7,6 +7,7 @@ use Kendo\Model\AccessControlCollection as ACCollection;
 use Exception;
 
 class DatabaseRule extends Rule
+{
 
     public function ARRecordArguments()
     {
@@ -15,9 +16,9 @@ class DatabaseRule extends Rule
             'operation' => $this->operation['id'],
             'description' => $this->desc,
         );
-        if( isset($this->resource['label'] )) )
+        if( isset($this->resource['label'] ) )
             $args['resource_label'] = $this->resource['label'];
-        if( isset($this->operation['label'] )) )
+        if( isset($this->operation['label'] ) )
             $args['operation_label'] = $this->operation['label'];
         return $args;
     }
@@ -48,9 +49,6 @@ class DatabaseRule extends Rule
  */
 abstract class DatabaseRules extends BaseRules
 {
-
-    abstract function build();
-
     public function __construct() {
         $this->cacheSupport = extension_loaded('apc');
         if( $this->cacheSupport ) {

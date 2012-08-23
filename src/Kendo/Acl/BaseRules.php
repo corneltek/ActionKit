@@ -4,9 +4,6 @@ use Exception;
 
 class RuleOrderException extends Exception { }
 
-
-
-
 abstract class BaseRules
 {
     public $allowRules = array();
@@ -21,6 +18,8 @@ abstract class BaseRules
      * when cache exists, this array is empty.
      */
     public $rules = array();
+
+    public $resources = array();
 
     public function __construct() {
         $this->cacheSupport = extension_loaded('apc');
@@ -40,16 +39,33 @@ abstract class BaseRules
 
     abstract function build();
 
-    public function add($roleId, $resourceId, $operationId, $allow )
+    public function resource($resourceId)
     {
-        if( $allow ) {
-            $this->addAllow($roleId,$resourceId,$operationId);
-        } else {
-            $this->addDeny($roleId,$resourceId,$operationId);
+        return $this->resources[ $resourceId ] = new Resource($resourceId);
+    }
+
+    public function hasResource($resourceId) 
+    {
+        return isset($this->resources[ $resourceId ]);
+    }
+
+    public function getResource($resourceId)
+    {
+        if( isset($this->resources[ $resourceId ]) ) {
+            return $this->resources[ $resourceId ];
         }
     }
 
-    public function addAllow( $roleId, $resourceId, $operationId ) 
+    public function rule($roleId, $resourceId, $operationId, $allow )
+    {
+        if( $allow ) {
+            $this->addAllowRule($roleId,$resourceId,$operationId);
+        } else {
+            $this->addDenyRule($roleId,$resourceId,$operationId);
+        }
+    }
+
+    public function addAllowRule( $roleId, $resourceId, $operationId ) 
     {
         if( ! isset($this->allowRules[ $roleId ]) ) {
             $this->allowRules[ $roleId ] = array();
@@ -59,10 +75,10 @@ abstract class BaseRules
         }
         $rule = new $this->ruleClass($roleId,$resourceId,$operationId,true);
         $this->rules[] = $rule;
-        return $this->allowRules[$roleId][$resourceId][ $operationId ] = $rule->toArray();
+        return $this->allowRules[$roleId][$resourceId][ $operationId ] = $rule;
     }
 
-    public function addDeny( $roleId, $resourceId, $operationId )
+    public function addDenyRule( $roleId, $resourceId, $operationId )
     {
         if( ! isset($this->denyRules[ $roleId ]) ) {
             $this->denyRules[ $roleId ] = array();
@@ -72,7 +88,7 @@ abstract class BaseRules
         }
         $rule = new $this->ruleClass($roleId,$resourceId,$operationId,false);
         $this->rules[] = $rule;
-        return $this->denyRules[$roleId][$resourceId][ $operationId ] = $rule->toArray();
+        return $this->denyRules[$roleId][$resourceId][ $operationId ] = $rule;
     }
 
     public function hasRule($rules,$roleId,$resourceId,$operationId) 
@@ -117,11 +133,15 @@ abstract class BaseRules
         }
     }
 
+
+
+
     public function import($stash)
     {
         $this->allowRules = $stash['allow'];
         $this->denyRules = $stash['deny'];
         $this->order = $stash['order'];
+        $this->resources = $stash['resources'];
     }
 
     public function export()
@@ -130,6 +150,7 @@ abstract class BaseRules
             'allow' => $this->allowRules,
             'deny'  => $this->denyRules,
             'order' => $this->order,
+            'resources' => $this->resources,
         );
     }
 }

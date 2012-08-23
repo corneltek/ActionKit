@@ -8,7 +8,7 @@ class Rule
     public $operation;
 
     /**
-     * description
+     * Description
      */
     public $desc;
     public $allow = false;
