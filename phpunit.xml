@@ -32,11 +32,11 @@
             <exclude>_old</exclude>
         </testsuite>
 
-        <testsuite name="Plugins">
+        <testsuite name="PluginTests">
             <directory suffix="Test.php">plugins</directory>
         </testsuite>
 
-        <testsuite name="PluginsAction">
+        <testsuite name="PluginsTests">
             <directory suffix="Test.php">tests/plugins</directory>
         </testsuite>
 
