@@ -8,6 +8,8 @@ class RuleLoader
 
     public $fallbackAllow = false;
 
+    public $allowUndefinedResource = true;
+
     public function load($rule) {
         if( is_string($rule) ) {
             $class = str_replace('::','\\',$rule);
@@ -22,15 +24,23 @@ class RuleLoader
 
     public function authorize($role,$resource,$operation)
     {
+        $foundResource = false;
         foreach( $this->rules as $rule ) {
-            $result = $rule->authorize($role,$resource,$operation);
-            if( $result === true ) {
-                return true;
-            } elseif( $result === false ) {
-                return false;
-            } elseif( $result === null ) {
-                // continue
+            if($rule->hasResource($resource))
+            {
+                $foundResource = true;
+                $result = $rule->authorize($role,$resource,$operation);
+                if( $result === true ) {
+                    return true;
+                } elseif( $result === false ) {
+                    return false;
+                } elseif( $result === null ) {
+                    // continue
+                }
             }
+        }
+        if( ! $foundResource && $this->allowUndefinedResource ) {
+            return true;
         }
         return $this->fallbackAllow;
     }
