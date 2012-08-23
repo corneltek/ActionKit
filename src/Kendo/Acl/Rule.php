@@ -25,11 +25,6 @@ class Rule
         return $this;
     }
 
-    public function resourceLabel($label) {
-        $this->resource['label'] = $label;
-        return $this;
-    }
-
     public function desc($desc) {
         $this->desc = $desc;
         return $this;

@@ -35,8 +35,6 @@ abstract class DatabaseRules extends BaseRules
             'operation' => $rule->operation['id'],
             'description' => $rule->desc,
         );
-        if( isset($rule->resource['label'] ) )
-            $args['resource_label'] = $rule->resource['label'];
         if( isset($rule->operation['label'] ) )
             $args['operation_label'] = $rule->operation['label'];
         return $args;
@@ -63,10 +61,18 @@ abstract class DatabaseRules extends BaseRules
             throw new $ret->exception;
     }
 
+    public function syncResource($res)
+    {
+
+    }
+
     public function buildAndSync() {
         $this->build();
         foreach( $this->rules as $rule ) {
             $this->syncRule($rule);
+        }
+        foreach( $this->resources as $res ) {
+            $this->syncResource($res);
         }
     }
 
