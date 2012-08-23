@@ -29,7 +29,12 @@
             <directory suffix="Test.php">tests/I18NKit</directory>
         </testsuite>
 
+        <testsuite name="KendoTest">
+            <directory suffix="Test.php">tests/Kendo</directory>
+        </testsuite>
+
         <testsuite name="PluginTest">
+            <directory suffix="Test.php">plugins</directory>
             <directory suffix="Test.php">tests/plugins</directory>
         </testsuite>
 
