@@ -21,7 +21,7 @@ abstract class BaseRules
                 return;
             } else {
                 $this->build();
-                apc_store($key,$this->export, $this->cacheExpiry);
+                apc_store($key,$this->export(), $this->cacheExpiry);
             }
         } else {
             $this->build();
@@ -47,7 +47,7 @@ abstract class BaseRules
         if( ! isset($this->allowRules[ $roleId ][ $resourceId ]) ) {
             $this->allowRules[ $roleId ][ $resourceId ] = array();
         }
-        $this->allowRules[$roleId][$resourceId][ $operationId ] = $allow;
+        $this->allowRules[$roleId][$resourceId][ $operationId ] = true;
     }
 
     public function addDeny( $roleId, $resourceId, $operationId )
@@ -58,7 +58,7 @@ abstract class BaseRules
         if( ! isset($this->denyRules[ $roleId ][ $resourceId ]) ) {
             $this->denyRules[ $roleId ][ $resourceId ] = array();
         }
-        $this->denyRules[$roleId][$resourceId][ $operationId ] = $allow;
+        $this->denyRules[$roleId][$resourceId][ $operationId ] = true;
     }
 
     public function hasRule($rules,$roleId,$resourceId,$operationId) 
@@ -66,7 +66,7 @@ abstract class BaseRules
         return isset( $rules[ $roleId ][ $resourceId ][ $operationId ] );
     }
 
-    public function authorize($roleId, $resoureId, $operationId)
+    public function authorize($roleId, $resourceId, $operationId)
     {
         if( $this->order[0] == 'allow' ) {
             if( $this->hasRule( $this->allowRules, $roleId, $resourceId, $operationId ) )
