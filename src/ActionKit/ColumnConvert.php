@@ -22,7 +22,7 @@ class ColumnConvert
         // if we got record, load the value from it.
         if( $record ) {
             $val = $record->{$name};
-            $val = is_a($val,'LazyRecord\BaseModel') ? $val->dataKeyValue() : $val;
+            $val = $val instanceof \LazyRecord\BaseModel ? $val->dataKeyValue() : $val;
 
             // var_dump( $name, $val, $val->results[0] );
             $param->value   = $val;
