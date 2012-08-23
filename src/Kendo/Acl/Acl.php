@@ -2,16 +2,40 @@
 namespace Kendo\Acl;
 use Kendo\Acl\RuleLoader;
 use Kendo\Acl\MultiRoleInterface;
+use Kendo\Acl\AccessObserver;
 use Exception;
 use InvalidArgumentException;
 
 class Acl
 {
     public $loader;
+    public $observers = array();
 
     public function __construct(RuleLoader $loader)
     {
         $this->loader = $loader;
+    }
+
+    public function attach(AccessObserver $obs) {
+        $this->observers["$obs"] = $obs;
+    }
+
+    public function detach(AccessObserver $obs) {
+        delete($this->observers["$obs"]);
+    }
+
+    public function notifySuccess() 
+    {
+        foreach( $this->observers as $observer ) {
+            $observer->success($this);
+        }
+    }
+
+    public function notifyFail()
+    {
+        foreach( $this->observers as $observer ) {
+            $observer->fail($this);
+        }
     }
 
     public function can($user,$resource,$operation)
