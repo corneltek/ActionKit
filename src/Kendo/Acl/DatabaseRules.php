@@ -2,6 +2,8 @@
 namespace Kendo\Acl;
 use Kendo\Model\AccessResource as AR;
 use Kendo\Model\AccessResourceCollection as ARCollection;
+use Kendo\Model\AccessControl as AC;
+use Kendo\Model\AccessControlCollection as ACCollection;
 
 class Resource {
 
@@ -77,6 +79,8 @@ class Rule {
             'operation_label' => $this->operation->label,
             'description' => $this->desc,
         ),array('resource','operation'));
+
+        $ac = 
     }
 
     public function toArray() {

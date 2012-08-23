@@ -13,7 +13,6 @@ class AccessResourceSchema extends SchemaDeclare
         $this->column('resource_label')
             ->varchar(128);
 
-
         $this->column('operation')
             ->varchar(64)
             ->required();
