@@ -6,66 +6,21 @@ use Kendo\Model\AccessControl as AC;
 use Kendo\Model\AccessControlCollection as ACCollection;
 use Exception;
 
-class Resource {
+class DatabaseRule extends Rule
 
-    public $id;
-    public $label;
-
-    public function __construct($id) {
-        $this->id = $id;
-    }
-
-    public function __toString() {
-        return $this->id;
-    }
-
-    public function toArray() {
-        return array(
-            'id' => $this->id,
-            'label' => $this->label,
+    public function ARRecordArguments()
+    {
+        $args = array( 
+            'resource' => $this->resource['id'],
+            'operation' => $this->operation['id'],
+            'description' => $this->desc,
         );
+        if( isset($this->resource['label'] )) )
+            $args['resource_label'] = $this->resource['label'];
+        if( isset($this->operation['label'] )) )
+            $args['operation_label'] = $this->operation['label'];
+        return $args;
     }
-}
-
-class Operation { 
-
-    public $id;
-    public $label;
-
-    public function __construct($id) {
-        $this->id = $id;
-    }
-
-    public function __toString() {
-        return $this->id;
-    }
-
-    public function toArray() {
-        return array(
-            'id' => $this->id,
-            'label' => $this->label,
-        );
-    }
-}
-
-class Rule {
-    public $role;
-    public $resource;
-    public $operation;
-
-    /**
-     * description
-     */
-    public $desc;
-    public $allow = false;
-
-    public function __construct($role,$resource,$operation,$allow) {
-        $this->role = $role;
-        $this->operation = new Operation($operation);
-        $this->resource = new Resource($operation);
-        $this->allow = $allow;
-    }
-
 
     /**
      * Sync Rule item to database.
@@ -73,14 +28,7 @@ class Rule {
     public function sync() {
         // sync resource operation table
         $ar = new AR;
-        $ret = $ar->createOrUpdate(array( 
-            'resource' => $this->resource->id,
-            'resource_label' => $this->resource->label,
-            'operation' => $this->operation->id,
-            'operation_label' => $this->operation->label,
-            'description' => $this->desc,
-        ),array('resource','operation'));
-
+        $ret = $ar->createOrUpdate( $this->ARRecordArguments() ,array('resource','operation'));
         if( ! $ret->success )
             throw new $ret->exception;
 
@@ -93,16 +41,6 @@ class Rule {
         if( ! $ret->success )
             throw new $ret->exception;
     }
-
-    public function toArray() {
-        return array(
-            'role' => $this->role,
-            'operation' => $this->operation->toArray(),
-            'resource' => $this->resource->toArray(),
-            'allow' => $this->allow,
-            'desc' => $this->desc,
-        );
-    }
 }
 
 /**
@@ -111,6 +49,38 @@ class Rule {
 abstract class DatabaseRules extends BaseRules
 {
 
+    abstract function build();
+
+    public function __construct() {
+        $this->cacheSupport = extension_loaded('apc');
+        if( $this->cacheSupport ) {
+            $key = get_class($this);
+            if( $cache = apc_fetch($key) ) {
+                $this->import($cache);
+                return;
+            } else {
+                $this->buildAndSync();
+                apc_store($key,$this->export(), $this->cacheExpiry);
+            }
+        } else {
+            $this->buildAndSync();
+        }
+    }
+
+    public function buildAndSync() {
+        $this->build();
+        foreach( $this->rules as $rule ) {
+            $rule->sync();
+        }
+    }
+
+    /*
+        function build() {
+            $this->add('admin','users','create',true)
+                ->resourceLabel( 'Users' );
+                ->operationLabel( 'Create User' );
+        }
+    */
 
 }
 

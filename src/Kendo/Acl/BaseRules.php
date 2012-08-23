@@ -4,6 +4,9 @@ use Exception;
 
 class RuleOrderException extends Exception { }
 
+
+
+
 abstract class BaseRules
 {
     public $allowRules = array();
@@ -11,6 +14,13 @@ abstract class BaseRules
     public $order = array('allow','deny');
     public $cacheSupport = false;
     public $cacheExpiry = 1200;
+    public $ruleClass = 'Kendo\Acl\Rule';
+
+    /**
+     * Contains rule objects after build,
+     * when cache exists, this array is empty.
+     */
+    public $rules = array();
 
     public function __construct() {
         $this->cacheSupport = extension_loaded('apc');
@@ -47,7 +57,9 @@ abstract class BaseRules
         if( ! isset($this->allowRules[ $roleId ][ $resourceId ]) ) {
             $this->allowRules[ $roleId ][ $resourceId ] = array();
         }
-        $this->allowRules[$roleId][$resourceId][ $operationId ] = true;
+        $rule = new $this->ruleClass($roleId,$resourceId,$operationId,true);
+        $this->rules[] = $rule;
+        return $this->allowRules[$roleId][$resourceId][ $operationId ] = $rule->toArray();
     }
 
     public function addDeny( $roleId, $resourceId, $operationId )
@@ -58,7 +70,9 @@ abstract class BaseRules
         if( ! isset($this->denyRules[ $roleId ][ $resourceId ]) ) {
             $this->denyRules[ $roleId ][ $resourceId ] = array();
         }
-        $this->denyRules[$roleId][$resourceId][ $operationId ] = true;
+        $rule = new $this->ruleClass($roleId,$resourceId,$operationId,false);
+        $this->rules[] = $rule;
+        return $this->denyRules[$roleId][$resourceId][ $operationId ] = $rule->toArray();
     }
 
     public function hasRule($rules,$roleId,$resourceId,$operationId) 
