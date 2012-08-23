@@ -4,8 +4,8 @@ use Kendo\Acl\Acl;
 
 interface AccessObserver
 {
-    public function success(Acl $o);
-    public function fail(Acl $o);
+    public function onAllow(Acl $o);
+    public function onDeny(Acl $o);
 }
 
 

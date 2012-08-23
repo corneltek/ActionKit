@@ -24,32 +24,46 @@ class Acl
         delete($this->observers["$obs"]);
     }
 
-    public function notifySuccess() 
+    public function notifyAllow() 
     {
         foreach( $this->observers as $observer ) {
-            $observer->success($this);
+            $observer->onAllow($this);
         }
     }
 
-    public function notifyFail()
+    public function notifyDeny()
     {
         foreach( $this->observers as $observer ) {
-            $observer->fail($this);
+            $observer->onDeny($this);
         }
+    }
+
+    public function allow() {
+        $this->notifyAllow();
+        return true;
+    }
+
+    public function deny()
+    {
+        $this->notifyDeny();
+        return false;
     }
 
     public function can($user,$resource,$operation)
     {
         if( is_string($user) ) {
             $role = $user;
-            return $this->loader->authorize($role,$resource,$operation);
+            if( true === $this->loader->authorize($role,$resource,$operation) ) 
+                return $this->allow();
+            return $this->deny();
         }
         elseif( $user instanceof MultiRoleInterface ) {
             foreach( $user->getRoles() as $role ) {
-                if( true === $this->loader->authorize($role,$resource,$operation) )
-                    return true;
+                if( true === $this->loader->authorize($role,$resource,$operation) ) {
+                    return $this->allow();
+                }
             }
-            return false;
+            return $this->deny();
         } else {
             throw new InvalidArgumentException;
         }
