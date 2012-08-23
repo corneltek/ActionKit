@@ -61,7 +61,10 @@ class Acl
 
     static public function getInstance($loader = null)
     {
-        return new self($loader);
+        static $instance;
+        if( $instance )
+            return $instance;
+        return $instance = new self($loader);
     }
 }
 
