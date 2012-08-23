@@ -2,15 +2,15 @@
 namespace Kendo\Acl;
 use Exception;
 
-class RuleOrderException extends Exception {
-
-}
+class RuleOrderException extends Exception { }
 
 class BaseRules
 {
     public $allowRules = array();
     public $denyRules = array();
     public $order = array('allow','deny');
+
+    public function __construct() { }
 
     public function add($roleId, $resourceId, $operationId, $allow )
     {
