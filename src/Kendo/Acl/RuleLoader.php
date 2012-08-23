@@ -1,5 +1,6 @@
 <?php
 namespace Kendo\Acl;
+use Exception;
 
 class RuleLoader
 {
@@ -8,7 +9,11 @@ class RuleLoader
     public $fallbackAllow = false;
 
     public function load($rule) {
-        if( is_string($rule) && class_exists($rule,true) ) {
+        if( is_string($rule) ) {
+            $rule = str_replace('::','\\',$rule);
+            if( ! class_exists($rule,true) ) {
+                throw new Exception("Rule class $rule not found.");
+            }
             $this->rules[] = new $rule;
         } else {
             $this->rules[] = $rule;
