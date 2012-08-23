@@ -15,8 +15,8 @@ class Rule
 
     public function __construct($role,$resource,$operation,$allow) {
         $this->role = $role;
+        $this->resource = $resource;
         $this->operation = array( 'id' => $operation );
-        $this->resource = array( 'id' => $resource );
         $this->allow = $allow;
     }
 

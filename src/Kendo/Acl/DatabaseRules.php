@@ -33,7 +33,7 @@ abstract class DatabaseRules extends BaseRules
     public function getRuleRecordArguments($rule)
     {
         $args = array( 
-            'resource' => $rule->resource['id'],
+            'resource' => $rule->resource,
             'operation' => $rule->operation['id'],
             'description' => $rule->desc,
         );
