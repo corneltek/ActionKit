@@ -82,6 +82,15 @@ abstract class DatabaseRules extends BaseRules
         $this->write();
     }
 
+
+    /**
+     * Load rules from database.
+     */
+    public function load() 
+    {
+
+    }
+
     public function write() {
         foreach( $this->resources as $res ) {
             $this->syncResource($res);
@@ -90,6 +99,22 @@ abstract class DatabaseRules extends BaseRules
             $this->syncRule($rule);
         }
     }
+
+    public function addAllowRule($roleId, $resourceId, $operationId) {
+        /*
+        $ar = new AccessRule;
+        $ret = $ar->load(array('resource' => $resourceId,'operation' => $operationId ));
+        $ac = new AccessControl;
+        $ac->load(array('role' => $roleId , 'rule_id' => $ar));
+        */
+        return parent::addAllowRule( $roleId, $resourceId, $operationId );
+    }
+
+    public function addDenyRule( $roleId, $resourceId, $operationId) {
+        return parent::addDenyRule( $roleId, $resourceId, $operationId );
+    }
+    
+    
 
     /*
     function build() {

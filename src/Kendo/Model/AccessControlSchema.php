@@ -18,7 +18,7 @@ class AccessControlSchema extends SchemaDeclare
             ->boolean()
             ->default(false);
 
-        $this->belongsTo('resource','Kendo\Model\AccessResourceSchema','id','rule_id');
+        $this->belongsTo('rule','Kendo\Model\AccessRuleSchema','id','rule_id');
     }
 }
 

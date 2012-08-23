@@ -25,6 +25,12 @@ class Rule
         return $this;
     }
 
+    public function allow($allow)
+    {
+        $this->allow = $allow;
+        return $this;
+    }
+
     public function desc($desc) {
         $this->desc = $desc;
         return $this;

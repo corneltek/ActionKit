@@ -4,7 +4,10 @@ use LazyRecord\Schema\SchemaDeclare;
 
 class AccessRuleSchema extends SchemaDeclare
 {
-    function schema() {
+    function schema() 
+    {
+        $this->column('rule_class')
+            ->varchar(64);
 
         $this->column('resource')
             ->varchar(64)
@@ -19,6 +22,8 @@ class AccessRuleSchema extends SchemaDeclare
 
         $this->column('description')
             ->text();
+
+        $this->belongsTo('control','Kendo\Model\AccessControlSchema','rule_id','id');
     }
 }
 

@@ -65,30 +65,44 @@ abstract class BaseRules
         }
     }
 
-    public function addAllowRule( $roleId, $resourceId, $operationId ) 
+    public function addRule($rule)
     {
+        if( $rule->allow ) {
+            $this->addAllowRule($rule->role,$rule->resource,$rule->operation['id']);
+        } else {
+            $this->addDenyRule($rule->role,$rule->resource,$rule->operation['id']);
+        }
+    }
+
+    public function addAllowRule($roleId, $resourceId, $operationId)
+    {
+        $rule = new $this->ruleClass($roleId,$resourceId,$operationId,true);
         if( ! isset($this->allowRules[ $roleId ]) ) {
             $this->allowRules[ $roleId ] = array();
         }
         if( ! isset($this->allowRules[ $roleId ][ $resourceId ]) ) {
             $this->allowRules[ $roleId ][ $resourceId ] = array();
         }
-        $rule = new $this->ruleClass($roleId,$resourceId,$operationId,true);
-        $this->rules[] = $rule;
-        return $this->allowRules[$roleId][$resourceId][ $operationId ] = $rule;
+        // not to override
+        if( ! isset($this->allowRules[$roleId][$resourceId][$operationId]) ) {
+            if( ! in_array($rule,$this->rules,true) )
+                $this->rules[] = $rule;
+            return $this->allowRules[$roleId][$resourceId][ $operationId ] = $rule;
+        }
     }
 
-    public function addDenyRule( $roleId, $resourceId, $operationId )
+    public function addDenyRule( $roleId, $resourceId, $operationId)
     {
+        $rule = new $this->ruleClass($roleId,$resourceId,$operationId,false);
         if( ! isset($this->denyRules[ $roleId ]) ) {
             $this->denyRules[ $roleId ] = array();
         }
         if( ! isset($this->denyRules[ $roleId ][ $resourceId ]) ) {
             $this->denyRules[ $roleId ][ $resourceId ] = array();
         }
-        $rule = new $this->ruleClass($roleId,$resourceId,$operationId,false);
-        $this->rules[] = $rule;
-        return $this->denyRules[$roleId][$resourceId][ $operationId ] = $rule;
+        if( ! in_array($rule,$this->rules,true) )
+            $this->rules[] = $rule;
+        return $this->denyRules[ $roleId ][$resourceId][ $operationId ] = $rule;
     }
 
     public function hasRule($rules,$roleId,$resourceId,$operationId) 
@@ -101,6 +115,26 @@ abstract class BaseRules
         if( isset( $rules[ $roleId ][ $resourceId ][ $operationId ] ) )
             return $rules[ $roleId ][ $resourceId ][ $operationId ];
     }
+
+    public function removeRule($rules,$roleId,$resourceId,$operationId) 
+    {
+        $rule = $this->getRule($rules,$roleId,$resourceId,$operationId);
+        if( isset( $rules[ $roleId ][ $resourceId ][ $operationId ] ) ) {
+            unset( $rules[ $roleId ][ $resourceId ][ $operationId ] );
+        }
+        return $rule;
+    }
+
+    public function removeAllowRule($roleId,$resourceId,$operationId)
+    {
+        return $this->removeRule($this->allowRules,$roleId,$resourceId,$operationId);
+    }
+
+    public function removeDenyRule($roleId,$resourceId,$operationId)
+    {
+        return $this->removeRule($this->denyRules,$roleId,$resourceId,$operationId);
+    }
+
 
     public function getAllowRule($roleId,$resourceId,$operationId) 
     {
