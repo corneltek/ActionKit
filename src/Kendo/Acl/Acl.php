@@ -57,7 +57,7 @@ class Acl
                 return $this->allow();
             return $this->deny();
         }
-        elseif( $user instanceof MultiRoleInterface ) {
+        elseif( $user instanceof MultiRoleInterface || method_exists($user,'getRoles') ) {
             foreach( $user->getRoles() as $role ) {
                 if( true === $this->loader->authorize($role,$resource,$operation) ) {
                     return $this->allow();
