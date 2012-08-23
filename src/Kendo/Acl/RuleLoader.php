@@ -15,8 +15,10 @@ class RuleLoader
                 throw new Exception("Rule class $rule not found.");
             }
             $this->rules[] = new $rule;
+            return $rule;
         } else {
             $this->rules[] = $rule;
+            return $rule;
         }
     }
 
