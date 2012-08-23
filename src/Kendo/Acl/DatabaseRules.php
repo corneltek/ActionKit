@@ -6,49 +6,12 @@ use Kendo\Model\AccessControl as AC;
 use Kendo\Model\AccessControlCollection as ACCollection;
 use Exception;
 
-class DatabaseRule extends Rule
-{
-
-    public function ARRecordArguments()
-    {
-        $args = array( 
-            'resource' => $this->resource['id'],
-            'operation' => $this->operation['id'],
-            'description' => $this->desc,
-        );
-        if( isset($this->resource['label'] ) )
-            $args['resource_label'] = $this->resource['label'];
-        if( isset($this->operation['label'] ) )
-            $args['operation_label'] = $this->operation['label'];
-        return $args;
-    }
-
-    /**
-     * Sync Rule item to database.
-     */
-    public function sync() {
-        // sync resource operation table
-        $ar = new AR;
-        $ret = $ar->createOrUpdate( $this->ARRecordArguments() ,array('resource','operation'));
-        if( ! $ret->success )
-            throw new $ret->exception;
-
-        $ac = new AC;
-        $ret = $ac->loadOrCreate(array( 
-            'resource_id' => $ar->id,
-            'role' => $this->role,
-            'allow' => $this->allow,
-        ));
-        if( ! $ret->success )
-            throw new $ret->exception;
-    }
-}
-
 /**
  * Use access control rules from database.
  */
 abstract class DatabaseRules extends BaseRules
 {
+
     public function __construct() {
         $this->cacheSupport = extension_loaded('apc');
         if( $this->cacheSupport ) {
@@ -65,10 +28,45 @@ abstract class DatabaseRules extends BaseRules
         }
     }
 
+    public function getARRecordArguments($rule)
+    {
+        $args = array( 
+            'resource' => $rule->resource['id'],
+            'operation' => $rule->operation['id'],
+            'description' => $rule->desc,
+        );
+        if( isset($rule->resource['label'] ) )
+            $args['resource_label'] = $rule->resource['label'];
+        if( isset($rule->operation['label'] ) )
+            $args['operation_label'] = $rule->operation['label'];
+        return $args;
+    }
+
+
+    /**
+     * Sync Rule item to database.
+     */
+    public function syncRule($rule) {
+        // sync resource operation table
+        $ar = new AR;
+        $ret = $ar->createOrUpdate( $this->getARRecordArguments($rule) ,array('resource','operation'));
+        if( ! $ret->success )
+            throw new $ret->exception;
+
+        $ac = new AC;
+        $ret = $ac->loadOrCreate(array( 
+            'resource_id' => $ar->id,
+            'role' => $rule->role,
+            'allow' => $rule->allow,
+        ));
+        if( ! $ret->success )
+            throw new $ret->exception;
+    }
+
     public function buildAndSync() {
         $this->build();
         foreach( $this->rules as $rule ) {
-            $rule->sync();
+            $this->syncRule($rule);
         }
     }
 
