@@ -118,6 +118,7 @@ abstract class DatabaseRules extends BaseRules
     {
         $rules = $this->getAccessRuleRecords();
         foreach( $rules as $rule ) {
+            $rule->control->delete();
             $rule->delete();
         }
     }
