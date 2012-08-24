@@ -24,31 +24,31 @@ class Acl
         delete($this->observers["$obs"]);
     }
 
-    public function notifyAllow() 
+    public function notifyAllow($role,$resource,$operation)
     {
         foreach( $this->observers as $observer ) {
-            $observer->onAllow($this);
+            $observer->onAllow($this,$role,$resource,$operation);
         }
     }
 
-    public function notifyDeny()
+    public function notifyDeny($role,$resource,$operation)
     {
         foreach( $this->observers as $observer ) {
-            $observer->onDeny($this);
+            $observer->onDeny($this,$role,$resource,$operation);
         }
     }
 
-    public function allow($notify = false) {
+    public function allow($role,$resource,$operation,$notify = false) {
         if($notify) {
-            $this->notifyAllow();
+            $this->notifyAllow($role,$resource,$operation);
         }
         return true;
     }
 
-    public function deny($notify = false)
+    public function deny($role,$resource,$operation,$notify = false)
     {
         if($notify) {
-            $this->notifyDeny();
+            $this->notifyDeny($role,$resource,$operation);
         }
         return false;
     }
@@ -58,16 +58,16 @@ class Acl
         if( is_string($user) ) {
             $role = $user;
             if( true === $this->loader->authorize($role,$resource,$operation) ) 
-                return $this->allow($notify);
-            return $this->deny($notify);
+                return $this->allow($role,$resource,$operation,$notify);
+            return $this->deny($role,$resource,$operation,$notify);
         }
         elseif( $user instanceof MultiRoleInterface || method_exists($user,'getRoles') ) {
             foreach( $user->getRoles() as $role ) {
                 if( true === $this->loader->authorize($role,$resource,$operation) ) {
-                    return $this->allow($notify);
+                    return $this->allow($role,$resource,$operation,$notify);
                 }
             }
-            return $this->deny($notify);
+            return $this->deny($role,$resource,$operation,$notify);
         } else {
             throw new InvalidArgumentException;
         }
