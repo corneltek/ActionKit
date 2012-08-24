@@ -10,7 +10,9 @@ extends \Kendo\Model\AccessResourceBase
         $controls->where()
             ->equal('role', $role);
         $controls->order('rule_id','desc');
-        $controls->join(new AccessRule,'LEFT','r');
+        $controls->join(new AccessRule,'LEFT','access_rule');
+        $controls->where()
+            ->equal('access_rule.resource', $this->name );
         return $controls;
     }
     
