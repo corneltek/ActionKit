@@ -21,11 +21,15 @@ class ColumnConvert
 
         // if we got record, load the value from it.
         if( $record ) {
-            $param->value   = $record->{$name};
+            $val = $record->{$name};
+            $val = $val instanceof \LazyRecord\BaseModel ? $val->dataKeyValue() : $val;
+
+            // var_dump( $name, $val, $val->results[0] );
+            $param->value   = $val;
 
             // XXX: should get default value (from column definition)
             //      default value is only used in create action.
-            $param->default = $record->{$name};
+            $param->default = $val;
         }
 
         if( $param->refer ) {
@@ -40,7 +44,7 @@ class ColumnConvert
                         $label = method_exists($item,'dataLabel') 
                                 ? $item->dataLabel()
                                 : $item->id;
-                        $options[ $label ] = $item->id;
+                        $options[ $label ] = $item->dataKeyValue();
                     }
                     $param->validValues = $options;
                 } 
@@ -53,7 +57,7 @@ class ColumnConvert
                         $label = method_exists($item,'dataLabel') 
                                 ? $item->dataLabel()
                                 : $item->id;
-                        $options[ $label ] = $item->id;
+                        $options[ $label ] = $item->dataKeyValue();
                     }
                     $param->validValues = $options;
                 }
