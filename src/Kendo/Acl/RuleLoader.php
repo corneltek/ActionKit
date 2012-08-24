@@ -14,7 +14,7 @@ class RuleLoader
         if( is_string($rule) ) {
             $class = str_replace('::','\\',$rule);
             if( ! class_exists($class,true) ) {
-                throw new Exception("Rule class $rule not found.");
+                throw new Exception("Rule class $class not found.");
             }
             return $this->rules[] = new $class;
         } else {
