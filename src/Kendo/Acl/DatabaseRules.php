@@ -1,7 +1,7 @@
 <?php
 namespace Kendo\Acl;
 use Kendo\Model\AccessResource;
-use Kendo\Model\AccessResourceCollection as ARCollection;
+use Kendo\Model\AccessResourceCollection;
 use Kendo\Model\AccessRule;
 use Kendo\Model\AccessRuleCollection;
 use Kendo\Model\AccessControl;
@@ -73,6 +73,7 @@ abstract class DatabaseRules extends BaseRules
         $ret = $resource->createOrUpdate( array(
             'name' => $res->name,
             'label' => $res->label,
+            'rules_class' => get_class($this),
         ),array('name'));
         if( ! $ret->success )
             throw $ret->exception;
@@ -94,11 +95,26 @@ abstract class DatabaseRules extends BaseRules
         return $rules;
     }
 
+    public function getResourceRecords()
+    {
+        $resources = new AccessResourceCollection;
+        $resources->where()
+            ->equal('rules_class',get_class($this));
+        return $resources;
+    }
+
     /**
      * Load rules from database.
      */
     public function load() 
     {
+        $resources = $this->getResourceRecords();
+        foreach( $resources as $resource ) {
+            $res = $this->resource($resource->name);
+            if( $resource->label )
+                $res->label($resource->label);
+        }
+
         $rules = $this->getAccessRuleRecords();
         $loaded = false;
         foreach($rules as $rule) {
@@ -130,22 +146,6 @@ abstract class DatabaseRules extends BaseRules
             $this->syncRule($rule);
         }
     }
-
-    public function addAllowRule($roleId, $resourceId, $operationId) {
-        /*
-        $ar = new AccessRule;
-        $ret = $ar->load(array('resource' => $resourceId,'operation' => $operationId ));
-        $ac = new AccessControl;
-        $ac->load(array('role' => $roleId , 'rule_id' => $ar));
-        */
-        return parent::addAllowRule( $roleId, $resourceId, $operationId );
-    }
-
-    public function addDenyRule( $roleId, $resourceId, $operationId) {
-        return parent::addDenyRule( $roleId, $resourceId, $operationId );
-    }
-    
-    
 
     /*
     function build() {

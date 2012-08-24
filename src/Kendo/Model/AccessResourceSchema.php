@@ -5,6 +5,9 @@ use LazyRecord\Schema\SchemaDeclare;
 class AccessResourceSchema extends SchemaDeclare
 {
     function schema() {
+        $this->column('rules_class')
+            ->varchar(64);
+
         $this->column('name')
             ->varchar(64)
             ->required();
