@@ -3,7 +3,7 @@ namespace ActionKit\Param;
 use ActionKit\Param;
 use Phifty\UploadFile;
 use Exception;
-use Phifty\SimpleImage;
+use SimpleImage;
 
 
 /**
@@ -36,6 +36,7 @@ class Image extends Param
 
     public function getImager()
     {
+        kernel()->library->load('simpleimage');
         return new SimpleImage;
     }
 
