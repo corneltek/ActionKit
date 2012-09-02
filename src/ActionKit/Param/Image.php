@@ -31,7 +31,7 @@ class Image extends Param
         $this->supportedAttributes[ 'validExtensions' ] = self::ATTR_ARRAY;
         $this->supportedAttributes[ 'putIn' ] = self::ATTR_STRING;
         $this->supportedAttributes[ 'prefix' ] = self::ATTR_STRING;
-        $this->renderAs('ImageFileInput');
+        $this->renderAs('ThumbImageFileInput');
     }
 
     public function getImager()
