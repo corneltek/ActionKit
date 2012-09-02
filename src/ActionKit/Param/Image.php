@@ -3,7 +3,7 @@ namespace ActionKit\Param;
 use ActionKit\Param;
 use Phifty\UploadFile;
 use Exception;
-use Phifty\SimpleImage;
+use SimpleImage;
 
 
 /**
@@ -31,11 +31,12 @@ class Image extends Param
         $this->supportedAttributes[ 'validExtensions' ] = self::ATTR_ARRAY;
         $this->supportedAttributes[ 'putIn' ] = self::ATTR_STRING;
         $this->supportedAttributes[ 'prefix' ] = self::ATTR_STRING;
-        $this->renderAs('ImageFileInput');
+        $this->renderAs('ThumbImageFileInput');
     }
 
     public function getImager()
     {
+        kernel()->library->load('simpleimage');
         return new SimpleImage;
     }
 
