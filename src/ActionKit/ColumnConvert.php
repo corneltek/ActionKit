@@ -29,7 +29,8 @@ class ColumnConvert
 
             // XXX: should get default value (from column definition)
             //      default value is only used in create action.
-            $param->default = $val;
+        } else {
+            $param->value = $column->getDefaultValue();
         }
 
         if( $param->refer ) {
