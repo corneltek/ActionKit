@@ -30,5 +30,16 @@ vendor/pear
 webroot/assets
 webroot/ph/
 webroot/static/upload/
+route
+.lazy.php
+assets/
+cache/
+config/application.yml
+config/database.yml
+config/framework.yml
+tests/screenshots/
+utils/Selenium/
 cache.properties
 *SchemaProxy.php
+*.swp
+locale/*.mo
