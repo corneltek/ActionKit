@@ -49,9 +49,12 @@ class Image extends Param
     public function build()
     {
         $this->supportedAttributes[ 'validExtensions' ] = self::ATTR_ARRAY;
-        $this->supportedAttributes[ 'putIn' ]           = self::ATTR_STRING;
-        $this->supportedAttributes[ 'prefix' ]          = self::ATTR_STRING;
-        $this->renderAs('ThumbImageFileInput');
+        $this->supportedAttributes[ 'putIn' ] = self::ATTR_STRING;
+        $this->supportedAttributes[ 'prefix' ] = self::ATTR_STRING;
+        $this->renderAs('ThumbImageFileInput',array(
+            /* prefix path for widget rendering */
+            'prefix' => '/',
+        ));
     }
 
     public function getImager()
