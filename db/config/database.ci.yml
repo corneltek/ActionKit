@@ -6,8 +6,6 @@ schema:
   loader: src/Phifty/SchemaLoader.php
   base_model: '\Phifty\Model'
   base_collection: '\Phifty\Collection'
-seeds:
-  - User::Seed
 data_sources:
   default:
     dsn: 'mysql:host=localhost;dbname=phifty'
