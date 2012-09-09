@@ -79,7 +79,7 @@ class Image extends Param
         }
     }
 
-    function validate($value)
+    public function validate($value)
     {
         $ret = (array) parent::validate($value);
         if( $ret[0] == false )
@@ -104,7 +104,7 @@ class Image extends Param
         return true;
     }
 
-    function init( & $args ) 
+    public function init( & $args ) 
     {
         /* how do we make sure the file is a real http upload ?
          * if we pass args to model ? 
