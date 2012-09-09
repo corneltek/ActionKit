@@ -8,6 +8,22 @@ use SimpleImage;
 
 /**
  * Preprocess image data fields
+ *
+ * This preprocessor takes image file columns, 
+ * copy these uploaded file to destination directory and 
+ * update the original file hash, So in the run method of 
+ * action class, user can simply take the hash arguments,
+ * and no need to move files or validate size by themselfs.
+ *
+ * To define a Image Param column in Action schema:
+ *
+ *  
+ *  public function schema() 
+ *  {
+ *     $this->param('image','Image')
+ *          ->validExtensions('jpg','png');
+ *  }
+ *
  */
 class Image extends Param
 {
@@ -20,6 +36,10 @@ class Image extends Param
     public $resizeHeight;
 
     public $validExtensions = array('jpg','jpeg','png','gif');
+
+    /**
+     * @var string relative path to webroot path.
+     */
     public $putIn;
     public $renameFile;
     public $sizeLimit;
@@ -29,8 +49,8 @@ class Image extends Param
     public function build()
     {
         $this->supportedAttributes[ 'validExtensions' ] = self::ATTR_ARRAY;
-        $this->supportedAttributes[ 'putIn' ] = self::ATTR_STRING;
-        $this->supportedAttributes[ 'prefix' ] = self::ATTR_STRING;
+        $this->supportedAttributes[ 'putIn' ]           = self::ATTR_STRING;
+        $this->supportedAttributes[ 'prefix' ]          = self::ATTR_STRING;
         $this->renderAs('ThumbImageFileInput');
     }
 
