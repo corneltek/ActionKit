@@ -306,17 +306,13 @@ class Result
         }
         elseif ( 'error' === $this->type ) {
             $ret['data']  = $this->data;
-            $ret['validations'] = $this->validations;
-        }
-        elseif ( 'valid' === $this->type ) {
-            $ret['validations'] = $this->validations;
-        }
-        elseif ( 'invalid' === $this->type ) {
-            $ret['validations'] = $this->validations;
         }
         elseif ( 'completion' === $this->type ) {
             $ret = array_merge( $ret , $this->completion );
         }
+
+        if( $this->validations )
+            $ret['validations'] = $this->validations;
 
         if( $this->redirect ) {
             $ret['redirect'] = $this->redirect;

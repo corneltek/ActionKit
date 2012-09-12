@@ -20,7 +20,6 @@ tests/tmp/
 tests/screenshots/*
 utils/Selenium/
 .lazy.php
-assets/
 config/application.yml
 config/database.yml
 config/framework.yml
