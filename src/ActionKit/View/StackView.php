@@ -54,7 +54,7 @@ class StackView extends BaseView
 
             // put HiddenInput widget out of table,
             // so that we don't have empty cells.
-            if( is_a($widget,'FormKit\Widget\HiddenInput') ) {
+            if( $widget instanceof \FormKit\Widget\HiddenInput ) {
                 $form->append($widget);
             } else {
                 $this->layout->addWidget($widget);

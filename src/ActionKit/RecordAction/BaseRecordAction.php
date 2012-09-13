@@ -186,7 +186,9 @@ abstract class BaseRecordAction extends Action
         if( $ret->validations ) {
             foreach( $ret->validations as $vld ) {
                 $this->result->addValidation( $vld->field , array( 
-                    ( $vld->success ? 'valid' : 'invalid' ) => $vld->message 
+                    'valid'   => $vld->valid,
+                    'message' => $vld->message,
+                    'field'   => $vld->field,
                 )); 
             }
         }
