@@ -5,6 +5,8 @@ abstract class BulkDeleteRecordAction extends DeleteRecordAction
 {
     const TYPE = 'bulk_delete';
 
+    public $enableLoadRecord = false;
+
     public function runValidate() 
     {
         if( isset( $this->args['items'] ) )
@@ -19,9 +21,9 @@ abstract class BulkDeleteRecordAction extends DeleteRecordAction
             $record = $this->record;
             foreach( $items as $id ) {
                 $record->load( (int) $id );
-                $record->delete();
+                $ret = $record->delete();
             }
-            return $this->deleteSuccess();
+            return $this->deleteSuccess($ret);
         } catch( Exception $e ) {
             return $this->error( $e->getMessage() );
         }
