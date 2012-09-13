@@ -1,7 +1,7 @@
 <?php
 namespace ActionKit\RecordAction;
 
-abstract class BulkDeleteRecordAction extends BulkAction
+abstract class BulkDeleteRecordAction extends BulkRecordAction
 {
     const TYPE = 'bulk_delete';
 

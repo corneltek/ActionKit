@@ -2,7 +2,7 @@
 namespace ActionKit\RecordAction;
 use ActionKit\Action;
 
-class BulkAction extends Action
+class BulkRecordAction extends Action
 {
     const TYPE = 'bulk';
 
