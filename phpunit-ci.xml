@@ -53,6 +53,9 @@
   </listeners>
 
   <logging>
+    <!-- print out tap so that we can check clearly on Jenkins CI -->
+    <log type="tap" target="php://stdout"/>
+
     <log type="coverage-html" 
         target="build/coverage" 
         title="Phifty"
@@ -68,6 +71,7 @@
     <log type="junit" 
         target="build/logs/junit.xml"
         logIncompleteSkipped="false"/>
+
 
   </logging>
 
