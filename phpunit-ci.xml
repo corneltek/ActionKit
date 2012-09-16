@@ -44,6 +44,11 @@
         
   </testsuites>
 
+
+  <!--
+  PHPUnit/Extensions/Selenium2TestCase/ScreenshotListener.php
+  -->
+
   <logging>
     <log type="coverage-html" 
         target="build/coverage" 
