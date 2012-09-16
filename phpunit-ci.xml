@@ -44,10 +44,13 @@
         
   </testsuites>
 
-
-  <!--
-  PHPUnit/Extensions/Selenium2TestCase/ScreenshotListener.php
-  -->
+  <listeners>
+    <listener class="PHPUnit_Extensions_Selenium2TestCase_ScreenshotListener" file="PHPUnit/Extensions/Selenium2TestCase/ScreenshotListener.php">
+      <arguments>
+         <string>build/screenshots</string>
+      </arguments>
+    </listener>
+  </listeners>
 
   <logging>
     <log type="coverage-html" 
