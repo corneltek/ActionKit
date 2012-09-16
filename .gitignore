@@ -20,7 +20,6 @@ tests/tmp/
 tests/screenshots/*
 utils/Selenium/
 .lazy.php
-assets/
 config/application.yml
 config/database.yml
 config/framework.yml
@@ -32,7 +31,6 @@ webroot/ph/
 webroot/static/upload/
 route
 .lazy.php
-assets/
 cache/
 config/application.yml
 config/database.yml

@@ -150,7 +150,11 @@ abstract class Action implements IteratorAggregate
         if( ! isset($this->params[ $name ] ) ) {
             return;
             // just skip it.
-            $this->result->addValidation( $name, array( 'invalid' => "Contains invalid arguments: $name" ));
+            $this->result->addValidation( $name, array( 
+                'valid' => false,
+                'message' => "Contains invalid arguments: $name",
+                'field' => $name,
+            ));
             return true;
         }
 
@@ -160,7 +164,11 @@ abstract class Action implements IteratorAggregate
             if( $ret[0] ) { // success
                 # $this->result->addValidation( $name, array( "valid" => $ret[1] ));
             } else {
-                $this->result->addValidation( $name, array( 'invalid' => @$ret[1] ));  // $ret[1] = message
+                $this->result->addValidation( $name, array( 
+                    'valid' => false,
+                    'message' => @$ret[1],
+                    'field' => $name,
+                ));  // $ret[1] = message
                 return true;
             }
         } else {
