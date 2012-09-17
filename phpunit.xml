@@ -55,15 +55,8 @@
         </testsuite>
         -->
         
-  </testsuites>
+    </testsuites>
 
-  <!--
-  <groups>
-        <include>
-            <group>ActionKit</group>
-        </include>
-  </groups>
-  -->
     <listeners>
         <listeners>
             <listener class="PHPUnit_Extensions_Selenium2TestCase_ScreenshotListener" file="PHPUnit/Extensions/Selenium2TestCase/ScreenshotListener.php">
