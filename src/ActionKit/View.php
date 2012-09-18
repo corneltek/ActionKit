@@ -1,10 +1,8 @@
 <?php
-
 namespace ActionKit;
-
 define('NL',"\n");
 
-/* 
+/**
  * A Generic Action View Generator 
  *
  *    $aView = new Phifty\View\Action( 'UpdateUser' );
@@ -58,7 +56,7 @@ class View
         # echo $this->action->getName();
         $this->formStart();
 
-
         $this->formEnd();
     }
 }
+

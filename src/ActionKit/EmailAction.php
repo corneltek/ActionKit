@@ -1,8 +1,8 @@
-<?
+<?php
 namespace ActionKit;
 
 use Phifty\Email;
-use ActionKit;
+use ActionKit\Action;
 /*
 
 
@@ -30,7 +30,7 @@ use ActionKit;
     }
 */
 
-class EmailAction extends \ActionKit\Action 
+class EmailAction extends Action
 {
     /* email object */
     public $email;
