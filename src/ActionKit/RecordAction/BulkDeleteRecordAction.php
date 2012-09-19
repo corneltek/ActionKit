@@ -1,30 +1,18 @@
 <?php
 namespace ActionKit\RecordAction;
 
-abstract class BulkDeleteRecordAction extends DeleteRecordAction
+abstract class BulkDeleteRecordAction extends BulkRecordAction
 {
     const TYPE = 'bulk_delete';
 
-    public function runValidate() 
-    {
-        if( isset( $this->args['items'] ) )
-            return false;  // no error
-        return true;
-    }
-
     public function run()
     {
-        try {
-            $items = $this->arg('items');
-            $record = $this->record;
-            foreach( $items as $id ) {
-                $record->load( (int) $id );
-                $record->delete();
-            }
-            return $this->deleteSuccess();
-        } catch( Exception $e ) {
-            return $this->error( $e->getMessage() );
+        $records = $this->loadRecords();
+        foreach( $records as $record ) {
+            $ret = $record->delete();
         }
+        $count = count($records);
+        return $this->success( $count . '個項目已刪除成功');
     }
 }
 

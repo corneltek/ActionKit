@@ -44,7 +44,18 @@
         
   </testsuites>
 
+  <listeners>
+    <listener class="PHPUnit_Extensions_Selenium2TestCase_ScreenshotListener" file="PHPUnit/Extensions/Selenium2TestCase/ScreenshotListener.php">
+      <arguments>
+         <string>build/screenshots</string>
+      </arguments>
+    </listener>
+  </listeners>
+
   <logging>
+    <!-- print out tap so that we can check clearly on Jenkins CI -->
+    <log type="tap" target="php://stdout"/>
+
     <log type="coverage-html" 
         target="build/coverage" 
         title="Phifty"
@@ -60,6 +71,7 @@
     <log type="junit" 
         target="build/logs/junit.xml"
         logIncompleteSkipped="false"/>
+
 
   </logging>
 

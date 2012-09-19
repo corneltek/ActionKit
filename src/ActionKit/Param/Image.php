@@ -3,11 +3,27 @@ namespace ActionKit\Param;
 use ActionKit\Param;
 use Phifty\UploadFile;
 use Exception;
-use Phifty\SimpleImage;
+use SimpleImage;
 
 
 /**
  * Preprocess image data fields
+ *
+ * This preprocessor takes image file columns, 
+ * copy these uploaded file to destination directory and 
+ * update the original file hash, So in the run method of 
+ * action class, user can simply take the hash arguments,
+ * and no need to move files or validate size by themselfs.
+ *
+ * To define a Image Param column in Action schema:
+ *
+ *  
+ *  public function schema() 
+ *  {
+ *     $this->param('image','Image')
+ *          ->validExtensions('jpg','png');
+ *  }
+ *
  */
 class Image extends Param
 {
@@ -20,6 +36,10 @@ class Image extends Param
     public $resizeHeight;
 
     public $validExtensions = array('jpg','jpeg','png','gif');
+
+    /**
+     * @var string relative path to webroot path.
+     */
     public $putIn;
     public $renameFile;
     public $sizeLimit;
@@ -31,11 +51,15 @@ class Image extends Param
         $this->supportedAttributes[ 'validExtensions' ] = self::ATTR_ARRAY;
         $this->supportedAttributes[ 'putIn' ] = self::ATTR_STRING;
         $this->supportedAttributes[ 'prefix' ] = self::ATTR_STRING;
-        $this->renderAs('ImageFileInput');
+        $this->renderAs('ThumbImageFileInput',array(
+            /* prefix path for widget rendering */
+            'prefix' => '/',
+        ));
     }
 
     public function getImager()
     {
+        kernel()->library->load('simpleimage');
         return new SimpleImage;
     }
 
@@ -55,7 +79,7 @@ class Image extends Param
         }
     }
 
-    function validate($value)
+    public function validate($value)
     {
         $ret = (array) parent::validate($value);
         if( $ret[0] == false )
@@ -80,7 +104,7 @@ class Image extends Param
         return true;
     }
 
-    function init( & $args ) 
+    public function init( & $args ) 
     {
         /* how do we make sure the file is a real http upload ?
          * if we pass args to model ? 

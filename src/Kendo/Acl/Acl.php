@@ -67,10 +67,9 @@ class Acl
                     return $this->allow($role,$resource,$operation,$notify);
                 }
             }
-            return $this->deny($role,$resource,$operation,$notify);
-        } else {
-            throw new InvalidArgumentException;
+            return $this->deny('',$resource,$operation,$notify);
         }
+        throw new InvalidArgumentException;
     }
 
     public function cannot($user,$resource,$operation,$notify = true) {
