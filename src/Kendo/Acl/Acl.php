@@ -38,42 +38,53 @@ class Acl
         }
     }
 
-    public function allow($role,$resource,$operation,$notify = false) {
-        if($notify) {
-            $this->notifyAllow($role,$resource,$operation);
-        }
+    public function allow($role,$resource,$operation) {
         return true;
     }
 
-    public function deny($role,$resource,$operation,$notify = false)
-    {
-        if($notify) {
-            $this->notifyDeny($role,$resource,$operation);
-        }
+    public function deny($role,$resource,$operation) {
         return false;
     }
 
-    public function can($user,$resource,$operation,$notify = true)
+
+    /**
+     * Do authorize (notify access observer)
+     */
+    public function authorize($user,$resource,$operation) 
+    {
+        $allowed = $this->can($user,$resource,$operation);
+        if($allowed) {
+            $this->notifyAllow($role,$resource,$operation);
+        } else {
+            $this->notifyDeny($role,$resource,$operation);
+        }
+        return $allowed;
+    }
+
+
+    /**
+     * Simply checks permisssion
+     */
+    public function can($user,$resource,$operation)
     {
         if( is_string($user) ) {
             $role = $user;
             if( true === $this->loader->authorize($role,$resource,$operation) ) 
-                return $this->allow($role,$resource,$operation,$notify);
-            return $this->deny($role,$resource,$operation,$notify);
+                return true;
+            return false;
         }
         elseif( $user instanceof MultiRoleInterface || method_exists($user,'getRoles') ) {
             foreach( $user->getRoles() as $role ) {
-                if( true === $this->loader->authorize($role,$resource,$operation) ) {
-                    return $this->allow($role,$resource,$operation,$notify);
-                }
+                if( true === $this->loader->authorize($role,$resource,$operation) )
+                    return true;
             }
-            return $this->deny('',$resource,$operation,$notify);
+            return false;
         }
         throw new InvalidArgumentException;
     }
 
-    public function cannot($user,$resource,$operation,$notify = true) {
-        return ! $this->can($user,$resource,$operation,$notify);
+    public function cannot($user,$resource,$operation) {
+        return ! $this->can($user,$resource,$operation);
     }
 
     static public function getInstance($loader = null)
