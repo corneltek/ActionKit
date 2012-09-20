@@ -30,16 +30,19 @@ class StackView extends BaseView
             $this->layout->border(0);
         }
 
-        $form = new FormKit\Element\Form;
-        $form->method($this->method);
-
-        if( $formId = $this->option('form_id') ) {
-            $form->addId( $formId );
+        if( $this->options('no_form') ) {
+            $form = new FormKit\Element\Form;
+            $form->method($this->method);
+            if( $formId = $this->option('form_id') ) {
+                $form->addId( $formId );
+            }
+            if( $formClass = $this->option('form_class') ) {
+                $form->addClass( $formClass );
+            }
+        } else {
+            $form = new FormKit\Element\Div;
         }
 
-        if( $formClass = $this->option('form_class') ) {
-            $form->addClass( $formClass );
-        }
 
         $widgets = array();
         if( $fields = $this->option('fields') ) {
@@ -61,35 +64,33 @@ class StackView extends BaseView
             }
         }
 
-        // Add control buttons
-        $submit = new FormKit\Widget\SubmitInput;
-        $this->layout->addWidget($submit);
+        if( ! $this->option('no_form') ) {
+            // Add control buttons
+            $submit = new FormKit\Widget\SubmitInput;
+            $this->layout->addWidget($submit);
+            if( $this->ajax ) {
+                $ajaxFlag  = new HiddenInput('__ajax_request',array( 'value' => '1' ));
+                $form->append( $ajaxFlag );
+            }
+            $hasRecord   = isset($this->action->record);
+            $hasRecordId = isset($this->action->record) && $this->action->record->id;
 
-        if( $this->ajax ) {
-            $ajaxFlag  = new HiddenInput('__ajax_request',array( 'value' => '1' ));
-            $form->append( $ajaxFlag );
-        }
+            // if we have record and the record has an id, render the id field as hidden field.
+            if( $hasRecordId ) {
+                if( $paramId = $this->action->param('id') ) {
+                    $recordId = $this->action->record->id;
 
-        $hasRecord   = isset($this->action->record);
-        $hasRecordId = isset($this->action->record) && $this->action->record->id;
-
-        // if we have record and the record has an id, render the id field as hidden field.
-        if( $hasRecordId ) {
-            if( $paramId = $this->action->param('id') ) {
-                $recordId = $this->action->record->id;
-
-                // if id field is defined, and the record exists.
-                if( $recordId && $paramId->value ) {
-                    $form->append( new HiddenInput('id',array('value' => $paramId->value )) );
+                    // if id field is defined, and the record exists.
+                    if( $recordId && $paramId->value ) {
+                        $form->append( new HiddenInput('id',array('value' => $paramId->value )) );
+                    }
                 }
             }
+            $signature = new HiddenInput('action',array(
+                'value' => $this->action->getSignature()
+            ));
+            $form->append( $signature );
         }
-
-        $signature = new HiddenInput('action',array(
-            'value' => $this->action->getSignature()
-        ));
-        
-        $form->append( $signature );
         $form->append( $this->layout );
         $this->form = $form;
     }
