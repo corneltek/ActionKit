@@ -24,17 +24,17 @@ class Acl
         delete($this->observers["$obs"]);
     }
 
-    public function notifyAllow($role,$resource,$operation)
+    public function notifyAllow($user,$resource,$operation)
     {
         foreach( $this->observers as $observer ) {
-            $observer->onAllow($this,$role,$resource,$operation);
+            $observer->onAllow($this,$user,$resource,$operation);
         }
     }
 
-    public function notifyDeny($role,$resource,$operation)
+    public function notifyDeny($user,$resource,$operation)
     {
         foreach( $this->observers as $observer ) {
-            $observer->onDeny($this,$role,$resource,$operation);
+            $observer->onDeny($this,$user,$resource,$operation);
         }
     }
 
@@ -54,9 +54,9 @@ class Acl
     {
         $allowed = $this->can($user,$resource,$operation);
         if($allowed) {
-            $this->notifyAllow($role,$resource,$operation);
+            $this->notifyAllow($user,$resource,$operation);
         } else {
-            $this->notifyDeny($role,$resource,$operation);
+            $this->notifyDeny($user,$resource,$operation);
         }
         return $allowed;
     }
@@ -83,7 +83,8 @@ class Acl
         throw new InvalidArgumentException;
     }
 
-    public function cannot($user,$resource,$operation) {
+    public function cannot($user,$resource,$operation) 
+    {
         return ! $this->can($user,$resource,$operation);
     }
 
