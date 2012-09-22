@@ -127,7 +127,7 @@ class Image extends Param
          *
          * if not, check sourceField.
          * */
-        if( isset($_FILES[ $this->name ]['name']) ) {
+        if( @$_FILES[ $this->name ]['name'] ) {
             $file = new UploadFile( $this->name );
         } else {
             if( $this->sourceField )
