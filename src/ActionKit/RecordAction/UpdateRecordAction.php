@@ -58,7 +58,7 @@ abstract class UpdateRecordAction
 
 
     function successMessage($ret) {
-        return __('%1 updated.', $this->record->getLabel() );
+        return __('%1 Record is updated.', $this->record->getLabel() );
     }
 
     function errorMessage($ret) {

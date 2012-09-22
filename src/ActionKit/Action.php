@@ -66,12 +66,15 @@ abstract class Action implements IteratorAggregate
         $this->request = new HttpRequest;
         $this->args = $args;
         $this->result = new Result;
-        if( $currentUser ) {
+        if( $currentUser )
             $this->currentUser = $currentUser;
-        }
 
         // initialize parameter objects
         $this->schema();
+
+        if( ! is_array($args) ) {
+            throw new Exception('Action arguments of ' . get_class($this) . ' is not an array.');
+        }
 
         $this->args = $this->_filterArguments($args);
 
@@ -96,19 +99,20 @@ abstract class Action implements IteratorAggregate
         return $this;
     }
 
-    function _filterArguments($args) {
+    protected function _filterArguments($args) {
+        
         // find immutable params and unset them
         foreach( $this->params as $name => $param ) {
             if( $param->immutable ) {
                 unset($args[$name]);
             }
         }
-
         if( $this->takeFields ) {
             // take these fields only
             return array_intersect_key( $args , array_fill_keys($this->takeFields,1) );
         }
-        elseif( $this->filterOutFields ) {
+        elseif( $this->filterOutFields ) 
+        {
             return array_diff_key( $args , array_fill_keys($this->filterOutFields,1) );
         }
         return $args;

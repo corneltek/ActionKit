@@ -37,6 +37,8 @@ class Image extends Param
 
     public $validExtensions = array('jpg','jpeg','png','gif');
 
+    public $compression = 99;
+
     /**
      * @var string relative path to webroot path.
      */
@@ -51,6 +53,7 @@ class Image extends Param
         $this->supportedAttributes[ 'validExtensions' ] = self::ATTR_ARRAY;
         $this->supportedAttributes[ 'putIn' ] = self::ATTR_STRING;
         $this->supportedAttributes[ 'prefix' ] = self::ATTR_STRING;
+        $this->supportedAttributes[ 'compression' ] = self::ATTR_ANY;
         $this->renderAs('ThumbImageFileInput',array(
             /* prefix path for widget rendering */
             'prefix' => '/',
@@ -161,7 +164,9 @@ class Image extends Param
                 // we should only resize image file only when size is changed.
                 if( $image->getWidth() > $this->resizeWidth ) {
                     $image->resizeToWidth( $this->resizeWidth );
-                    $image->save( $imageFile );
+
+                    // (filename, image type, jpeg compression, permissions);
+                    $image->save( $imageFile , null , $this->compression );
                 }
             }
         }
