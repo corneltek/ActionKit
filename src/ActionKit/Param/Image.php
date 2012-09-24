@@ -37,6 +37,8 @@ class Image extends Param
 
     public $validExtensions = array('jpg','jpeg','png','gif');
 
+    public $compression = 99;
+
     /**
      * @var string relative path to webroot path.
      */
@@ -51,6 +53,7 @@ class Image extends Param
         $this->supportedAttributes[ 'validExtensions' ] = self::ATTR_ARRAY;
         $this->supportedAttributes[ 'putIn' ] = self::ATTR_STRING;
         $this->supportedAttributes[ 'prefix' ] = self::ATTR_STRING;
+        $this->supportedAttributes[ 'compression' ] = self::ATTR_ANY;
         $this->renderAs('ThumbImageFileInput',array(
             /* prefix path for widget rendering */
             'prefix' => '/',
@@ -69,7 +72,7 @@ class Image extends Param
     }
 
 
-    function preinit( & $args )
+    public function preinit( & $args )
     {
         /* For safety , remove the POST, GET field !! should only keep $_FILES ! */
         if( isset( $args[ $this->name ] ) ) {
@@ -104,7 +107,7 @@ class Image extends Param
         return true;
     }
 
-    public function init( & $args ) 
+    public function init( & $args )
     {
         /* how do we make sure the file is a real http upload ?
          * if we pass args to model ? 
@@ -124,7 +127,7 @@ class Image extends Param
          *
          * if not, check sourceField.
          * */
-        if( @$_FILES[ $this->name ]['name'] ) {
+        if( isset($_FILES[ $this->name ]['name']) && $_FILES[$this->name]['name'] ) {
             $file = new UploadFile( $this->name );
         } else {
             if( $this->sourceField )
@@ -146,9 +149,9 @@ class Image extends Param
                     ? $this->prefixPath . $file->getSavedPath()
                     : $file->getSavedPath()
                     ;
-            $this->action->addData( $this->name , 
+            $this->action->addData( $this->name ,
                 $this->prefixPath
-                    ? $this->prefixPath . $file->getSavedPath() 
+                    ? $this->prefixPath . $file->getSavedPath()
                     : $file->getSavedPath()
             );
 
@@ -157,11 +160,15 @@ class Image extends Param
                 $image = $this->getImager();
                 $imageFile = $file->getSavedPath();
                 $image->load( $imageFile );
-                if( $image->getWidth() > $this->resizeWidth )
-                    $image->resizeToWidth( $this->resizeWidth );
-                $image->save( $imageFile );
-            }
 
+                // we should only resize image file only when size is changed.
+                if( $image->getWidth() > $this->resizeWidth ) {
+                    $image->resizeToWidth( $this->resizeWidth );
+
+                    // (filename, image type, jpeg compression, permissions);
+                    $image->save( $imageFile , null , $this->compression );
+                }
+            }
         }
     }
 
