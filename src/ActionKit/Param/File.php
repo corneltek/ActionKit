@@ -19,8 +19,6 @@ class File extends Param
 {
     public $paramType = 'file';
 
-    public $validExtensions;
-    public $putIn;
     public $renameFile;
     public $sizeLimit;
     public $sourceField;  /* If field is not defined, use this source field */
