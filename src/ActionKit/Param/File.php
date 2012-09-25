@@ -69,7 +69,7 @@ class File extends Param
         return true;
     }
 
-    function init( & $args ) 
+    public function init( & $args ) 
     {
         /* how do we make sure the file is a real http upload ?
          * if we pass args to model ? 
