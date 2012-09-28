@@ -1,6 +1,7 @@
 <?php
 namespace ActionKit;
 use ActionKit\Param;
+use Exception;
 
 /**
  * Convert LazyORM column to Action param, 
@@ -18,11 +19,18 @@ class ColumnConvert
             $param->$k = $v;
         }
 
-
         // if we got record, load the value from it.
         if( $record ) {
-            // $param->value = $record->{$name};
-            $param->default = $record->{$name};
+            $val = $record->{$name};
+            $val = $val instanceof \LazyRecord\BaseModel ? $val->dataKeyValue() : $val;
+
+            // var_dump( $name, $val, $val->results[0] );
+            $param->value   = $val;
+
+            // XXX: should get default value (from column definition)
+            //      default value is only used in create action.
+        } else {
+            $param->value = $column->getDefaultValue();
         }
 
         if( $param->refer ) {
@@ -37,7 +45,7 @@ class ColumnConvert
                         $label = method_exists($item,'dataLabel') 
                                 ? $item->dataLabel()
                                 : $item->id;
-                        $options[ $label ] = $item->id;
+                        $options[ $label ] = $item->dataKeyValue();
                     }
                     $param->validValues = $options;
                 } 
@@ -50,10 +58,10 @@ class ColumnConvert
                         $label = method_exists($item,'dataLabel') 
                                 ? $item->dataLabel()
                                 : $item->id;
-                        $options[ $label ] = $item->id;
+                        $options[ $label ] = $item->dataKeyValue();
                     }
                     $param->validValues = $options;
-                } 
+                }
                 else {
                     throw new Exception('Unsupported refer type');
                 }
@@ -67,6 +75,9 @@ class ColumnConvert
 
         //  Convert column type to param type.
         // copy widget attributes
+        if( $column->widgetClass ) {
+            $param->widgetClass = $column->widgetClass;
+        }
         if( $column->widgetAttributes ) {
             $param->widgetAttributes = $column->widgetAttributes;
         }

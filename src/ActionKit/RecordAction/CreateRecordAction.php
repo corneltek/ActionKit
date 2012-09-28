@@ -7,6 +7,8 @@ abstract class CreateRecordAction
 {
     const TYPE = 'create';
 
+    public $enableLoadRecord = false;
+
     function create($args)
     {
         $ret = $this->record->create( $args );
@@ -43,7 +45,9 @@ abstract class CreateRecordAction
 
     public function errorMessage($ret)
     {
-        return __('Can not create %1 record' , $this->record->getLabel() );
+        // XXX: should show exception message when error is found.
+        return __('Can not create %1 record: %2' , $this->record->getLabel(), $ret->exception->getMessage() );
+        return __('Can not create %1 record.' , $this->record->getLabel() );
     }
 
     public function createSuccess($ret) 

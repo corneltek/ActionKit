@@ -4,8 +4,14 @@ use Exception;
 
 class Result 
 {
+    /**
+     * @var string success, error
+     */
     public $type;  // success, error, valid, invalid, completion, redirect
 
+    /**
+     * @var array argument array
+     */
     public $args;  // arguments to actions.
 
 
@@ -29,7 +35,7 @@ class Result
     /**
      * @var string can descrbie the result.
      */
-    public $description;
+    public $desc;
 
     /**
      * @var boolean should we redirect ? this is usually needed in ajax 
@@ -60,16 +66,16 @@ class Result
         }
     }
 
+
+    /**
+     * Set result type
+     *
+     * @param string $type
+     */
     function type( $type ) 
     {
-        // check type
-        if( $type != 'completion'
-            && $type != 'success'
-            && $type != 'error'
-            && $type != 'valid'
-            && $type != 'invalid'
-            && $type != 'redirect' ) {
-            throw new Exception( _('Wrong ActionResult Type, Line ') . __LINE__ );
+        if( in_array($type, array('success','completeion','error','valid','invalid','redirect')) ) {
+            throw new Exception('Invalid result type.');
         }
         $this->type = $type;
     }
@@ -160,6 +166,11 @@ class Result
     }
 
 
+    /**
+     * Transform validation messages into errors.
+     *
+     * @return array
+     */
     function gatherInvalidMsgs()
     {
         $errors = array();
@@ -171,26 +182,52 @@ class Result
         return $errors;
     }
 
+
+    /**
+     * Set redirect path
+     *
+     * @param string $path
+     */
     function redirect( $path )
     {
-        $this->redirect = $path; return $this; 
+        $this->redirect = $path; 
+        return $this; 
     }
 
+
+    /**
+     * Set arguments
+     *
+     * @param array $args
+     */
     function args( $args ) 
     {
         $this->args = $args; 
         return $this; 
     }
 
-    function describe($description) {
-        $this->description = $description;
+
+    /**
+     * Set result description
+     *
+     * @param string $desc
+     */
+    function desc($desc) {
+        $this->desc = $desc;
         return $this;
     }
 
 
-    function data( $data ) 
+    /**
+     * Set result data
+     */
+    function data( $data , $val = null )
     { 
-        $this->data = $data; 
+        if( is_array($data) ) {
+            $this->data = $data; 
+        } elseif( $val ) {
+            $this->data[ $data ] = $val;
+        }
         return $this; 
     }
 
@@ -256,8 +293,8 @@ class Result
 
         $ret[ $this->type ] = true;
 
-        if( $this->description ) {
-            $ret['description'] = $this->description;
+        if( $this->desc ) {
+            $ret['desc'] = $this->desc;
         }
 
         if( $this->message ) {
@@ -269,17 +306,13 @@ class Result
         }
         elseif ( 'error' === $this->type ) {
             $ret['data']  = $this->data;
-            $ret['validations'] = $this->validations;
-        }
-        elseif ( 'valid' === $this->type ) {
-            $ret['validations'] = $this->validations;
-        }
-        elseif ( 'invalid' === $this->type ) {
-            $ret['validations'] = $this->validations;
         }
         elseif ( 'completion' === $this->type ) {
             $ret = array_merge( $ret , $this->completion );
         }
+
+        if( $this->validations )
+            $ret['validations'] = $this->validations;
 
         if( $this->redirect ) {
             $ret['redirect'] = $this->redirect;

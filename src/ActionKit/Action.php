@@ -66,12 +66,15 @@ abstract class Action implements IteratorAggregate
         $this->request = new HttpRequest;
         $this->args = $args;
         $this->result = new Result;
-        if( $currentUser ) {
+        if( $currentUser )
             $this->currentUser = $currentUser;
-        }
 
         // initialize parameter objects
         $this->schema();
+
+        if( ! is_array($args) ) {
+            throw new Exception('Action arguments of ' . get_class($this) . ' is not an array.');
+        }
 
         $this->args = $this->_filterArguments($args);
 
@@ -96,19 +99,20 @@ abstract class Action implements IteratorAggregate
         return $this;
     }
 
-    function _filterArguments($args) {
+    protected function _filterArguments($args) {
+        
         // find immutable params and unset them
         foreach( $this->params as $name => $param ) {
             if( $param->immutable ) {
                 unset($args[$name]);
             }
         }
-
         if( $this->takeFields ) {
             // take these fields only
             return array_intersect_key( $args , array_fill_keys($this->takeFields,1) );
         }
-        elseif( $this->filterOutFields ) {
+        elseif( $this->filterOutFields ) 
+        {
             return array_diff_key( $args , array_fill_keys($this->filterOutFields,1) );
         }
         return $args;
@@ -150,7 +154,11 @@ abstract class Action implements IteratorAggregate
         if( ! isset($this->params[ $name ] ) ) {
             return;
             // just skip it.
-            $this->result->addValidation( $name, array( 'invalid' => "Contains invalid arguments: $name" ));
+            $this->result->addValidation( $name, array( 
+                'valid' => false,
+                'message' => "Contains invalid arguments: $name",
+                'field' => $name,
+            ));
             return true;
         }
 
@@ -160,7 +168,11 @@ abstract class Action implements IteratorAggregate
             if( $ret[0] ) { // success
                 # $this->result->addValidation( $name, array( "valid" => $ret[1] ));
             } else {
-                $this->result->addValidation( $name, array( 'invalid' => @$ret[1] ));  // $ret[1] = message
+                $this->result->addValidation( $name, array( 
+                    'valid' => false,
+                    'message' => @$ret[1],
+                    'field' => $name,
+                ));  // $ret[1] = message
                 return true;
             }
         } else {
@@ -266,12 +278,11 @@ abstract class Action implements IteratorAggregate
         if( $all ) {
             return $this->params;
         }
-
         if ( $this->takeFields ) {
             return array_intersect_key($this->params, array_fill_keys($this->takeFields,1) );  // find white list
         }
         elseif( $this->filterOutFields ) {
-            return array_diff_key( $this->params, array_fill_keys($this->filterOutFields,1) ); // diff keys by blacklist
+            return array_diff_key($this->params, array_fill_keys($this->filterOutFields,1) ); // diff keys by blacklist
         } 
         return $this->params;
     }
@@ -678,7 +689,7 @@ abstract class Action implements IteratorAggregate
         }
         $param = $this->getParam($name);
         if( ! $param ) {
-            throw new Exception( "Param $name is not defined." );
+            throw new Exception( "Action param '$name' is not defined." );
         }
         $view = new $fieldViewClass($param);
         $view->setWidgetAttributes($attrs);

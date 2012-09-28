@@ -1,4 +1,4 @@
-<?
+<?php
 namespace ActionKit;
 
 use Phifty\Email;

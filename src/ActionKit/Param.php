@@ -113,7 +113,7 @@ class Param extends CascadingAttribute
     public function getLabel()
     {
         if( $this->label )
-            return $this->label;
+            return _($this->label);
         return ucfirst($this->name);
     }
 

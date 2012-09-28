@@ -22,6 +22,7 @@ abstract class BaseRecordAction extends Action
      */
     public $recordClass;
 
+    public $enableLoadRecord = true;
 
     abstract function successMessage($ret);
 
@@ -40,7 +41,7 @@ abstract class BaseRecordAction extends Action
         $this->record = $record ?: new $this->recordClass;
 
         if( ! $record ) {   // for create action, we don't need to create record
-            if( $this->getType() !== 'create' ) {
+            if( $this->getType() !== 'create' && $this->enableLoadRecord ) {
                 if( ! $this->loadRecordFromArguments( $args ) ) {
                     throw new ActionException('Record action can not load record', $this );
                 }
@@ -57,6 +58,7 @@ abstract class BaseRecordAction extends Action
 
         /* run schema , init base action stuff */
         parent::__construct( $args , $currentUser );
+        $this->loadRecordValues();
     }
 
 
@@ -69,6 +71,21 @@ abstract class BaseRecordAction extends Action
         $this->initRecordColumn();
     }
 
+
+    /**
+     * Load record values into params
+     */
+    public function loadRecordValues() {
+        /* load record value */
+        if( $this->record->id ) {
+            foreach( $this->record->getColumns(true) as $column ) {
+                if( $val = $this->record->{ $column->name } ) {
+                    if( isset($this->params[ $column->name ]) )
+                        $this->params[ $column->name ]->value = $val;
+                }
+            }
+        }
+    }
 
     /**
      * Load record from arguments (by primary key: id)
@@ -95,7 +112,7 @@ abstract class BaseRecordAction extends Action
         foreach( $this->record->getColumns(true) as $column ) {
             if( ! isset($this->params[$column->name] ) ) {
                 $this->params[ $column->name ] = ColumnConvert::toParam( $column , $this->record );
-            }
+            } 
         }
     }
 
@@ -169,7 +186,9 @@ abstract class BaseRecordAction extends Action
         if( $ret->validations ) {
             foreach( $ret->validations as $vld ) {
                 $this->result->addValidation( $vld->field , array( 
-                    ( $vld->success ? 'valid' : 'invalid' ) => $vld->message 
+                    'valid'   => $vld->valid,
+                    'message' => $vld->message,
+                    'field'   => $vld->field,
                 )); 
             }
         }
