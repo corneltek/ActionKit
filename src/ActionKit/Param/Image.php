@@ -145,10 +145,11 @@ class Image extends Param
             /* if we use sourceField, than use Copy */
             $file->putIn( $this->putIn , $newName , $this->sourceField ? true : false );
 
-            $args[ $this->name ] = $this->prefixPath
+            $imageFile = $args[ $this->name ] = $this->prefixPath
                     ? $this->prefixPath . $file->getSavedPath()
                     : $file->getSavedPath()
                     ;
+
             $this->action->addData( $this->name ,
                 $this->prefixPath
                     ? $this->prefixPath . $file->getSavedPath()
@@ -158,11 +159,10 @@ class Image extends Param
             // resize image and save back.
             if( $this->resizeWidth ) {
                 $image = $this->getImager();
-                $imageFile = $file->getSavedPath();
                 $image->load( $imageFile );
 
                 // we should only resize image file only when size is changed.
-                if( $image->getWidth() > $this->resizeWidth ) {
+                if( $image->getWidth() >= $this->resizeWidth ) {
                     $image->resizeToWidth( $this->resizeWidth );
 
                     // (filename, image type, jpeg compression, permissions);

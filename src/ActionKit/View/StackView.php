@@ -30,7 +30,8 @@ class StackView extends BaseView
             $this->layout->border(0);
         }
 
-        if( $this->options('no_form') ) {
+
+        if( ! $this->option('no_form') ) {
             $form = new FormKit\Element\Form;
             $form->method($this->method);
             if( $formId = $this->option('form_id') ) {
