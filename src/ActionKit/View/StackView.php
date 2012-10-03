@@ -8,6 +8,7 @@ use FormKit\Widget\HiddenInput;
 class StackView extends BaseView
 {
     public $layout;
+    public $wrapper;
     public $method = 'POST';
     public $ajax = false;
 
@@ -50,6 +51,7 @@ class StackView extends BaseView
                 $wrapper->addClass( $formClass );
             }
         }
+        $this->wrapper = $wrapper;
         $wrapper->append( $this->layout );
 
 
@@ -81,8 +83,26 @@ class StackView extends BaseView
 
                     }
                 } else {
+                    $record = new $relation['record'];
                     $subview = $this->createSubactionView($relationKey,$relation);
-                    $wrapper->append($subview);
+                    $html = addslashes($subview->render());
+
+                    $button = new \FormKit\Widget\ButtonInput;
+                    $button->value = '新增 ' . $record->getLabel();
+                    $button->onclick = <<<SCRIPT
+                        var self = this;
+                        var el = document.createElement('div');
+                        var closeBtn = document.createElement('input');
+                        closeBtn.type = 'button';
+                        closeBtn.value = 'Remove';
+                        closeBtn.onclick = function() {
+                            self.parentNode.removeChild(el);
+                        };
+                        el.innerHTML = '$html';
+                        el.appendChild( closeBtn );
+                        this.parentNode.insertBefore(el, this.nextSibling);
+SCRIPT;
+                    $wrapper->append($button);
                 }
             }
         }
@@ -138,8 +158,7 @@ class StackView extends BaseView
 
     public function render()
     {
-        $wrapper = $this->build();
-        return $wrapper->render();
+        return $this->build()->render();
     }
 }
 

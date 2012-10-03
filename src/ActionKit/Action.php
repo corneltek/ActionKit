@@ -72,7 +72,6 @@ abstract class Action implements IteratorAggregate
         if( ! is_array($args) )
             throw new Exception('Action arguments of ' . get_class($this) . ' is not an array.');
 
-
         $this->result = new Result;
         if( $currentUser )
             $this->currentUser = $currentUser;
