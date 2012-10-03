@@ -75,35 +75,34 @@ class StackView extends BaseView
          * Render relationships if attribute 'nested' is defined.
          */
         if( $this->action->nested ) {
-            foreach( $this->action->relationships as $relationKey => $relation ) {
+            foreach( $this->action->relationships as $relationId => $relation ) {
                 if( $hasRecordId ) {
                     // for each existing records
-                    foreach( $this->action->record->{ $relationKey } as $subrecord ) {
-                        $subview = $this->createSubactionView($relationKey, $relation, $record);
-
+                    foreach( $this->action->record->{ $relationId } as $subrecord ) {
+                        $subview = $this->createSubactionView($relationId, $relation, $subrecord);
+                        $wrapper->append($subview);
                     }
-                } else {
-                    $record = new $relation['record'];
-                    $subview = $this->createSubactionView($relationKey,$relation);
-                    $html = addslashes($subview->render());
+                } 
 
-                    $button = new \FormKit\Widget\ButtonInput;
-                    $button->value = _('Add') . $record->getLabel();
-                    $button->onclick = <<<SCRIPT
-                        var self = this;
-                        var el = document.createElement('div');
-                        var closeBtn = document.createElement('input');
-                        closeBtn.type = 'button';
-                        closeBtn.value = '移除';
-                        closeBtn.onclick = function() {
-                            self.parentNode.removeChild(el);
-                        };
-                        el.innerHTML = '$html';
-                        el.appendChild( closeBtn );
-                        this.parentNode.insertBefore(el, this.nextSibling);
+                $record = new $relation['record'];
+                $subview = $this->createSubactionView($relationId,$relation);
+                $html = addslashes($subview->render());
+                $button = new \FormKit\Widget\ButtonInput;
+                $button->value = _('Add') . $record->getLabel();
+                $button->onclick = <<<SCRIPT
+                    var self = this;
+                    var el = document.createElement('div');
+                    var closeBtn = document.createElement('input');
+                    closeBtn.type = 'button';
+                    closeBtn.value = '移除';
+                    closeBtn.onclick = function() {
+                        self.parentNode.removeChild(el);
+                    };
+                    el.innerHTML = '$html';
+                    el.appendChild( closeBtn );
+                    this.parentNode.insertBefore(el, this.nextSibling);
 SCRIPT;
-                    $wrapper->append($button);
-                }
+                $wrapper->append($button);
             }
         }
 
@@ -122,7 +121,7 @@ SCRIPT;
 
             // if we have record and the record has an id, render the id field as hidden field.
             if( $hasRecordId ) {
-                if( $paramId = $this->action->param('id') ) {
+                if( $paramId = $this->action->getParam('id') ) {
                     $recordId = $this->action->record->id;
 
                     // if id field is defined, and the record exists.
