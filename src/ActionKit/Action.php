@@ -72,13 +72,14 @@ abstract class Action implements IteratorAggregate
         if( ! is_array($args) )
             throw new Exception('Action arguments of ' . get_class($this) . ' is not an array.');
 
-        $this->args = $this->_filterArguments($args);
+
         $this->result = new Result;
         if( $currentUser )
             $this->currentUser = $currentUser;
 
         // initialize parameter objects
         $this->schema();
+        $this->args = $this->_filterArguments($args);
 
         if( $relationId = $this->arg('__nested') ) {
             $this->setParamNamesWithIndex($relationId);
@@ -117,7 +118,8 @@ abstract class Action implements IteratorAggregate
         }
     }
 
-    protected function takes($fields) {
+    protected function takes($fields) 
+    {
         $args = func_get_args();
         if( count($args) > 1 ) {
             $this->takeFields = (array) $args;
@@ -127,8 +129,8 @@ abstract class Action implements IteratorAggregate
         return $this;
     }
 
-    protected function _filterArguments($args) {
-        
+    protected function _filterArguments($args) 
+    {
         // find immutable params and unset them
         foreach( $this->params as $name => $param ) {
             if( $param->immutable ) {

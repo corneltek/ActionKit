@@ -34,6 +34,10 @@ abstract class CreateRecordAction
             $foreignKey = $relation['foreign_key'];
             $selfKey = $relation['self_key'];
             $argsList = $this->arg( $relationId );
+
+            if(!$argsList)
+                continue;
+
             foreach( $argsList as $index => $args ) {
                 // update related records with the main record id 
                 // by using self_key and foreign_key
@@ -59,6 +63,7 @@ abstract class CreateRecordAction
                 }
             }
         }
+        return true;
     }
 
     /**
@@ -68,8 +73,9 @@ abstract class CreateRecordAction
     {
         /* default run method , to run create action */
         $ret = $this->create( $this->args );
-        if( $this->nested && ! empty($this->relationships) )
+        if( $this->nested && ! empty($this->relationships) ) {
             $ret = $this->processSubActions();
+        }
         return $ret;
     }
 

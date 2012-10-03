@@ -11,6 +11,15 @@ class StackView extends BaseView
     public $method = 'POST';
     public $ajax = false;
 
+    public function getAvailableWidgets()
+    {
+        if( $fields = $this->option('fields') ) {
+            return $this->action->getWidgetsByNames($fields);
+        } else {
+            return $this->action->getWidgets();
+        }
+    }
+
     public function build()
     {
         // Use Generic Table Layout
@@ -44,17 +53,10 @@ class StackView extends BaseView
         $wrapper->append( $this->layout );
 
 
-        $widgets = array();
-        if( $fields = $this->option('fields') ) {
-            $widgets = $this->action->getWidgetsByNames($fields);
-        } else {
-            $widgets = $this->action->getWidgets();
-        }
-        
+        $widgets = $this->getAvailableWidgets();
 
         // add widgets to layout.
         foreach( $widgets as $widget ) {
-
             // put HiddenInput widget out of table,
             // so that we don't have empty cells.
             if( $widget instanceof \FormKit\Widget\HiddenInput ) {
@@ -67,7 +69,6 @@ class StackView extends BaseView
         $hasRecord   = isset($this->action->record);
         $hasRecordId = isset($this->action->record) && $this->action->record->id;
 
-
         /**
          * Render relationships if attribute 'nested' is defined.
          */
@@ -76,12 +77,10 @@ class StackView extends BaseView
                 if( $hasRecordId ) {
                     // for each existing records
                     foreach( $this->action->record->{ $relationKey } as $subrecord ) {
+                        $subview = $this->createSubactionView($relationKey, $relation, $record);
 
                     }
                 } else {
-                    $subview = $this->createSubactionView($relationKey,$relation);
-                    $wrapper->append($subview);
-
                     $subview = $this->createSubactionView($relationKey,$relation);
                     $wrapper->append($subview);
                 }
@@ -98,6 +97,7 @@ class StackView extends BaseView
             if( $this->ajax ) {
                 $ajaxFlag  = new HiddenInput('__ajax_request',array( 'value' => '1' ));
                 $wrapper->append( $ajaxFlag );
+                $wrapper->addClass('ajax-action');
             }
 
             // if we have record and the record has an id, render the id field as hidden field.
@@ -119,11 +119,15 @@ class StackView extends BaseView
         return $wrapper;
     }
 
-    public function createSubactionView($relationId,$relation)
+    public function createSubactionView($relationId,$relation, $record = null)
     {
-        $recordClass = $relation['record'];
-        $record      = new $recordClass;
-        $action      = $record->asCreateAction();
+        if( ! $record ) {
+            $recordClass = $relation['record'];
+            $record      = new $recordClass;
+            $action      = $record->asCreateAction();
+        } else {
+            $action      = $record->asUpdateAction();
+        }
         $action->setParamNamesWithIndex($relationId);
         $subview = new self($action, array(
             'no_form' => 1,
@@ -134,7 +138,8 @@ class StackView extends BaseView
 
     public function render()
     {
-        return $this->build()->render();
+        $wrapper = $this->build();
+        return $wrapper->render();
     }
 }
 
