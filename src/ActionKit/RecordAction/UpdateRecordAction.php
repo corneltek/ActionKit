@@ -27,7 +27,11 @@ abstract class UpdateRecordAction
 
     public function run() 
     { 
-        return $this->update( $this->args );
+        $ret = $this->update( $this->args );
+        if( $this->nested && ! empty($this->relationships) ) {
+            $ret = $this->processSubActions();
+        }
+        return $ret;
     }
 
     /**

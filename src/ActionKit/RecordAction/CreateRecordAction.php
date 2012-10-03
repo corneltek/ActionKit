@@ -26,46 +26,6 @@ abstract class CreateRecordAction
         return $this->createSuccess( $ret );
     }
 
-
-    public function processSubActions()
-    {
-        foreach( $this->relationships as $relationId => $relation ) {
-            $recordClass = $relation['record'];
-            $foreignKey = $relation['foreign_key'];
-            $selfKey = $relation['self_key'];
-            $argsList = $this->arg( $relationId );
-
-            if(!$argsList)
-                continue;
-
-            foreach( $argsList as $index => $args ) {
-                // update related records with the main record id 
-                // by using self_key and foreign_key
-                $args[$selfKey] = $this->record->{$foreignKey};
-                $files = array();
-                if( isset($this->files[ $relationId ][ $index ]) ) {
-                    $files = $this->files[$relationId][ $index ];
-                }
-
-                // run subaction
-                $record = new $recordClass;
-                if( isset($args['id']) && $args['id'] ) {
-                    $record->load( $args['id'] );
-                    $action = $record->asUpdateAction($args);
-                } else {
-                    unset($args['id']);
-                    $action = $record->asCreateAction($args);
-                }
-                $action->files = $files;
-                if( $action->invoke() === false ) {
-                    $this->result = $action->result;
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
     /**
      * runValidate inherited from parent class.
      * */

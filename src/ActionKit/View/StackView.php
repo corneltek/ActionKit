@@ -130,10 +130,12 @@ SCRIPT;
                     }
                 }
             }
-            $signature = new HiddenInput('action',array(
-                'value' => $this->action->getSignature()
-            ));
-            $wrapper->append( $signature );
+            if( ! $this->option('no_signature') ) {
+                $signature = new HiddenInput('action',array(
+                    'value' => $this->action->getSignature()
+                ));
+                $wrapper->append( $signature );
+            }
         }
         return $wrapper;
     }
@@ -147,7 +149,7 @@ SCRIPT;
         } else {
             $action      = $record->asUpdateAction();
         }
-        $action->setParamNamesWithIndex($relationId);
+        $formIndex = $action->setParamNamesWithIndex($relationId);
         $subview = new self($action, array(
             'no_form' => 1,
             'ajax' => $this->ajax

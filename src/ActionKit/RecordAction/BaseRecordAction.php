@@ -146,7 +146,7 @@ abstract class BaseRecordAction extends Action
     /**
      * Get current record
      */
-    function getRecord() 
+    public function getRecord() 
     {
         return $this->record; 
     }
@@ -157,7 +157,7 @@ abstract class BaseRecordAction extends Action
      *
      * @param Phifty\Model $record
      */
-    function setRecord($record)
+    public function setRecord($record)
     {
         $this->record = $record;
     }
@@ -170,7 +170,7 @@ abstract class BaseRecordAction extends Action
      * 
      * @see Phifty\Model
      */
-    function currentUserCan( $user )
+    public function currentUserCan( $user )
     {
         return true;
     }
@@ -182,7 +182,7 @@ abstract class BaseRecordAction extends Action
      *
      * @param LazyRecord\OperationResult $ret
      */
-    function convertRecordValidation( $ret ) 
+    public function convertRecordValidation( $ret ) 
     {
         if( $ret->validations ) {
             foreach( $ret->validations as $vld ) {
@@ -216,6 +216,47 @@ abstract class BaseRecordAction extends Action
         }
         eval( $ret->code );
         return $ret->action_class;
+    }
+
+
+
+    public function processSubActions()
+    {
+        foreach( $this->relationships as $relationId => $relation ) {
+            $recordClass = $relation['record'];
+            $foreignKey = $relation['foreign_key'];
+            $selfKey = $relation['self_key'];
+            $argsList = $this->arg( $relationId );
+
+            if(!$argsList)
+                continue;
+
+            foreach( $argsList as $index => $args ) {
+                // update related records with the main record id 
+                // by using self_key and foreign_key
+                $args[$selfKey] = $this->record->{$foreignKey};
+                $files = array();
+                if( isset($this->files[ $relationId ][ $index ]) ) {
+                    $files = $this->files[$relationId][ $index ];
+                }
+
+                // run subaction
+                $record = new $recordClass;
+                if( isset($args['id']) && $args['id'] ) {
+                    $record->load( $args['id'] );
+                    $action = $record->asUpdateAction($args);
+                } else {
+                    unset($args['id']);
+                    $action = $record->asCreateAction($args);
+                }
+                $action->files = $files;
+                if( $action->invoke() === false ) {
+                    $this->result = $action->result;
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
 }

@@ -101,6 +101,8 @@ abstract class Action implements IteratorAggregate
      *
      * @param string $key
      * @param string $index
+     *
+     * @return string index number
      */
     public function setParamNamesWithIndex($key,$index = null)
     {
@@ -115,6 +117,7 @@ abstract class Action implements IteratorAggregate
         foreach( $this->params as $name => $param ) {
             $param->name = sprintf('%s[%s][%s]', $key, $index, $param->name);
         }
+        return $index;
     }
 
     protected function takes($fields) 
