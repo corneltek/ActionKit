@@ -4,7 +4,6 @@ use ActionKit\Param;
 use Phifty\UploadFile;
 use Exception;
 
-
 /**
  * Preprocess image data fields
  *
@@ -50,7 +49,8 @@ class File extends Param
             return $ret;
 
         // Consider required and optional situations.
-        if( @$_FILES[ $this->name ]['tmp_name'] )
+        $file = $this->action->getFile($this->name);
+        if( @$file['tmp_name'] )
         {
             $dir = $this->putIn;
             if( ! file_exists( $dir ) )
@@ -88,37 +88,33 @@ class File extends Param
          *
          * if not, check sourceField.
          * */
-        if( isset($req->files[ $this->name ]) ) {
-            $file = $req->files[ $this->name ];
-        } elseif( $this->sourceField && isset($req->files[ $this->sourceField ]) ) {
-            $file = $req->files[ $this->sourceField ];
+        if( isset($this->action->files[ $this->name ]) ) {
+            $file = $this->action->files[ $this->name ];
+        } elseif( $this->sourceField && isset($this->action->files[ $this->sourceField ]) ) {
+            $file = $this->action->files[ $this->sourceField ];
         }
 
-        if( $file && $file->hasFile() )
+        if( $file && file_exists($file['tmp_name'] )
         {
-            $newName = null;
-            if( $this->renameFile ) {
-                $cb = $this->renameFile;
-                $newName = $cb( $file->name );
-            }
+            $newName = $file['name'];
+            if( $this->renameFile )
+                $newName = call_user_func($this->rename,$newName);
 
-            if( $this->putIn && ! file_exists($this->putIn) ) {
+            if( $this->putIn && ! file_exists($this->putIn) )
                 mkdir( $this->putIn, 0755 , true );
-            }
 
             /* if we use sourceField, than use Copy */
+            $savedPath = $this->putIn . DIRECTORY_SEPARATOR . $newName ;
             if( $this->sourceField ) {
-                $file->copy( $this->putIn , $newName );
+                copy( $file['tmp_name'] , $savedPath);
+            } else {
+                move_uploaded_file( $file['tmp_name'], $savedPath);
             }
-            else {
-                $file->move( $this->putIn , $newName );
-            }
-
-            $args[ $this->name ] = $file->getSavedFilepath();
-            $this->action->addData( $this->name , $file->getSavedFilepath() );
+            $this->action->files[ $this->name ]['saved_path'] = $savedPath;
+            $args[ $this->name ] = $savedPath;
+            $this->action->addData( $this->name , $savedPath );
         }
     }
-
 
 }
 

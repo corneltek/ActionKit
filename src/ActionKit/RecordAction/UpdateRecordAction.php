@@ -6,7 +6,7 @@ abstract class UpdateRecordAction
 {
     const TYPE = 'update';
 
-    function update( $args )
+    public function update( $args )
     {
         $id = (int) $args['id'];
         if( ! $id )
@@ -25,7 +25,7 @@ abstract class UpdateRecordAction
         return $this->updateSuccess($ret);
     }
 
-    function run() 
+    public function run() 
     { 
         return $this->update( $this->args );
     }

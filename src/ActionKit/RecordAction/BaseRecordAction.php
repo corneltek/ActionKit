@@ -10,6 +10,9 @@ abstract class BaseRecordAction extends Action
     const TYPE = 'base';
 
 
+    public $nested = false;
+    public $relationships = array();
+
     /**
      *
      * @var Phifty\Model
@@ -103,19 +106,17 @@ abstract class BaseRecordAction extends Action
     /**
      * Convert model columns to action columns 
      */
-    function initRecordColumn()
+    protected function initRecordColumn()
     {
         if( ! $this->record ) {
             throw new ActionException('Record object is empty.', $this );
         }
-
         foreach( $this->record->getColumns(true) as $column ) {
             if( ! isset($this->params[$column->name] ) ) {
                 $this->params[ $column->name ] = ColumnConvert::toParam( $column , $this->record );
             } 
         }
     }
-
 
 
     /**
@@ -125,7 +126,7 @@ abstract class BaseRecordAction extends Action
      * In this method, we use column converter to 
      * convert record columns into action param objects.
      */
-    function schema() 
+    public function schema() 
     {
         $this->useRecordSchema();
     }
@@ -136,7 +137,7 @@ abstract class BaseRecordAction extends Action
      *
      * @return string 'create','update','delete','bulk_delete'
      */
-    function getType() 
+    public function getType() 
     {
         return static::TYPE;
     }

@@ -8,7 +8,6 @@ use FormKit\Widget\HiddenInput;
 class StackView extends BaseView
 {
     public $layout;
-    public $form;
     public $method = 'POST';
     public $ajax = false;
 
@@ -30,18 +29,19 @@ class StackView extends BaseView
             $this->layout->border(0);
         }
 
-        if( $this->options('no_form') ) {
-            $form = new FormKit\Element\Form;
-            $form->method($this->method);
+        if( $this->option('no_form') ) {
+            $wrapper = new FormKit\Element\Div;
+        } else {
+            $wrapper = new FormKit\Element\Form;
+            $wrapper->method($this->method);
             if( $formId = $this->option('form_id') ) {
-                $form->addId( $formId );
+                $wrapper->addId( $formId );
             }
             if( $formClass = $this->option('form_class') ) {
-                $form->addClass( $formClass );
+                $wrapper->addClass( $formClass );
             }
-        } else {
-            $form = new FormKit\Element\Div;
         }
+        $wrapper->append( $this->layout );
 
 
         $widgets = array();
@@ -58,22 +58,47 @@ class StackView extends BaseView
             // put HiddenInput widget out of table,
             // so that we don't have empty cells.
             if( $widget instanceof \FormKit\Widget\HiddenInput ) {
-                $form->append($widget);
+                $wrapper->append($widget);
             } else {
                 $this->layout->addWidget($widget);
             }
         }
 
+        $hasRecord   = isset($this->action->record);
+        $hasRecordId = isset($this->action->record) && $this->action->record->id;
+
+
+        /**
+         * Render relationships if attribute 'nested' is defined.
+         */
+        if( $this->action->nested ) {
+            foreach( $this->action->relationships as $relationKey => $relation ) {
+                if( $hasRecordId ) {
+                    // for each existing records
+                    foreach( $this->action->record->{ $relationKey } as $subrecord ) {
+
+                    }
+                } else {
+                    $subview = $this->createSubactionView($relationKey,$relation);
+                    $wrapper->append($subview);
+
+                    $subview = $this->createSubactionView($relationKey,$relation);
+                    $wrapper->append($subview);
+                }
+            }
+        }
+
+        // if we use form
         if( ! $this->option('no_form') ) {
+
             // Add control buttons
             $submit = new FormKit\Widget\SubmitInput;
-            $this->layout->addWidget($submit);
+            // $this->layout->addWidget($submit);
+            $wrapper->append($submit);
             if( $this->ajax ) {
                 $ajaxFlag  = new HiddenInput('__ajax_request',array( 'value' => '1' ));
-                $form->append( $ajaxFlag );
+                $wrapper->append( $ajaxFlag );
             }
-            $hasRecord   = isset($this->action->record);
-            $hasRecordId = isset($this->action->record) && $this->action->record->id;
 
             // if we have record and the record has an id, render the id field as hidden field.
             if( $hasRecordId ) {
@@ -82,23 +107,34 @@ class StackView extends BaseView
 
                     // if id field is defined, and the record exists.
                     if( $recordId && $paramId->value ) {
-                        $form->append( new HiddenInput('id',array('value' => $paramId->value )) );
+                        $wrapper->append( new HiddenInput('id',array('value' => $paramId->value )) );
                     }
                 }
             }
             $signature = new HiddenInput('action',array(
                 'value' => $this->action->getSignature()
             ));
-            $form->append( $signature );
+            $wrapper->append( $signature );
         }
-        $form->append( $this->layout );
-        $this->form = $form;
+        return $wrapper;
     }
 
-    public function render() 
+    public function createSubactionView($relationId,$relation)
     {
-        $this->build();
-        return $this->form->render();
+        $recordClass = $relation['record'];
+        $record      = new $recordClass;
+        $action      = $record->asCreateAction();
+        $action->setParamNamesWithIndex($relationId);
+        $subview = new self($action, array(
+            'no_form' => 1,
+            'ajax' => $this->ajax
+        ));
+        return $subview;
+    }
+
+    public function render()
+    {
+        return $this->build()->render();
     }
 }
 
