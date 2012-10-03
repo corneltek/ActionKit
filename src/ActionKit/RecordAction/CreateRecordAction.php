@@ -67,10 +67,10 @@ abstract class CreateRecordAction
     public function run()
     {
         /* default run method , to run create action */
-        if( ! $this->create( $this->args ) )
-            return;
+        $ret = $this->create( $this->args );
         if( $this->nested && ! empty($this->relationships) )
-            $this->processSubActions();
+            $ret = $this->processSubActions();
+        return $ret;
     }
 
     public function successMessage($ret)
