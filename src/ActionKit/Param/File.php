@@ -94,7 +94,7 @@ class File extends Param
             $file = $this->action->files[ $this->sourceField ];
         }
 
-        if( $file && file_exists($file['tmp_name'] )
+        if( $file && file_exists($file['tmp_name'] ) )
         {
             $newName = $file['name'];
             if( $this->renameFile )
