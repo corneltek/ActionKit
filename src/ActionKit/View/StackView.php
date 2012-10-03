@@ -88,13 +88,13 @@ class StackView extends BaseView
                     $html = addslashes($subview->render());
 
                     $button = new \FormKit\Widget\ButtonInput;
-                    $button->value = '新增 ' . $record->getLabel();
+                    $button->value = _('Add') . $record->getLabel();
                     $button->onclick = <<<SCRIPT
                         var self = this;
                         var el = document.createElement('div');
                         var closeBtn = document.createElement('input');
                         closeBtn.type = 'button';
-                        closeBtn.value = 'Remove';
+                        closeBtn.value = '移除';
                         closeBtn.onclick = function() {
                             self.parentNode.removeChild(el);
                         };
