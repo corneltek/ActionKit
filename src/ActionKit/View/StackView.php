@@ -154,12 +154,19 @@ SCRIPT;
             'no_form' => 1,
             'ajax' => $this->ajax
         ));
+        $wrapper = $subview->build();
+        $signature = new HiddenInput(  "{$relationId}[{$formIndex}][action]",array(
+            'value' => $action->getSignature()
+        ));
+        $wrapper->append( $signature );
         return $subview;
     }
 
     public function render()
     {
-        return $this->build()->render();
+        if(!$this->wrapper)
+            $this->build();
+        return $this->wrapper->render();
     }
 }
 
