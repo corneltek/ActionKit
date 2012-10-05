@@ -51,7 +51,6 @@ class StackView extends BaseView
                 $wrapper->addClass( $formClass );
             }
         }
-        $this->wrapper = $wrapper;
         $wrapper->append( $this->layout );
 
 
@@ -159,13 +158,15 @@ SCRIPT;
             'value' => $action->getSignature()
         ));
         $wrapper->append( $signature );
+        $this->wrapper = $wrapper;
         return $subview;
     }
 
     public function render()
     {
-        if(!$this->wrapper)
-            $this->build();
+        if(!$this->wrapper) {
+            $this->wrapper = $this->build();
+        }
         return $this->wrapper->render();
     }
 }
