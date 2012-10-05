@@ -13,7 +13,6 @@ abstract class BaseView
 
     public $fields;
 
-
     abstract function build($container);
 
     abstract function render();
@@ -103,14 +102,14 @@ abstract class BaseView
         }
     }
 
-    public function pushWidgetsToLayout($widgets)
+    public function registerWidgets($widgets)
     {
         // push widgets to layout.
         foreach( $widgets as $widget ) {
             // put HiddenInput widget out of table,
             // so that we don't have empty cells.
             if( $widget instanceof \FormKit\Widget\HiddenInput ) {
-                $container->append($widget);
+                $this->container->append($widget);
             } else {
                 $this->layout->addWidget($widget);
             }
