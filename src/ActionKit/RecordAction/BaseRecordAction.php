@@ -43,35 +43,30 @@ abstract class BaseRecordAction extends Action
     public function __construct( $args = array(), $record = null, $currentUser = null ) 
     {
         // record name is in Camel case
-        if( ! $this->recordClass ) {
+        if( ! $this->recordClass )
             throw new ActionException( sprintf('Record class is not specified.' , $this ));
-        }
-        if( $record && ! is_subclass_of($record,'LazyRecord\\BaseModel',true) ) {
+
+        if( $record && ! is_subclass_of($record,'LazyRecord\\BaseModel',true) )
             throw new ActionException( 'The record object you specified is not a BaseModel object.' , $this );
-        }
 
-        $this->record = $record ?: new $this->recordClass;
+        if( ! $record )
+            $record = new $this->recordClass;
 
-        if( ! $this->record->id ) {   // for create action, we don't need to create record
+        $this->setRecord($record);
+
+        if( ! $record->id ) {   // for create action, we don't need to create record
             if( $this->getType() !== 'create' && $this->enableLoadRecord ) {
-                if( ! $this->loadRecordFromArguments( $args ) ) {
+                if( ! $this->loadRecordFromArguments( $args ) )
                     throw new ActionException('Record action can not load record', $this );
-                }
             }
         }
 
-        // Convert id column object from record schema to
-        // Action param object.
-        if( $column = $this->record->getColumn('id') ) {
-            if( ! isset($this->params[$column->name] ) ) {
-                $this->params[ $column->name ] = ColumnConvert::toParam( $column , $this->record );
-            }
-        }
-
-        /* run schema , init base action stuff */
+        // initialize schema , init base action stuff
         parent::__construct( $args , $currentUser );
+
         $this->loadRecordValues();
     }
+
 
 
     /**
@@ -86,6 +81,7 @@ abstract class BaseRecordAction extends Action
 
     /**
      * Load record values into params
+     *
      */
     public function loadRecordValues() {
         /* load record value */
@@ -169,6 +165,14 @@ abstract class BaseRecordAction extends Action
     public function setRecord($record)
     {
         $this->record = $record;
+
+        // Convert id column object from record schema to
+        // Action param object.
+        if( $column = $this->record->getColumn('id') ) {
+            if( ! isset($this->params[$column->name] ) ) {
+                $this->params[ $column->name ] = ColumnConvert::toParam( $column , $record );
+            }
+        }
     }
 
 
