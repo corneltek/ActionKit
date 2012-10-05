@@ -21,6 +21,18 @@ class StackView extends BaseView
         }
     }
 
+    public function getAction()
+    {
+        return $this->action;
+    }
+
+    public function isRecordAction()
+    {
+        return $this->action instanceof \ActionKit\RecordAction\BaseRecordAction
+            || $this->action instanceof \ActionKit\RecordAction\BulkRecordAction
+            ;
+    }
+
     public function build()
     {
         // Use Generic Table Layout
@@ -52,7 +64,6 @@ class StackView extends BaseView
             }
         }
         $wrapper->append( $this->layout );
-
 
         $widgets = $this->getAvailableWidgets();
 
