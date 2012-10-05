@@ -31,7 +31,7 @@ class StackView extends BaseView
     /**
      * Create Layout Container object.
      */
-    public function createLayoutContainer()
+    public function createContainer()
     {
         if( $this->option('no_form') ) {
             $container = new FormKit\Element\Div;
@@ -50,7 +50,7 @@ class StackView extends BaseView
 
     public function build()
     {
-        $container  = $this->createLayoutContainer();
+        $container = $this->container;
         $container->append( $this->layout );
 
         $widgets = $this->getAvailableWidgets();
@@ -145,14 +145,19 @@ SCRIPT;
             'value' => $action->getSignature()
         ));
         $container->append( $signature );
-        $this->container = $container;
         return $subview;
     }
+
+    public function beforeBuild() { }
+    public function afterBuild() { }
 
     public function render()
     {
         if(!$this->container) {
-            $this->container = $this->build();
+            $this->container = $this->createContainer();
+            $this->beforeBuild();
+            $this->build();
+            $this->afterBuild();
         }
         return $this->container->render();
     }
