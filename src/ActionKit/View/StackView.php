@@ -52,20 +52,11 @@ class StackView extends BaseView
         return $container;
     }
 
-    public function build($container)
+    public function buildNestedSection($container)
     {
-        $container->append( $this->layout );
-
-        $widgets = $this->getAvailableWidgets();
-        $this->registerWidgets($widgets);
-
         $record = $this->getRecord();
         $recordId = $record ? $record->id : null;
 
-        /**
-         * Render relationships if attribute 'nested' is defined.
-         */
-        if( $this->action->nested ) {
             foreach( $this->action->relationships as $relationId => $relation ) {
                 if( $recordId && isset($record->{ $relationId }) ) {
                     // for each existing records
@@ -95,6 +86,22 @@ class StackView extends BaseView
 SCRIPT;
                 $container->append($button);
             }
+    }
+
+    public function build($container)
+    {
+        $container->append( $this->layout );
+
+        $widgets = $this->getAvailableWidgets();
+        $this->registerWidgets($widgets);
+
+
+        $record = $this->getRecord();
+        $recordId = $record ? $record->id : null;
+
+        // Render relationships if attribute 'nested' is defined.
+        if( $this->action->nested ) {
+            $this->buildNestedSection($container);
         }
 
         // if we use form
