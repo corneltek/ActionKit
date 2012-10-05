@@ -83,6 +83,15 @@ abstract class BaseView
         }
     }
 
+    public function getAvailableWidgets()
+    {
+        if( $fields = $this->option('fields') ) {
+            return $this->action->getWidgetsByNames($fields);
+        } else {
+            return $this->action->getWidgets();
+        }
+    }
+
     /**
      * Return rendered fields.
      */
