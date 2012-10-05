@@ -154,9 +154,9 @@ SCRIPT;
         return $subview;
     }
 
-    public function beforeBuild() { }
+    public function beforeBuild($container) { }
 
-    public function afterBuild() { }
+    public function afterBuild($container) { }
 
     /**
      * create container object.
@@ -166,9 +166,9 @@ SCRIPT;
     public function triggerBuild()
     {
         $this->container = $this->createContainer();
-        $this->beforeBuild();
+        $this->beforeBuild($this->container);
         $this->build($this->container);
-        $this->afterBuild();
+        $this->afterBuild($this->container);
         return $this->container;
     }
 
