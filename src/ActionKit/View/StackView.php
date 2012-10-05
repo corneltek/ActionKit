@@ -43,6 +43,11 @@ class StackView extends BaseView
             if( $formClass = $this->option('form_class') ) {
                 $container->addClass( $formClass );
             }
+            if( $this->ajax ) {
+                $ajaxFlag  = new HiddenInput('__ajax_request',array( 'value' => '1' ));
+                $container->append( $ajaxFlag );
+                $container->addClass('ajax-action');
+            }
         }
         return $container;
     }
@@ -99,11 +104,6 @@ SCRIPT;
             $submit = new FormKit\Widget\SubmitInput;
             // $this->layout->addWidget($submit);
             $container->append($submit);
-            if( $this->ajax ) {
-                $ajaxFlag  = new HiddenInput('__ajax_request',array( 'value' => '1' ));
-                $container->append( $ajaxFlag );
-                $container->addClass('ajax-action');
-            }
 
             // if we have record and the record has an id, render the id field as hidden field.
             if( $recordId ) {
@@ -149,7 +149,6 @@ SCRIPT;
     public function beforeBuild() { }
 
     public function afterBuild() { }
-
 
     /**
      * create container object.

@@ -39,7 +39,6 @@ abstract class BaseView
         $this->layout = $this->createLayout();
     }
 
-
     public function setLayout($layout)
     {
         $this->layout = $layout;
