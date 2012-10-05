@@ -96,15 +96,14 @@ SCRIPT;
         $this->registerWidgets($widgets);
 
 
-        $record = $this->getRecord();
-        $recordId = $record ? $record->id : null;
-
         // Render relationships if attribute 'nested' is defined.
         if( $this->action->nested ) {
             $this->buildNestedSection($container);
         }
 
         // if we use form
+        $record = $this->getRecord();
+        $recordId = $record ? $record->id : null;
         if( ! $this->option('no_form') ) {
 
             // Add control buttons

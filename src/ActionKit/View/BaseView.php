@@ -112,11 +112,20 @@ abstract class BaseView
 
     public function getAvailableWidgets()
     {
+        $widgets = array();
+
         if( $fields = $this->option('fields') ) {
-            return $this->action->getWidgetsByNames($fields);
+            $widgets = $this->action->getWidgetsByNames($fields);
         } else {
-            return $this->action->getWidgets();
+            $widgets = $this->action->getWidgets();
         }
+
+        if ( $fields = $this->option('skips') ) {
+            $widgets = array_filter($widgets,function($widget) use($fields) {
+                return ! in_array($widget->name,$fields);
+            });
+        }
+        return $widgets;
     }
 
 
