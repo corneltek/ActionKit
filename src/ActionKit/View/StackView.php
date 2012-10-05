@@ -7,7 +7,6 @@ use FormKit\Widget\HiddenInput;
 
 class StackView extends BaseView
 {
-    public $layout;
     public $wrapper;
     public $method = 'POST';
     public $ajax = false;
@@ -35,9 +34,6 @@ class StackView extends BaseView
 
     public function build()
     {
-        // Use Generic Table Layout
-        $this->layout = new FormKit\Layout\GenericLayout;
-
         if( $width = $this->option('width') ) {
             $this->layout->width( $width );
         }
