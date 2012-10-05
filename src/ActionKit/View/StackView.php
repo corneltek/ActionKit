@@ -36,7 +36,11 @@ class StackView extends BaseView
         return $layout;
     }
 
-    public function build()
+
+    /**
+     * Create Layout Container object.
+     */
+    public function createLayoutContainer()
     {
         if( $this->option('no_form') ) {
             $wrapper = new FormKit\Element\Div;
@@ -50,6 +54,12 @@ class StackView extends BaseView
                 $wrapper->addClass( $formClass );
             }
         }
+        return $wrapper;
+    }
+
+    public function build()
+    {
+        $wrapper  = $this->createLayoutContainer();
         $wrapper->append( $this->layout );
 
         $widgets = $this->getAvailableWidgets();
