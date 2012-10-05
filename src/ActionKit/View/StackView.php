@@ -138,7 +138,8 @@ SCRIPT;
             'no_form' => 1,
             'ajax' => $this->ajax
         ));
-        $container = $subview->triggerBuild();
+        $subview->triggerBuild();
+        $container = $subview->getContainer();
         $signature = new HiddenInput(  "{$relationId}[{$formIndex}][action]",array(
             'value' => $action->getSignature()
         ));
