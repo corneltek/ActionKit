@@ -218,11 +218,55 @@ abstract class BaseRecordAction extends Action
         return $ret->action_class;
     }
 
+    public function createRelationAction($relation,$args)
+    {
+        $record = null;
+        if( isset($relation['record']) ) {
+            $recordClass = $relation['record'];
+            // create record object, and load it with primary id
+            $record = new $recordClass;
+            if( isset($args['id']) && $args['id'] ) {
+                $record->load( $args['id'] );
+            }
+        }
+
+        if( isset($relation['action']) ) {
+            $class = $relation['action'];
+
+            // which is a record-based action.
+            if( is_a($class,'ActionKit\\RecordAction\\BaseRecordAction',true) ) {
+                return new $class($args, $record);
+            }
+
+            // which is a simple action
+            return $class($args);
+        }
+        else {
+            // run subaction
+            if( $record->id ) {
+                if( isset($relation['update_action']) ) {
+                    $class = $relation['update_action'];
+                    return new $class($args,$record);
+                } 
+                return $record->asUpdateAction($args);
+            } 
+
+            unset($args['id']);
+            if( isset($relation['create_action']) ) {
+                $class = $relation['create_action'];
+                return new $class($args,$record);
+            }
+            return $record->asCreateAction($args);
+        }
+    }
 
 
     public function processSubActions()
     {
         foreach( $this->relationships as $relationId => $relation ) {
+            if( ! isset($relation['has_many']) )
+                continue;
+
             $recordClass = $relation['record'];
             $foreignKey = $relation['foreign_key'];
             $selfKey = $relation['self_key'];
@@ -235,20 +279,15 @@ abstract class BaseRecordAction extends Action
                 // update related records with the main record id 
                 // by using self_key and foreign_key
                 $args[$selfKey] = $this->record->{$foreignKey};
+
+                // get file arguments from fixed $_FILES array.
+                // the ->files array is fixed in Action::__construct method
                 $files = array();
                 if( isset($this->files[ $relationId ][ $index ]) ) {
                     $files = $this->files[$relationId][ $index ];
                 }
 
-                // run subaction
-                $record = new $recordClass;
-                if( isset($args['id']) && $args['id'] ) {
-                    $record->load( $args['id'] );
-                    $action = $record->asUpdateAction($args);
-                } else {
-                    unset($args['id']);
-                    $action = $record->asCreateAction($args);
-                }
+                $action = $this->createRelationAction($relation,$args);
                 $action->files = $files;
                 if( $action->invoke() === false ) {
                     $this->result = $action->result;
