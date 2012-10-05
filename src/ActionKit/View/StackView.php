@@ -20,33 +20,24 @@ class StackView extends BaseView
         }
     }
 
-    public function getAction()
+    public function createLayout()
     {
-        return $this->action;
-    }
+        $layout = new \FormKit\Layout\GenericLayout;
 
-    public function isRecordAction()
-    {
-        return $this->action instanceof \ActionKit\RecordAction\BaseRecordAction
-            || $this->action instanceof \ActionKit\RecordAction\BulkRecordAction
-            ;
+        // initialize layout object here.
+        if( $width = $this->option('width') )
+            $layout->width( $width );
+        if( $padding = $this->option('cellpadding') )
+            $layout->cellpadding( $padding );
+        if( $spacing = $this->option('cellspacing') )
+            $layout->cellspacing( $spacing );
+        if( $border = $this->option('border') )
+            $layout->border(0);
+        return $layout;
     }
 
     public function build()
     {
-        if( $width = $this->option('width') ) {
-            $this->layout->width( $width );
-        }
-        if( $padding = $this->option('cellpadding') ) {
-            $this->layout->cellpadding( $padding );
-        }
-        if( $spacing = $this->option('cellspacing') ) {
-            $this->layout->cellspacing( $spacing );
-        }
-        if( $border = $this->option('border') ) {
-            $this->layout->border(0);
-        }
-
         if( $this->option('no_form') ) {
             $wrapper = new FormKit\Element\Div;
         } else {

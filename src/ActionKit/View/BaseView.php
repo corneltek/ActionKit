@@ -29,15 +29,22 @@ abstract class BaseView
         $this->layout = $this->createLayout();
     }
 
-    public function createLayout()
-    {
-        $layout = new \FormKit\Layout\GenericLayout;
-        return $layout;
-    }
 
     public function getLayout()
     {
         return $this->layout;
+    }
+
+    public function getAction()
+    {
+        return $this->action;
+    }
+
+    public function isRecordAction()
+    {
+        return $this->action instanceof \ActionKit\RecordAction\BaseRecordAction
+            || $this->action instanceof \ActionKit\RecordAction\BulkRecordAction
+            ;
     }
 
 
@@ -89,6 +96,7 @@ abstract class BaseView
 
     abstract function build();
     abstract function render();
+    abstract function createLayout();
 }
 
 
