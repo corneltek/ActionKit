@@ -37,7 +37,7 @@ abstract class BaseRecordAction extends Action
         if( ! $this->recordClass ) {
             throw new ActionException( sprintf('Record class is not specified.' , $this ));
         }
-        if( $record && ! is_a($record,'LazyRecord\BaseModel') ) {
+        if( $record && ! is_subclass_of($record,'LazyRecord\\BaseModel',true) ) {
             throw new ActionException( 'The record object you specified is not a BaseModel object.' , $this );
         }
 
@@ -234,7 +234,7 @@ abstract class BaseRecordAction extends Action
             $class = $relation['action'];
 
             // which is a record-based action.
-            if( is_a($class,'ActionKit\\RecordAction\\BaseRecordAction',true) ) {
+            if( is_subclass_of($class,'ActionKit\\RecordAction\\BaseRecordAction',true) ) {
                 return new $class($args, $record);
             }
 
