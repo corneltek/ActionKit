@@ -67,7 +67,7 @@ class StackView extends BaseView
          */
         if( $this->action->nested ) {
             foreach( $this->action->relationships as $relationId => $relation ) {
-                if( $recordId ) {
+                if( $recordId && isset($record->{ $relationId }) ) {
                     // for each existing records
                     foreach( $record->{ $relationId } as $subrecord ) {
                         $subview = $this->createSubactionView($relationId, $relation, $subrecord);
