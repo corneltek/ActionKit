@@ -161,6 +161,7 @@ SCRIPT;
         $this->beforeBuild();
         $this->build($this->container);
         $this->afterBuild();
+        return $this->container;
     }
 
     public function render()
