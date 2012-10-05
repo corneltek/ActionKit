@@ -52,7 +52,7 @@ class StackView extends BaseView
         $container->append( $this->layout );
 
         $widgets = $this->getAvailableWidgets();
-        $this->pushWidgetsToLayout($widgets);
+        $this->registerWidgets($widgets);
 
         $record = $this->getRecord();
         $recordId = $record ? $record->id : null;
@@ -147,8 +147,15 @@ SCRIPT;
     }
 
     public function beforeBuild() { }
+
     public function afterBuild() { }
 
+
+    /**
+     * create container object.
+     *
+     * trigger beforeBuild, build, afterBuild methods
+     */
     public function triggerBuild()
     {
         $this->container = $this->createContainer();
@@ -162,7 +169,7 @@ SCRIPT;
         if(!$this->container) {
             $this->triggerBuild();
         }
-        return $this->container->render();
+        return $this->getContainer()->render();
     }
 }
 

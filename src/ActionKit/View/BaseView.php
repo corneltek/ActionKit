@@ -50,6 +50,24 @@ abstract class BaseView
         return $this->layout;
     }
 
+    public function setContainer($container)
+    {
+        $this->container = $container;
+    }
+
+    public function getContainer()
+    {
+        return $this->container;
+    }
+
+    public function hasContainer()
+    {
+        return isset($this->container);
+    }
+        
+        
+
+
     public function getAction()
     {
         return $this->action;
@@ -102,6 +120,12 @@ abstract class BaseView
         }
     }
 
+
+    /**
+     * Register widgets into container object, layout object.
+     *
+     * @param array Widget
+     */
     public function registerWidgets($widgets)
     {
         // push widgets to layout.
