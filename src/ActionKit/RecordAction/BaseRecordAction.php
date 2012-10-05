@@ -31,6 +31,15 @@ abstract class BaseRecordAction extends Action
 
     abstract function errorMessage($ret);
 
+
+    /**
+     * Construct an action object.
+     *
+     *    $action = new UpdateProductAction(array( ... ), new Product, $currentUser);
+     * 
+     * @param array $args
+     * @param LazyRecord\BaseModel $record
+     */
     public function __construct( $args = array(), $record = null, $currentUser = null ) 
     {
         // record name is in Camel case
@@ -43,7 +52,7 @@ abstract class BaseRecordAction extends Action
 
         $this->record = $record ?: new $this->recordClass;
 
-        if( ! $record ) {   // for create action, we don't need to create record
+        if( ! $this->record->id ) {   // for create action, we don't need to create record
             if( $this->getType() !== 'create' && $this->enableLoadRecord ) {
                 if( ! $this->loadRecordFromArguments( $args ) ) {
                     throw new ActionException('Record action can not load record', $this );
