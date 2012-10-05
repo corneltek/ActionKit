@@ -3,6 +3,8 @@ namespace ActionKit\View;
 
 abstract class BaseView
 {
+    public $container;
+
     public $layout;
 
     public $action;
@@ -10,6 +12,15 @@ abstract class BaseView
     public $options = array();
 
     public $fields;
+
+
+    abstract function build($container);
+
+    abstract function render();
+
+    abstract function createLayout();
+
+
     /**
      *
      * @param ActionKit\Action $action
@@ -138,9 +149,6 @@ abstract class BaseView
         }
     }
 
-    abstract function build();
-    abstract function render();
-    abstract function createLayout();
 
     public function __call($method,$args) 
     {

@@ -7,7 +7,6 @@ use FormKit\Widget\HiddenInput;
 
 class StackView extends BaseView
 {
-    public $container;
     public $method = 'POST';
     public $ajax = false;
 
@@ -48,9 +47,8 @@ class StackView extends BaseView
         return $container;
     }
 
-    public function build()
+    public function build($container)
     {
-        $container = $this->container;
         $container->append( $this->layout );
 
         $widgets = $this->getAvailableWidgets();
@@ -140,7 +138,7 @@ SCRIPT;
             'no_form' => 1,
             'ajax' => $this->ajax
         ));
-        $container = $subview->build();
+        $container = $subview->triggerBuild();
         $signature = new HiddenInput(  "{$relationId}[{$formIndex}][action]",array(
             'value' => $action->getSignature()
         ));
@@ -151,13 +149,18 @@ SCRIPT;
     public function beforeBuild() { }
     public function afterBuild() { }
 
+    public function triggerBuild()
+    {
+        $this->container = $this->createContainer();
+        $this->beforeBuild();
+        $this->build($this->container);
+        $this->afterBuild();
+    }
+
     public function render()
     {
         if(!$this->container) {
-            $this->container = $this->createContainer();
-            $this->beforeBuild();
-            $this->build();
-            $this->afterBuild();
+            $this->triggerBuild();
         }
         return $this->container->render();
     }
