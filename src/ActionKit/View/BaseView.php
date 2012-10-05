@@ -92,6 +92,20 @@ abstract class BaseView
         }
     }
 
+    public function pushWidgetsToLayout($widgets)
+    {
+        // push widgets to layout.
+        foreach( $widgets as $widget ) {
+            // put HiddenInput widget out of table,
+            // so that we don't have empty cells.
+            if( $widget instanceof \FormKit\Widget\HiddenInput ) {
+                $container->append($widget);
+            } else {
+                $this->layout->addWidget($widget);
+            }
+        }
+    }
+
     /**
      * Return rendered fields.
      */

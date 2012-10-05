@@ -11,7 +11,6 @@ class StackView extends BaseView
     public $method = 'POST';
     public $ajax = false;
 
-
     public function createLayout()
     {
         $layout = new \FormKit\Layout\GenericLayout;
@@ -55,17 +54,7 @@ class StackView extends BaseView
         $container->append( $this->layout );
 
         $widgets = $this->getAvailableWidgets();
-
-        // add widgets to layout.
-        foreach( $widgets as $widget ) {
-            // put HiddenInput widget out of table,
-            // so that we don't have empty cells.
-            if( $widget instanceof \FormKit\Widget\HiddenInput ) {
-                $container->append($widget);
-            } else {
-                $this->layout->addWidget($widget);
-            }
-        }
+        $this->pushWidgetsToLayout($widgets);
 
         $record = $this->getRecord();
         $recordId = $record ? $record->id : null;
