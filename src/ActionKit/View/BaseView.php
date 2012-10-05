@@ -30,6 +30,11 @@ abstract class BaseView
     }
 
 
+    public function setLayout($layout)
+    {
+        $this->layout = $layout;
+    }
+
     public function getLayout()
     {
         return $this->layout;
@@ -40,6 +45,16 @@ abstract class BaseView
         return $this->action;
     }
 
+    /**
+     * Set action object
+     *
+     * @param ActionKit\Action
+     */
+    public function setAction($action)
+    {
+        $this->action = $action;
+    }
+
     public function isRecordAction()
     {
         return $this->action instanceof \ActionKit\RecordAction\BaseRecordAction
@@ -47,27 +62,23 @@ abstract class BaseView
             ;
     }
 
-
     /**
      * Set action fields for rendering
      *
      * @param array $fields field names
      */
-    public function fields($fields) 
+    public function setFields($fields) 
     {
         $this->fields = $fields;
-        return $this;
     }
 
 
     /**
-     * Set action object
-     *
-     * @param ActionKit\Action
+     * Return rendered fields.
      */
-    public function action($action) { 
-        $this->action = $action;
-        return $this;
+    public function getFields()
+    {
+        return $this->fields;
     }
 
 
@@ -97,9 +108,15 @@ abstract class BaseView
     abstract function build();
     abstract function render();
     abstract function createLayout();
+
+    public function __call($method,$args) 
+    {
+        if( method_exists( $this,'set' . ucfirst($method) ) ) {
+            call_user_func_array('set' . ucfirst($method), $args);
+            return $this;
+        }
+        throw new RuntimeException("$method not found.");
+    }
 }
-
-
-
 
 
