@@ -57,9 +57,7 @@ abstract class BaseView
 
     public function isRecordAction()
     {
-        return $this->action instanceof \ActionKit\RecordAction\BaseRecordAction
-            || $this->action instanceof \ActionKit\RecordAction\BulkRecordAction
-            ;
+        return $this->action instanceof \ActionKit\RecordAction\BaseRecordAction;
     }
 
     /**
@@ -72,6 +70,18 @@ abstract class BaseView
         $this->fields = $fields;
     }
 
+    public function hasRecord()
+    {
+        return $this->isRecordAction() 
+            && $this->action->record->id;
+    }
+
+    public function getRecord()
+    {
+        if( $this->isRecordAction() ) {
+            return $this->action->record;
+        }
+    }
 
     /**
      * Return rendered fields.

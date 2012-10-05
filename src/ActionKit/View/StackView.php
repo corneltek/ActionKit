@@ -75,15 +75,15 @@ class StackView extends BaseView
             }
         }
 
-        $hasRecord   = isset($this->action->record);
-        $hasRecordId = isset($this->action->record) && $this->action->record->id;
+        $record = $this->getRecord();
+        $recordId = $record ? $record->id ? null;
 
         /**
          * Render relationships if attribute 'nested' is defined.
          */
         if( $this->action->nested ) {
             foreach( $this->action->relationships as $relationId => $relation ) {
-                if( $hasRecordId ) {
+                if( $recordId ) {
                     // for each existing records
                     foreach( $this->action->record->{ $relationId } as $subrecord ) {
                         $subview = $this->createSubactionView($relationId, $relation, $subrecord);
@@ -127,7 +127,7 @@ SCRIPT;
             }
 
             // if we have record and the record has an id, render the id field as hidden field.
-            if( $hasRecordId ) {
+            if( $recordId ) {
                 if( $paramId = $this->action->getParam('id') ) {
                     $recordId = $this->action->record->id;
 
