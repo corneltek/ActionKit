@@ -57,35 +57,35 @@ class StackView extends BaseView
         $record = $this->getRecord();
         $recordId = $record ? $record->id : null;
 
-            foreach( $this->action->relationships as $relationId => $relation ) {
-                if( $recordId && isset($record->{ $relationId }) ) {
-                    // for each existing records
-                    foreach( $record->{ $relationId } as $subrecord ) {
-                        $subview = $this->createSubactionView($relationId, $relation, $subrecord);
-                        $container->append($subview);
-                    }
-                } 
+        foreach( $this->action->relationships as $relationId => $relation ) {
+            if( $recordId && isset($record->{ $relationId }) ) {
+                // for each existing records
+                foreach( $record->{ $relationId } as $subrecord ) {
+                    $subview = $this->createSubactionView($relationId, $relation, $subrecord);
+                    $container->append($subview);
+                }
+            } 
 
-                $record = new $relation['record'];
-                $subview = $this->createSubactionView($relationId,$relation);
-                $html = addslashes($subview->render());
-                $button = new \FormKit\Widget\ButtonInput;
-                $button->value = _('Add') . $record->getLabel();
-                $button->onclick = <<<SCRIPT
-                    var self = this;
-                    var el = document.createElement('div');
-                    var closeBtn = document.createElement('input');
-                    closeBtn.type = 'button';
-                    closeBtn.value = '移除';
-                    closeBtn.onclick = function() {
-                        self.parentNode.removeChild(el);
-                    };
-                    el.innerHTML = '$html';
-                    el.appendChild( closeBtn );
-                    this.parentNode.insertBefore(el, this.nextSibling);
+            $record = new $relation['record'];
+            $subview = $this->createSubactionView($relationId,$relation);
+            $html = addslashes($subview->render());
+            $button = new \FormKit\Widget\ButtonInput;
+            $button->value = _('Add') . $record->getLabel();
+            $button->onclick = <<<SCRIPT
+                var self = this;
+                var el = document.createElement('div');
+                var closeBtn = document.createElement('input');
+                closeBtn.type = 'button';
+                closeBtn.value = '移除';
+                closeBtn.onclick = function() {
+                    self.parentNode.removeChild(el);
+                };
+                el.innerHTML = '$html';
+                el.appendChild( closeBtn );
+                this.parentNode.insertBefore(el, this.nextSibling);
 SCRIPT;
-                $container->append($button);
-            }
+            $container->append($button);
+        }
     }
 
     public function build($container)
@@ -95,7 +95,6 @@ SCRIPT;
         $widgets = $this->getAvailableWidgets();
         $this->registerWidgets($widgets);
 
-
         // Render relationships if attribute 'nested' is defined.
         if( $this->action->nested ) {
             $this->buildNestedSection($container);
@@ -104,27 +103,18 @@ SCRIPT;
         // if we use form
         $record = $this->getRecord();
         $recordId = $record ? $record->id : null;
+
+        // if we don't have form, we don't need submit button and action signature.
         if( ! $this->option('no_form') ) {
 
             // Add control buttons
-            $submit = new FormKit\Widget\SubmitInput;
-            // $this->layout->addWidget($submit);
-            $container->append($submit);
+            $container->append( new FormKit\Widget\SubmitInput );
 
             // if we have record and the record has an id, render the id field as hidden field.
-            if( $recordId ) {
-                if( $paramId = $this->action->getParam('id') ) {
-                    // if id field is defined, and the record exists.
-                    if( $recordId && $paramId->value ) {
-                        $container->append( new HiddenInput('id',array('value' => $paramId->value )) );
-                    }
-                }
-            }
             if( ! $this->option('no_signature') ) {
-                $signature = new HiddenInput('action',array(
-                    'value' => $this->action->getSignature()
-                ));
-                $container->append( $signature );
+                $container->append( 
+                    new HiddenInput('action',array('value' => $this->action->getSignature() ))
+                );
             }
         }
         return $container;

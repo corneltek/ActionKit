@@ -130,7 +130,8 @@ abstract class BaseView
 
 
     /**
-     * Register widgets into container object, layout object.
+     * Register widgets into container object or layout object
+     * Hidden fields will be container, visiable fields will be in layout.
      *
      * @param array Widget
      */
