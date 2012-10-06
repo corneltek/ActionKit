@@ -23,6 +23,7 @@ abstract class CreateRecordAction
             }
             return $this->createError( $ret );
         }
+        $this->result->data( $this->record->getData() );
         return $this->createSuccess( $ret );
     }
 
