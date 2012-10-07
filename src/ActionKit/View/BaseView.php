@@ -110,10 +110,15 @@ abstract class BaseView
         }
     }
 
+
+    /**
+     * Use 'fields', 'skips' options to filter widgets for rendering.
+     *
+     * @return FormKit\Widget\BaseWidget
+     */
     public function getAvailableWidgets()
     {
         $widgets = array();
-
         if( $fields = $this->option('fields') ) {
             $widgets = $this->action->getWidgetsByNames($fields);
         } else {
@@ -132,7 +137,7 @@ abstract class BaseView
      * Register widgets into container object or layout object
      * Hidden fields will be container, visiable fields will be in layout.
      *
-     * @param array Widget
+     * @param FormKit\Widget\BaseWidget[]
      */
     public function registerWidgets($widgets)
     {
@@ -154,6 +159,11 @@ abstract class BaseView
     public function getFields()
     {
         return $this->fields;
+    }
+
+    public function getSkipFields()
+    {
+        return $this->skips;
     }
 
 
