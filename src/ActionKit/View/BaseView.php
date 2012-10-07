@@ -119,7 +119,6 @@ abstract class BaseView
         } else {
             $widgets = $this->action->getWidgets();
         }
-
         if ( $fields = $this->option('skips') ) {
             $widgets = array_filter($widgets,function($widget) use($fields) {
                 return ! in_array($widget->name,$fields);
