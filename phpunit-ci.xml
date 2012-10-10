@@ -44,6 +44,7 @@
         
   </testsuites>
 
+  <!--
   <listeners>
     <listener class="PHPUnit_Extensions_Selenium2TestCase_ScreenshotListener" file="PHPUnit/Extensions/Selenium2TestCase/ScreenshotListener.php">
       <arguments>
@@ -51,6 +52,7 @@
       </arguments>
     </listener>
   </listeners>
+  -->
 
   <logging>
     <!-- print out tap so that we can check clearly on Jenkins CI -->

@@ -66,12 +66,6 @@ class Image extends Param
         return new SimpleImage;
     }
 
-    public function getFile( $name )
-    {
-        return $_FILES[ $name ];
-    }
-
-
     public function preinit( & $args )
     {
         /* For safety , remove the POST, GET field !! should only keep $_FILES ! */
@@ -115,64 +109,68 @@ class Image extends Param
          * if POST,GET file column key is set. remove it from ->args
          *
          * */
-        // $file = $this->getFile( $this->name );
         if( ! $this->putIn )
             throw new Exception( "putIn attribute is not defined." );
 
 
         $file = null;
 
-
         /* if the column is defined, then use the column 
          *
          * if not, check sourceField.
          * */
-        if( isset($_FILES[ $this->name ]['name']) && $_FILES[$this->name]['name'] ) {
-            $file = new UploadFile( $this->name );
-        } else {
-            if( $this->sourceField )
-                $file = new UploadFile( $this->sourceField );
+        if( isset($this->action->files[ $this->name ]) && $this->action->files[$this->name]['name'] ) {
+            $file = $this->action->getFile($this->name);
+        } 
+        elseif ( $this->sourceField
+                && isset( $this->action->files[$this->sourceField] ) ) {
+            $file = $this->action->getFile($this->sourceField);
         }
 
-        if( $file && $file->found() )
-        {
-            $newName = null;
-            if( $this->renameFile ) {
-                $cb = $this->renameFile;
-                $newName = $cb( $file->name );
+        if( empty($file) || ! isset($file['name']) || !$file['name'] ) {
+            unset( $args[ $this->name ] );
+            return;
+        }
+
+        $newName = $file['name'];
+        if( $this->renameFile ) {
+            $newName = call_user_func($this->renameFile,$newName);
+        }
+
+        $targetPath = $this->putIn . DIRECTORY_SEPARATOR . $newName;
+        if( $this->sourceField ) {
+
+            if( isset($file['saved_path']) ) {
+                copy($file['saved_path'], $targetPath);
             }
+            elseif( isset($file['tmp_name']) ) {
+                copy($file['tmp_name'], $targetPath);
+            } else {
+                unset( $args[$this->name] );
+                return;
+            }
+        } else {
+            if( move_uploaded_file($file['tmp_name'],$targetPath) === false )
+                die('File upload failed.');
+        }
 
-            /* if we use sourceField, than use Copy */
-            $file->putIn( $this->putIn , $newName , $this->sourceField ? true : false );
+        $args[$this->name]  = $targetPath;
+        $this->action->files[ $this->name ]['saved_path'] = $targetPath;
+        $this->action->addData( $this->name , $targetPath );
 
-            $args[ $this->name ] = $this->prefixPath
-                    ? $this->prefixPath . $file->getSavedPath()
-                    : $file->getSavedPath()
-                    ;
-            $this->action->addData( $this->name ,
-                $this->prefixPath
-                    ? $this->prefixPath . $file->getSavedPath()
-                    : $file->getSavedPath()
-            );
+        // resize image and save back.
+        if( $this->resizeWidth ) {
+            $image = $this->getImager();
+            $image->load( $targetPath );
 
-            // resize image and save back.
-            if( $this->resizeWidth ) {
-                $image = $this->getImager();
-                $imageFile = $file->getSavedPath();
-                $image->load( $imageFile );
+            // we should only resize image file only when size is changed.
+            if( $image->getWidth() > $this->resizeWidth ) {
+                $image->resizeToWidth( $this->resizeWidth );
 
-                // we should only resize image file only when size is changed.
-                if( $image->getWidth() > $this->resizeWidth ) {
-                    $image->resizeToWidth( $this->resizeWidth );
-
-                    // (filename, image type, jpeg compression, permissions);
-                    $image->save( $imageFile , null , $this->compression );
-                }
+                // (filename, image type, jpeg compression, permissions);
+                $image->save( $targetPath , null , $this->compression );
             }
         }
     }
-
-
 }
-
 

@@ -7,98 +7,166 @@ use FormKit\Widget\HiddenInput;
 
 class StackView extends BaseView
 {
-    public $layout;
-    public $form;
     public $method = 'POST';
     public $ajax = false;
 
-    public function build()
+    public function createLayout()
     {
-        // Use Generic Table Layout
-        $this->layout = new FormKit\Layout\GenericLayout;
+        $layout = new \FormKit\Layout\GenericLayout;
 
-        if( $width = $this->option('width') ) {
-            $this->layout->width( $width );
-        }
-        if( $padding = $this->option('cellpadding') ) {
-            $this->layout->cellpadding( $padding );
-        }
-        if( $spacing = $this->option('cellspacing') ) {
-            $this->layout->cellspacing( $spacing );
-        }
-        if( $border = $this->option('border') ) {
-            $this->layout->border(0);
-        }
-
-        if( $this->options('no_form') ) {
-            $form = new FormKit\Element\Form;
-            $form->method($this->method);
-            if( $formId = $this->option('form_id') ) {
-                $form->addId( $formId );
-            }
-            if( $formClass = $this->option('form_class') ) {
-                $form->addClass( $formClass );
-            }
-        } else {
-            $form = new FormKit\Element\Div;
-        }
-
-
-        $widgets = array();
-        if( $fields = $this->option('fields') ) {
-            $widgets = $this->action->getWidgetsByNames($fields);
-        } else {
-            $widgets = $this->action->getWidgets();
-        }
-        
-
-        // add widgets to layout.
-        foreach( $widgets as $widget ) {
-
-            // put HiddenInput widget out of table,
-            // so that we don't have empty cells.
-            if( $widget instanceof \FormKit\Widget\HiddenInput ) {
-                $form->append($widget);
-            } else {
-                $this->layout->addWidget($widget);
-            }
-        }
-
-        if( ! $this->option('no_form') ) {
-            // Add control buttons
-            $submit = new FormKit\Widget\SubmitInput;
-            $this->layout->addWidget($submit);
-            if( $this->ajax ) {
-                $ajaxFlag  = new HiddenInput('__ajax_request',array( 'value' => '1' ));
-                $form->append( $ajaxFlag );
-            }
-            $hasRecord   = isset($this->action->record);
-            $hasRecordId = isset($this->action->record) && $this->action->record->id;
-
-            // if we have record and the record has an id, render the id field as hidden field.
-            if( $hasRecordId ) {
-                if( $paramId = $this->action->param('id') ) {
-                    $recordId = $this->action->record->id;
-
-                    // if id field is defined, and the record exists.
-                    if( $recordId && $paramId->value ) {
-                        $form->append( new HiddenInput('id',array('value' => $paramId->value )) );
-                    }
-                }
-            }
-            $signature = new HiddenInput('action',array(
-                'value' => $this->action->getSignature()
-            ));
-            $form->append( $signature );
-        }
-        $form->append( $this->layout );
-        $this->form = $form;
+        // initialize layout object here.
+        if( $width = $this->option('width') )
+            $layout->width( $width );
+        if( $padding = $this->option('cellpadding') )
+            $layout->cellpadding( $padding );
+        if( $spacing = $this->option('cellspacing') )
+            $layout->cellspacing( $spacing );
+        if( $border = $this->option('border') )
+            $layout->border(0);
+        return $layout;
     }
 
-    public function render() 
+
+    /**
+     * Create Layout Container object.
+     */
+    public function createContainer()
     {
-        $this->build();
-        return $this->form->render();
+        if( $this->option('no_form') ) {
+            $container = new FormKit\Element\Div;
+        } else {
+            $container = new FormKit\Element\Form;
+            $container->method($this->method);
+            if( $formId = $this->option('form_id') ) {
+                $container->addId( $formId );
+            }
+            if( $formClass = $this->option('form_class') ) {
+                $container->addClass( $formClass );
+            }
+            if( $this->ajax ) {
+                $ajaxFlag  = new HiddenInput('__ajax_request',array( 'value' => '1' ));
+                $container->append( $ajaxFlag );
+                $container->addClass('ajax-action');
+            }
+        }
+        return $container;
+    }
+
+    public function buildNestedSection($container)
+    {
+        $record = $this->getRecord();
+        $recordId = $record ? $record->id : null;
+
+        foreach( $this->action->relationships as $relationId => $relation ) {
+            if( $recordId && isset($record->{ $relationId }) ) {
+                // for each existing records
+                foreach( $record->{ $relationId } as $subrecord ) {
+                    $subview = $this->createSubactionView($relationId, $relation, $subrecord);
+                    $container->append($subview);
+                }
+            } 
+
+            $record = new $relation['record'];
+            $subview = $this->createSubactionView($relationId,$relation);
+            $html = addslashes($subview->render());
+            $button = new \FormKit\Widget\ButtonInput;
+            $button->value = _('Add') . $record->getLabel();
+            $button->onclick = <<<SCRIPT
+                var self = this;
+                var el = document.createElement('div');
+                var closeBtn = document.createElement('input');
+                closeBtn.type = 'button';
+                closeBtn.value = '移除';
+                closeBtn.onclick = function() {
+                    self.parentNode.removeChild(el);
+                };
+                el.innerHTML = '$html';
+                el.appendChild( closeBtn );
+                this.parentNode.insertBefore(el, this.nextSibling);
+SCRIPT;
+            $container->append($button);
+        }
+    }
+
+    public function build($container)
+    {
+        $container->append( $this->layout );
+
+        $widgets = $this->getAvailableWidgets();
+        $this->registerWidgets($widgets);
+
+        // Render relationships if attribute 'nested' is defined.
+        if( $this->action->nested ) {
+            $this->buildNestedSection($container);
+        }
+
+        // if we use form
+        $record = $this->getRecord();
+        $recordId = $record ? $record->id : null;
+
+        // if we don't have form, we don't need submit button and action signature.
+        if( ! $this->option('no_form') ) {
+
+            // Add control buttons
+            $container->append( new FormKit\Widget\SubmitInput );
+
+            // if we have record and the record has an id, render the id field as hidden field.
+            if( ! $this->option('no_signature') ) {
+                $container->append( 
+                    new HiddenInput('action',array('value' => $this->action->getSignature() ))
+                );
+            }
+        }
+        return $container;
+    }
+
+    public function createSubactionView($relationId,$relation, $record = null)
+    {
+        if( ! $record ) {
+            $recordClass = $relation['record'];
+            $record      = new $recordClass;
+            $action      = $record->asCreateAction();
+        } else {
+            $action      = $record->asUpdateAction();
+        }
+        $formIndex = $action->setParamNamesWithIndex($relationId);
+        $subview = new self($action, array(
+            'no_form' => 1,
+            'ajax' => $this->ajax
+        ));
+        $subview->triggerBuild();
+        $container = $subview->getContainer();
+        $signature = new HiddenInput(  "{$relationId}[{$formIndex}][action]",array(
+            'value' => $action->getSignature()
+        ));
+        $container->append( $signature );
+        return $subview;
+    }
+
+    public function beforeBuild($container) { }
+
+    public function afterBuild($container) { }
+
+    /**
+     * create container object.
+     *
+     * trigger beforeBuild, build, afterBuild methods
+     */
+    public function triggerBuild()
+    {
+        $this->container = $this->createContainer();
+        $this->beforeBuild($this->container);
+        $this->build($this->container);
+        $this->afterBuild($this->container);
+        return $this->container;
+    }
+
+    public function render()
+    {
+        if(!$this->container) {
+            $this->triggerBuild();
+        }
+        return $this->getContainer()->render();
     }
 }
 

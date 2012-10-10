@@ -221,7 +221,7 @@ class Result
     /**
      * Set result data
      */
-    function data( $data , $val = null )
+    public function data( $data , $val = null )
     { 
         if( is_array($data) ) {
             $this->data = $data; 
@@ -231,7 +231,7 @@ class Result
         return $this; 
     }
 
-    function addData( $key, $value )
+    public function addData( $key, $value )
     {
         $this->data[ $key ] = $value;
         return $this;

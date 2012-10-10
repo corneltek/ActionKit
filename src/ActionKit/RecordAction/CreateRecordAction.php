@@ -1,5 +1,4 @@
 <?php
-
 namespace ActionKit\RecordAction;
 
 abstract class CreateRecordAction 
@@ -9,7 +8,7 @@ abstract class CreateRecordAction
 
     public $enableLoadRecord = false;
 
-    function create($args)
+    public function create($args)
     {
         $ret = $this->record->create( $args );
 
@@ -24,18 +23,21 @@ abstract class CreateRecordAction
             }
             return $this->createError( $ret );
         }
+        $this->result->data( $this->record->getData() );
         return $this->createSuccess( $ret );
     }
-
 
     /**
      * runValidate inherited from parent class.
      * */
-
     public function run()
     {
         /* default run method , to run create action */
-        return $this->create( $this->args );
+        $ret = $this->create( $this->args );
+        if( $this->nested && ! empty($this->relationships) ) {
+            $ret = $this->processSubActions();
+        }
+        return $ret;
     }
 
     public function successMessage($ret)
@@ -46,7 +48,8 @@ abstract class CreateRecordAction
     public function errorMessage($ret)
     {
         // XXX: should show exception message when error is found.
-        return __('Can not create %1 record: %2' , $this->record->getLabel(), $ret->exception->getMessage() );
+        if($ret->exception)
+            return __('Can not create %1 record: %2' , $this->record->getLabel(), $ret->exception->getMessage() );
         return __('Can not create %1 record.' , $this->record->getLabel() );
     }
 
