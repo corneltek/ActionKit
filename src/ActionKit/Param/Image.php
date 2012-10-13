@@ -4,6 +4,7 @@ use ActionKit\Param;
 use Phifty\UploadFile;
 use Exception;
 use SimpleImage;
+use Phifty\FileUtils;
 
 
 /**
@@ -35,6 +36,11 @@ class Image extends Param
     public $resizeWidth;
     public $resizeHeight;
 
+    /**
+     * @var array image size info
+     */
+    public $size;
+
     public $validExtensions = array('jpg','jpeg','png','gif');
 
     public $compression = 99;
@@ -51,6 +57,7 @@ class Image extends Param
     public function build()
     {
         $this->supportedAttributes[ 'validExtensions' ] = self::ATTR_ARRAY;
+        $this->supportedAttributes[ 'size' ] = self::ATTR_ARRAY;
         $this->supportedAttributes[ 'putIn' ] = self::ATTR_STRING;
         $this->supportedAttributes[ 'prefix' ] = self::ATTR_STRING;
         $this->supportedAttributes[ 'compression' ] = self::ATTR_ANY;
@@ -99,6 +106,21 @@ class Image extends Param
                     return array( false, _("The uploaded file exceeds the size limitation. ") . $this->sizeLimit . ' KB.');
         }
         return true;
+    }
+
+    public function hintFromSizeInfo($size = null)
+    {
+        if($size)
+            $this->size = $size;
+
+        if( $this->sizeLimit ) {
+            $this->hint .= '<br/> 檔案大小限制: ' . FileUtils::pretty_size($this->sizeLimit*1024);
+        }
+
+        if( $this->size && isset($this->size['width']) && isset($this->size['height']) ) {
+            $this->hint .= '<br/> 圖片大小: ' . $this->size['width'] . 'x' . $this->size['height'];
+        }
+        return $this;
     }
 
     public function init( & $args )
