@@ -69,17 +69,15 @@ class File extends Param
         return true;
     }
 
-    public function init( & $args ) 
+    public function init( & $args )
     {
         /* how do we make sure the file is a real http upload ?
          * if we pass args to model ? 
          *
          * if POST,GET file column key is set. remove it from ->args
-         *
-         * */
+         */
         if( ! $this->putIn )
             throw new Exception( "putIn attribute is not defined." );
-
 
         $req = new \Universal\Http\HttpRequest;
         $file = null;
