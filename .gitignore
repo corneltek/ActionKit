@@ -38,7 +38,7 @@ config/framework.yml
 tests/screenshots/
 utils/Selenium/
 cache.properties
-# *SchemaProxy.php
+*SchemaProxy.php
 # *CollectionBase.php
 *.swp
 locale/*.mo

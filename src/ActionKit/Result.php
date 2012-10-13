@@ -188,7 +188,7 @@ class Result
      *
      * @param string $path
      */
-    function redirect( $path )
+    public function redirect( $path )
     {
         $this->redirect = $path; 
         return $this; 
@@ -200,7 +200,7 @@ class Result
      *
      * @param array $args
      */
-    function args( $args ) 
+    public function args( $args ) 
     {
         $this->args = $args; 
         return $this; 
@@ -212,7 +212,7 @@ class Result
      *
      * @param string $desc
      */
-    function desc($desc) {
+    public function desc($desc) {
         $this->desc = $desc;
         return $this;
     }
@@ -221,7 +221,7 @@ class Result
     /**
      * Set result data
      */
-    function data( $data , $val = null )
+    public function data( $data , $val = null )
     { 
         if( is_array($data) ) {
             $this->data = $data; 
@@ -231,19 +231,19 @@ class Result
         return $this; 
     }
 
-    function addData( $key, $value )
+    public function addData( $key, $value )
     {
         $this->data[ $key ] = $value;
         return $this;
     }
 
-    function mergeData( $data )
+    public function mergeData( $data )
     {
         $this->data = array_merge( $this->data , $data );
         return $this;
     }
 
-    function success( $message = null )
+    public function success( $message = null )
     {
         $this->type = 'success';
         if( $message )
@@ -251,7 +251,7 @@ class Result
         return $this;
     }
 
-    function error( $message = null )
+    public function error( $message = null )
     {
         $this->type = 'error';
         if( $message )
@@ -259,7 +259,7 @@ class Result
         return $this;
     }
 
-    function valid( $message = null )
+    public function valid( $message = null )
     {
         $this->type = 'valid';
         if( $message )
@@ -267,7 +267,7 @@ class Result
         return $this;
     }
 
-    function invalid( $message = null )
+    public function invalid( $message = null )
     {
         $this->type = 'invalid';
         if( $message )
@@ -275,15 +275,15 @@ class Result
         return $this;
     }
 
-    function addValidation( $field , $attrs )
+    public function addValidation( $field , $attrs )
     {
         $this->validations[ $field ] = $attrs;
         return $this;
     }
 
-    function toArray()
+    public function toArray()
     {
-        $ret = array( );
+        $ret = array();
 
         if( $this->args ) {
             $ret['args'] = $this->args;
