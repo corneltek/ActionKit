@@ -59,12 +59,13 @@ class File extends Param
             $file = new UploadFile( $this->name );
             if( $this->validExtensions ) {
                 if( ! $file->validateExtension( $this->validExtensions ) )
-                    return array( false, _('Invalid File Extension: ' . $this->name ) );
+                    return array( false, __('Invalid File Extension: %1' . $this->name ) );
             }
 
             if( $this->sizeLimit )
                 if( ! $file->validateSize( $this->sizeLimit ) )
-                    return array( false, _("The uploaded file exceeds the size limitation. " . $this->sizeLimit . ' KB.'));
+                    return array( false, 
+                        _("The uploaded file exceeds the size limitation. ") . $this->sizeLimit . ' KB.');
         }
         return true;
     }
@@ -95,8 +96,9 @@ class File extends Param
         if( $file && file_exists($file['tmp_name'] ) )
         {
             $newName = $file['name'];
-            if( $this->renameFile )
+            if( $this->renameFile ) {
                 $newName = call_user_func($this->rename,$newName);
+            }
 
             if( $this->putIn && ! file_exists($this->putIn) )
                 mkdir( $this->putIn, 0755 , true );
