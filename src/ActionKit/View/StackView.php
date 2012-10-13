@@ -4,6 +4,7 @@ use FormKit;
 use FormKit\Layout\FieldsetLayout;
 use ActionKit\View\BaseView;
 use FormKit\Widget\HiddenInput;
+use FormKit\Layout\GenericLayout;
 
 class StackView extends BaseView
 {
@@ -12,7 +13,7 @@ class StackView extends BaseView
 
     public function createLayout()
     {
-        $layout = new \FormKit\Layout\GenericLayout;
+        $layout = new GenericLayout;
 
         // initialize layout object here.
         if( $width = $this->option('width') )
