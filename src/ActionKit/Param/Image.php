@@ -70,9 +70,9 @@ class Image extends Param
     {
         /* For safety , remove the POST, GET field !! should only keep $_FILES ! */
         if( isset( $args[ $this->name ] ) ) {
-            unset( $_GET[ $this->name ]  );
-            unset( $_POST[ $this->name ] );
-            unset( $args[ $this->name ]  );
+            // unset( $_GET[ $this->name ]  );
+            // unset( $_POST[ $this->name ] );
+            // unset( $args[ $this->name ]  );
         }
     }
 
@@ -122,13 +122,25 @@ class Image extends Param
         if( isset($this->action->files[ $this->name ]) && $this->action->files[$this->name]['name'] ) {
             $file = $this->action->getFile($this->name);
         } 
-        elseif ( $this->sourceField
-                && isset( $this->action->files[$this->sourceField] ) ) {
-            $file = $this->action->getFile($this->sourceField);
+        elseif ( $this->sourceField )
+        {
+            if( isset( $this->action->files[$this->sourceField] ) )
+                $file = $this->action->getFile($this->sourceField);
+            elseif ( isset( $this->action->args[$this->sourceField] ) ) {
+                // rebuild $_FILES arguments from file path (string).
+                $path = $this->action->args[$this->sourceField];
+                $pathinfo = pathinfo($path);
+                $file = array(
+                    'name' => $pathinfo['basename'],
+                    'tmp_name' => $path,
+                    'saved_path' => $path,
+                    'size' => filesize($path)
+                );
+            }
         }
 
         if( empty($file) || ! isset($file['name']) || !$file['name'] ) {
-            unset( $args[ $this->name ] );
+            // XXX: unset( $args[ $this->name ] );
             return;
         }
 

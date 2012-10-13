@@ -36,9 +36,9 @@ class File extends Param
 
         /* For safety , remove the POST, GET field !! should only keep $_FILES ! */
         if( isset( $args[ $this->name ] ) ) {
-            unset( $_GET[ $this->name ]  );
-            unset( $_POST[ $this->name ] );
-            unset( $args[ $this->name ]  );
+            // unset( $_GET[ $this->name ]  );
+            // unset( $_POST[ $this->name ] );
+            // unset( $args[ $this->name ]  );
         }
     }
 
