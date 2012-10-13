@@ -23,12 +23,12 @@ class ActionGenerator
 
     public $cacheDir;
 
-    function __construct( $options = array() ) 
+    public function __construct( $options = array() ) 
     {
         $this->cache = isset($options['cache']) && extension_loaded('apc');
     }
 
-    function generateClassCode( $modelClass , $type ) 
+    public function generateClassCode( $modelClass , $type ) 
     {
         $modelClass = ltrim($modelClass, '\\');
         $p          = strpos($modelClass, '\\');
@@ -52,10 +52,10 @@ class ActionGenerator
      *
      * @return string class code
      */
-    function generateClassCodeWithNamespace( $ns , $modelName , $type )
+    public function generateClassCodeWithNamespace( $prefix , $modelName , $type )
     {
         $actionClass  = $type . $modelName;
-        $actionFullClass = $ns . '\\Action\\'  . $actionClass;
+        $actionFullClass = $prefix . '\\Action\\'  . $actionClass;
         if( $this->cache && $code = apc_fetch( 'action:' . $actionFullClass ) ) {
             return (object) array(
                 'action_class' => $actionFullClass,
@@ -63,10 +63,10 @@ class ActionGenerator
             );
         }
 
-        $recordClass  = $ns . '\\Model\\' . $modelName;
+        $recordClass  = $prefix . '\\Model\\' . $modelName;
         $baseAction   = $type . 'RecordAction';
         $code =<<<CODE
-namespace $ns\\Action {
+namespace $prefix\\Action {
     use ActionKit\\RecordAction\\$baseAction;
     class $actionClass extends $baseAction
     {

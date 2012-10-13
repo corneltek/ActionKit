@@ -80,7 +80,7 @@ class ActionRunner
         $gen = new ActionGenerator(array( 'cache' => true ));
 
         $args = $this->crudActions[$class];
-        $code = $gen->generateClassCodeWithNamespace( $args['ns'], $args['model_name'], $args['type'] )->code;
+        $code = $gen->generateClassCodeWithNamespace( $args['prefix'], $args['model_name'], $args['type'] )->code;
 
         // TODO: eval is slower than require
         //       use a better code generator
@@ -97,31 +97,32 @@ class ActionRunner
      * Add CRUD action class to pool, so we can generate these class later 
      * if needed. (lazy)
      *
-     *   - registerCRUD( 'News' , 'News' , array('create') );
+     *   - registerCRUD( 'News' , 'News' , array('Create','Update') );
+     * 
+     * Which generates:
+     *
+     *    News\Action\CreateNews
+     *    News\Action\UpdateNews
      * 
      * @param string $ns namespace name
      * @param string $modelName model name
      * @param array $types action types
      */
-    public function registerCRUD( $ns , $modelName , $types ) 
+    public function registerCRUD( $prefixNs , $modelName , $types ) 
     {
         foreach( (array) $types as $type ) {
-            $class = $ns . '\Action\\' . $type . $modelName;
-            $this->crudActions[$class] = array( 
-                'ns'           => $ns,
+            $class = $prefixNs . '\\Action\\' . $type . $modelName;
+            $this->registerCRUDAction($class,array( 
+                'prefix'           => $prefixNs,
                 'type'         => $type,
                 'model_name'   => $modelName,
-            );
+            ));
         }
     }
 
-    public function registerCRUDFromModel( $model , $types ) 
+    public function registerCRUDAction($class,$args) 
     {
-        $class = is_object($model) ? get_class($model) : $model;
-        $nsParts = explode('\\',$class);
-        if( count($nsParts) >= 3 ) {
-            // XXX:
-        }
+        $this->crudActions[ $class ] = $args;
     }
 
     public function isInvalidActionName( $actionName ) 
@@ -178,7 +179,7 @@ class ActionRunner
 
             // please see registerCRUD method
             $gen = new ActionGenerator(array( 'cache' => true ));
-            $code = $gen->generateClassCodeWithNamespace( $args['ns'], $args['model_name'], $args['type'] )->code;
+            $code = $gen->generateClassCodeWithNamespace( $args['prefix'], $args['model_name'], $args['type'] )->code;
 
             // TODO: eval is slower than require
             //       use a better code generator
