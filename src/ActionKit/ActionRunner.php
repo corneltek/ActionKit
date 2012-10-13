@@ -53,23 +53,19 @@ class ActionRunner
      *
      * @return return result array if there is such an action.
      * */
-    public function run() 
+    public function run($actionName)
     {
-        if( isset($_REQUEST['action']) )
-        {
-            $actionName = $this->getCurrentActionName(); // without postfix "Action".
-            if( $this->isInvalidActionName( $actionName ) )
-                throw new Exception( "Invalid action name: $actionName." );
+        if( $this->isInvalidActionName( $actionName ) )
+            throw new Exception( "Invalid action name: $actionName." );
 
-            /* translate :: into php namespace */
-            $class = $this->getActionClass( $actionName );
-            if( ! class_exists($class,true) ) {
-                throw new Exception( "Action class not found: $actionName $class, you might need to setup action autoloader" );
-            }
-
-            /* register results into hash */
-            return $this->results[ $actionName ] = $this->dispatch( $class );
+        /* translate :: into php namespace */
+        $class = $this->getActionClass( $actionName );
+        if( ! class_exists($class,true) ) {
+            throw new Exception( "Action class not found: $actionName $class, you might need to setup action autoloader" );
         }
+
+        /* register results into hash */
+        return $this->results[ $actionName ] = $this->dispatch( $class );
     }
 
     public function autoload($class) 
@@ -143,11 +139,6 @@ class ActionRunner
         return isset($_REQUEST['__ajax_request']);
     }
 
-    public function getCurrentActionName() 
-    {
-        return isset($_REQUEST['action']) ? 
-            $_REQUEST['action'] : null;
-    }
 
 
     /*
