@@ -87,16 +87,16 @@ class Image extends Param
         {
             $dir = $this->putIn;
             if( ! file_exists( $dir ) )
-                return array( false , _("Static dir $dir doesn't exist.") );
+                return array( false , __("Directory %1 doesn't exist.",$dir) );
 
             $file = new UploadFile( $this->name );
             if( $this->validExtensions )
                 if( ! $file->validateExtension( $this->validExtensions ) )
-                    return array( false, _('Invalid File Extension: ' . $this->name ) );
+                    return array( false, _('Invalid File Extension: ') . $this->name );
 
             if( $this->sizeLimit )
                 if( ! $file->validateSize( $this->sizeLimit ) )
-                    return array( false, _("The uploaded file exceeds the size limitation. " . $this->sizeLimit . ' KB.'));
+                    return array( false, _("The uploaded file exceeds the size limitation. ") . $this->sizeLimit . ' KB.');
         }
         return true;
     }
