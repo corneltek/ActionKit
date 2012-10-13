@@ -283,7 +283,7 @@ class Result
 
     public function toArray()
     {
-        $ret = array( );
+        $ret = array();
 
         if( $this->args ) {
             $ret['args'] = $this->args;
