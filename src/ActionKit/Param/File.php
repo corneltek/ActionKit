@@ -70,6 +70,16 @@ class File extends Param
         return true;
     }
 
+    public function hintFromSizeLimit()
+    {
+        if( $this->sizeLimit ) {
+            if( $this->hint )
+                $this->hint .= '<br/>';
+            $this->hint .= '檔案大小限制: ' . FileUtils::pretty_size($this->sizeLimit*1024);
+        }
+        return $this;
+    }
+
     public function init( & $args )
     {
         /* how do we make sure the file is a real http upload ?
