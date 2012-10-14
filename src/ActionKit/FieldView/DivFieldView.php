@@ -3,6 +3,7 @@ namespace ActionKit\FieldView;
 use FormKit;
 use FormKit\Element\Div;
 use FormKit\Element\Span;
+use FormKit\Widget\HiddenInput;
 
 class DivFieldView
 {
@@ -57,13 +58,15 @@ class DivFieldView
         $inputDiv = new Div(array( 'class' => $this->inputClass ));
 
 
-        $label = $this->column->createLabelWidget();
         $widget = $this->column->createWidget(null, $this->widgetAttributes);
-
-        $labelDiv->append( $label );
         $inputDiv->append( $widget );
 
-        $wrapper->append($labelDiv);
+        if( ! $widget instanceof HiddenInput ) {
+            $label = $this->column->createLabelWidget();
+            $labelDiv->append( $label );
+            $wrapper->append($labelDiv);
+        }
+
         $wrapper->append($inputDiv);
 
         if( $this->column->hint ) {
