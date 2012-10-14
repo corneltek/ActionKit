@@ -134,6 +134,8 @@ class Image extends Param
         if( ! $this->putIn )
             throw new Exception( "putIn attribute is not defined." );
 
+        if( ! file_exists($this->putIn) )
+            mkdir($this->putIn, 0755, true);
 
         $file = null;
 
