@@ -2,6 +2,7 @@
 namespace ActionKit\Param;
 use ActionKit\Param;
 use Phifty\UploadFile;
+use Phifty\FileUtils;
 use Exception;
 
 /**
