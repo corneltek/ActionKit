@@ -29,6 +29,7 @@ class File extends Param
         // XXX: use CascadingAttribute class setter instead.
         $this->supportedAttributes['validExtensions'] = self::ATTR_ARRAY;
         $this->supportedAttributes['putIn'] = self::ATTR_STRING;
+        $this->supportedAttributes['sizeLimit'] = self::ATTR_ANY;
         $this->supportedAttributes['renameFile'] = self::ATTR_ANY;
     }
 
@@ -76,6 +77,8 @@ class File extends Param
         if( $this->sizeLimit ) {
             if( $this->hint )
                 $this->hint .= '<br/>';
+            else
+                $this->hint = '';
             $this->hint .= '檔案大小限制: ' . FileUtils::pretty_size($this->sizeLimit*1024);
         }
         return $this;

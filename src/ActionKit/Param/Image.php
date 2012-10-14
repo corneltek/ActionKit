@@ -108,6 +108,19 @@ class Image extends Param
         return true;
     }
 
+    // XXX: should be inhertied from Param\File.
+    public function hintFromSizeLimit()
+    {
+        if( $this->sizeLimit ) {
+            if( $this->hint )
+                $this->hint .= '<br/>';
+            else
+                $this->hint = '';
+            $this->hint .= '檔案大小限制: ' . FileUtils::pretty_size($this->sizeLimit*1024);
+        }
+        return $this;
+    }
+
     public function hintFromSizeInfo($size = null)
     {
         if($size)
