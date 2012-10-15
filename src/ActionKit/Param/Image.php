@@ -4,6 +4,7 @@ use ActionKit\Param;
 use Phifty\UploadFile;
 use Exception;
 use SimpleImage;
+use Phifty\FileUtils;
 
 
 /**
@@ -35,6 +36,11 @@ class Image extends Param
     public $resizeWidth;
     public $resizeHeight;
 
+    /**
+     * @var array image size info
+     */
+    public $size;
+
     public $validExtensions = array('jpg','jpeg','png','gif');
 
     public $compression = 99;
@@ -51,6 +57,7 @@ class Image extends Param
     public function build()
     {
         $this->supportedAttributes[ 'validExtensions' ] = self::ATTR_ARRAY;
+        $this->supportedAttributes[ 'size' ] = self::ATTR_ARRAY;
         $this->supportedAttributes[ 'putIn' ] = self::ATTR_STRING;
         $this->supportedAttributes[ 'prefix' ] = self::ATTR_STRING;
         $this->supportedAttributes[ 'compression' ] = self::ATTR_ANY;
@@ -87,18 +94,46 @@ class Image extends Param
         {
             $dir = $this->putIn;
             if( ! file_exists( $dir ) )
-                return array( false , _("Static dir $dir doesn't exist.") );
+                return array( false , __("Directory %1 doesn't exist.",$dir) );
 
             $file = new UploadFile( $this->name );
             if( $this->validExtensions )
                 if( ! $file->validateExtension( $this->validExtensions ) )
-                    return array( false, _('Invalid File Extension: ' . $this->name ) );
+                    return array( false, _('Invalid File Extension: ') . $this->name );
 
             if( $this->sizeLimit )
                 if( ! $file->validateSize( $this->sizeLimit ) )
-                    return array( false, _("The uploaded file exceeds the size limitation. " . $this->sizeLimit . ' KB.'));
+                    return array( false, _("The uploaded file exceeds the size limitation. ") . $this->sizeLimit . ' KB.');
         }
         return true;
+    }
+
+    // XXX: should be inhertied from Param\File.
+    public function hintFromSizeLimit()
+    {
+        if( $this->sizeLimit ) {
+            if( $this->hint )
+                $this->hint .= '<br/>';
+            else
+                $this->hint = '';
+            $this->hint .= '檔案大小限制: ' . FileUtils::pretty_size($this->sizeLimit*1024);
+        }
+        return $this;
+    }
+
+    public function hintFromSizeInfo($size = null)
+    {
+        if($size)
+            $this->size = $size;
+
+        if( $this->sizeLimit ) {
+            $this->hint .= '<br/> 檔案大小限制: ' . FileUtils::pretty_size($this->sizeLimit*1024);
+        }
+
+        if( $this->size && isset($this->size['width']) && isset($this->size['height']) ) {
+            $this->hint .= '<br/> 圖片大小: ' . $this->size['width'] . 'x' . $this->size['height'];
+        }
+        return $this;
     }
 
     public function init( & $args )
@@ -112,6 +147,8 @@ class Image extends Param
         if( ! $this->putIn )
             throw new Exception( "putIn attribute is not defined." );
 
+        if( ! file_exists($this->putIn) )
+            mkdir($this->putIn, 0755, true);
 
         $file = null;
 
@@ -151,7 +188,6 @@ class Image extends Param
 
         $targetPath = $this->putIn . DIRECTORY_SEPARATOR . $newName;
         if( $this->sourceField ) {
-
             if( isset($file['saved_path']) ) {
                 copy($file['saved_path'], $targetPath);
             }

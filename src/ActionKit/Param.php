@@ -164,12 +164,6 @@ class Param extends CascadingAttribute
     }
 
 
-    public function createLabelWidget($widgetClass = null , $attributes = array() )
-    {
-        $class = $widgetClass ?: 'FormKit\Widget\Label';
-        return new $class( $this->getLabel() );
-    }
-
     public function getValidValues() 
     {
         if( is_callable($this->validValues) ) {
@@ -177,6 +171,23 @@ class Param extends CascadingAttribute
         }
         return $this->validValues;
     }
+
+    public function createHintWidget($widgetClass = null , $attributes = array() )
+    {
+        if( $this->hint ) {
+            $class = $widgetClass ?: 'FormKit\\Element\\Div';
+            $widget = new $class( $attributes );
+            $widget->append($this->hint);
+            return $widget;
+        }
+    }
+
+    public function createLabelWidget($widgetClass = null , $attributes = array() )
+    {
+        $class = $widgetClass ?: 'FormKit\\Widget\\Label';
+        return new $class( $this->getLabel() );
+    }
+
 
     /**
      * A simple widget factory for Action Param

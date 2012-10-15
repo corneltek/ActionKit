@@ -1,6 +1,9 @@
 <?php
 namespace ActionKit\FieldView;
 use FormKit;
+use FormKit\Element\Div;
+use FormKit\Element\Span;
+use FormKit\Widget\HiddenInput;
 
 class DivFieldView
 {
@@ -15,6 +18,8 @@ class DivFieldView
     public $labelClass = 'label';
 
     public $inputClass = 'input';
+
+    public $hintClass = 'hint';
 
     public $container;
 
@@ -46,20 +51,29 @@ class DivFieldView
      */
     public function build()
     {
-        $wrapper = new FormKit\Element\Div(array( 
+        $wrapper = new Div(array( 
             'class' => $this->wrapperClass,
         ));
-        $labelDiv = new FormKit\Element\Div(array( 'class' => $this->labelClass ));
-        $inputDiv = new FormKit\Element\Div(array( 'class' => $this->inputClass ));
+        $labelDiv = new Div(array( 'class' => $this->labelClass ));
+        $inputDiv = new Div(array( 'class' => $this->inputClass ));
 
-        $label = $this->column->createLabelWidget();
+
         $widget = $this->column->createWidget(null, $this->widgetAttributes);
-
-        $labelDiv->append( $label );
         $inputDiv->append( $widget );
 
-        $wrapper->append($labelDiv);
+        if( ! $widget instanceof HiddenInput ) {
+            $label = $this->column->createLabelWidget();
+            $labelDiv->append( $label );
+            $wrapper->append($labelDiv);
+        }
+
         $wrapper->append($inputDiv);
+
+        if( $this->column->hint ) {
+            $hintEl  = new Span(array( 'class' => $this->hintClass ));
+            $hintEl->append( $this->column->hint );
+            $wrapper->append($hintEl);
+        }
         return $wrapper;
     }
 

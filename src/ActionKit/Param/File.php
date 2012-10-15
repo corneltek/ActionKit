@@ -2,6 +2,7 @@
 namespace ActionKit\Param;
 use ActionKit\Param;
 use Phifty\UploadFile;
+use Phifty\FileUtils;
 use Exception;
 
 /**
@@ -28,6 +29,7 @@ class File extends Param
         // XXX: use CascadingAttribute class setter instead.
         $this->supportedAttributes['validExtensions'] = self::ATTR_ARRAY;
         $this->supportedAttributes['putIn'] = self::ATTR_STRING;
+        $this->supportedAttributes['sizeLimit'] = self::ATTR_ANY;
         $this->supportedAttributes['renameFile'] = self::ATTR_ANY;
     }
 
@@ -59,27 +61,38 @@ class File extends Param
             $file = new UploadFile( $this->name );
             if( $this->validExtensions ) {
                 if( ! $file->validateExtension( $this->validExtensions ) )
-                    return array( false, _('Invalid File Extension: ' . $this->name ) );
+                    return array( false, __('Invalid File Extension: %1' . $this->name ) );
             }
 
             if( $this->sizeLimit )
                 if( ! $file->validateSize( $this->sizeLimit ) )
-                    return array( false, _("The uploaded file exceeds the size limitation. " . $this->sizeLimit . ' KB.'));
+                    return array( false, 
+                        _("The uploaded file exceeds the size limitation. ") . $this->sizeLimit . ' KB.');
         }
         return true;
     }
 
-    public function init( & $args ) 
+    public function hintFromSizeLimit()
+    {
+        if( $this->sizeLimit ) {
+            if( $this->hint )
+                $this->hint .= '<br/>';
+            else
+                $this->hint = '';
+            $this->hint .= '檔案大小限制: ' . FileUtils::pretty_size($this->sizeLimit*1024);
+        }
+        return $this;
+    }
+
+    public function init( & $args )
     {
         /* how do we make sure the file is a real http upload ?
          * if we pass args to model ? 
          *
          * if POST,GET file column key is set. remove it from ->args
-         *
-         * */
+         */
         if( ! $this->putIn )
             throw new Exception( "putIn attribute is not defined." );
-
 
         $req = new \Universal\Http\HttpRequest;
         $file = null;
@@ -97,8 +110,9 @@ class File extends Param
         if( $file && file_exists($file['tmp_name'] ) )
         {
             $newName = $file['name'];
-            if( $this->renameFile )
+            if( $this->renameFile ) {
                 $newName = call_user_func($this->rename,$newName);
+            }
 
             if( $this->putIn && ! file_exists($this->putIn) )
                 mkdir( $this->putIn, 0755 , true );
