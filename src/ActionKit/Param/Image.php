@@ -188,7 +188,6 @@ class Image extends Param
 
         $targetPath = $this->putIn . DIRECTORY_SEPARATOR . $newName;
         if( $this->sourceField ) {
-
             if( isset($file['saved_path']) ) {
                 copy($file['saved_path'], $targetPath);
             }
