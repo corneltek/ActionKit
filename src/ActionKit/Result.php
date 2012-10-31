@@ -322,7 +322,6 @@ class Result
 
     public function __toString()
     {
-        return json_encode( $this->toArray() );
+        return json_encode( $this->toArray(), JSON_HEX_TAG );
     }
-
 }
