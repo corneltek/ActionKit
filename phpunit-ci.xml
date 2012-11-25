@@ -38,9 +38,11 @@
             <directory suffix="Test.php">tests/plugins</directory>
         </testsuite>
 
+        <!-- disable functional test
         <testsuite name="Functional">
             <directory suffix="Test.php">tests/functional</directory>
         </testsuite>
+        -->
   </testsuites>
 
   <!--
