@@ -67,6 +67,14 @@ class Image extends Param
         ));
     }
 
+    public function setSize( $size ) 
+    {
+        if ( $size ) {
+            $this->widgetAttributes = array_merge( $this->widgetAttributes, $size);
+        }
+        return $this;
+    }
+
     public function getImager()
     {
         kernel()->library->load('simpleimage');
