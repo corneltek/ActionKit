@@ -67,10 +67,11 @@ class Image extends Param
         ));
     }
 
-    public function setSize( $size ) 
+    public function size( $size ) 
     {
         if ( $size ) {
-            $this->widgetAttributes = array_merge( $this->widgetAttributes, $size);
+            $this->widgetAttributes['dataWidth'] = $size['width'];
+            $this->widgetAttributes['dataHeight'] = $size['height'];
         }
         return $this;
     }

@@ -48,7 +48,7 @@ class Param extends CascadingAttribute
     public $widgetClass = 'TextInput';
 
     /* default widget attributes */
-    public $widgetAttributes;
+    public $widgetAttributes = array();
 
     /* default widget namespace */
     public $widgetNamespace = 'FormKit\\Widget';
@@ -146,7 +146,7 @@ class Param extends CascadingAttribute
     public function renderAs( $type , $attributes = null ) {
         $this->widgetClass = $type;
         if( $attributes ) {
-            $this->widgetAttributes = $attributes;
+            $this->widgetAttributes = array_merge( $this->widgetAttributes, $attributes );
         }
         return $this;
     }
