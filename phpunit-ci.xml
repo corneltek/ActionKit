@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="tests/bootstrap.php"
+         backupGlobals="false"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         stopOnError="false"
+         stopOnFailure="false"
+         verbose="true">
+
+  <filter>
+    <whitelist>
+        <directory suffix=".php">src/</directory>
+    </whitelist>
+  </filter>
+
+  <testsuites>
+
+        <testsuite name="Phifty">
+            <directory suffix="Test.php">tests/Phifty</directory>
+            <exclude>_old</exclude>
+        </testsuite>
+
+        <testsuite name="ActionKit">
+            <directory suffix="Test.php">tests/ActionKit</directory>
+        </testsuite>
+
+        <testsuite name="I18NKit">
+            <directory suffix="Test.php">tests/I18NKit</directory>
+        </testsuite>
+
+        <testsuite name="KendoTest">
+            <directory suffix="Test.php">tests/Kendo</directory>
+        </testsuite>
+
+        <testsuite name="PluginTest">
+            <directory suffix="Test.php">plugins</directory>
+            <directory suffix="Test.php">tests/plugins</directory>
+        </testsuite>
+
+        <!-- disable functional test
+        <testsuite name="Functional">
+            <directory suffix="Test.php">tests/functional</directory>
+        </testsuite>
+        -->
+  </testsuites>
+
+  <!--
+  <listeners>
+    <listener class="PHPUnit_Extensions_Selenium2TestCase_ScreenshotListener" file="PHPUnit/Extensions/Selenium2TestCase/ScreenshotListener.php">
+      <arguments>
+         <string>build/screenshots</string>
+      </arguments>
+    </listener>
+  </listeners>
+  -->
+
+  <logging>
+    <!-- print out tap so that we can check clearly on Jenkins CI -->
+    <!--
+    <log type="tap" target="php://stdout"/>
+    -->
+
+    <log type="coverage-html" 
+        target="build/coverage" 
+        title="Phifty"
+        charset="UTF-8" 
+        yui="true" 
+        highlight="true"
+        lowUpperBound="35" 
+        highLowerBound="70"/>
+
+    <log type="coverage-clover" 
+        target="build/logs/clover.xml"/>
+
+    <log type="junit" 
+        target="build/logs/junit.xml"
+        logIncompleteSkipped="false"/>
+
+  </logging>
+
+</phpunit>
