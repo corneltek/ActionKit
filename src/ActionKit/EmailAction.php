@@ -1,8 +1,8 @@
-<?
+<?php
 namespace ActionKit;
 
 use Phifty\Email;
-use ActionKit;
+use ActionKit\Action;
 /*
 
 
@@ -30,9 +30,9 @@ use ActionKit;
     }
 */
 
-class EmailAction extends \ActionKit\Action 
+class EmailAction extends Action
 {
-	/* email object */
+    /* email object */
     public $email;
     public $template;
 
@@ -80,7 +80,7 @@ class EmailAction extends \ActionKit\Action
     }
 
 
-	/* the default run method */
+    /* the default run method */
     public function run()
     {
 
@@ -126,7 +126,7 @@ class EmailAction extends \ActionKit\Action
         if( empty($this->email->from) )
             $this->error( _('Please enter your E-mail address.') );
 
-		if( ! $this->email->getContent() )
+        if( ! $this->email->getContent() )
             return $this->error( _('Please enter mail content.') );
 
         try {
