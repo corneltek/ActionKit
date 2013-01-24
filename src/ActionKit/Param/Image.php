@@ -61,6 +61,9 @@ class Image extends Param
         $this->supportedAttributes[ 'putIn' ] = self::ATTR_STRING;
         $this->supportedAttributes[ 'prefix' ] = self::ATTR_STRING;
         $this->supportedAttributes[ 'compression' ] = self::ATTR_ANY;
+        $this->renameFile = function($filename) {
+            return FileUtils::filename_increase( $filename );
+        };
         $this->renderAs('ThumbImageFileInput',array(
             /* prefix path for widget rendering */
             'prefix' => '/',
