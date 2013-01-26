@@ -19,10 +19,10 @@ class File extends Param
 {
     public $paramType = 'file';
 
-    public $renameFile;
     public $sizeLimit;
     public $sourceField;  /* If field is not defined, use this source field */
     public $widgetClass = 'FileInput';
+    public $renameFile;
 
     public function build()
     {

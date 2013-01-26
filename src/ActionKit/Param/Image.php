@@ -49,10 +49,10 @@ class Image extends Param
      * @var string relative path to webroot path.
      */
     public $putIn;
-    public $renameFile;
     public $sizeLimit;
     public $sourceField;  /* If field is not defined, use this source field */
     public $widgetClass = 'FileInput';
+    public $renameFile;
 
     public function build()
     {
@@ -60,7 +60,11 @@ class Image extends Param
         $this->supportedAttributes[ 'size' ] = self::ATTR_ARRAY;
         $this->supportedAttributes[ 'putIn' ] = self::ATTR_STRING;
         $this->supportedAttributes[ 'prefix' ] = self::ATTR_STRING;
+        $this->supportedAttributes[ 'renameFile'] = self::ATTR_ANY;
         $this->supportedAttributes[ 'compression' ] = self::ATTR_ANY;
+        $this->renameFile = function($filename) {
+            return FileUtils::filename_increase( $filename );
+        };
         $this->renderAs('ThumbImageFileInput',array(
             /* prefix path for widget rendering */
             'prefix' => '/',
@@ -190,12 +194,11 @@ class Image extends Param
             return;
         }
 
-        $newName = $file['name'];
+        $targetPath = $this->putIn . DIRECTORY_SEPARATOR . $file['name'];
         if( $this->renameFile ) {
-            $newName = call_user_func($this->renameFile,$newName);
+            $targetPath = call_user_func($this->renameFile,$targetPath);
         }
 
-        $targetPath = $this->putIn . DIRECTORY_SEPARATOR . $newName;
         if( $this->sourceField ) {
             if( isset($file['saved_path']) ) {
                 copy($file['saved_path'], $targetPath);
