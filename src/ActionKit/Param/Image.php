@@ -90,6 +90,9 @@ class Image extends Param
             $this->widgetAttributes['dataHeight'] = $size['height'];
             $this->widgetAttributes['autoresize'] = true;
             $this->widgetAttributes['autoresize_input'] = true;
+            $this->widgetAttributes['autoresize_type_input'] = true;
+            // default resize type
+            // $this->widgetAttributes['autoresize_type'] = '';
         }
         return $this;
     }
