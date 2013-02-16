@@ -37,7 +37,15 @@ class Image extends Param
     public $resizeHeight;
 
     /**
-     * @var array image size info
+     * @var array image size info, if this size info is specified, data-width, 
+     * data-height will be rendered
+     *
+     * $size = array( 'height' => 200 , 'width' => 200 );
+     *
+     * is rendered as
+     *
+     * data-height=200 data-width=200
+     *
      */
     public $size;
 
@@ -49,9 +57,13 @@ class Image extends Param
      * @var string relative path to webroot path.
      */
     public $putIn;
+
     public $sizeLimit;
+
     public $sourceField;  /* If field is not defined, use this source field */
+
     public $widgetClass = 'FileInput';
+
     public $renameFile;
 
     public function build()
@@ -76,6 +88,8 @@ class Image extends Param
         if ( $size ) {
             $this->widgetAttributes['dataWidth'] = $size['width'];
             $this->widgetAttributes['dataHeight'] = $size['height'];
+            $this->widgetAttributes['autoresize'] = true;
+            $this->widgetAttributes['autoresize_input'] = true;
         }
         return $this;
     }
