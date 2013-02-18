@@ -86,7 +86,8 @@ class Image extends Param
 
     public function size( $size ) 
     {
-        if ( $size ) {
+        if ( ! empty($size) ) {
+            $this->size = $size;
             $this->widgetAttributes['dataWidth'] = $size['width'];
             $this->widgetAttributes['dataHeight'] = $size['height'];
             $this->widgetAttributes['autoresize'] = true;
@@ -166,7 +167,6 @@ class Image extends Param
         if ( $this->sizeLimit ) {
             $this->hint .= '<br/> 檔案大小限制: ' . FileUtils::pretty_size($this->sizeLimit*1024);
         }
-
         if ( $this->size && isset($this->size['width']) && isset($this->size['height']) ) {
             $this->hint .= '<br/> 圖片大小: ' . $this->size['width'] . 'x' . $this->size['height'];
         }
@@ -263,7 +263,7 @@ class Image extends Param
         $this->action->files[ $this->name ]['saved_path'] = $targetPath;
         $this->action->addData( $this->name , $targetPath );
 
-        if( isset($args[$this->name . '_autoresize']) )
+        if( isset($args[$this->name . '_autoresize']) && $this->size )
         {
             $t = @$args[$this->name . '_autoresize_type' ] ?: 'crop_and_scale';
             $classes = array(
@@ -272,6 +272,10 @@ class Image extends Param
                 'scale'          => 'ActionKit\Param\Image\ScaleResize',
                 'crop_and_scale' => 'ActionKit\Param\Image\CropAndScaleResize',
             );
+
+            // echo "resizing {$this->name} with $t\n";
+            // print_r( $this->size );
+
             if( isset($classes[$t]) ) {
                 $c = $classes[$t];
                 $resizer = new $c($this);
