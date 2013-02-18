@@ -246,6 +246,10 @@ class Image extends Param
                 $resizer = new Image\MaxHeightResize($this);
                 $resizer->resize( $targePath );
             }
+            elseif( $t === 'scale' ) {
+                $resizer = new Image\ScaleResize($this);
+                $resizer->resize( $targePath );
+            }
         }
     }
 }
