@@ -5,6 +5,8 @@
 *.tbz
 *.zip
 *.jar
+.sass-cache
+.lazy.yml
 .DS_Store
 .gitmodules
 .hg
