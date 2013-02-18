@@ -81,6 +81,7 @@ class Image extends Param
             /* prefix path for widget rendering */
             'prefix' => '/',
         ));
+        $this->putIn("static/upload/");
     }
 
     public function size( $size ) 
@@ -238,7 +239,7 @@ class Image extends Param
 
         if( isset($args[$this->name . '_autoresize']) ) 
         {
-            $t = @$args[ $this->name . '_autoresize_type' ] ?: 'crop_and_scale';
+            $t = @$args[$this->name . '_autoresize_type' ] ?: 'crop_and_scale';
             $classes = array(
                 'max_width'      => 'ActionKit\Param\Image\MaxWidthResize',
                 'max_height'     => 'ActionKit\Param\Image\MaxHeightResize',
