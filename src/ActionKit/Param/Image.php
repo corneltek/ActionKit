@@ -90,9 +90,22 @@ class Image extends Param
             $this->widgetAttributes['dataWidth'] = $size['width'];
             $this->widgetAttributes['dataHeight'] = $size['height'];
             $this->widgetAttributes['autoresize'] = true;
+
+
             $this->widgetAttributes['autoresize_input'] = true;
             $this->widgetAttributes['autoresize_input_check'] = true;
             $this->widgetAttributes['autoresize_type_input'] = true;
+            $this->widgetAttributes['autoresize_types'] = array(
+                _('Crop And Scale') => 'crop_and_scale',
+                _('Scale') => 'scale',
+            );
+            if(isset($size['width'])) {
+                $this->widgetAttributes['autoresize_types'][ _('Max Width') ] = 'max_width';
+            }
+            if(isset($size['height'])) {
+                $this->widgetAttributes['autoresize_types'][ _('Max Height') ] = 'max_height';
+            }
+
             // default resize type
             // $this->widgetAttributes['autoresize_type'] = '';
         }
