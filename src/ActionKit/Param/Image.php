@@ -90,6 +90,7 @@ class Image extends Param
             $this->widgetAttributes['dataHeight'] = $size['height'];
             $this->widgetAttributes['autoresize'] = true;
             $this->widgetAttributes['autoresize_input'] = true;
+            $this->widgetAttributes['autoresize_input_check'] = true;
             $this->widgetAttributes['autoresize_type_input'] = true;
             // default resize type
             // $this->widgetAttributes['autoresize_type'] = '';
@@ -235,20 +236,21 @@ class Image extends Param
         $this->action->files[ $this->name ]['saved_path'] = $targetPath;
         $this->action->addData( $this->name , $targetPath );
 
-        // check resize algorithm
-        if( isset($args[ $this->name . '_autoresize_type']) ) {
-            $t = $args[ $this->name . '_autoresize_type' ];
-            if($t === 'max_width') {
-                $resizer = new Image\MaxWidthResize($this);
-                $resizer->resize( $targePath );
-            }
-            elseif( $t === 'max_height' ) {
-                $resizer = new Image\MaxHeightResize($this);
-                $resizer->resize( $targePath );
-            }
-            elseif( $t === 'scale' ) {
-                $resizer = new Image\ScaleResize($this);
-                $resizer->resize( $targePath );
+        if( isset($args[$this->name . '_autoresize']) ) 
+        {
+            $t = @$args[ $this->name . '_autoresize_type' ] ?: 'crop_and_scale';
+            $classes = array(
+                'max_width'      => 'ActionKit\Param\Image\MaxWidthResize',
+                'max_height'     => 'ActionKit\Param\Image\MaxHeightResize',
+                'scale'          => 'ActionKit\Param\Image\ScaleResize',
+                'crop_and_scale' => 'ActionKit\Param\Image\CropAndScaleResize',
+            );
+            if( isset($classes[$t]) ) {
+                $c = $classes[$t];
+                $resizer = new $c($this);
+                $resizer->resize( $targetPath );
+            } else {
+                throw new Exception("Unsupported autoresize_type $t");
             }
         }
     }
