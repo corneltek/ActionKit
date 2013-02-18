@@ -176,11 +176,12 @@ class Image extends Param
          * if POST,GET file column key is set. remove it from ->args
          *
          * */
-        if( ! $this->putIn )
+        if( ! $this->putIn ) {
             throw new Exception( "putIn attribute is not defined." );
-
-        if( ! file_exists($this->putIn) )
-            mkdir($this->putIn, 0755, true);
+        }
+        if( ! file_exists($this->putIn) ) {
+            throw new Exception( "putIn {$this->putIn} directory does not exists." );
+        }
 
         $file = null;
 
@@ -237,7 +238,10 @@ class Image extends Param
         $this->action->files[ $this->name ]['saved_path'] = $targetPath;
         $this->action->addData( $this->name , $targetPath );
 
-        if( isset($args[$this->name . '_autoresize']) ) 
+        echo $this->name . "\n";
+        print_r($args);
+
+        if( isset($args[$this->name . '_autoresize']) )
         {
             $t = @$args[$this->name . '_autoresize_type' ] ?: 'crop_and_scale';
             $classes = array(
@@ -247,6 +251,7 @@ class Image extends Param
                 'crop_and_scale' => 'ActionKit\Param\Image\CropAndScaleResize',
             );
             if( isset($classes[$t]) ) {
+                echo "resizing {$this->name} with $t\n";
                 $c = $classes[$t];
                 $resizer = new $c($this);
                 $resizer->resize( $targetPath );
