@@ -20,7 +20,8 @@ class ScaleResize
 
             $image = $this->param->getImager();
             $image->load( $targetPath );
-            $image->scale($w, $h);
+            $image->resize($w, $h);
+
             // (filename, image type, jpeg compression, permissions);
             $image->save( $targetPath , null , $this->param->compression );
         }
