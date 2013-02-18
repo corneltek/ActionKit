@@ -58,7 +58,11 @@ class Image extends Param
      */
     public $putIn;
 
-    public $sizeLimit;
+
+    /**
+     * @var integer file size limit (default to 1024KB)
+     */
+    public $sizeLimit = 1024;
 
     public $sourceField;  /* If field is not defined, use this source field */
 

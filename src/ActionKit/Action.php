@@ -228,12 +228,15 @@ abstract class Action implements IteratorAggregate
         $error = false;
         foreach( $this->params as $name => $param ) {
             $hasError = $this->validateParam( $name );
-            if( $hasError )
+            if( $hasError ) {
                 $error = true;
+            }
         }
 
-        if( $error )
+        // we do this here because we need to validate all param(s)
+        if( $error ) {
             $this->result->error( _('Validation Error') );
+        }
         return $error;
     }
 
