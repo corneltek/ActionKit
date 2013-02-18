@@ -47,7 +47,7 @@ class Image extends Param
      * data-height=200 data-width=200
      *
      */
-    public $size;
+    public $size = array();
 
     public $validExtensions = array('jpg','jpeg','png','gif');
 
@@ -235,19 +235,17 @@ class Image extends Param
         $this->action->files[ $this->name ]['saved_path'] = $targetPath;
         $this->action->addData( $this->name , $targetPath );
 
-        // resize image and save back.
-        if( $this->resizeWidth ) {
-            $image = $this->getImager();
-            $image->load( $targetPath );
+        // check resize algorithm
 
-            // we should only resize image file only when size is changed.
-            if( $image->getWidth() > $this->resizeWidth ) {
-                $image->resizeToWidth( $this->resizeWidth );
-
-                // (filename, image type, jpeg compression, permissions);
-                $image->save( $targetPath , null , $this->compression );
+        if( isset($args[ $this->name . '_autoresize_type']) ) {
+            $t = $args[ $this->name . '_autoresize_type' ];
+            if($t === 'max_width') {
+                $resizer = new Image\MaxWidthResize($this);
+                $resizer->resize( $targePath );
             }
         }
+
+
     }
 }
 
