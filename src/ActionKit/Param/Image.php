@@ -236,16 +236,17 @@ class Image extends Param
         $this->action->addData( $this->name , $targetPath );
 
         // check resize algorithm
-
         if( isset($args[ $this->name . '_autoresize_type']) ) {
             $t = $args[ $this->name . '_autoresize_type' ];
             if($t === 'max_width') {
                 $resizer = new Image\MaxWidthResize($this);
                 $resizer->resize( $targePath );
             }
+            elseif( $t === 'max_height' ) {
+                $resizer = new Image\MaxHeightResize($this);
+                $resizer->resize( $targePath );
+            }
         }
-
-
     }
 }
 
