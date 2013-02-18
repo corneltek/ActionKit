@@ -62,7 +62,7 @@ class Image extends Param
     /**
      * @var integer file size limit (default to 1024KB)
      */
-    public $sizeLimit = 1024;
+    public $sizeLimit = 2048 * 1024;
 
     public $sourceField;  /* If field is not defined, use this source field */
 
@@ -145,7 +145,7 @@ class Image extends Param
 
             if( $this->sizeLimit )
                 if( ! $file->validateSize( $this->sizeLimit ) )
-                    return array( false, _("The uploaded file exceeds the size limitation. ") . $this->sizeLimit . ' KB.');
+                    return array( false, _("The uploaded file exceeds the size limitation. ") . FileUtils::pretty_size($this->sizeLimit * 1024) );
         }
         return true;
     }
