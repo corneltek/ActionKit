@@ -127,13 +127,13 @@ class Image extends Param
         if( $ret[0] == false )
             return $ret;
 
+        if( ! file_exists( $this->putIn ) ) {
+            throw new Exception(__("Directory %1 doesn't exist.",$dir));
+        }
+
         // Consider required and optional situations.
         if( @$_FILES[ $this->name ]['tmp_name'] )
         {
-            $dir = $this->putIn;
-            if( ! file_exists( $dir ) )
-                return array( false , __("Directory %1 doesn't exist.",$dir) );
-
             $file = new UploadFile( $this->name );
             if( $this->validExtensions )
                 if( ! $file->validateExtension( $this->validExtensions ) )
