@@ -105,9 +105,6 @@ class Image extends Param
             if(isset($size['height'])) {
                 $this->widgetAttributes['autoresize_types'][ _('Max Height') ] = 'max_height';
             }
-
-            // default resize type
-            // $this->widgetAttributes['autoresize_type'] = '';
         }
         return $this;
     }
@@ -168,14 +165,14 @@ class Image extends Param
 
     public function hintFromSizeInfo($size = null)
     {
-        if($size)
+        if ($size) {
             $this->size = $size;
-
-        if( $this->sizeLimit ) {
+        }
+        if ( $this->sizeLimit ) {
             $this->hint .= '<br/> 檔案大小限制: ' . FileUtils::pretty_size($this->sizeLimit*1024);
         }
 
-        if( $this->size && isset($this->size['width']) && isset($this->size['height']) ) {
+        if ( $this->size && isset($this->size['width']) && isset($this->size['height']) ) {
             $this->hint .= '<br/> 圖片大小: ' . $this->size['width'] . 'x' . $this->size['height'];
         }
         return $this;
