@@ -83,7 +83,8 @@ abstract class BaseRecordAction extends Action
      * Load record values into params
      *
      */
-    public function loadRecordValues() {
+    public function loadRecordValues() 
+    {
         /* load record value */
         if( $this->record->id ) {
             foreach( $this->record->getColumns(true) as $column ) {

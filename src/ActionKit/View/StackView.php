@@ -39,7 +39,7 @@ class StackView extends BaseView
             $container = new FormKit\Element\Form;
             $container->method($this->method);
             if( $formId = $this->option('form_id') ) {
-                $container->addId( $formId );
+                $container->setId( $formId );
             }
             if( $formClass = $this->option('form_class') ) {
                 $container->addClass( $formClass );
