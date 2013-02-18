@@ -92,6 +92,7 @@ class Image extends Param
             $this->widgetAttributes['autoresize'] = true;
 
 
+            // initialize autoresize options
             $this->widgetAttributes['autoresize_input'] = true;
             $this->widgetAttributes['autoresize_input_check'] = true;
             $this->widgetAttributes['autoresize_type_input'] = true;
@@ -117,12 +118,6 @@ class Image extends Param
 
     public function preinit( & $args )
     {
-        /* For safety , remove the POST, GET field !! should only keep $_FILES ! */
-        if( isset( $args[ $this->name ] ) ) {
-            // unset( $_GET[ $this->name ]  );
-            // unset( $_POST[ $this->name ] );
-            // unset( $args[ $this->name ]  );
-        }
     }
 
     public function validate($value)
@@ -178,6 +173,10 @@ class Image extends Param
         return $this;
     }
 
+
+
+
+
     public function init( & $args )
     {
         /* how do we make sure the file is a real http upload ?
@@ -193,36 +192,43 @@ class Image extends Param
             throw new Exception( "putIn {$this->putIn} directory does not exists." );
         }
 
+        $replacingRemote = false;
         $file = null;
-
-        /* if the column is defined, then use the column 
-         *
-         * if not, check sourceField.
-         * */
-        if( isset($this->action->files[ $this->name ]) && $this->action->files[$this->name]['name'] ) {
+        if( isset($this->action->files[ $this->name ])
+            && $this->action->files[$this->name]['name'] )
+        {
             $file = $this->action->getFile($this->name);
-        } 
+        }
+        elseif( isset($this->action->args[$this->name]) ) 
+        {
+            $file = FileUtils::fileobject_from_path(
+                $this->action->args[$this->name]
+            );
+            $replacingRemote = true;
+        }
         elseif ( $this->sourceField )
         {
-            if( isset( $this->action->files[$this->sourceField] ) )
+            if( isset( $this->action->files[$this->sourceField] ) ) 
+            {
                 $file = $this->action->getFile($this->sourceField);
-            elseif ( isset( $this->action->args[$this->sourceField] ) ) {
+            }
+            // check values from POST or GET path to string
+            elseif ( isset( $this->action->args[$this->sourceField] ) ) 
+            {
                 // rebuild $_FILES arguments from file path (string).
-                $path = $this->action->args[$this->sourceField];
-                $pathinfo = pathinfo($path);
-                $file = array(
-                    'name' => $pathinfo['basename'],
-                    'tmp_name' => $path,
-                    'saved_path' => $path,
-                    'size' => filesize($path)
+                $file = FileUtils::fileobject_from_path(
+                    $this->action->args[$this->sourceField]
                 );
+                $replacingRemote = true;
             }
         }
+
 
         if( empty($file) || ! isset($file['name']) || !$file['name'] ) {
             // XXX: unset( $args[ $this->name ] );
             return;
         }
+
 
         $targetPath = $this->putIn . DIRECTORY_SEPARATOR . $file['name'];
         if( $this->renameFile ) {
@@ -240,16 +246,22 @@ class Image extends Param
                 return;
             }
         } else {
-            if( move_uploaded_file($file['tmp_name'],$targetPath) === false )
-                die('File upload failed.');
+            // XXX: merge this
+            if( $replacingRemote ) {
+                if( isset($file['saved_path']) ) {
+                    if( $targetPath !== $file['saved_path'] )
+                        copy($file['saved_path'], $targetPath);
+                }
+            }
+            elseif( move_uploaded_file($file['tmp_name'],$targetPath) === false ) {
+                throw new Exception('File upload failed.');
+            }
         }
 
+        // update field path from target path
         $args[$this->name]  = $targetPath;
         $this->action->files[ $this->name ]['saved_path'] = $targetPath;
         $this->action->addData( $this->name , $targetPath );
-
-        echo $this->name . "\n";
-        print_r($args);
 
         if( isset($args[$this->name . '_autoresize']) )
         {
@@ -261,7 +273,6 @@ class Image extends Param
                 'crop_and_scale' => 'ActionKit\Param\Image\CropAndScaleResize',
             );
             if( isset($classes[$t]) ) {
-                echo "resizing {$this->name} with $t\n";
                 $c = $classes[$t];
                 $resizer = new $c($this);
                 $resizer->resize( $targetPath );
