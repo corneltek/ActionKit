@@ -123,6 +123,12 @@ class Image extends Param
 
     public function preinit( & $args )
     {
+        if( ! $this->putIn ) {
+            throw new Exception( "putIn attribute is not defined." );
+        }
+        if( ! file_exists($this->putIn) ) {
+            throw new Exception( "putIn {$this->putIn} directory does not exists." );
+        }
     }
 
     public function validate($value)
@@ -183,27 +189,15 @@ class Image extends Param
 
     public function init( & $args )
     {
-        /* how do we make sure the file is a real http upload ?
-         * if we pass args to model ? 
-         *
-         * if POST,GET file column key is set. remove it from ->args
-         *
-         * */
-        if( ! $this->putIn ) {
-            throw new Exception( "putIn attribute is not defined." );
-        }
-        if( ! file_exists($this->putIn) ) {
-            throw new Exception( "putIn {$this->putIn} directory does not exists." );
-        }
-
+        // constructing file
         $replacingRemote = false;
         $file = null;
-        if( isset($this->action->files[ $this->name ])
+        if ( isset($this->action->files[ $this->name ])
             && $this->action->files[$this->name]['name'] )
         {
             $file = $this->action->getFile($this->name);
         }
-        elseif( isset($this->action->args[$this->name]) ) 
+        elseif ( isset($this->action->args[$this->name]) ) 
         {
             $file = FileUtils::fileobject_from_path(
                 $this->action->args[$this->name]
@@ -212,7 +206,7 @@ class Image extends Param
         }
         elseif ( $this->sourceField )
         {
-            if( isset( $this->action->files[$this->sourceField] ) ) 
+            if( $this->action->hasFile($this->sourceField) )
             {
                 $file = $this->action->getFile($this->sourceField);
             }
@@ -223,21 +217,19 @@ class Image extends Param
                 $file = FileUtils::fileobject_from_path(
                     $this->action->args[$this->sourceField]
                 );
-                $replacingRemote = true;
             }
         }
-
 
         if( empty($file) || ! isset($file['name']) || !$file['name'] ) {
             // XXX: unset( $args[ $this->name ] );
             return;
         }
 
-
         $targetPath = $this->putIn . DIRECTORY_SEPARATOR . $file['name'];
         if( $this->renameFile ) {
             $targetPath = call_user_func($this->renameFile,$targetPath);
         }
+
 
         if( $this->sourceField ) {
             if( isset($file['saved_path']) ) {
@@ -246,7 +238,7 @@ class Image extends Param
             elseif( isset($file['tmp_name']) ) {
                 copy($file['tmp_name'], $targetPath);
             } else {
-                unset( $args[$this->name] );
+                throw new Exception("source field not found.");
                 return;
             }
         } else {
@@ -264,6 +256,7 @@ class Image extends Param
 
         // update field path from target path
         $args[$this->name]  = $targetPath;
+        $this->action->args[ $this->name ] = $targetPath; // for source field
         $this->action->files[ $this->name ]['saved_path'] = $targetPath;
         $this->action->addData( $this->name , $targetPath );
 

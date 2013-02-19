@@ -459,6 +459,16 @@ abstract class Action implements IteratorAggregate
         }
     }
 
+    public function hasFile($name) 
+    {
+        if( isset($this->files[$name])
+            && isset($this->files[$name]['name'])
+            && $this->files[$name]['name'])
+        {
+            return $this->files[$name];
+        }
+    }
+
     /**
      * Set argument
      *
