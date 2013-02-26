@@ -37,10 +37,6 @@
             <directory suffix="Test.php">tests/plugins</directory>
         </testsuite>
 
-        <testsuite name="Kendo">
-            <directory suffix="Test.php">tests/Kendo</directory>
-        </testsuite>
-
         <testsuite name="ActionKit">
             <directory suffix="Test.php">tests/ActionKit</directory>
         </testsuite>
