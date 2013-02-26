@@ -7,10 +7,15 @@ class RuleOrderException extends Exception { }
 abstract class BaseRules
 {
     public $allowRules = array();
+
     public $denyRules = array();
+
     public $order = array('allow','deny');
+
     public $cacheSupport = false;
+
     public $cacheExpiry = 1200;
+
     public $ruleClass = 'Kendo\Acl\Rule';
 
     /**
@@ -23,10 +28,12 @@ abstract class BaseRules
 
     public $cacheLoaded = false;
 
+    public $cacheEnable = true;
+
 
     public function __construct() {
         $this->cacheSupport = extension_loaded('apc');
-        if( $this->cacheSupport ) {
+        if( $this->cacheEnable && $this->cacheSupport ) {
             $key = get_class($this);
             if( $cache = apc_fetch($key) ) {
                 $this->import($cache);
