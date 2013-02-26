@@ -13,19 +13,22 @@ use Exception;
  */
 abstract class DatabaseRules extends BaseRules
 {
-    public function __construct() {
+    public $autoSync = false;
+
+    public function __construct() 
+    {
         $this->cacheSupport = extension_loaded('apc');
-        if( $this->cacheSupport ) {
+        if( $this->cacheEnable && $this->cacheSupport ) {
             $key = get_class($this);
             if( $cache = apc_fetch($key) ) {
                 $this->import($cache);
                 $this->cacheLoaded = true;
                 return;
-            } else {
+            } elseif( $this->autoSync) {
                 $this->buildAndSync();
                 apc_store($key,$this->export(), $this->cacheExpiry);
             }
-        } else {
+        } elseif( $this->autoSync ) {
             $this->buildAndSync();
         }
     }
