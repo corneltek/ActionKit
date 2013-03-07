@@ -44,3 +44,4 @@ cache.properties
 # *CollectionBase.php
 *.swp
 locale/*.mo
+manifest.php
