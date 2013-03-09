@@ -2,7 +2,6 @@
 namespace ActionKit;
 use Exception;
 use IteratorAggregate;
-use ActionKit\RecordAction\BaseRecordAction;
 
 /**
  * Run actions!
@@ -11,21 +10,21 @@ use ActionKit\RecordAction\BaseRecordAction;
  *      full-qualified action name in web form:
  *              Yasumi::Action::Login
  *              Phifty::Action::Login
- *      names like "Login", "Signup" should refer to 
- *              {App}::Action::Login or 
+ *      names like "Login", "Signup" should refer to
+ *              {App}::Action::Login or
  *              {App}::Action::Signup
  *
  *  $runner = ActionKit\ActionRunner::getInstance();
  *  $result = $runner->run();
- *  if( $result ) {
- *      if( $runner->isAjax() ) {
+ *  if ($result) {
+ *      if ( $runner->isAjax() ) {
  *          echo $result;
  *      }
  *  }
  *
  * Iterator support:
  *
- *  foreach( $runner as $name => $result ) {
+ *  foreach ($runner as $name => $result) {
  *
  *  }
  *
@@ -35,14 +34,14 @@ class ActionRunner
     implements IteratorAggregate
 {
     /**
-     * Abstract CRUD action pool 
+     * Abstract CRUD action pool
      *
      * @var array
      */
     public $crudActions = array();
 
     /**
-     * Result pool 
+     * Result pool
      *
      * @var array
      */
@@ -60,18 +59,20 @@ class ActionRunner
 
         /* translate :: into php namespace */
         $class = $this->getActionClass( $actionName );
-        if( ! class_exists($class,true) ) {
+        if ( ! class_exists($class,true) ) {
             throw new Exception( "Action class not found: $actionName $class, you might need to setup action autoloader" );
         }
 
         /* register results into hash */
+
         return $this->results[ $actionName ] = $this->dispatch( $class );
     }
 
-    public function autoload($class) 
+    public function autoload($class)
     {
         /* check if action is in CRUD list */
         if( ! isset( $this->crudActions[$class] ) )
+
             return false;
 
         // Generate the crud action
@@ -85,34 +86,35 @@ class ActionRunner
         // TODO: eval is slower than require
         //       use a better code generator
         eval( $code );
+
         return true;
     }
 
-    public function registerAutoloader() 
+    public function registerAutoloader()
     {
         spl_autoload_register(array($this,'autoload'));
     }
 
     /**
-     * Add CRUD action class to pool, so we can generate these class later 
+     * Add CRUD action class to pool, so we can generate these class later
      * if needed. (lazy)
      *
      *   - registerCRUD( 'News' , 'News' , array('Create','Update') );
-     * 
+     *
      * Which generates:
      *
      *    News\Action\CreateNews
      *    News\Action\UpdateNews
-     * 
-     * @param string $ns namespace name
+     *
+     * @param string $ns        namespace name
      * @param string $modelName model name
-     * @param array $types action types
+     * @param array  $types     action types
      */
-    public function registerCRUD( $prefixNs , $modelName , $types ) 
+    public function registerCRUD( $prefixNs , $modelName , $types )
     {
-        foreach( (array) $types as $type ) {
+        foreach ( (array) $types as $type ) {
             $class = $prefixNs . '\\Action\\' . $type . $modelName;
-            $this->registerCRUDAction($class,array( 
+            $this->registerCRUDAction($class,array(
                 'prefix'           => $prefixNs,
                 'type'         => $type,
                 'model_name'   => $modelName,
@@ -120,12 +122,12 @@ class ActionRunner
         }
     }
 
-    public function registerCRUDAction($class,$args) 
+    public function registerCRUDAction($class,$args)
     {
         $this->crudActions[ $class ] = $args;
     }
 
-    public function isInvalidActionName( $actionName ) 
+    public function isInvalidActionName( $actionName )
     {
         return preg_match( '/[^A-Za-z0-9:]/i' , $actionName  );
     }
@@ -135,17 +137,15 @@ class ActionRunner
         return strpos( $actionName, '::' ) != -1;
     }
 
-    public function isAjax() 
+    public function isAjax()
     {
         return isset($_REQUEST['__ajax_request']);
     }
 
-
-
     /*
      * replace action name "::" charactors with "\"
      * */
-    public function getActionClass( $actionName ) 
+    public function getActionClass( $actionName )
     {
         // replace :: with '\'
         return str_replace( '::' , '\\' , $actionName );
@@ -157,22 +157,23 @@ class ActionRunner
      *
      * @param string $class
      */
-    public function createAction( $class ) 
+    public function createAction( $class )
     {
         $args = array_merge( array() , $_REQUEST );
 
-        if( isset($args['__ajax_request']) ) {
+        if ( isset($args['__ajax_request']) ) {
             unset( $args['__ajax_request'] );
         }
-        if( isset($args['action']) ) {
+        if ( isset($args['action']) ) {
             unset( $args['action'] );
         }
 
         if( class_exists($class,true) )
+
             return new $class( $args );
 
         /* check if action is in CRUD list */
-        if( isset( $this->crudActions[$class] ) ) {
+        if ( isset( $this->crudActions[$class] ) ) {
 
             /* generate the crud action */
             $args = $this->crudActions[$class];
@@ -184,22 +185,23 @@ class ActionRunner
             // TODO: eval is slower than require
             //       use a better code generator
             eval( $code );
+
             return new $class( $_REQUEST );
         }
+
         return new $class( $_REQUEST );
     }
 
-    public function dispatch( $class ) 
+    public function dispatch( $class )
     {
         $act = $this->createAction( $class );
-        if( ! $act ) {
+        if (! $act) {
             throw new Exception( "Can not create action class $class" );
         }
         $act();
+
         return $act->getResult();
     }
-
-
 
     /**
      * Get all results
@@ -211,7 +213,6 @@ class ActionRunner
         return $this->results;
     }
 
-
     /**
      * Get Action result by action name
      *
@@ -221,7 +222,7 @@ class ActionRunner
     {
         return isset($this->results[ $name ]) ?
                 $this->results[ $name ] : null;
-                
+
     }
 
     /**
@@ -229,7 +230,7 @@ class ActionRunner
      *
      * @param string $name Action name
      */
-    public function hasResult($name) 
+    public function hasResult($name)
     {
         return isset($this->results[$name]);
     }
@@ -239,20 +240,18 @@ class ActionRunner
         unset( $this->results[$name] );
     }
 
-
-    static function getInstance()
+    public static function getInstance()
     {
         static $self;
         if( $self )
+
             return $self;
         return $self = new static;
     }
 
-
-    public function getIterator() 
+    public function getIterator()
     {
         return new ArrayIterator($this->results);
     }
 
 }
-

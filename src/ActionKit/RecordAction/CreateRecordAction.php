@@ -1,7 +1,7 @@
 <?php
 namespace ActionKit\RecordAction;
 
-abstract class CreateRecordAction 
+abstract class CreateRecordAction
     extends BaseRecordAction
 {
     const TYPE = 'create';
@@ -13,17 +13,19 @@ abstract class CreateRecordAction
         $ret = $this->record->create( $args );
 
         /* error checking */
-        if( false === $ret->success ) {
+        if (false === $ret->success) {
             $this->convertRecordValidation( $ret );
-            if( function_exists('fb') ) {
+            if ( function_exists('fb') ) {
                 fb( $ret->message );
                 fb( $ret->exception );
                 fb( $ret->sql );
                 fb( $ret->vars );
             }
+
             return $this->createError( $ret );
         }
         $this->result->data( $this->record->getData() );
+
         return $this->createSuccess( $ret );
     }
 
@@ -34,9 +36,10 @@ abstract class CreateRecordAction
     {
         /* default run method , to run create action */
         $ret = $this->create( $this->args );
-        if( $this->nested && ! empty($this->relationships) ) {
+        if ( $this->nested && ! empty($this->relationships) ) {
             $ret = $this->processSubActions();
         }
+
         return $ret;
     }
 
@@ -49,22 +52,21 @@ abstract class CreateRecordAction
     {
         // XXX: should show exception message when error is found.
         if($ret->exception)
+
             return __('Can not create %1 record: %2' , $this->record->getLabel(), $ret->exception->getMessage() );
         return __('Can not create %1 record.' , $this->record->getLabel() );
     }
 
-    public function createSuccess($ret) 
+    public function createSuccess($ret)
     {
-        return $this->success( $this->successMessage($ret) , array( 
+        return $this->success( $this->successMessage($ret) , array(
             'id' => $this->record->id
         ));
     }
 
-    public function createError($ret) 
+    public function createError($ret)
     {
         return $this->error( $this->errorMessage($ret) );
     }
 
 }
-
-

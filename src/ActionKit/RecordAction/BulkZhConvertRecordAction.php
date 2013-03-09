@@ -9,11 +9,11 @@ class BulkZhConvertRecordAction extends BulkRecordAction
 
     public function convertRecords($convertion,$records)
     {
-        foreach( $records as $record ) {
+        foreach ($records as $record) {
             $args = $record->getData();
             $newArgs = array();
-            foreach( $this->convertionKeys as $key ) {
-                if( ! isset($args[$key]) ) 
+            foreach ($this->convertionKeys as $key) {
+                if( ! isset($args[$key]) )
                     continue;
                 $newArgs[ $key ] = call_user_func( $convertion, $args[ $key ]);
             }
@@ -26,10 +26,12 @@ class BulkZhConvertRecordAction extends BulkRecordAction
         kernel()->library->load('han-convert');
         $convertion = $this->arg('convertion');
         if( ! in_array($convertion,$this->convertionFunctions) )
+
             return $this->error('Invalid convertion method.');
 
         $records = $this->loadRecords();
         $this->convertRecords($convertion,$records);
+
         return $this->success(count($records) . '個項目轉換成功');
     }
 }

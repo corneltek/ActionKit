@@ -4,9 +4,9 @@ namespace ActionKit;
 /**
  * Action Generator
  *
- *    $generator = new ActionGenerator(array( 
+ *    $generator = new ActionGenerator(array(
  *          'cache' => true,                 // this enables apc cache.
- *          'cache_dir' => 'phifty/cache', 
+ *          'cache_dir' => 'phifty/cache',
  *          'template_dirs' => array( 'Resource/Templates' )
  *    ));
  *    $classFile = $generator->generate( 'Plugin\Action\TargetClassName', 'CreateRecordAction.template' , array( ));
@@ -23,21 +23,21 @@ class ActionGenerator
 
     public $cacheDir;
 
-    public function __construct( $options = array() ) 
+    public function __construct( $options = array() )
     {
         $this->cache = isset($options['cache']) && extension_loaded('apc');
     }
 
-    public function generateClassCode( $modelClass , $type ) 
+    public function generateClassCode( $modelClass , $type )
     {
         $modelClass = ltrim($modelClass, '\\');
         $p          = strpos($modelClass, '\\');
         $bp         = strrpos($modelClass, '\\');
         $ns         = substr($modelClass, 0, $p);
         $modelName  = substr($modelClass, $bp + 1 );
+
         return $this->generateClassCodeWithNamespace($ns, $modelName, $type);
     }
-
 
     /**
      * Generate record action class dynamically.
@@ -56,7 +56,7 @@ class ActionGenerator
     {
         $actionClass  = $type . $modelName;
         $actionFullClass = $prefix . '\\Action\\'  . $actionClass;
-        if( $this->cache && $code = apc_fetch( 'action:' . $actionFullClass ) ) {
+        if ( $this->cache && $code = apc_fetch( 'action:' . $actionFullClass ) ) {
             return (object) array(
                 'action_class' => $actionFullClass,
                 'code' => $code
@@ -74,43 +74,44 @@ namespace $prefix\\Action {
     }
 }
 CODE;
-        if( $this->cache ) {
+        if ($this->cache) {
             apc_store('action:' . $actionFullClass , $code);
         }
-        return (object) array( 
+
+        return (object) array(
             'action_class' => $actionFullClass,
             'code' => $code,
         );
     }
 
 
-    function generateActionClassCode($namespaceName,$actionName) {
+    public function generateActionClassCode($namespaceName,$actionName)
+    {
         $actionNamespace = $namespaceName . '\\Action';
         $actionClass = $actionNamespace . '\\' . $actionName;
         $code =<<<CODE
 namespace $actionNamespace {
     use ActionKit\\Action;
-    class $actionName extends Action 
+    class $actionName extends Action
     {
 
-        function schema() {
-
+        function schema()
+        {
         }
 
-        function run() {
+        function run()
+        {
             return \$this->success('Success!!');
         }
 
     }
 }
 CODE;
+
         return (object) array(
             'action_class' => $actionClass,
             'code' => $code,
         );
     }
 
-
 }
-
-

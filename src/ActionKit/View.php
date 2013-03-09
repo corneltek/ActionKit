@@ -3,7 +3,7 @@ namespace ActionKit;
 define('NL',"\n");
 
 /**
- * A Generic Action View Generator 
+ * A Generic Action View Generator
  *
  *    $aView = new Phifty\View\Action( 'UpdateUser' );
  *    $aView->renderFormStart();
@@ -11,7 +11,7 @@ define('NL',"\n");
  *    $aView->renderField( 'name' );
  *    $aView->renderFormEnd();
  *
- *    => integrated by 
+ *    => integrated by
  *
  *      $aView->render();
  *
@@ -22,26 +22,25 @@ class View
     public $actionClass;
     public $action;
 
-    function __construct( $actionClass ) 
+    public function __construct( $actionClass )
     {
         $this->actionClass = $actionClass;
         // $this->actionClass = kernel()->config->('name') . '\Action\\' . $actionName;
         // $this->action = new $this->actionClass;
     }
 
-
-    function formStart($attrs = "")
+    public function formStart($attrs = "")
     {
         echo '<form method="POST" ' . $attrs . '>' . NL;
         echo '<input type="hidden" name="action" value="' . $this->actionName . '">' . NL;
     }
 
-    function formEnd()
+    public function formEnd()
     {
         echo NL . '</form>' . NL;
     }
 
-    function field( $fieldName )
+    public function field( $fieldName )
     {
         // get action field
         $field = $this->getActionField();
@@ -51,7 +50,7 @@ class View
         $widget->render();
     }
 
-    function render()
+    public function render()
     {
         # echo $this->action->getName();
         $this->formStart();
@@ -59,4 +58,3 @@ class View
         $this->formEnd();
     }
 }
-

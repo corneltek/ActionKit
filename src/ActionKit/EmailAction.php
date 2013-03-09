@@ -5,8 +5,7 @@ use Phifty\Email;
 use ActionKit\Action;
 /*
 
-
-    class ConfirmEmailAction 
+    class ConfirmEmailAction
     {
 
         var $to = '';
@@ -15,12 +14,12 @@ use ActionKit\Action;
         var $message = 'Hello World';
         var $template = 'confirm_email_{lang}.tpl'; // i18n
 
-        function getContent() 
-        { 
+        function getContent()
+        {
             return ..... mail content ..... or $this->message;
         }
 
-        function run() 
+        function run()
         {
             $to = $this->arg( 'to' );
             $this->assign(  );
@@ -43,10 +42,10 @@ class EmailAction extends Action
     public $message;
     public $contentType = 'html';  #default content type
 
-    function __construct( $args = null ) 
+    public function __construct( $args = null )
     {
         $this->email = new Email;
-        if( $this->template ) {
+        if ($this->template) {
             # XXX: check template file
             $this->email->template( $this->template );
 
@@ -55,10 +54,10 @@ class EmailAction extends Action
         return parent::__construct( $args );
     }
 
-
     public function getContent()
     {
         if( $this->message )
+
             return $this->message;
         return null;
     }
@@ -71,7 +70,7 @@ class EmailAction extends Action
         if( $this->subject )
             $this->email->subject( $this->subject );
 
-        if( $content = $this->getContent() ) {
+        if ( $content = $this->getContent() ) {
             if( $this->contentType == 'html' )
                 $this->email->html( $content );
             else
@@ -79,12 +78,11 @@ class EmailAction extends Action
         }
     }
 
-
     /* the default run method */
     public function run()
     {
 
-        if( $this->allowOverride ) {
+        if ($this->allowOverride) {
             $to = $this->arg('to');
             $cc = $this->arg('cc');
             $bcc = $this->arg('bcc');
@@ -115,10 +113,11 @@ class EmailAction extends Action
         } else {
             $this->extractFieldsFromThis();
         }
+
         return $this->send();
     }
 
-    public function send() 
+    public function send()
     {
         if( empty($this->email->to) )
             $this->error( _('Please enter E-mail address. No receiver email address. ') );
@@ -127,6 +126,7 @@ class EmailAction extends Action
             $this->error( _('Please enter your E-mail address.') );
 
         if( ! $this->email->getContent() )
+
             return $this->error( _('Please enter mail content.') );
 
         try {
@@ -134,8 +134,8 @@ class EmailAction extends Action
         } catch ( Exception $e ) {
             return $this->error( $e->getMessage() );
         }
+
         return $this->success(_('Email is sent.'));
     }
 
 }
-

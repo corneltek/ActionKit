@@ -25,15 +25,15 @@ class DivFieldView
 
     public $widgetAttributes = array();
 
-    public function __construct($column, $options = array()) 
+    public function __construct($column, $options = array())
     {
         $this->column = $column;
     }
 
-    public function setWidgetAttributes($attrs) {
+    public function setWidgetAttributes($attrs)
+    {
         $this->widgetAttributes = $attrs;
     }
-
 
     /**
      *
@@ -51,17 +51,16 @@ class DivFieldView
      */
     public function build()
     {
-        $wrapper = new Div(array( 
+        $wrapper = new Div(array(
             'class' => $this->wrapperClass,
         ));
         $labelDiv = new Div(array( 'class' => $this->labelClass ));
         $inputDiv = new Div(array( 'class' => $this->inputClass ));
 
-
         $widget = $this->column->createWidget(null, $this->widgetAttributes);
         $inputDiv->append( $widget );
 
-        if( ! $widget instanceof HiddenInput ) {
+        if (! $widget instanceof HiddenInput) {
             $label = $this->column->createLabelWidget();
             $labelDiv->append( $label );
             $wrapper->append($labelDiv);
@@ -69,11 +68,12 @@ class DivFieldView
 
         $wrapper->append($inputDiv);
 
-        if( $this->column->hint ) {
+        if ($this->column->hint) {
             $hintEl  = new Span(array( 'class' => $this->hintClass ));
             $hintEl->append( $this->column->hint );
             $wrapper->append($hintEl);
         }
+
         return $wrapper;
     }
 
@@ -82,4 +82,3 @@ class DivFieldView
         return $this->build()->render();
     }
 }
-

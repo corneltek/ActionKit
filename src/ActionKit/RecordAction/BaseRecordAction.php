@@ -9,7 +9,6 @@ abstract class BaseRecordAction extends Action
 {
     const TYPE = 'base';
 
-
     public $nested = false;
     public $relationships = array();
 
@@ -19,7 +18,6 @@ abstract class BaseRecordAction extends Action
      */
     public $record; // record schema object
 
-
     /**
      * @var string Record class
      */
@@ -27,20 +25,19 @@ abstract class BaseRecordAction extends Action
 
     public $enableLoadRecord = true;
 
-    abstract function successMessage($ret);
+    abstract public function successMessage($ret);
 
-    abstract function errorMessage($ret);
-
+    abstract public function errorMessage($ret);
 
     /**
      * Construct an action object.
      *
      *    $action = new UpdateProductAction(array( ... ), new Product, $currentUser);
-     * 
-     * @param array $args
+     *
+     * @param array                $args
      * @param LazyRecord\BaseModel $record
      */
-    public function __construct( $args = array(), $record = null, $currentUser = null ) 
+    public function __construct( $args = array(), $record = null, $currentUser = null )
     {
         // record name is in Camel case
         if( ! $this->recordClass )
@@ -54,8 +51,8 @@ abstract class BaseRecordAction extends Action
 
         $this->setRecord($record);
 
-        if( ! $record->id ) {   // for create action, we don't need to create record
-            if( $this->getType() !== 'create' && $this->enableLoadRecord ) {
+        if (! $record->id) {   // for create action, we don't need to create record
+            if ( $this->getType() !== 'create' && $this->enableLoadRecord ) {
                 if( ! $this->loadRecordFromArguments( $args ) )
                     throw new ActionException('Record action can not load record', $this );
             }
@@ -83,12 +80,12 @@ abstract class BaseRecordAction extends Action
      * Load record values into params
      *
      */
-    public function loadRecordValues() 
+    public function loadRecordValues()
     {
         /* load record value */
-        if( $this->record->id ) {
-            foreach( $this->record->getColumns(true) as $column ) {
-                if( $val = $this->record->{ $column->name } ) {
+        if ($this->record->id) {
+            foreach ( $this->record->getColumns(true) as $column ) {
+                if ($val = $this->record->{ $column->name }) {
                     if( isset($this->params[ $column->name ]) )
                         $this->params[ $column->name ]->value = $val;
                 }
@@ -101,38 +98,39 @@ abstract class BaseRecordAction extends Action
      *
      * @return boolean
      */
-    public function loadRecordFromArguments($args) 
+    public function loadRecordFromArguments($args)
     {
-        if( isset( $args['id'] )) {
+        if ( isset( $args['id'] )) {
             return $this->record->load( $args['id'] )->success;
         }
+
         return false;
     }
 
     /**
-     * Convert model columns to action columns 
+     * Convert model columns to action columns
      */
     protected function initRecordColumn()
     {
-        if( ! $this->record ) {
+        if (! $this->record) {
             throw new ActionException('Record object is empty.', $this );
         }
-        foreach( $this->record->getColumns(true) as $column ) {
-            if( ! isset($this->params[$column->name] ) ) {
+        foreach ( $this->record->getColumns(true) as $column ) {
+            if ( ! isset($this->params[$column->name] ) ) {
                 $this->params[ $column->name ] = ColumnConvert::toParam( $column , $this->record );
-            } 
+            }
         }
     }
 
 
     /**
-     * Default base record action schema 
+     * Default base record action schema
      *
      * Inherits columns from record schema.
-     * In this method, we use column converter to 
+     * In this method, we use column converter to
      * convert record columns into action param objects.
      */
-    public function schema() 
+    public function schema()
     {
         $this->useRecordSchema();
     }
@@ -143,7 +141,7 @@ abstract class BaseRecordAction extends Action
      *
      * @return string 'create','update','delete','bulk_delete'
      */
-    public function getType() 
+    public function getType()
     {
         return static::TYPE;
     }
@@ -152,14 +150,14 @@ abstract class BaseRecordAction extends Action
     /**
      * Get current record
      */
-    public function getRecord() 
+    public function getRecord()
     {
-        return $this->record; 
+        return $this->record;
     }
 
 
     /**
-     * Set record 
+     * Set record
      *
      * @param Phifty\Model $record
      */
@@ -169,8 +167,8 @@ abstract class BaseRecordAction extends Action
 
         // Convert id column object from record schema to
         // Action param object.
-        if( $column = $this->record->getColumn('id') ) {
-            if( ! isset($this->params[$column->name] ) ) {
+        if ( $column = $this->record->getColumn('id') ) {
+            if ( ! isset($this->params[$column->name] ) ) {
                 $this->params[ $column->name ] = ColumnConvert::toParam( $column , $record );
             }
         }
@@ -181,7 +179,7 @@ abstract class BaseRecordAction extends Action
      * Permission check method
      *
      * We should call model's currentUserCan method
-     * 
+     *
      * @see Phifty\Model
      */
     public function currentUserCan( $user )
@@ -189,27 +187,24 @@ abstract class BaseRecordAction extends Action
         return true;
     }
 
-
     /**
-     * Convert record validation object to action validation 
+     * Convert record validation object to action validation
      * result.
      *
      * @param LazyRecord\OperationResult $ret
      */
-    public function convertRecordValidation( $ret ) 
+    public function convertRecordValidation( $ret )
     {
-        if( $ret->validations ) {
-            foreach( $ret->validations as $vld ) {
-                $this->result->addValidation( $vld->field , array( 
+        if ($ret->validations) {
+            foreach ($ret->validations as $vld) {
+                $this->result->addValidation( $vld->field , array(
                     'valid'   => $vld->valid,
                     'message' => $vld->message,
                     'field'   => $vld->field,
-                )); 
+                ));
             }
         }
     }
-
-
 
     /**
      * Create CRUD class
@@ -219,65 +214,68 @@ abstract class BaseRecordAction extends Action
      *
      * @return string class code
      */
-    static function createCRUDClass( $recordClass , $type ) 
+    public static function createCRUDClass( $recordClass , $type )
     {
         $gen = new ActionGenerator(array( 'cache' => true ));
         $ret = $gen->generateClassCode( $recordClass , $type );
 
         // trigger spl classloader if needed.
-        if( class_exists($ret->action_class,true) ) {
+        if ( class_exists($ret->action_class,true) ) {
             return $ret->action_class;
         }
         eval( $ret->code );
+
         return $ret->action_class;
     }
 
     public function createRelationAction($relation,$args)
     {
         $record = null;
-        if( isset($relation['record']) ) {
+        if ( isset($relation['record']) ) {
             $recordClass = $relation['record'];
             // create record object, and load it with primary id
             $record = new $recordClass;
-            if( isset($args['id']) && $args['id'] ) {
+            if ( isset($args['id']) && $args['id'] ) {
                 $record->load( $args['id'] );
             }
         }
 
-        if( isset($relation['action']) ) {
+        if ( isset($relation['action']) ) {
             $class = $relation['action'];
 
             // which is a record-based action.
-            if( is_subclass_of($class,'ActionKit\\RecordAction\\BaseRecordAction',true) ) {
+            if ( is_subclass_of($class,'ActionKit\\RecordAction\\BaseRecordAction',true) ) {
                 return new $class($args, $record);
             }
 
             // which is a simple action
             return $class($args);
-        }
-        else {
+        } else {
             // run subaction
-            if( $record->id ) {
-                if( isset($relation['update_action']) ) {
+            if ($record->id) {
+                if ( isset($relation['update_action']) ) {
                     $class = $relation['update_action'];
+
                     return new $class($args,$record);
-                } 
+                }
+
                 return $record->asUpdateAction($args);
-            } 
+            }
 
             unset($args['id']);
-            if( isset($relation['create_action']) ) {
+            if ( isset($relation['create_action']) ) {
                 $class = $relation['create_action'];
+
                 return new $class($args,$record);
             }
+
             return $record->asCreateAction($args);
         }
     }
 
-
     public function processSubActions()
     {
-        foreach( $this->relationships as $relationId => $relation ) {
+        foreach ($this->relationships as $relationId => $relation) {
             if( ! isset($relation['has_many']) )
                 continue;
 
@@ -289,28 +287,29 @@ abstract class BaseRecordAction extends Action
             if(!$argsList)
                 continue;
 
-            foreach( $argsList as $index => $args ) {
-                // update related records with the main record id 
+            foreach ($argsList as $index => $args) {
+                // update related records with the main record id
                 // by using self_key and foreign_key
                 $args[$selfKey] = $this->record->{$foreignKey};
 
                 // get file arguments from fixed $_FILES array.
                 // the ->files array is fixed in Action::__construct method
                 $files = array();
-                if( isset($this->files[ $relationId ][ $index ]) ) {
+                if ( isset($this->files[ $relationId ][ $index ]) ) {
                     $files = $this->files[$relationId][ $index ];
                 }
 
                 $action = $this->createRelationAction($relation,$args);
                 $action->files = $files;
-                if( $action->invoke() === false ) {
+                if ( $action->invoke() === false ) {
                     $this->result = $action->result;
+
                     return false;
                 }
             }
         }
+
         return true;
     }
 
 }
-

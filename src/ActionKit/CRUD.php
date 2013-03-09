@@ -7,11 +7,11 @@ class CRUD
     {
         $runner = ActionRunner::getInstance();
         $nsList = explode('\\',ltrim($modelClass));
-        if( count($nsList) > 1 ) {
+        if ( count($nsList) > 1 ) {
             $prefix = $nsList[0];
             $modelName = end($nsList);
 
-            foreach( (array) $types as $type ) {
+            foreach ( (array) $types as $type ) {
 
             }
 
@@ -20,13 +20,10 @@ class CRUD
 
         }
 
-        kernel()->action->registerCRUD( 
-            $this->getNamespace(), 
-            $model , 
-            (array) $types 
+        kernel()->action->registerCRUD(
+            $this->getNamespace(),
+            $model ,
+            (array) $types
         );
     }
 }
-
-
-

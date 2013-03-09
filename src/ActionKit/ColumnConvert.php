@@ -4,23 +4,23 @@ use ActionKit\Param;
 use Exception;
 
 /**
- * Convert LazyORM column to Action param, 
+ * Convert LazyORM column to Action param,
  * so that we can render with widget (currently).
  *
  * XXX: refactor this column converter
  */
-class ColumnConvert 
+class ColumnConvert
 {
-    static function toParam( $column , $record = null )
+    public static function toParam( $column , $record = null )
     {
         $name = $column->name;
         $param = new Param( $name );
-        foreach( $column->attributes as $k => $v ) {
+        foreach ($column->attributes as $k => $v) {
             $param->$k = $v;
         }
 
         // if we got record, load the value from it.
-        if( $record ) {
+        if ($record) {
             $val = $record->{$name};
             $val = $val instanceof \LazyRecord\BaseModel ? $val->dataKeyValue() : $val;
 
@@ -33,40 +33,38 @@ class ColumnConvert
             $param->value = $column->getDefaultValue();
         }
 
-        if( $param->refer ) {
-            if( class_exists($param->refer,true) ) {
+        if ($param->refer) {
+            if ( class_exists($param->refer,true) ) {
                 $class = $param->refer;
 
                 // it's a `has many`-like relationship
-                if( is_subclass_of($class,'LazyRecord\\BaseCollection', true) ) {
+                if ( is_subclass_of($class,'LazyRecord\\BaseCollection', true) ) {
                     $collection = new $class;
                     $options = array();
-                    foreach( $collection as $item ) {
-                        $label = method_exists($item,'dataLabel') 
+                    foreach ($collection as $item) {
+                        $label = method_exists($item,'dataLabel')
                                 ? $item->dataLabel()
                                 : $item->id;
                         $options[ $label ] = $item->dataKeyValue();
                     }
                     $param->validValues = $options;
-                } 
+                }
                 // it's a `belongs-to`-like relationship
-                elseif( is_subclass_of($class,'LazyRecord\\BaseModel', true) ) {
+                elseif ( is_subclass_of($class,'LazyRecord\\BaseModel', true) ) {
                     $class = $class . 'Collection';
                     $collection = new $class;
                     $options = array();
-                    foreach( $collection as $item ) {
-                        $label = method_exists($item,'dataLabel') 
+                    foreach ($collection as $item) {
+                        $label = method_exists($item,'dataLabel')
                                 ? $item->dataLabel()
                                 : $item->id;
                         $options[ $label ] = $item->dataKeyValue();
                     }
                     $param->validValues = $options;
-                }
-                else {
+                } else {
                     throw new Exception('Unsupported refer type');
                 }
-            }
-            elseif( $relation = $record->getSchema()->getRelation($param->refer) ) {
+            } elseif ( $relation = $record->getSchema()->getRelation($param->refer) ) {
                 // so it's a relationship reference
                 // TODO: implement this
                 throw new Exception('Unsupported refer type');
@@ -75,38 +73,33 @@ class ColumnConvert
 
         //  Convert column type to param type.
         // copy widget attributes
-        if( $column->widgetClass ) {
+        if ($column->widgetClass) {
             $param->widgetClass = $column->widgetClass;
         }
-        if( $column->widgetAttributes ) {
+        if ($column->widgetAttributes) {
             $param->widgetAttributes = $column->widgetAttributes;
         }
 
-        if( $column->renderAs ) {
+        if ($column->renderAs) {
             $param->renderAs( $column->renderAs );
-        }
-        elseif( $param->validValues || $param->validPairs ) {
+        } elseif ($param->validValues || $param->validPairs) {
             $param->renderAs( 'SelectInput' );
-        }
-        elseif( $param->name === 'id' ) {
+        } elseif ($param->name === 'id') {
             $param->renderAs( 'HiddenInput' );
-        } 
-        else {
+        } else {
             // guess input widget from data type
             $typeMapping = array(
                 'date' => 'DateInput',
                 'datetime' => 'DateTimeInput',
                 'text' => 'TextareaInput',
             );
-            if( isset($typeMapping[ $param->type ]) ) {
+            if ( isset($typeMapping[ $param->type ]) ) {
                 $param->renderAs($typeMapping[$param->type]);
             } else {
                 $param->renderAs('TextInput');
             }
         }
+
         return $param;
     }
 }
-
-
-

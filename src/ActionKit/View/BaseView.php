@@ -13,22 +13,21 @@ abstract class BaseView
 
     public $fields;
 
-    abstract function build($container);
+    abstract public function build($container);
 
-    abstract function render();
+    abstract public function render();
 
-    abstract function createLayout();
-
+    abstract public function createLayout();
 
     /**
      *
      * @param ActionKit\Action $action
      */
-    public function __construct($action, $options = array() ) 
+    public function __construct($action, $options = array() )
     {
         $this->action = $action;
         $this->options = $options;
-        if( isset($options['fields']) ) {
+        if ( isset($options['fields']) ) {
             $this->fields = $options['fields'];
         }
         $this->init();
@@ -63,9 +62,6 @@ abstract class BaseView
     {
         return isset($this->container);
     }
-        
-        
-
 
     public function getAction()
     {
@@ -92,24 +88,23 @@ abstract class BaseView
      *
      * @param array $fields field names
      */
-    public function setFields($fields) 
+    public function setFields($fields)
     {
         $this->fields = $fields;
     }
 
     public function hasRecord()
     {
-        return $this->isRecordAction() 
+        return $this->isRecordAction()
             && $this->action->record->id;
     }
 
     public function getRecord()
     {
-        if( $this->isRecordAction() ) {
+        if ( $this->isRecordAction() ) {
             return $this->action->record;
         }
     }
-
 
     /**
      * Use 'fields', 'skips' options to filter widgets for rendering.
@@ -119,19 +114,19 @@ abstract class BaseView
     public function getAvailableWidgets()
     {
         $widgets = array();
-        if( $fields = $this->option('fields') ) {
+        if ( $fields = $this->option('fields') ) {
             $widgets = $this->action->getWidgetsByNames($fields);
         } else {
             $widgets = $this->action->getWidgets();
         }
         if ( $fields = $this->option('skips') ) {
-            $widgets = array_filter($widgets,function($widget) use($fields) {
+            $widgets = array_filter($widgets,function($widget) use ($fields) {
                 return ! in_array($widget->name,$fields);
             });
         }
+
         return $widgets;
     }
-
 
     /**
      * Register widgets into container object or layout object
@@ -142,10 +137,10 @@ abstract class BaseView
     public function registerWidgets($widgets)
     {
         // push widgets to layout.
-        foreach( $widgets as $widget ) {
+        foreach ($widgets as $widget) {
             // put HiddenInput widget out of table,
             // so that we don't have empty cells.
-            if( $widget instanceof \FormKit\Widget\HiddenInput ) {
+            if ($widget instanceof \FormKit\Widget\HiddenInput) {
                 $this->container->append($widget);
             } else {
                 $this->layout->addWidget($widget);
@@ -172,8 +167,10 @@ abstract class BaseView
      *
      * @param array $options
      */
-    public function options($options) {
+    public function options($options)
+    {
         $this->options = $options;
+
         return $this;
     }
 
@@ -183,22 +180,21 @@ abstract class BaseView
      *
      * @param string $key
      */
-    public function option($key) 
+    public function option($key)
     {
-        if( isset($this->options[$key]) ) {
+        if ( isset($this->options[$key]) ) {
             return $this->options[$key];
         }
     }
 
 
-    public function __call($method,$args) 
+    public function __call($method,$args)
     {
-        if( method_exists( $this,'set' . ucfirst($method) ) ) {
+        if ( method_exists( $this,'set' . ucfirst($method) ) ) {
             call_user_func_array('set' . ucfirst($method), $args);
+
             return $this;
         }
         throw new RuntimeException("$method not found.");
     }
 }
-
-

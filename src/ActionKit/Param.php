@@ -3,7 +3,6 @@ namespace ActionKit;
 use CascadingAttribute;
 use FormKit;
 
-
 class Param extends CascadingAttribute
 {
     /**
@@ -12,17 +11,17 @@ class Param extends CascadingAttribute
     public $action;
 
     /**
-     * @var string action param name 
+     * @var string action param name
      */
     public $name;
 
     /**
-     * @var string action param type 
+     * @var string action param type
      */
     public $type;
 
     /**
-     * @var boolean is a required column ? 
+     * @var boolean is a required column ?
      */
     public $required;
 
@@ -55,7 +54,7 @@ class Param extends CascadingAttribute
 
     public $validator;
 
-    public function __construct( $name , $action = null ) 
+    public function __construct( $name , $action = null )
     {
         $this->name = $name;
         $this->action = $action;
@@ -85,20 +84,21 @@ class Param extends CascadingAttribute
     {
         /* if it's file type , should read from $_FILES , not from the args of action */
         // TODO: note, we should do this validation in File Param or Image Param
-        if( $this->paramType === 'file' ) {
-            if( $this->required 
+        if ($this->paramType === 'file') {
+            if( $this->required
                 && ( ! isset($_FILES[ $this->name ]['tmp_name']) && ! isset($_REQUEST[$this->name]) )
             ) {
                 return array(false, __('File Field %1 is required.' , $this->getLabel()  ) );
             }
         } else {
-            if( $this->required && ! isset($_REQUEST[ $this->name ]) && ! $this->default ) {
+            if ( $this->required && ! isset($_REQUEST[ $this->name ]) && ! $this->default ) {
                 return array(false, __('Field %1 is required.' , $this->getLabel()  ) );
             }
         }
-        if( $this->validator ) {
+        if ($this->validator) {
             return call_user_func($this->validator,$value);
         }
+
         return true;
     }
 
@@ -107,7 +107,7 @@ class Param extends CascadingAttribute
 
     }
 
-    public function init( & $args ) 
+    public function init( & $args )
     {
 
     }
@@ -115,15 +115,17 @@ class Param extends CascadingAttribute
     public function getLabel()
     {
         if( $this->label )
+
             return _($this->label);
         return ucfirst($this->name);
     }
 
     public function getDefaultValue()
     {
-        if( is_callable($this->default) ) {
+        if ( is_callable($this->default) ) {
             return call_user_func($this->default);
         }
+
         return $this->default;
     }
 
@@ -131,53 +133,55 @@ class Param extends CascadingAttribute
      * Widget related methods
      **************************/
 
-
     /**
      * Render action column as {Type}Widget, with extra options/attributes
      *
      *     $this->column('created_on')
      *         ->renderAs('DateInput', array( 'format' => 'yy-mm-dd' ))
      *
-     * @param string $type Widget type
-     * @param array $attributes
+     * @param string $type       Widget type
+     * @param array  $attributes
      *
      * @return self
      */
-    public function renderAs( $type , $attributes = null ) {
+    public function renderAs( $type , $attributes = null )
+    {
         $this->widgetClass = $type;
-        if( $attributes ) {
+        if ($attributes) {
             $this->widgetAttributes = array_merge( $this->widgetAttributes, $attributes );
         }
+
         return $this;
     }
-
 
     /**
      * Render current parameter column to HTML
      *
-     * @param array|null $attributes
+     * @param  array|null $attributes
      * @return string
      */
-    public function render($attributes = null) {
+    public function render($attributes = null)
+    {
         return $this->createWidget( null , $attributes )
             ->render();
     }
 
-
-    public function getValidValues() 
+    public function getValidValues()
     {
-        if( is_callable($this->validValues) ) {
+        if ( is_callable($this->validValues) ) {
             return call_user_func($this->validValues);
         }
+
         return $this->validValues;
     }
 
     public function createHintWidget($widgetClass = null , $attributes = array() )
     {
-        if( $this->hint ) {
+        if ($this->hint) {
             $class = $widgetClass ?: 'FormKit\\Element\\Div';
             $widget = new $class( $attributes );
             $widget->append($this->hint);
+
             return $widget;
         }
     }
@@ -185,66 +189,67 @@ class Param extends CascadingAttribute
     public function createLabelWidget($widgetClass = null , $attributes = array() )
     {
         $class = $widgetClass ?: 'FormKit\\Widget\\Label';
+
         return new $class( $this->getLabel() );
     }
-
 
     /**
      * A simple widget factory for Action Param
      *
-     * @param string $widgetClass Widget Class.
-     * @param array  $attributes Widget attributes.
+     * @param  string                    $widgetClass Widget Class.
+     * @param  array                     $attributes  Widget attributes.
      * @return FormKit\Widget\BaseWidget
      */
-    public function createWidget( $widgetClass = null , $attributes = array() ) {
+    public function createWidget( $widgetClass = null , $attributes = array() )
+    {
         $class = $widgetClass ?: $this->widgetClass;
 
         // convert attributes into widget style attributes
         $newAttributes = array();
         $newAttributes['label'] = $this->getLabel();
 
-        if( $this->validValues ) {
+        if ($this->validValues) {
             $newAttributes['options'] = $this->getValidValues();
         }
-        if( $this->immutable ) {
+        if ($this->immutable) {
             $newAttributes['readonly'] = true;
         }
 
-        // for inputs (except password input), 
+        // for inputs (except password input),
         // we should render the value (or default value)
-        if( false === stripos( $class , 'Password' ) ) {
-            if( $this->value ) {
+        if ( false === stripos( $class , 'Password' ) ) {
+            if ($this->value) {
                 $newAttributes['value'] = $this->value;
-            } elseif( $this->default ) {
+            } elseif ($this->default) {
                 $newAttributes['value'] = $this->getDefaultValue();
             }
         }
 
-        if( $this->placeholder ) {
+        if ($this->placeholder) {
             $newAttributes['placeholder'] = $this->placeholder;
-        } 
-        if( $this->hint ) {
+        }
+        if ($this->hint) {
             $newAttributes['hint'] = $this->hint;
         }
 
-        if( $this->immutable ) {
+        if ($this->immutable) {
             $newAttributes['readonly'] = true;
         }
 
         // merge override attributes
-        if( $this->widgetAttributes ) {
+        if ($this->widgetAttributes) {
             $newAttributes = array_merge( $newAttributes , $this->widgetAttributes );
         }
-        if( $attributes ) {
+        if ($attributes) {
             $newAttributes = array_merge( $newAttributes , $attributes );
         }
 
         // if it's not a full-qualified class name
         // we should concat class name with default widget namespace
-        if( '+' !== $class[0] ) {
+        if ('+' !== $class[0]) {
             $class = $this->widgetNamespace . '\\' . $class;
         }
+
         return new $class( $this->name , $newAttributes );
     }
 }
-
