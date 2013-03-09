@@ -125,6 +125,7 @@ class Image extends Param
         if (! $this->putIn) {
             throw new Exception( "putIn attribute is not defined." );
         }
+        // TODO: fix path for unit testing
         if ( ! file_exists($this->putIn) ) {
             throw new Exception( "putIn '{$this->putIn}' directory does not exists." );
         }
