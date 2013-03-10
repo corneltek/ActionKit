@@ -250,6 +250,7 @@ class Param extends CascadingAttribute
             $class = $this->widgetNamespace . '\\' . $class;
         }
 
-        return new $class( $this->name , $newAttributes );
+        // create new widget object.
+        return new $class($this->name , $newAttributes);
     }
 }
