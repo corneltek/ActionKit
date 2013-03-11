@@ -59,19 +59,27 @@ class StackView extends BaseView
         $recordId = $record ? $record->id : null;
 
 
-        // in current action, find all relationship information, and iterate them
+        // in current action, find all relationship information, and iterate 
+        // them.
         foreach ($this->action->relationships as $relationId => $relation) {
 
             // If the record is loaded and the relation is defined
             if ( $recordId && isset($record->{ $relationId }) ) {
 
-                // for each existing (one-many) records, create it's own subaction view.
-                foreach ($record->{ $relationId } as $subrecord) {
-                    $subview = $this->createSubactionView($relationId, $relation, $subrecord);
-                    $container->append($subview);
+
+                // handle has_many records
+                if ( isset($relation['has_many']) ) {
+                    // for each existing (one-many) records, 
+                    // create it's own subaction view for these existing 
+                    // records.
+                    foreach ($record->{ $relationId } as $subrecord) {
+                        $subview = $this->createSubactionView($relationId, $relation, $subrecord);
+                        $container->append($subview);
+                    }
                 }
             }
 
+            // create another subview for creating new (one-many) records
             $record = new $relation['record'];
             $subview = $this->createSubactionView($relationId,$relation);
             $html = addslashes($subview->render());
