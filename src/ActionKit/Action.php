@@ -90,15 +90,18 @@ abstract class Action implements IteratorAggregate
     }
 
     /**
-     * patch param names with index, this method is for
-     * related records.
+     * Patch param names with index, this method is for
+     * related records. e.g.
+     *
+     * relationId[ index ][name] = value
+     * relationId[ index ][column2] = value
      *
      * @param string $key
      * @param string $index
      *
      * @return string index number
      */
-    public function setParamNamesWithIndex($key,$index = null)
+    public function setParamNamesWithIndex($key, $index = null)
     {
         // default index key for rendering
         // if record is loaded, use the primary key as identity.

@@ -122,6 +122,22 @@ SCRIPT;
         return $container;
     }
 
+
+    /**
+     * As to handle record relationship, we need to render
+     * subactions inside the current action.
+     *
+     * Here we use the action view without the form element wrapper.
+     * Then did a small trick to the field name, e.g.
+     *
+     * subaction[name] => form[subaction][0][name]
+     *
+     * Currently this is only for one-many relationship.
+     *
+     * @param string $relationId
+     * @param array  $relation
+     * @param \Phifty\Model $record
+     */
     public function createSubactionView($relationId,$relation, $record = null)
     {
         if (! $record) {
