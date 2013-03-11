@@ -54,7 +54,7 @@ class ActionRunner
      * */
     public function run($actionName)
     {
-        if( $this->isInvalidActionName( $actionName ) )
+        if ( $this->isInvalidActionName( $actionName ) )
             throw new Exception( "Invalid action name: $actionName." );
 
         /* translate :: into php namespace */
@@ -71,7 +71,7 @@ class ActionRunner
     public function autoload($class)
     {
         /* check if action is in CRUD list */
-        if( ! isset( $this->crudActions[$class] ) )
+        if ( ! isset( $this->crudActions[$class] ) )
 
             return false;
 
@@ -168,7 +168,7 @@ class ActionRunner
             unset( $args['action'] );
         }
 
-        if( class_exists($class,true) )
+        if ( class_exists($class,true) )
 
             return new $class( $args );
 
@@ -243,7 +243,7 @@ class ActionRunner
     public static function getInstance()
     {
         static $self;
-        if( $self )
+        if ( $self )
 
             return $self;
         return $self = new static;

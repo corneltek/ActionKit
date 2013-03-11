@@ -134,7 +134,7 @@ class Image extends Param
     public function validate($value)
     {
         $ret = (array) parent::validate($value);
-        if( $ret[0] == false )
+        if ( $ret[0] == false )
 
             return $ret;
 
@@ -145,13 +145,13 @@ class Image extends Param
         // Consider required and optional situations.
         if (@$_FILES[ $this->name ]['tmp_name']) {
             $file = new UploadFile( $this->name );
-            if( $this->validExtensions )
-                if( ! $file->validateExtension( $this->validExtensions ) )
+            if ( $this->validExtensions )
+                if ( ! $file->validateExtension( $this->validExtensions ) )
 
                     return array( false, _('Invalid File Extension: ') . $this->name );
 
-            if( $this->sizeLimit )
-                if( ! $file->validateSize( $this->sizeLimit ) )
+            if ( $this->sizeLimit )
+                if ( ! $file->validateSize( $this->sizeLimit ) )
 
                     return array( false, _("The uploaded file exceeds the size limitation. ") . FileUtils::pretty_size($this->sizeLimit * 1024) );
         }
@@ -163,7 +163,7 @@ class Image extends Param
     public function hintFromSizeLimit()
     {
         if ($this->sizeLimit) {
-            if( $this->hint )
+            if ( $this->hint )
                 $this->hint .= '<br/>';
             else
                 $this->hint = '';
@@ -239,7 +239,7 @@ class Image extends Param
             // XXX: merge this
             if ($replacingRemote) {
                 if ( isset($file['saved_path']) ) {
-                    if( $targetPath !== $file['saved_path'] )
+                    if ( $targetPath !== $file['saved_path'] )
                         copy($file['saved_path'], $targetPath);
                 }
             } elseif ( move_uploaded_file($file['tmp_name'],$targetPath) === false ) {

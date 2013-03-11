@@ -9,13 +9,13 @@ abstract class UpdateRecordAction
     public function update( $args )
     {
         $id = (int) $args['id'];
-        if( ! $id )
+        if ( ! $id )
 
             return $this->error( _('Arguments Error') );
 
         $record = $this->record;
         $record->load( $id );
-        if( ! $record->id )
+        if ( ! $record->id )
 
             return $this->recordNotFound();
 
@@ -48,14 +48,14 @@ abstract class UpdateRecordAction
         $error = false;
         foreach ($this->args as $key => $value) {
             /* skip action column */
-            if( $key === 'action' || $key === '__ajax_request' )
+            if ( $key === 'action' || $key === '__ajax_request' )
                 continue;
 
             $hasError = $this->validateparam( $key );
-            if( $hasError )
+            if ( $hasError )
                 $error = true;
         }
-        if( $error )
+        if ( $error )
             $this->result->error( _('Validation Error') );
 
         return $error;

@@ -56,7 +56,7 @@ class EmailAction extends Action
 
     public function getContent()
     {
-        if( $this->message )
+        if ( $this->message )
 
             return $this->message;
         return null;
@@ -64,14 +64,14 @@ class EmailAction extends Action
 
     public function extractFieldsFromThis()
     {
-        if( $this->to )
+        if ( $this->to )
             $this->email->to( $this->to );
 
-        if( $this->subject )
+        if ( $this->subject )
             $this->email->subject( $this->subject );
 
         if ( $content = $this->getContent() ) {
-            if( $this->contentType == 'html' )
+            if ( $this->contentType == 'html' )
                 $this->email->html( $content );
             else
                 $this->email->text( $content );
@@ -89,23 +89,23 @@ class EmailAction extends Action
             $subject = $this->arg('subject');
 
             /* if class vars is defined, dont override it */
-            if( $to )
+            if ( $to )
                 $this->email->to( $to );
 
-            if( $cc )
+            if ( $cc )
                 $this->email->cc( $cc );
 
-            if( $bcc )
+            if ( $bcc )
                 $this->email->bcc( $bcc );
 
-            if( $subject )
+            if ( $subject )
                 $this->email->subject( $subject );
 
             $content = $this->arg('content');
-            if( ! $content )
+            if ( ! $content )
                 $content = $this->getContent();
 
-            if( $this->contentType == "html" )
+            if ( $this->contentType == "html" )
                 $this->email->html( $content );
             else
                 $this->email->text( $content );
@@ -119,13 +119,13 @@ class EmailAction extends Action
 
     public function send()
     {
-        if( empty($this->email->to) )
+        if ( empty($this->email->to) )
             $this->error( _('Please enter E-mail address. No receiver email address. ') );
 
-        if( empty($this->email->from) )
+        if ( empty($this->email->from) )
             $this->error( _('Please enter your E-mail address.') );
 
-        if( ! $this->email->getContent() )
+        if ( ! $this->email->getContent() )
 
             return $this->error( _('Please enter mail content.') );
 

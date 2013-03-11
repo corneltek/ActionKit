@@ -40,20 +40,20 @@ abstract class BaseRecordAction extends Action
     public function __construct( $args = array(), $record = null, $currentUser = null )
     {
         // record name is in Camel case
-        if( ! $this->recordClass )
+        if ( ! $this->recordClass )
             throw new ActionException( sprintf('Record class is not specified.' , $this ));
 
-        if( $record && ! is_subclass_of($record,'LazyRecord\\BaseModel',true) )
+        if ( $record && ! is_subclass_of($record,'LazyRecord\\BaseModel',true) )
             throw new ActionException( 'The record object you specified is not a BaseModel object.' , $this );
 
-        if( ! $record )
+        if ( ! $record )
             $record = new $this->recordClass;
 
         $this->setRecord($record);
 
         if (! $record->id) {   // for create action, we don't need to create record
             if ( $this->getType() !== 'create' && $this->enableLoadRecord ) {
-                if( ! $this->loadRecordFromArguments( $args ) )
+                if ( ! $this->loadRecordFromArguments( $args ) )
                     throw new ActionException('Record action can not load record', $this );
             }
         }
@@ -86,7 +86,7 @@ abstract class BaseRecordAction extends Action
         if ($this->record->id) {
             foreach ( $this->record->getColumns(true) as $column ) {
                 if ($val = $this->record->{ $column->name }) {
-                    if( isset($this->params[ $column->name ]) )
+                    if ( isset($this->params[ $column->name ]) )
                         $this->params[ $column->name ]->value = $val;
                 }
             }
@@ -276,7 +276,7 @@ abstract class BaseRecordAction extends Action
     public function processSubActions()
     {
         foreach ($this->relationships as $relationId => $relation) {
-            if( ! isset($relation['has_many']) )
+            if ( ! isset($relation['has_many']) )
                 continue;
 
             $recordClass = $relation['record'];
@@ -284,7 +284,7 @@ abstract class BaseRecordAction extends Action
             $selfKey = $relation['self_key'];
             $argsList = $this->arg( $relationId );
 
-            if(!$argsList)
+            if (!$argsList)
                 continue;
 
             foreach ($argsList as $index => $args) {

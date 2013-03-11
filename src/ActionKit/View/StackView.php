@@ -15,13 +15,13 @@ class StackView extends BaseView
         $layout = new GenericLayout;
 
         // initialize layout object here.
-        if( $width = $this->option('width') )
+        if ( $width = $this->option('width') )
             $layout->width( $width );
-        if( $padding = $this->option('cellpadding') )
+        if ( $padding = $this->option('cellpadding') )
             $layout->cellpadding( $padding );
-        if( $spacing = $this->option('cellspacing') )
+        if ( $spacing = $this->option('cellspacing') )
             $layout->cellspacing( $spacing );
-        if( $border = $this->option('border') )
+        if ( $border = $this->option('border') )
             $layout->border(0);
 
         return $layout;

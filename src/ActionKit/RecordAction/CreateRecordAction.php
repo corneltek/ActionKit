@@ -51,7 +51,7 @@ abstract class CreateRecordAction
     public function errorMessage($ret)
     {
         // XXX: should show exception message when error is found.
-        if($ret->exception)
+        if ($ret->exception)
 
             return __('Can not create %1 record: %2' , $this->record->getLabel(), $ret->exception->getMessage() );
         return __('Can not create %1 record.' , $this->record->getLabel() );

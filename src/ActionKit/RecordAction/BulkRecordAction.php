@@ -15,7 +15,7 @@ class BulkRecordAction extends Action
 
     public function runValidate()
     {
-        if( isset( $this->args['items'] ) )
+        if ( isset( $this->args['items'] ) )
 
             return false;  // no error
         return true;
@@ -30,7 +30,7 @@ class BulkRecordAction extends Action
         foreach ($itemIds as $id) {
             $record = new $this->recordClass;
             $record->load( (int) $id );
-            if($record->id)
+            if ($record->id)
                 $records[] = $record;
         }
 

@@ -63,11 +63,11 @@ abstract class Action implements IteratorAggregate
         }
 
         $this->request = new HttpRequest;
-        if( ! is_array($args) )
+        if ( ! is_array($args) )
             throw new Exception('Action arguments of ' . get_class($this) . ' is not an array.');
 
         $this->result = new Result;
-        if( $currentUser )
+        if ( $currentUser )
             $this->currentUser = $currentUser;
 
         // initialize parameter objects
@@ -173,7 +173,7 @@ abstract class Action implements IteratorAggregate
     protected function validateParam( $name )
     {
         // skip __ajax_request field
-        if( $name === '__ajax_request' )
+        if ( $name === '__ajax_request' )
 
             return;
 
@@ -274,7 +274,7 @@ abstract class Action implements IteratorAggregate
         $this->runPreinit();
         $this->runInit();
         $this->beforeRun();
-        if( $this->enableValidation and $this->runValidate() )  // if found error, return false;
+        if ( $this->enableValidation and $this->runValidate() )  // if found error, return false;
 
             return false;
         $ret = $this->run();
@@ -394,7 +394,7 @@ abstract class Action implements IteratorAggregate
      */
     public function getCurrentUser()
     {
-        if( $this->currentUser )
+        if ( $this->currentUser )
 
             return $this->currentUser;
     }
@@ -466,7 +466,7 @@ abstract class Action implements IteratorAggregate
 
     public function hasFile($name)
     {
-        if( isset($this->files[$name])
+        if ( isset($this->files[$name])
             && isset($this->files[$name]['name'])
             && $this->files[$name]['name'])
         {
@@ -589,10 +589,10 @@ abstract class Action implements IteratorAggregate
     public function complete( $field )
     {
         $param = $this->getParam( $field );
-        if( ! $param )
+        if ( ! $param )
             die( 'action param not found.' );
         $ret = $param->complete();
-        if( ! is_array( $ret ) )
+        if ( ! is_array( $ret ) )
             throw new Exception( "Completer doesnt return array. [type,list]\n" );
 
         // [ type , list ]
@@ -737,9 +737,9 @@ abstract class Action implements IteratorAggregate
                 $attrs = $args[1];
             }
         } elseif ( count($args) == 3 ) {
-            if( $args[1] )
+            if ( $args[1] )
                 $fieldViewClass = $args[1];
-            if( $args[2] )
+            if ( $args[2] )
                 $attrs = $args[2];
         }
         $param = $this->getParam($name);
@@ -889,7 +889,7 @@ abstract class Action implements IteratorAggregate
     protected function success( $message , $data = null )
     {
         $this->result->success( $message );
-        if( $data )
+        if ( $data )
             $this->result->mergeData( $data );
 
         return true;

@@ -85,7 +85,7 @@ class Param extends CascadingAttribute
         /* if it's file type , should read from $_FILES , not from the args of action */
         // TODO: note, we should do this validation in File Param or Image Param
         if ($this->paramType === 'file') {
-            if( $this->required
+            if ( $this->required
                 && ( ! isset($_FILES[ $this->name ]['tmp_name']) && ! isset($_REQUEST[$this->name]) )
             ) {
                 return array(false, __('File Field %1 is required.' , $this->getLabel()  ) );
@@ -114,7 +114,7 @@ class Param extends CascadingAttribute
 
     public function getLabel()
     {
-        if( $this->label )
+        if ( $this->label )
 
             return _($this->label);
         return ucfirst($this->name);

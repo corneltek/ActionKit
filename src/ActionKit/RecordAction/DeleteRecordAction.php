@@ -28,7 +28,7 @@ abstract class DeleteRecordAction
      */
     public function runValidate()
     {
-        if( isset( $this->args['id'] ) )
+        if ( isset( $this->args['id'] ) )
 
             return false;
         return true;

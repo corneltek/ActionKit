@@ -244,7 +244,7 @@ class Result
     public function success( $message = null )
     {
         $this->type = 'success';
-        if( $message )
+        if ( $message )
             $this->message = $message;
 
         return $this;
@@ -253,7 +253,7 @@ class Result
     public function error( $message = null )
     {
         $this->type = 'error';
-        if( $message )
+        if ( $message )
             $this->message = $message;
 
         return $this;
@@ -262,7 +262,7 @@ class Result
     public function valid( $message = null )
     {
         $this->type = 'valid';
-        if( $message )
+        if ( $message )
             $this->message = $message;
 
         return $this;
@@ -271,7 +271,7 @@ class Result
     public function invalid( $message = null )
     {
         $this->type = 'invalid';
-        if( $message )
+        if ( $message )
             $this->message = $message;
 
         return $this;
@@ -312,7 +312,7 @@ class Result
             $ret = array_merge( $ret , $this->completion );
         }
 
-        if( $this->validations )
+        if ( $this->validations )
             $ret['validations'] = $this->validations;
 
         if ($this->redirect) {
