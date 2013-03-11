@@ -62,16 +62,25 @@ abstract class Action implements IteratorAggregate
             $this->files = \Universal\Http\FilesParameter::fix_files_array($_FILES);
         }
 
-        $this->request = new HttpRequest;
-        if ( ! is_array($args) )
+        if ( ! is_array($args) ) {
             throw new Exception('Action arguments of ' . get_class($this) . ' is not an array.');
+        }
 
-        $this->result = new Result;
-        if ( $currentUser )
+        if ( $currentUser ) {
             $this->currentUser = $currentUser;
+        }
+
+        $this->request = new HttpRequest;
+        $this->result  = new Result;
+
+
+
+        $this->preinit();
 
         // initialize parameter objects
         $this->schema();
+
+        // use the schema definitions to filter arguments
         $this->args = $this->_filterArguments($args);
 
         if ( $relationId = $this->arg('__nested') ) {
@@ -84,9 +93,32 @@ abstract class Action implements IteratorAggregate
             $this->getParam($name)->value($val);
         }
 
+        // action & parameters initialization
+        // ===================================
+        //
+        // call the parameter preinit method to initialize
+        // foreach is always faster than array_map
+        foreach ($this->params as $param) {
+            $param->preinit( $this->args );
+        }
+
+
+        // call the parameter init method
+        foreach ($this->params as $param) {
+            $param->init( $this->args );
+        }
         // user-defined init script
         $this->init();
-        $this->result->args( $this->args ); // save request arguments
+
+
+        // call the parameter init method
+        foreach ($this->params as $param) {
+            $param->postinit( $this->args );
+        }
+        $this->postinit();
+
+        // save request arguments
+        $this->result->args( $this->args );
     }
 
     /**
@@ -118,7 +150,7 @@ abstract class Action implements IteratorAggregate
         return $index;
     }
 
-    protected function takes($fields)
+    public function takes($fields)
     {
         $args = func_get_args();
         if ( count($args) > 1 ) {
@@ -130,7 +162,7 @@ abstract class Action implements IteratorAggregate
         return $this;
     }
 
-    protected function _filterArguments($args)
+    public function _filterArguments($args)
     {
         // find immutable params and unset them
         foreach ($this->params as $name => $param) {
@@ -156,7 +188,7 @@ abstract class Action implements IteratorAggregate
      *
      * @param array $fields Field names
      */
-    protected function filterOut($fields)
+    public function filterOut($fields)
     {
         $args = func_get_args();
         if ( count($args) > 1 ) {
@@ -173,7 +205,7 @@ abstract class Action implements IteratorAggregate
      *
      * @param string $name is a parameter name
      */
-    protected function validateParam( $name )
+    public function validateParam( $name )
     {
         // skip __ajax_request field
         if ( $name === '__ajax_request' )
@@ -242,27 +274,6 @@ abstract class Action implements IteratorAggregate
     }
 
 
-    /**
-     * Run preinit method of each param
-     */
-    public function runPreinit()
-    {
-        // foreach is always faster than array_map
-        foreach ($this->params as $param) {
-            $param->preinit( $this->args );
-        }
-    }
-
-
-    /**
-     * Run init method of each param
-     */
-    public function runInit()
-    {
-        foreach ($this->params as $param) {
-            $param->init( $this->args );
-        }
-    }
 
     public function isAjax()
     {
@@ -270,19 +281,20 @@ abstract class Action implements IteratorAggregate
     }
 
 
+
+    /**
+     * Invoke is a run method wraper
+     */
     public function invoke()
     {
         /* run column methods */
         // XXX: merge them all...
-        $this->runPreinit();
-        $this->runInit();
         $this->beforeRun();
-        if ( $this->enableValidation and $this->runValidate() )  // if found error, return false;
-
+        if ( $this->enableValidation and $this->runValidate() ) {  // if found error, return false;
             return false;
+        }
         $ret = $this->run();
         $this->afterRun();
-
         return $ret;
     }
 
@@ -522,7 +534,7 @@ abstract class Action implements IteratorAggregate
      *     $this->param('image', 'image' ); // use ActionKit\Param\Image
      *
      */
-    protected function param( $field , $type = null )
+    public function param( $field , $type = null )
     {
         // default column class
         $class = 'ActionKit\\Param';
@@ -542,19 +554,13 @@ abstract class Action implements IteratorAggregate
     /**
      * Action schema is defined here.
      */
-    public function schema()
-    {
+    public function schema() { }
 
-    }
+    public function preinit() {  }
 
+    public function init() { }
 
-    /**
-     * Initialize action
-     */
-    public function init()
-    {
-
-    }
+    public function postinit() {  }
 
 
 
@@ -618,7 +624,7 @@ abstract class Action implements IteratorAggregate
      *
      * @param string $path
      */
-    protected function redirect( $path )
+    public function redirect( $path )
     {
 
         /* for ajax request, we should redirect by json result,
@@ -640,7 +646,7 @@ abstract class Action implements IteratorAggregate
      * @param string  $path
      * @param integer $secs
      */
-    protected function redirectLater( $path , $secs = 1 )
+    public function redirectLater( $path , $secs = 1 )
     {
         if ( $this->isAjax() ) {
             // XXX: more support.
@@ -889,7 +895,7 @@ abstract class Action implements IteratorAggregate
      * @param string $message Success message
      * @param mixed  $data
      */
-    protected function success( $message , $data = null )
+    public function success( $message , $data = null )
     {
         $this->result->success( $message );
         if ( $data )
@@ -903,7 +909,7 @@ abstract class Action implements IteratorAggregate
      *
      * @param string $message Error message
      */
-    protected function error( $message )
+    public function error( $message )
     {
         $this->result->error( $message );
 

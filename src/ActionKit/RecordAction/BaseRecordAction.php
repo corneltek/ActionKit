@@ -42,8 +42,8 @@ abstract class BaseRecordAction extends Action
      *    BaseRecordAction::__construct
      *    BaseRecordAction::setRecord
      *      Action::__construct
-     *      Action::schema
      *      Action::init
+     *      Action::schema
      *    BaseRecordAction::loadRecordValues
      *
      *
@@ -67,7 +67,7 @@ abstract class BaseRecordAction extends Action
 
         $this->setRecord($record);
 
-        if (! $record->id) {   // for create action, we don't need to create record
+        if ( ! $record->id ) {   // for create action, we don't need to create record
             if ( $this->getType() !== 'create' && $this->enableLoadRecord ) {
                 if ( ! $this->loadRecordFromArguments( $args ) )
                     throw new ActionException('Record action can not load record', $this );
@@ -87,7 +87,7 @@ abstract class BaseRecordAction extends Action
      * This method takes column objects from record schema,
      * and convert them into param objects.
      */
-    protected function useRecordSchema()
+    public function useRecordSchema()
     {
         $this->initRecordColumn();
     }
@@ -125,7 +125,7 @@ abstract class BaseRecordAction extends Action
     /**
      * Convert model columns to action columns
      */
-    protected function initRecordColumn()
+    public function initRecordColumn()
     {
         if (! $this->record) {
             throw new ActionException('Record object is empty.', $this );
