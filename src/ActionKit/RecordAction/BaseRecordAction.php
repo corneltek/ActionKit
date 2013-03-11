@@ -66,6 +66,38 @@ abstract class BaseRecordAction extends Action
 
 
 
+
+
+    /**
+     * Create record method for CreateRecordAction class.
+     *
+     * @param array $args
+     * @return bool success or failure
+     */
+    public function createRecord($args)
+    {
+        $ret = $this->record->create( $args );
+
+        /* error checking */
+        if (false === $ret->success) {
+            $this->convertRecordValidation( $ret );
+            if ( function_exists('fb') ) {
+                fb( $ret->message );
+                fb( $ret->exception );
+                fb( $ret->sql );
+                fb( $ret->vars );
+            }
+
+            return $this->createError( $ret );
+        }
+        $this->result->data( $this->record->getData() );
+        return $this->createSuccess( $ret );
+    }
+
+
+
+
+
     /**
      * This method takes column objects from record schema,
      * and convert them into param objects.
@@ -311,5 +343,26 @@ abstract class BaseRecordAction extends Action
 
         return true;
     }
+
+
+
+    /**
+     * BaseRecordAction provides a built-in dispatcher to
+     * dispatch the behavior of record actions.
+     */
+    public function run()
+    {
+        if ( self::TYPE === "create" ) {
+            /* default run method , to run create action */
+            $ret = $this->createRecord( $this->args );
+            if ( $this->nested && ! empty($this->relationships) ) {
+                $ret = $this->processSubActions();
+            }
+            return $ret;
+        } else {
+            throw new Exception("Oops, BaseRecordAction behavior is not defined.");
+        }
+    }
+
 
 }
