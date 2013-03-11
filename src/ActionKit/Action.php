@@ -5,6 +5,7 @@ use FormKit;
 use ActionKit\Param;
 use ActionKit\Result;
 use Universal\Http\HttpRequest;
+use Universal\Http\FilesParameter;
 use InvalidArgumentException;
 use IteratorAggregate;
 
@@ -28,12 +29,12 @@ abstract class Action implements IteratorAggregate
     public $params = array();
 
     /**
-     * @public Universal\Http\HttpRequest request object
+     * @var Universal\Http\HttpRequest request object
      */
     public $request;
 
     /**
-     * @public array filter out fields (blacklist)
+     * @var array filter out fields (blacklist)
      */
     public $filterOutFields;
 
@@ -47,6 +48,11 @@ abstract class Action implements IteratorAggregate
      */
     public $enableValidation = true;
 
+
+
+    /**
+     * @var array Converted & Fixed $_FILES
+     */
     public $files = array();
 
     /**
