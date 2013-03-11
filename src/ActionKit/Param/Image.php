@@ -125,8 +125,9 @@ class Image extends Param
         if (! $this->putIn) {
             throw new Exception( "putIn attribute is not defined." );
         }
+
         // TODO: fix path for unit testing
-        if ( ! file_exists($this->putIn) ) {
+        if ( ! file_exists( kernel()->webroot . DIRECTORY_SEPARATOR . $this->putIn) ) {
             throw new Exception( "putIn '{$this->putIn}' directory does not exists." );
         }
     }
@@ -134,12 +135,8 @@ class Image extends Param
     public function validate($value)
     {
         $ret = (array) parent::validate($value);
-        if ( $ret[0] == false )
-
+        if ( false === $ret[0] ) {
             return $ret;
-
-        if ( ! file_exists( $this->putIn ) ) {
-            throw new Exception(__("Directory %1 doesn't exist.",$dir));
         }
 
         // Consider required and optional situations.
