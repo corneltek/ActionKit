@@ -34,20 +34,36 @@ abstract class BaseRecordAction extends Action
      *
      *    $action = new UpdateProductAction(array( ... ), new Product, $currentUser);
      *
+     *
+     * Here we override the default __construct from Action class.
+     *
+     * The initialize flow here is:
+     *
+     *    BaseRecordAction::__construct
+     *    BaseRecordAction::setRecord
+     *      Action::__construct
+     *      Action::schema
+     *      Action::init
+     *    BaseRecordAction::loadRecordValues
+     *
+     *
      * @param array                $args
      * @param LazyRecord\BaseModel $record
      */
     public function __construct( $args = array(), $record = null, $currentUser = null )
     {
         // record name is in Camel case
-        if ( ! $this->recordClass )
+        if ( ! $this->recordClass ) {
             throw new ActionException( sprintf('Record class is not specified.' , $this ));
+        }
 
-        if ( $record && ! is_subclass_of($record,'LazyRecord\\BaseModel',true) )
+        if ( $record && ! is_subclass_of($record,'LazyRecord\\BaseModel',true) ) {
             throw new ActionException( 'The record object you specified is not a BaseModel object.' , $this );
+        }
 
-        if ( ! $record )
+        if ( ! $record ) {
             $record = new $this->recordClass;
+        }
 
         $this->setRecord($record);
 
