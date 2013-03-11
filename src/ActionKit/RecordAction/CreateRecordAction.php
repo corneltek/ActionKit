@@ -8,6 +8,41 @@ abstract class CreateRecordAction
 
     public $enableLoadRecord = false;
 
+    public function create($args)
+    {
+        $ret = $this->record->create( $args );
+
+        /* error checking */
+        if (false === $ret->success) {
+            $this->convertRecordValidation( $ret );
+            if ( function_exists('fb') ) {
+                fb( $ret->message );
+                fb( $ret->exception );
+                fb( $ret->sql );
+                fb( $ret->vars );
+            }
+
+            return $this->createError( $ret );
+        }
+        $this->result->data( $this->record->getData() );
+
+        return $this->createSuccess( $ret );
+    }
+
+    /**
+     * runValidate inherited from parent class.
+     * */
+    public function run()
+    {
+        /* default run method , to run create action */
+        $ret = $this->create( $this->args );
+        if ( $this->nested && ! empty($this->relationships) ) {
+            $ret = $this->processSubActions();
+        }
+
+        return $ret;
+    }
+
     public function successMessage($ret)
     {
         return __("%1 Record is created." , $this->record->getLabel() );

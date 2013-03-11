@@ -49,6 +49,12 @@ class Result
      */
     public $completion;
 
+
+    /**
+     * @var mixed debug information
+     */
+    public $debug;
+
     /**
      *
      * @param string $type Action result type, 'success', 'error', 'valid', 'invalid', 'completion', 'redirect'
@@ -210,6 +216,18 @@ class Result
     {
         $this->desc = $desc;
 
+        return $this;
+    }
+
+
+    /**
+     * Set debug information
+     *
+     * @param mixed $debug
+     */
+    public function debug($debug)
+    {
+        $this->debug = $debug;
         return $this;
     }
 

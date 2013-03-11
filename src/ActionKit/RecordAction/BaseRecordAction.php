@@ -61,41 +61,10 @@ abstract class BaseRecordAction extends Action
         // initialize schema , init base action stuff
         parent::__construct( $args , $currentUser );
 
-        $this->loadRecordValues();
-    }
-
-
-
-
-
-    /**
-     * Create record method for CreateRecordAction class.
-     *
-     * @param array $args
-     * @return bool success or failure
-     */
-    public function createRecord($args)
-    {
-        $ret = $this->record->create( $args );
-
-        /* error checking */
-        if (false === $ret->success) {
-            $this->convertRecordValidation( $ret );
-            if ( function_exists('fb') ) {
-                fb( $ret->message );
-                fb( $ret->exception );
-                fb( $ret->sql );
-                fb( $ret->vars );
-            }
-
-            return $this->createError( $ret );
+        if ( $this->record->id ) {
+            $this->loadRecordValues();
         }
-        $this->result->data( $this->record->getData() );
-        return $this->createSuccess( $ret );
     }
-
-
-
 
 
     /**
@@ -115,12 +84,10 @@ abstract class BaseRecordAction extends Action
     public function loadRecordValues()
     {
         /* load record value */
-        if ($this->record->id) {
-            foreach ( $this->record->getColumns(true) as $column ) {
-                if ($val = $this->record->{ $column->name }) {
-                    if ( isset($this->params[ $column->name ]) )
-                        $this->params[ $column->name ]->value = $val;
-                }
+        foreach ( $this->record->getColumns(true) as $column ) {
+            if ($val = $this->record->{ $column->name }) {
+                if ( isset($this->params[ $column->name ]) )
+                    $this->params[ $column->name ]->value = $val;
             }
         }
     }
@@ -343,26 +310,5 @@ abstract class BaseRecordAction extends Action
 
         return true;
     }
-
-
-
-    /**
-     * BaseRecordAction provides a built-in dispatcher to
-     * dispatch the behavior of record actions.
-     */
-    public function run()
-    {
-        if ( self::TYPE === "create" ) {
-            /* default run method , to run create action */
-            $ret = $this->createRecord( $this->args );
-            if ( $this->nested && ! empty($this->relationships) ) {
-                $ret = $this->processSubActions();
-            }
-            return $ret;
-        } else {
-            throw new Exception("Oops, BaseRecordAction behavior is not defined.");
-        }
-    }
-
 
 }
