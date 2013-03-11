@@ -58,9 +58,14 @@ class StackView extends BaseView
         $record = $this->getRecord();
         $recordId = $record ? $record->id : null;
 
+
+        // in current action, find all relationship information, and iterate them
         foreach ($this->action->relationships as $relationId => $relation) {
+
+            // If the record is loaded and the relation is defined
             if ( $recordId && isset($record->{ $relationId }) ) {
-                // for each existing records
+
+                // for each existing (one-many) records, create it's own subaction view.
                 foreach ($record->{ $relationId } as $subrecord) {
                     $subview = $this->createSubactionView($relationId, $relation, $subrecord);
                     $container->append($subview);
@@ -138,7 +143,7 @@ SCRIPT;
      * @param array  $relation
      * @param \Phifty\Model $record
      */
-    public function createSubactionView($relationId,$relation, $record = null)
+    public function createSubactionView($relationId, $relation, $record = null)
     {
         if (! $record) {
             $recordClass = $relation['record'];
@@ -147,6 +152,8 @@ SCRIPT;
         } else {
             $action      = $record->asUpdateAction();
         }
+
+
         $formIndex = $action->setParamNamesWithIndex($relationId);
         $subview = new self($action, array(
             'no_form' => 1,
