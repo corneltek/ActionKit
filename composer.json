@@ -8,5 +8,6 @@
     ],
     "require": {
         "twig/twig": "1.12.*"
-    }
+    },
+    "autoload": { "psr-0": { "ActionKit": "src" } }
 }
