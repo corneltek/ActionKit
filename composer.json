@@ -1,0 +1,12 @@
+{
+    "name": "corneltek/action-kit",
+    "authors": [
+        {
+            "name": "c9s",
+            "email": "cornelius.howl@gmail.com"
+        }
+    ],
+    "require": {
+        "twig/twig": "1.12.*"
+    }
+}
