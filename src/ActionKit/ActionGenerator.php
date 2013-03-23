@@ -111,7 +111,7 @@ class ActionGenerator
         $baseAction   = $type . 'RecordAction';
 
         $code =<<<CODE
-namespace $prefix\\Action {
+namespace $actionNs {
     use ActionKit\\RecordAction\\$baseAction;
     class $actionClass extends $baseAction
     {
