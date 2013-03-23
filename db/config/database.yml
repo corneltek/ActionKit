@@ -1,0 +1,12 @@
+---
+bootstrap:
+  - tests/bootstrap.php
+schema:
+ paths:
+   - tests
+data_sources:
+  default:
+    driver: sqlite
+    database: :memory:
+    user: 
+    pass: 
