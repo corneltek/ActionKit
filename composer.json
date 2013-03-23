@@ -9,5 +9,8 @@
     "require": {
         "twig/twig": "1.12.*"
     },
+    "require-dev": {
+        "corneltek/phpunit-testmore": "dev-master"
+    },
     "autoload": { "psr-0": { "ActionKit": "src" } }
 }
