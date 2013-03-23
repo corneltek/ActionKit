@@ -7,6 +7,6 @@ schema:
 data_sources:
   default:
     driver: sqlite
-    database: :memory:
+    database: ":memory:"
     user: 
     pass: 
