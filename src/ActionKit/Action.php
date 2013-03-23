@@ -13,6 +13,11 @@ abstract class Action implements IteratorAggregate
 {
     public $currentUser;
 
+    public $nested = false;
+
+    public $relationships = array();
+
+
     /**
      * @var array
      */
@@ -128,7 +133,7 @@ abstract class Action implements IteratorAggregate
     }
 
     /**
-     * Patch param names with index, this method is for
+     * Rewrite param names with index, this method is for
      * related records. e.g.
      *
      * relationId[ index ][name] = value
@@ -141,13 +146,14 @@ abstract class Action implements IteratorAggregate
      */
     public function setParamNamesWithIndex($key, $index = null)
     {
-        // default index key for rendering
-        // if record is loaded, use the primary key as identity.
+        // The default index key for rendering field index name.
+        //
+        // if the record is loaded, use the primary key as identity.
         // if not, use timestamp simply, hope seconds is enough.
         if (! $index) {
             $index = ( $this->record && $this->record->id )
                 ? $this->record->id
-                : time() . '_' . rand();
+                : md5(microtime());
         }
         foreach ($this->params as $name => $param) {
             $param->name = sprintf('%s[%s][%s]', $key, $index, $param->name);
@@ -696,7 +702,6 @@ abstract class Action implements IteratorAggregate
             $class = $args[0];
             $options = $args[1];
         }
-
         return new $class($this, $options);
     }
 
@@ -822,8 +827,17 @@ abstract class Action implements IteratorAggregate
     public function renderButtonWidget($attrs = array() )
     {
         $button = new FormKit\Widget\ButtonInput;
-
         return $button->render($attrs);
+    }
+
+
+
+    /**
+     * Shortcut method for creating signature widget
+     */
+    public function createSignatureWidget()
+    {
+        return new \FormKit\Widget\HiddenInput('action', array( 'value' => $this->getSignature() ));
     }
 
 
@@ -836,11 +850,25 @@ abstract class Action implements IteratorAggregate
      */
     public function renderSignatureWidget($attrs = array() )
     {
-        $hidden = new FormKit\Widget\HiddenInput('action',
-                array( 'value' => $this->getSignature() ));
-
+        $hidden = $this->createSignatureWidget();
         return $hidden->render( $attrs );
     }
+
+
+
+    public function hasRelation($relationId)
+    {
+        return isset( $this->relationships[$relationId] );
+    }
+
+
+    public function getRelation($relationId)
+    {
+        if ( isset($this->relationships[$relationId]) ) {
+            return $this->relationships[$relationId];
+        }
+    }
+
 
 
     /**
@@ -921,5 +949,8 @@ abstract class Action implements IteratorAggregate
 
         return false;
     }
+
+
+
 
 }

@@ -1,5 +1,5 @@
 {
-    "hash": "d255a49c7138fa3685f994c0404d78ef",
+    "hash": "485184bbd3d0dab29cf980ddf1712809",
     "packages": [
         {
             "name": "twig/twig",
@@ -52,15 +52,33 @@
         }
     ],
     "packages-dev": [
-
+        {
+            "name": "corneltek/phpunit-testmore",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git@git.corneltek.com:php/PHPUnit_TestMore.git",
+                "reference": "e10a5ba320b9c3d3f7d42436e9196238558b8b51"
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/PHPUnit/TestMore.php"
+                ]
+            },
+            "time": "2013-03-21 08:49:44"
+        }
     ],
     "aliases": [
 
     ],
     "minimum-stability": "stable",
-    "stability-flags": [
-
-    ],
+    "stability-flags": {
+        "corneltek/phpunit-testmore": 20
+    },
     "platform": [
 
     ],

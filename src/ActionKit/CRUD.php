@@ -1,29 +1,19 @@
 <?php
 namespace ActionKit;
+use ActionKit\ActionGenerator;
 
 class CRUD
 {
-    public static function generate($modelClass, $types)
+    public static function generate($recordClass, $type)
     {
-        $runner = ActionRunner::getInstance();
-        $nsList = explode('\\',ltrim($modelClass));
-        if ( count($nsList) > 1 ) {
-            $prefix = $nsList[0];
-            $modelName = end($nsList);
+        $gen = new ActionGenerator(array( 'cache' => true ));
+        $ret = $gen->generateClassCode( $recordClass , $type );
 
-            foreach ( (array) $types as $type ) {
-
-            }
-
-            $runner->registerCRUDAction();
-        } else {
-
+        // trigger spl classloader if needed.
+        if ( class_exists($ret->action_class,true) ) {
+            return $ret->action_class;
         }
-
-        kernel()->action->registerCRUD(
-            $this->getNamespace(),
-            $model ,
-            (array) $types
-        );
+        eval( $ret->code );
+        return $ret->action_class;
     }
 }

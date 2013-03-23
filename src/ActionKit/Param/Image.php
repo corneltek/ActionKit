@@ -68,6 +68,14 @@ class Image extends Param
 
     public $renameFile;
 
+    public function preinit( & $args )
+    {
+        if (! $this->putIn) {
+            throw new Exception( "putIn attribute is not defined." );
+        }
+        futil_mkdir_if_not_exists(PH_APP_ROOT . DIRECTORY_SEPARATOR . $this->putIn);
+    }
+
     public function build()
     {
         $this->supportedAttributes[ 'validExtensions' ] = self::ATTR_ARRAY;
@@ -120,12 +128,6 @@ class Image extends Param
         return new SimpleImage;
     }
 
-    public function preinit( & $args )
-    {
-        if (! $this->putIn) {
-            throw new Exception( "putIn attribute is not defined." );
-        }
-    }
 
     public function validate($value)
     {

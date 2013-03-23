@@ -189,7 +189,6 @@ class Param extends CascadingAttribute
     public function createLabelWidget($widgetClass = null , $attributes = array() )
     {
         $class = $widgetClass ?: 'FormKit\\Widget\\Label';
-
         return new $class( $this->getLabel() );
     }
 

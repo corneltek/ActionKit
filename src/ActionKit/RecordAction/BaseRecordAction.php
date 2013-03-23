@@ -4,13 +4,12 @@ use ActionKit\Action;
 use ActionKit\ColumnConvert;
 use ActionKit\ActionGenerator;
 use ActionKit\Exception\ActionException;
+use ActionKit\CRUD;
 
 abstract class BaseRecordAction extends Action
 {
     const TYPE = 'base';
 
-    public $nested = false;
-    public $relationships = array();
 
     /**
      *
@@ -231,19 +230,16 @@ abstract class BaseRecordAction extends Action
      */
     public static function createCRUDClass( $recordClass , $type )
     {
-        $gen = new ActionGenerator(array( 'cache' => true ));
-        $ret = $gen->generateClassCode( $recordClass , $type );
-
-        // trigger spl classloader if needed.
-        if ( class_exists($ret->action_class,true) ) {
-            return $ret->action_class;
-        }
-        eval( $ret->code );
-
-        return $ret->action_class;
+        return CRUD::generate($recordClass, $type );
     }
 
-    public function createRelationAction($relation,$args)
+
+
+    /**
+     * Base on the relationship definition, we should
+     * create the action object to process the nested data.
+     */
+    public function createSubAction($relation,$args)
     {
         $record = null;
         if ( isset($relation['record']) ) {
@@ -255,75 +251,152 @@ abstract class BaseRecordAction extends Action
             }
         }
 
+        // for relationships that has defined an action class,
+        // we should just use it.
         if ( isset($relation['action']) ) {
             $class = $relation['action'];
 
-            // which is a record-based action.
+            // for record-based action, we should pass the record object.
             if ( is_subclass_of($class,'ActionKit\\RecordAction\\BaseRecordAction',true) ) {
                 return new $class($args, $record);
+            } else {
+                // for simple action class without record.
+                return $class($args);
             }
 
-            // which is a simple action
-            return $class($args);
         } else {
-            // run subaction
+            // If the record is loaded
             if ($record->id) {
+
+                // if the update_action field is defined,
+                // then we should use the customized class to process our data.
                 if ( isset($relation['update_action']) ) {
                     $class = $relation['update_action'];
-
                     return new $class($args,$record);
                 }
-
                 return $record->asUpdateAction($args);
+
+            } else {
+
+                // we are going to create related records with subactions
+                // just ensure that we've unset the record identity.
+                unset($args['id']);
+                if ( isset($relation['create_action']) ) {
+                    $class = $relation['create_action'];
+                    return new $class($args,$record);
+                }
+                return $record->asCreateAction($args);
+
             }
-
-            unset($args['id']);
-            if ( isset($relation['create_action']) ) {
-                $class = $relation['create_action'];
-
-                return new $class($args,$record);
-            }
-
-            return $record->asCreateAction($args);
+            // won't be here.
         }
+        // won't be here.
     }
+
 
     public function processSubActions()
     {
         foreach ($this->relationships as $relationId => $relation) {
-            if ( ! isset($relation['has_many']) )
-                continue;
 
-            $recordClass = $relation['record'];
-            $foreignKey = $relation['foreign_key'];
-            $selfKey = $relation['self_key'];
             $argsList = $this->arg( $relationId );
-
-            if (!$argsList)
+            if ( ! $argsList) {
                 continue;
+            }
 
-            foreach ($argsList as $index => $args) {
-                // update related records with the main record id
-                // by using self_key and foreign_key
-                $args[$selfKey] = $this->record->{$foreignKey};
 
-                // get file arguments from fixed $_FILES array.
-                // the ->files array is fixed in Action::__construct method
-                $files = array();
-                if ( isset($this->files[ $relationId ][ $index ]) ) {
-                    $files = $this->files[$relationId][ $index ];
+            if ( isset($relation['has_many']) ) {
+                // In this behavior, we don't handle the 
+                // previous created records, only the records from the form submit.
+                //
+                // for each records, we get the action field, and create the subaction
+                // to process the "one-many" relationship records.
+                //
+                // the subactions are not only for records, it may handle
+                // pure action objects.
+                $foreignKey  = $relation['foreign_key'];
+                $selfKey     = $relation['self_key'];
+
+
+                // the argument here we are expecting is:
+                //
+                //     $args[relationId][index][field_name] => value
+                //
+                // where the index is 'the relational record id' or the timestamp.
+                //
+                // so let us iterating these fields
+                foreach ($argsList as $index => $args) {
+                    // before here, we've loaded/created the record,
+                    // so that we already have a record id.
+
+                    // we should update related records with the main record id
+                    // by using self_key and foreign_key
+                    $args[$selfKey] = $this->record->{$foreignKey};
+
+                    // get file arguments from fixed $_FILES array.
+                    // the ->files array is fixed in Action::__construct method
+                    $files = array();
+                    if ( isset($this->files[ $relationId ][ $index ]) ) {
+                        $files = $this->files[ $relationId ][ $index ];
+                    }
+
+                    $action = $this->createSubAction($relation, $args);
+                    $action->files = $files;
+                    if ( $action->invoke() === false ) {
+                        // transfrer the error result to self,
+                        // then report error.
+                        $this->result = $action->result;
+                        return false;
+                    }
+                }
+            } elseif ( isset($relation['many_to_many']) ) {
+                // Process the junction of many-to-many relationship
+                //
+                // For the many-to-many relationship, we should simply focus on the
+                // junction records. so that we are not going to render these "end-records" as form.
+                //
+                // But we need to render these "end-records" as the name of options.
+                //
+                // Here we handle somethine like:
+                //
+                //
+                //      categories[index][id] = category_id
+                //      categories[index][_connect] = 1 || 0
+                //      
+
+                $from       = $relation['from'];
+                $interForeignKey = $relation['inter_foreign_key'];
+                $connected = array();
+
+                $junctionRecords = $this->record->{$from};
+                $foreignRecords = $this->record->{ $relationId };
+                foreach ( $foreignRecords as $fRecord ) {
+                    $connected[ $fRecord->id ] = $fRecord;
                 }
 
-                $action = $this->createRelationAction($relation,$args);
-                $action->files = $files;
-                if ( $action->invoke() === false ) {
-                    $this->result = $action->result;
+                foreach ($argsList as $index => $args) {
+                    // foreign record primary key
+                    $fId  = $args['id'];
 
-                    return false;
+                    // find junction record or create a new junction record
+                    // create the junction record if it is not connected.
+                    if ( isset($args['_connect']) && $args['_connect'] ) {
+                        if ( ! isset($connected[ $fId ]) ) {
+                            $junctionRecords->create(array(
+                                $interForeignKey => $fId,
+                            ));
+                        }
+                    } else {
+                        // not connected, but if the connection exists.
+                        if ( isset($connected[ $fId ]) ) {
+                            $jrs = clone $junctionRecords;
+                            $jrs->where(array( $interForeignKey => $fId ));
+                            $jrs->first()->delete();
+                            unset($connected[ $fId ]);
+                        }
+                    }
                 }
             }
         }
-
         return true;
     }
 

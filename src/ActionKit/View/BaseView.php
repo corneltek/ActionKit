@@ -1,8 +1,24 @@
 <?php
 namespace ActionKit\View;
+use FormKit;
+use FormKit\Layout\GenericLayout;
 
+
+/**
+ * BaseView create a basic form view for action.
+ *
+ * To use the BaseView-based action view class:
+ *
+ *   $view = new YourView($action,array( ... options ... ));
+ *
+ */
 abstract class BaseView
 {
+
+    public $method = 'POST';
+
+    public $enctype = 'multipart/form-data';
+
     public $container;
 
     public $layout;
@@ -13,15 +29,17 @@ abstract class BaseView
 
     public $fields;
 
-    abstract public function build($container);
+    public $_built = false;
 
-    abstract public function render();
 
-    abstract public function createLayout();
+    abstract public function build();
+
+
 
     /**
      *
      * @param ActionKit\Action $action
+     * @param array $options
      */
     public function __construct($action, $options = array() )
     {
@@ -35,7 +53,16 @@ abstract class BaseView
 
     public function init()
     {
-        $this->layout = $this->createLayout();
+    }
+
+    public function setMethod($method)
+    {
+        $this->method = $method;
+    }
+
+    public function getMethod()
+    {
+        return $this->method;
     }
 
     public function setLayout($layout)
@@ -43,9 +70,43 @@ abstract class BaseView
         $this->layout = $layout;
     }
 
+    /**
+     * Create layout container
+     *
+     * @return GenericLayout The layout container object.
+     */
+    public function createLayout()
+    {
+        $layout = new GenericLayout;
+
+        // initialize layout object here.
+        if ( $width = $this->option('width') ) {
+            $layout->width( $width );
+        }
+        if ( $padding = $this->option('cellpadding') ) {
+            $layout->cellpadding( $padding );
+        }
+        if ( $spacing = $this->option('cellspacing') ) {
+            $layout->cellspacing( $spacing );
+        }
+        if ( $border = $this->option('border') ) {
+            $layout->border(0);
+        }
+
+        return $layout;
+    }
+
+
+
+
+
+
+
     public function getLayout()
     {
-        return $this->layout;
+        if ( $this->layout )
+            return $this->layout;
+        return $this->layout = $this->createLayout();
     }
 
     public function setContainer($container)
@@ -53,14 +114,54 @@ abstract class BaseView
         $this->container = $container;
     }
 
-    public function getContainer()
+    public function createContainer()
     {
-        return $this->container;
+        // create default container
+        if ( $this->option('no_form') ) {
+            $container = new \FormKit\Element\Div;
+            return $container;
+        } else {
+            $container = new \FormKit\Element\Form;
+
+            if ( $this->enctype ) {
+                $container->enctype($this->enctype);
+            }
+
+            if ( $this->method ) {
+                $container->method($this->method);
+            }
+            if ( $formId = $this->option('form_id') ) {
+                $container->setId( $formId );
+            }
+            if ( $formClass = $this->option('form_class') ) {
+                $container->addClass( $formClass );
+            }
+            return $container;
+        }
     }
+
 
     public function hasContainer()
     {
-        return isset($this->container);
+        return $this->container !== null;
+    }
+
+
+    /**
+     * As we are getting the container object lazily,
+     * We need to also append the layout object if the container is 
+     * initialized.
+     */
+    public function getContainer()
+    {
+        if ( $this->container ) {
+            return $this->container;
+        }
+        $this->container = $this->createContainer();
+        if ( ! $this->option('no_layout') ) {
+            $this->container->append( $this->getLayout() );
+        }
+        return $this->container;
     }
 
     public function getAction()
@@ -141,9 +242,9 @@ abstract class BaseView
             // put HiddenInput widget out of table,
             // so that we don't have empty cells.
             if ($widget instanceof \FormKit\Widget\HiddenInput) {
-                $this->container->append($widget);
+                $this->getContainer()->append($widget);
             } else {
-                $this->layout->addWidget($widget);
+                $this->getLayout()->addWidget($widget);
             }
         }
     }
@@ -197,4 +298,45 @@ abstract class BaseView
         }
         throw new RuntimeException("$method not found.");
     }
+
+
+    /**
+     * A build wrapper method for build().
+     *
+     * This call beforeBuild, build, afterBuild methods before rendering the 
+     * content.
+     *
+     * @return Container
+     */
+    public function triggerBuild()
+    {
+        $this->beforeBuild();
+        $this->build();
+        $this->afterBuild();
+
+        $this->_built = true;
+        return $this->getContainer();
+    }
+
+    /**
+     * Trigger method before building the content.
+     */
+    public function beforeBuild() {  }
+
+
+    /**
+     * Trigger method after building the content.
+     */
+    public function afterBuild() {  }
+
+
+    public function render()
+    {
+        if (! $this->_built ) {
+            $this->triggerBuild();
+        }
+        return $this->getContainer()->render();
+    }
+
+
 }

@@ -1,11 +1,17 @@
 <?php
 namespace ActionKit;
+use UniversalCache;
+use Twig_Loader_Filesystem;
+use Twig_Environment;
 
 /**
- * Action Generator
+ * Action Generator Synopsis
  *
  *    $generator = new ActionGenerator(array(
  *          'cache' => true,                 // this enables apc cache.
+ *
+ *
+ *          // currently we only use APC
  *          'cache_dir' => 'phifty/cache',
  *          'template_dirs' => array( 'Resource/Templates' )
  *    ));
@@ -18,24 +24,56 @@ namespace ActionKit;
  */
 class ActionGenerator
 {
-
     public $cache;
 
     public $cacheDir;
 
+    public $templatePaths = array();
+
     public function __construct( $options = array() )
     {
         $this->cache = isset($options['cache']) && extension_loaded('apc');
+
+        if ( isset($options['cache_dir']) ) {
+            $this->cacheDir = $options['cache_dir'];
+        } else {
+            $this->cacheDir = __DIR__ . DIRECTORY_SEPARATOR . 'Cache';
+            if ( file_exists($this->cacheDir) ) {
+                mkdir($this->cacheDir, 0755, true);
+            }
+        }
+
+        // add built-in template path
+        $this->templatePaths[] = __DIR__ . DIRECTORY_SEPARATOR . 'Templates';
     }
 
+    public function addTemplatePath($path)
+    {
+        $this->templatePaths[] = $path;
+    }
+
+    public function getTwig()
+    {
+        $loader = new Twig_Loader_Filesystem($this->templatePaths);
+        $twig = new Twig_Environment($loader, array(
+            'cache' => $this->cacheDir,
+        ));
+        return $twig;
+    }
+
+
+
+    /**
+     * Given a model class name, split out the namespace and the model name.
+     *
+     * @param string $modelClass full-qualified model class name
+     * @param string $type action type
+     */
     public function generateClassCode( $modelClass , $type )
     {
-        $modelClass = ltrim($modelClass, '\\');
-        $p          = strpos($modelClass, '\\');
-        $bp         = strrpos($modelClass, '\\');
-        $ns         = substr($modelClass, 0, $p);
-        $modelName  = substr($modelClass, $bp + 1 );
-
+        $ps = explode('\\', ltrim($modelClass) );
+        $modelName = array_pop($ps);
+        $ns = join("\\", $ps);
         return $this->generateClassCodeWithNamespace($ns, $modelName, $type);
     }
 
@@ -52,10 +90,15 @@ class ActionGenerator
      *
      * @return string class code
      */
-    public function generateClassCodeWithNamespace( $prefix , $modelName , $type )
+    public function generateClassCodeWithNamespace( $modelNs , $modelName , $type )
     {
         $actionClass  = $type . $modelName;
-        $actionFullClass = $prefix . '\\Action\\'  . $actionClass;
+
+        // here we translate App\Model\Book to App\Action\CreateBook or something
+        $actionNs = str_replace('Model','Action', $modelNs);
+        $actionFullClass = $actionNs . '\\' . $actionClass;
+
+        // let's cache the action code
         if ( $this->cache && $code = apc_fetch( 'action:' . $actionFullClass ) ) {
             return (object) array(
                 'action_class' => $actionFullClass,
@@ -63,8 +106,10 @@ class ActionGenerator
             );
         }
 
-        $recordClass  = $prefix . '\\Model\\' . $modelName;
+        // the original ns is the model namespace
+        $recordClass  = $modelNs . $modelName;
         $baseAction   = $type . 'RecordAction';
+
         $code =<<<CODE
 namespace $prefix\\Action {
     use ActionKit\\RecordAction\\$baseAction;
@@ -77,7 +122,6 @@ CODE;
         if ($this->cache) {
             apc_store('action:' . $actionFullClass , $code);
         }
-
         return (object) array(
             'action_class' => $actionFullClass,
             'code' => $code,
@@ -95,11 +139,11 @@ namespace $actionNamespace {
     class $actionName extends Action
     {
 
-        function schema()
+        public function schema()
         {
         }
 
-        function run()
+        public function run()
         {
             return \$this->success('Success!!');
         }

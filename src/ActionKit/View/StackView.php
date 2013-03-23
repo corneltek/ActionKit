@@ -1,30 +1,36 @@
 <?php
 namespace ActionKit\View;
-use FormKit;
 use ActionKit\View\BaseView;
+use FormKit;
+use FormKit\Element;
+use FormKit\Widget\Label;
 use FormKit\Widget\HiddenInput;
+use FormKit\Widget\ButtonInput;
+use FormKit\Widget\CheckboxInput;
 use FormKit\Layout\GenericLayout;
+
+
+
+/**
+ *  $view = new StackView( $action, array(
+ *      'no_form' => true,
+ *      'no_signature' => true,
+ *      'form_id' => 'formId',
+ *      'form_class' => 'product-form',
+ *  ));
+ *  $view->buildRelationalActionViewForExistingRecords($relationId, $relation);
+ *  $view->buildRelationalActionViewForNewRecord($relationId,$relation);
+ *
+ */
 
 class StackView extends BaseView
 {
-    public $method = 'POST';
+
     public $ajax = false;
 
-    public function createLayout()
+    public function setAjax($ajax)
     {
-        $layout = new GenericLayout;
-
-        // initialize layout object here.
-        if ( $width = $this->option('width') )
-            $layout->width( $width );
-        if ( $padding = $this->option('cellpadding') )
-            $layout->cellpadding( $padding );
-        if ( $spacing = $this->option('cellspacing') )
-            $layout->cellspacing( $spacing );
-        if ( $border = $this->option('border') )
-            $layout->border(0);
-
-        return $layout;
+        $this->ajax = $ajax;
     }
 
     /**
@@ -32,86 +38,179 @@ class StackView extends BaseView
      */
     public function createContainer()
     {
+        $container = parent::createContainer();
         if ( $this->option('no_form') ) {
-            $container = new FormKit\Element\Div;
+            return $container;
         } else {
-            $container = new FormKit\Element\Form;
-            $container->method($this->method);
-            if ( $formId = $this->option('form_id') ) {
-                $container->setId( $formId );
-            }
-            if ( $formClass = $this->option('form_class') ) {
-                $container->addClass( $formClass );
-            }
             if ($this->ajax) {
                 $ajaxFlag  = new HiddenInput('__ajax_request',array( 'value' => '1' ));
                 $container->append( $ajaxFlag );
                 $container->addClass('ajax-action');
             }
         }
-
         return $container;
     }
 
-    public function buildNestedSection($container)
-    {
-        $record = $this->getRecord();
-        $recordId = $record ? $record->id : null;
 
+
+
+    public function createRelationalActionViewForNewRecord($relationId,$relation)
+    {
+        // get the record class.
+        $record = new $relation['record'];
+
+        $subview = $this->createRelationalActionView($relationId,$relation);
+        $html = addslashes($subview->render());
+        $button = new ButtonInput;
+        $button->value = _('Add') . $record->getLabel();
+        $button->onclick = <<<SCRIPT
+            var self = this;
+            var el = document.createElement('div');
+            var closeBtn = document.createElement('input');
+            closeBtn.type = 'button';
+            closeBtn.value = '移除';
+            closeBtn.onclick = function() {
+                self.parentNode.removeChild(el);
+            };
+            el.innerHTML = '$html';
+            el.appendChild( closeBtn );
+            this.parentNode.insertBefore(el, this.nextSibling);
+SCRIPT;
+        return $button;
+    }
+
+
+    public function buildRelationalActionViewForExistingRecords($relationId, $relation = null)
+    {
+        if ( ! $relation ) {
+            $relation = $this->action->getRelation($relationId);
+        }
+
+        // get record from action
+        $record = $this->getRecord();
+        $container = $this->getContainer();
+
+        // handle has_many records
+        if ( isset($relation['has_many']) ) {
+            // For each existing (one-many) records, 
+            // create it's own subaction view for these existing 
+            // records.
+
+            // If the record is loaded and the relation is defined
+            if ( $record->id && isset($record->{ $relationId }) ) {
+                foreach ($record->{ $relationId } as $subrecord) {
+                    $subview = $this->createRelationalActionView($relationId, $relation, $subrecord);
+                    $container->append($subview);
+                }
+            }
+        }
+        elseif ( isset($relation['many_to_many']) ) {
+            // TODO: Add a view option to the relationship, so that we can define the view for the editor.
+
+            // Get the record collection.
+            $collection = new $relation['collection'];
+
+            if ( isset($relation['filter']) ) {
+                call_user_func($relation['filter'], $collection, $record, $this);
+            }
+
+
+            $from = $relation['from'];
+            $ul = new Element('ul');
+            $ul->appendTo($container);
+            $connected = array();
+
+            if ( $record->id && isset($record->{ $relationId }) ) {
+                // so that we can get product_id field since we joined the table.
+                $foreignRecords = $record->{ $relationId };
+                foreach ( $foreignRecords as $fRecord ) {
+                    $fId = $fRecord->id;
+                    $li       = new Element('li');
+                    $label    = new Label;
+                    $hiddenId = new HiddenInput(   "{$relationId}[{$fId}][id]", array( 'value' => $fId ) );
+                    $checkbox = new CheckboxInput( "{$relationId}[{$fId}][_connect]",array( 
+                        'boolean_value' => false,
+                        'value' => 1,
+                    ));
+                    $checkbox->check();
+                    $label->append( $checkbox );
+                    $label->appendText( $fRecord->dataLabel() );
+                    $label->append( $hiddenId );
+                    $li->append($label)->appendTo($ul);
+                    $connected[ $fId ] = $fRecord;
+                }
+            }
+
+            foreach( $collection as $record ) {
+                if ( isset($connected[$record->id]) ) {
+                    continue;
+                }
+                $li = new Element('li');
+                $label = new Label;
+                $hiddenId = new HiddenInput(   "{$relationId}[{$record->id}][id]", array( 'value' => $record->id ) );
+                $checkbox = new CheckboxInput( "{$relationId}[{$record->id}][_connect]",array(
+                    'boolean_value' => false,
+                    'value' => 1,
+                ));
+                $label->append($checkbox);
+                $label->appendText($record->dataLabel());
+                $label->append( $hiddenId );
+                $li->append($label)->appendTo($ul);
+            }
+        }
+        return $container;
+    }
+
+
+    public function buildRelationalActionViewForNewRecord($relationId, $relation = null)
+    {
+        if ( ! $relation ) {
+            $relation = $this->action->getRelation($relationId);
+        }
+
+        // create another subview for creating new (one-many) record.
+        // currently onlly for has_many relationship
+        $container = $this->getContainer();
+        if ( isset($relation['has_many']) ) {
+            $button = $this->createRelationalActionViewForNewRecord($relationId, $relation);
+            $container->append($button);
+        }
+        return $container;
+    }
+
+
+    /**
+     * See if we can build subactions and render it outside of an action view.
+     *
+     * @param View $container The container view.
+     */
+    public function buildNestedSection()
+    {
 
         // in current action, find all relationship information, and iterate 
         // them.
         foreach ($this->action->relationships as $relationId => $relation) {
-
-            // If the record is loaded and the relation is defined
-            if ( $recordId && isset($record->{ $relationId }) ) {
-
-
-                // handle has_many records
-                if ( isset($relation['has_many']) ) {
-                    // for each existing (one-many) records, 
-                    // create it's own subaction view for these existing 
-                    // records.
-                    foreach ($record->{ $relationId } as $subrecord) {
-                        $subview = $this->createSubactionView($relationId, $relation, $subrecord);
-                        $container->append($subview);
-                    }
-                }
+            // skip non-renderable relationship definitions
+            if ( isset($relation['renderable']) && $relation['renderable'] === false ) {
+                continue;
             }
-
-            // create another subview for creating new (one-many) records
-            $record = new $relation['record'];
-            $subview = $this->createSubactionView($relationId,$relation);
-            $html = addslashes($subview->render());
-            $button = new \FormKit\Widget\ButtonInput;
-            $button->value = _('Add') . $record->getLabel();
-            $button->onclick = <<<SCRIPT
-                var self = this;
-                var el = document.createElement('div');
-                var closeBtn = document.createElement('input');
-                closeBtn.type = 'button';
-                closeBtn.value = '移除';
-                closeBtn.onclick = function() {
-                    self.parentNode.removeChild(el);
-                };
-                el.innerHTML = '$html';
-                el.appendChild( closeBtn );
-                this.parentNode.insertBefore(el, this.nextSibling);
-SCRIPT;
-            $container->append($button);
+            $this->buildRelationalActionViewForExistingRecords($relationId, $relation);
+            $this->buildRelationalActionViewForNewRecord($relationId,$relation);
         }
     }
 
-    public function build($container)
+
+    public function build()
     {
-        $container->append( $this->layout );
+        $container = $this->getContainer();
 
         $widgets = $this->getAvailableWidgets();
         $this->registerWidgets($widgets);
 
-        // Render relationships if attribute 'nested' is defined.
+        // Render relationships in the same form 
+        // If attribute 'nested' is defined.
         if ($this->action->nested) {
-            $this->buildNestedSection($container);
+            $this->buildNestedSection();
         }
 
         // if we use form
@@ -126,12 +225,9 @@ SCRIPT;
 
             // if we have record and the record has an id, render the id field as hidden field.
             if ( ! $this->option('no_signature') ) {
-                $container->append(
-                    new HiddenInput('action',array('value' => $this->action->getSignature() ))
-                );
+                $container->append( $this->action->createSignatureWidget() );
             }
         }
-
         return $container;
     }
 
@@ -151,7 +247,7 @@ SCRIPT;
      * @param array  $relation
      * @param \Phifty\Model $record
      */
-    public function createSubactionView($relationId, $relation, $record = null)
+    public function createRelationalActionView($relationId, $relation, $record = null)
     {
         if (! $record) {
             $recordClass = $relation['record'];
@@ -161,47 +257,23 @@ SCRIPT;
             $action      = $record->asUpdateAction();
         }
 
-
+        // rewrite the field names with index, so that we will get something like:
+        //
+        //    categories[index][name]...
+        //    categories[index][subtitle]...
+        //     
         $formIndex = $action->setParamNamesWithIndex($relationId);
         $subview = new self($action, array(
             'no_form' => 1,
             'ajax' => $this->ajax
         ));
+
         $subview->triggerBuild();
         $container = $subview->getContainer();
         $signature = new HiddenInput(  "{$relationId}[{$formIndex}][action]",array(
             'value' => $action->getSignature()
         ));
         $container->append( $signature );
-
         return $subview;
-    }
-
-    public function beforeBuild($container) { }
-
-    public function afterBuild($container) { }
-
-    /**
-     * create container object.
-     *
-     * trigger beforeBuild, build, afterBuild methods
-     */
-    public function triggerBuild()
-    {
-        $this->container = $this->createContainer();
-        $this->beforeBuild($this->container);
-        $this->build($this->container);
-        $this->afterBuild($this->container);
-
-        return $this->container;
-    }
-
-    public function render()
-    {
-        if (!$this->container) {
-            $this->triggerBuild();
-        }
-
-        return $this->getContainer()->render();
     }
 }
