@@ -1,6 +1,37 @@
 {
-    "hash": "485184bbd3d0dab29cf980ddf1712809",
+    "hash": "da291c4b80faf6a7551bbd7a2036ce8a",
     "packages": [
+        {
+            "name": "corneltek/lazyrecord",
+            "version": "1.9.0",
+            "source": {
+                "type": "git",
+                "url": "git@git.corneltek.com:php/LazyRecord.git",
+                "reference": "1.9.0"
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "LazyRecord": "src"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Yo-An Lin",
+                    "email": "cornelius.howl@gmail.com",
+                    "homepage": "http://c9s.me"
+                }
+            ],
+            "description": "The Fast PHP ORM",
+            "homepage": "http://github.com/c9s/LazyRecord",
+            "time": "2012-11-06 15:22:10"
+        },
         {
             "name": "twig/twig",
             "version": "v1.12.2",

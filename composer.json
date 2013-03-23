@@ -1,5 +1,5 @@
 {
-    "name": "corneltek/action-kit",
+    "name": "corneltek/actionkit",
     "authors": [
         {
             "name": "c9s",
@@ -7,7 +7,8 @@
         }
     ],
     "require": {
-        "twig/twig": "1.12.*"
+        "twig/twig": "1.12.*",
+        "corneltek/lazyrecord": "1.9.2"
     },
     "require-dev": {
         "corneltek/phpunit-testmore": "dev-master"
