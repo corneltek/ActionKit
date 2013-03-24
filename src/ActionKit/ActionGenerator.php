@@ -92,11 +92,13 @@ class ActionGenerator
      */
     public function generateClassCodeWithNamespace( $modelNs , $modelName , $type )
     {
+        $modelNs = ltrim($modelNs,'\\');
         $actionClass  = $type . $modelName;
 
         // here we translate App\Model\Book to App\Action\CreateBook or something
         $actionNs = str_replace('Model','Action', $modelNs);
-        $actionFullClass = $actionNs . '\\' . $actionClass;
+        $actionFullClass = ltrim($actionNs . '\\' . $actionClass, '\\');
+
 
         // let's cache the action code
         if ( $this->cache && $code = apc_fetch( 'action:' . $actionFullClass ) ) {
@@ -107,7 +109,7 @@ class ActionGenerator
         }
 
         // the original ns is the model namespace
-        $recordClass  = $modelNs . $modelName;
+        $recordClass  = ltrim($modelNs . '\\' . $modelName, '\\');
         $baseAction   = $type . 'RecordAction';
 
         $code =<<<CODE
@@ -138,7 +140,6 @@ namespace $actionNamespace {
     use ActionKit\\Action;
     class $actionName extends Action
     {
-
         public function schema()
         {
         }

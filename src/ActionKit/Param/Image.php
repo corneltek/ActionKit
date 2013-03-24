@@ -73,7 +73,7 @@ class Image extends Param
         if (! $this->putIn) {
             throw new Exception( "putIn attribute is not defined." );
         }
-        futil_mkdir_if_not_exists(PH_APP_ROOT . DIRECTORY_SEPARATOR . $this->putIn);
+        futil_mkdir_if_not_exists(PH_APP_ROOT . DIRECTORY_SEPARATOR . $this->putIn, 0755, true);
     }
 
     public function build()

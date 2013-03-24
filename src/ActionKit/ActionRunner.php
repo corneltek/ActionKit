@@ -86,7 +86,6 @@ class ActionRunner
         // TODO: eval is slower than require
         //       use a better code generator
         eval( $code );
-
         return true;
     }
 
@@ -115,7 +114,7 @@ class ActionRunner
         foreach ( (array) $types as $type ) {
             $class = $prefixNs . '\\Action\\' . $type . $modelName;
             $this->registerCRUDAction($class,array(
-                'prefix'           => $prefixNs,
+                'prefix'       => $prefixNs . '\\Model',
                 'type'         => $type,
                 'model_name'   => $modelName,
             ));
