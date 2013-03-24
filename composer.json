@@ -1,5 +1,5 @@
 {
-    "name": "corneltek/actionkit",
+    "name": "corneltek\/actionkit",
     "authors": [
         {
             "name": "c9s",
@@ -7,11 +7,16 @@
         }
     ],
     "require": {
-        "twig/twig": "1.12.*",
-        "corneltek/lazyrecord": "~1.9"
+        "twig\/twig": "1.12.*",
+        "corneltek\/lazyrecord": "~1.9"
     },
     "require-dev": {
-        "corneltek/phpunit-testmore": "dev-master"
+        "corneltek\/phpunit-testmore": "dev-master"
     },
-    "autoload": { "psr-0": { "ActionKit": "src" } }
+    "autoload": {
+        "psr-0": {
+            "ActionKit": "src"
+        }
+    },
+    "version": "0.0.1"
 }
