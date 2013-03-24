@@ -104,46 +104,5 @@ class ActionTest extends PHPUnit_Framework_TestCase
         is('Login', $result->message);
         ok( $result->isSuccess() );
     }
-
-    function testRecordAction() 
-    {
-        $createUser = new User\Action\CreateUser(array(
-            'account' => '1234',
-            'password1' => '123456',
-            'password2' => '123456',
-            'role' => 'user',
-        ));
-        ok($createUser);
-
-        $ret = $createUser->invoke();
-        ok($ret);
-
-        $result = $createUser->getResult();
-        ok($result);
-        is('success',$result->type);
-        ok($createUser->record->delete()->success);
-    }
-
-    function testChangePasswordActionView() {
-        $user = new User\Model\User;
-        $ret = $user->create(array(
-            'account' => 'user111',
-            'password' => 'asdf',
-        ));
-        ok($ret->success,$ret);
-
-        $action = new User\Action\ChangePassword(array(),$user);
-        ok($action);
-
-        $view = $action->asView('AdminUI\\Action\\View\\StackView');
-        ok($view,'Got View');
-        isa_ok('AdminUI\\Action\\View\\StackView',$view);
-
-        $html = $view->render();
-        ok($html);
-
-        $user->delete();
-        // TODO: more detailed testing
-    }
 }
 
