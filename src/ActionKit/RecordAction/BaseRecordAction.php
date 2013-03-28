@@ -43,7 +43,7 @@ abstract class BaseRecordAction extends Action
      *      Action::__construct
      *      Action::init
      *      Action::schema
-     *    BaseRecordAction::loadRecordValues
+     *    BaseRecordAction::loadRecordValuesToParams
      *
      *
      * @param array                $args
@@ -66,19 +66,20 @@ abstract class BaseRecordAction extends Action
 
         $this->setRecord($record);
 
-        if ( ! $record->id ) {   // for create action, we don't need to create record
-            if ( $this->getType() !== 'create' && $this->enableLoadRecord ) {
-                if ( ! $this->loadRecordFromArguments( $args ) ) {
-                    throw new ActionException( get_class($this) . " Record action can not load record from {$this->recordClass}", $this );
-                }
+        if ( ! $record->id && $this->getType() !== 'create' && $this->enableLoadRecord ) {
+            // for create action, we don't need to create record
+            if ( ! $this->loadRecordFromArguments( $args ) ) {
+                throw new ActionException( get_class($this) . " Record action can not load record from {$this->recordClass}", $this );
             }
         }
 
         // initialize schema , init base action stuff
         parent::__construct( $args , $currentUser );
 
+
         if ( $this->record->id ) {
-            $this->loadRecordValues();
+            // load record values to params
+            $this->loadRecordValuesToParams();
         }
     }
 
@@ -97,7 +98,7 @@ abstract class BaseRecordAction extends Action
      * Load record values into params
      *
      */
-    public function loadRecordValues()
+    public function loadRecordValuesToParams()
     {
         /* load record value */
         foreach ( $this->record->getColumns(true) as $column ) {
