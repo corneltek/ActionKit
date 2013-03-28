@@ -737,9 +737,8 @@ abstract class Action implements IteratorAggregate
      * Render column with field view class
      *
      * renderField( 'name' )
-     * renderField( 'name' , null , {  } )
-     * renderField( 'name' , {  } )
-     *
+     * renderField( 'name', FieldViewClass , WidgetAttributes )
+     * renderField( 'name', WidgetAttributes )
      *
      * @param string $name           column name
      * @param string $fieldViewClass
@@ -747,6 +746,7 @@ abstract class Action implements IteratorAggregate
      */
     public function renderField( $name )
     {
+        // the default field view class.
         $args = func_get_args();
         $fieldViewClass = 'ActionKit\FieldView\DivFieldView';
         $attrs = array();

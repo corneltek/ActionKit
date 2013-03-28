@@ -4,6 +4,7 @@ use FormKit;
 use FormKit\Element\Div;
 use FormKit\Element\Span;
 use FormKit\Widget\HiddenInput;
+use FormKit\Widget\CheckboxInput;
 
 class DivFieldView
 {
@@ -54,26 +55,31 @@ class DivFieldView
         $wrapper = new Div(array(
             'class' => $this->wrapperClass,
         ));
-        $labelDiv = new Div(array( 'class' => $this->labelClass ));
-        $inputDiv = new Div(array( 'class' => $this->inputClass ));
+
 
         $widget = $this->column->createWidget(null, $this->widgetAttributes);
-        $inputDiv->append( $widget );
+        $wrapper->addClass($widget->convertClassToCssClassName());
 
-        if (! $widget instanceof HiddenInput) {
+        if ( $widget instanceof CheckboxInput ) {
+            $label = $this->column->createLabelWidget();
+            $label->prepend($widget);
+            $wrapper->append($label);
+        } elseif ( $widget instanceof HiddenInput) {
+            $wrapper->append( $widget );
+        } else {
+            $labelDiv = new Div(array( 'class' => $this->labelClass ));
+            $inputDiv = new Div(array( 'class' => $this->inputClass ));
+            $inputDiv->append( $widget );
             $label = $this->column->createLabelWidget();
             $labelDiv->append( $label );
             $wrapper->append($labelDiv);
+            $wrapper->append($inputDiv);
+            if ($this->column->hint) {
+                $hintEl  = new Span(array( 'class' => $this->hintClass ));
+                $hintEl->append( $this->column->hint );
+                $wrapper->append($hintEl);
+            }
         }
-
-        $wrapper->append($inputDiv);
-
-        if ($this->column->hint) {
-            $hintEl  = new Span(array( 'class' => $this->hintClass ));
-            $hintEl->append( $this->column->hint );
-            $wrapper->append($hintEl);
-        }
-
         return $wrapper;
     }
 

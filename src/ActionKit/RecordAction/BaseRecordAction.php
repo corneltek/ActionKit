@@ -68,8 +68,9 @@ abstract class BaseRecordAction extends Action
 
         if ( ! $record->id ) {   // for create action, we don't need to create record
             if ( $this->getType() !== 'create' && $this->enableLoadRecord ) {
-                if ( ! $this->loadRecordFromArguments( $args ) )
-                    throw new ActionException('Record action can not load record', $this );
+                if ( ! $this->loadRecordFromArguments( $args ) ) {
+                    throw new ActionException( get_class($this) . " Record action can not load record from {$this->recordClass}", $this );
+                }
             }
         }
 
@@ -117,7 +118,6 @@ abstract class BaseRecordAction extends Action
         if ( isset( $args['id'] )) {
             return $this->record->load( $args['id'] )->success;
         }
-
         return false;
     }
 
