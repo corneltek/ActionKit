@@ -16,6 +16,9 @@ class ColumnConvert
         $name = $column->name;
         $param = new Param( $name );
         foreach ($column->attributes as $k => $v) {
+            // if the model column validator is not compatible with action validator
+            if ( $k === 'validator' )
+                continue;
             $param->$k = $v;
         }
 
