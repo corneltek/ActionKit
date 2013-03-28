@@ -33,6 +33,7 @@ class ColumnConvert
             $param->value = $column->getDefaultValue();
         }
 
+        // convert related collection model to validValues
         if ($param->refer) {
             if ( class_exists($param->refer,true) ) {
                 $class = $param->refer;
@@ -76,8 +77,13 @@ class ColumnConvert
         if ($column->widgetClass) {
             $param->widgetClass = $column->widgetClass;
         }
+
         if ($column->widgetAttributes) {
             $param->widgetAttributes = $column->widgetAttributes;
+        }
+
+        if ( $column->immutable ) {
+            $param->widgetAttributes['readonly'] = 'readonly';
         }
 
         if ($column->renderAs) {
