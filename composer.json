@@ -7,8 +7,10 @@
         }
     ],
     "require": {
-        "twig\/twig": "1.12.*",
-        "corneltek\/lazyrecord": "~1.9"
+        "twig\/twig": "1.12.*"
+    },
+    "suggest": {
+        "corneltek/lazyrecord": "Support Record-based Action"
     },
     "require-dev": {
         "corneltek\/phpunit-testmore": "dev-master"
