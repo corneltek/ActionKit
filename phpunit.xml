@@ -8,6 +8,11 @@
          stopOnError="true"
          stopOnFailure="true"
          verbose="true">
+
+  <php>
+    <env name="DB_SQLITE_DSN" value="sqlite:tests.db"/>
+  </php>
+
   <testsuites>
         <testsuite name="ActionKit">
             <directory suffix="Test.php">tests</directory>
