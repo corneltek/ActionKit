@@ -13,8 +13,6 @@
 .onion/
 .svn
 cache/
-build
-build/
 config/*.php
 coverage/
 docs/_build/
