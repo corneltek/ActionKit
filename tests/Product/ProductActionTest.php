@@ -59,9 +59,6 @@ class ProductActionTest extends ModelTestCase
         $delete = new $class(array( 'id' => $product->id ), $product);
         $ret = $delete->run();
         ok($ret);
-
-        // use DeleteAction to delete
-        // $product->delete();
     }
 
 }

@@ -48,7 +48,6 @@ class ProductBaseMixin
             'from'            => 'product_categories',
             'inter_foreign_key' => 'category_id',
             'filter' => function($collection, $record) {
-                $collection->order('lang','desc');
                 return $collection;
             },
         );
