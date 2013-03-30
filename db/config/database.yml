@@ -2,11 +2,11 @@
 bootstrap:
   - tests/bootstrap.php
 schema:
- paths:
+  auto_id: true
+  paths:
    - tests
 data_sources:
   default:
-    driver: sqlite
-    database: ":memory:"
-    user: 
+    dsn: "sqlite:tests.db"
+    user:
     pass: 
