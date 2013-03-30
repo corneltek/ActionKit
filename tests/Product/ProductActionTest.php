@@ -51,7 +51,17 @@ class ProductActionTest extends ModelTestCase
 
         $ret = $product->load(array( 'name' => 'C' ));
         ok($ret->success);
-        $product->delete();
+
+
+        $class = CRUD::generate('Product\\Model\\Product', 'Delete');
+        ok($class);
+
+        $delete = new $class(array( 'id' => $product->id ), $product);
+        $ret = $delete->run();
+        ok($ret);
+
+        // use DeleteAction to delete
+        // $product->delete();
     }
 
 }
