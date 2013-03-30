@@ -8,6 +8,10 @@
          stopOnFailure="false"
          verbose="true">
 
+  <php>
+    <env name="DB_SQLITE_DSN" value="sqlite:tests.db"/>
+  </php>
+
   <filter>
     <whitelist>
         <directory suffix=".php">src/</directory>
