@@ -336,8 +336,9 @@ abstract class BaseRecordAction extends Action
     public function createSubAction($relation,$args)
     {
         $record = null;
-        if ( isset($relation['record']) ) {
-            $recordClass = $relation['record'];
+        if ( isset($relation['foreign']['schema']) ) {
+            $schema = new $relation['foreign']['schema'];
+            $recordClass = $schema->getModelClass();
             // create record object, and load it with primary id
             $record = new $recordClass;
             if ( isset($args['id']) && $args['id'] ) {
@@ -397,8 +398,7 @@ abstract class BaseRecordAction extends Action
                 continue;
             }
 
-
-            if ( isset($relation['has_many']) ) {
+            if ( SchemaDeclare::has_many === $relation['type'] ) {
                 // XXX: use the lazyrecord schema relationship!!!
                 //
                 //
@@ -410,8 +410,8 @@ abstract class BaseRecordAction extends Action
                 //
                 // the subactions are not only for records, it may handle
                 // pure action objects.
-                $foreignKey  = $relation['foreign_key'];
-                $selfKey     = $relation['self_key'];
+                $foreignKey  = $relation['foreign']['column'];
+                $selfKey     = $relation['self']['column'];
 
 
                 // the argument here we are expecting is:
@@ -427,7 +427,7 @@ abstract class BaseRecordAction extends Action
 
                     // we should update related records with the main record id
                     // by using self_key and foreign_key
-                    $args[$selfKey] = $this->record->{$foreignKey};
+                    $args[$foreignKey] = $this->record->{$selfKey};
 
                     // get file arguments from fixed $_FILES array.
                     // the ->files array is fixed in Action::__construct method
@@ -445,7 +445,7 @@ abstract class BaseRecordAction extends Action
                         return false;
                     }
                 }
-            } elseif ( isset($relation['many_to_many']) ) {
+            } elseif ( SchemaDeclare::many_to_many === $relation['type']) {
                 // Process the junction of many-to-many relationship
                 //
                 // For the many-to-many relationship, we should simply focus on the
@@ -459,13 +459,27 @@ abstract class BaseRecordAction extends Action
                 //      categories[index][id] = category_id
                 //      categories[index][_connect] = 1 || 0
                 //      
+                $record = $this->record;
+                $middleRelation    = $record->schema->getRelation($relation['relation']['id']);
+                $middleSchema      = new $middleRelation['foreign']['schema'];
+                $middleRecordClass = $middleSchema->getModelClass();
+                $middleRecord      = new $middleRecordClass;
 
-                $from       = $relation['from'];
-                $interForeignKey = $relation['inter_foreign_key'];
+                $foreignRelation = $middleRecord->schema->getRelation( $relation['relation']['id2'] ); // which should be 'belongsTo' relation
+                $foreignSchema   = new $foreignRelation['foreign']['schema'];
+
+                $collectionClass = $foreignSchema->getCollectionClass();
+                $collection      = new $collectionClass;
+
                 $connected = array();
 
-                $junctionRecords = $this->record->{$from};
-                $foreignRecords = $this->record->{ $relationId };
+                $from = $relation['relation']['id'];
+                $middleForeignKey = $foreignRelation['self']['column'];
+
+                $junctionRecords = $record->{$from};
+
+                // get existing records
+                $foreignRecords = $record->{$relationId};
                 foreach ( $foreignRecords as $fRecord ) {
                     $connected[ $fRecord->id ] = $fRecord;
                 }
@@ -479,14 +493,14 @@ abstract class BaseRecordAction extends Action
                     if ( isset($args['_connect']) && $args['_connect'] ) {
                         if ( ! isset($connected[ $fId ]) ) {
                             $junctionRecords->create(array(
-                                $interForeignKey => $fId,
+                                $middleForeignKey => $fId,
                             ));
                         }
                     } else {
                         // not connected, but if the connection exists.
                         if ( isset($connected[ $fId ]) ) {
                             $jrs = clone $junctionRecords;
-                            $jrs->where(array( $interForeignKey => $fId ));
+                            $jrs->where(array( $middleForeignKey => $fId ));
                             $jrs->first()->delete();
                             unset($connected[ $fId ]);
                         }

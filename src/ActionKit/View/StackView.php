@@ -112,7 +112,6 @@ SCRIPT;
             $view  = isset($relation['view']) ? new $relation['view'] : new \ActionKit\View\ManyToManyCheckboxView;
 
             $middleRelation = $record->schema->getRelation($relation['relation']['id']);
-
             $middleSchema = new $middleRelation['foreign']['schema'];
             $middleRecordClass = $middleSchema->getModelClass();
             $middleRecord = new $middleRecordClass;
