@@ -1,7 +1,6 @@
 <?php
 namespace ActionKit\View;
 
-
 /**
  * Render many-to-many relationship records as a checkbox list.
  */

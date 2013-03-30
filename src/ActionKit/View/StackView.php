@@ -109,10 +109,8 @@ SCRIPT;
             // TODO: Add a view option to the relationship, so that we can define the view for the editor.
 
             // Get the record collection.
-            $viewClass  = isset($relation['view']) ? $relation['view'] : 'ActionKit\View\ManyToManyCheckboxView';
-            $view = new $viewClass;
+            $view  = isset($relation['view']) ? new $relation['view'] : new \ActionKit\View\ManyToManyCheckboxView;
             $collection = new $relation['collection'];
-
             if ( isset($relation['filter']) ) {
                 call_user_func($relation['filter'], $collection, $record, $this);
             }
