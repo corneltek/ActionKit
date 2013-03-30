@@ -64,4 +64,18 @@ class RecordActionTest extends ModelTestCase
         is('Bar', $record->name);
     }
 
+    public function testBulkRecordDelete()
+    {
+        $idList = array();
+        foreach( range(1,20) as $num ) {
+            $product = $this->createProduct("Book $num");
+            ok($product);
+            $idList[] = $product->id;
+        }
+
+        $class = $this->createProductActionClass('BulkDelete');
+        $bulkDelete = new $class(array( 'items' => $idList ));
+        ok( $bulkDelete->run(), 'items deleted' );
+    }
+
 }
