@@ -8,8 +8,14 @@ use Twig_Environment;
 abstract class TemplateView
 {
     private $_classDir;
+    public $action;
 
     abstract public function render();
+
+    public function __construct($action)
+    {
+        $this->action = $action;
+    }
 
     public function getClassDir()
     {
@@ -55,6 +61,7 @@ abstract class TemplateView
     public function renderTemplateFile($templateFile,$arguments = array())
     {
         $template = $this->getTemplate($templateFile);
+        $arguments = array_merge( array('View' => $this , 'Action' => $this->action ) , $arguments );
         return $template->render($arguments);
     }
 
