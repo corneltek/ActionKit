@@ -9,6 +9,8 @@ abstract class TemplateView
 {
     private $_classDir;
 
+    abstract public function render();
+
     public function getClassDir()
     {
         if ( $this->_classDir ) {
@@ -56,6 +58,10 @@ abstract class TemplateView
         return $template->render($arguments);
     }
 
-    abstract public function render();
+    public function __toString()
+    {
+        return $this->render();
+    }
+
 }
 
