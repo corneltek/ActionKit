@@ -51,7 +51,6 @@ class ProductActionTest extends ModelTestCase
 
         $ret = $product->load(array( 'name' => 'C' ));
         ok($ret->success);
-
         $product->delete();
     }
 
