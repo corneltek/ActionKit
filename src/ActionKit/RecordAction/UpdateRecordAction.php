@@ -8,16 +8,17 @@ abstract class UpdateRecordAction
 
     public function update( $args )
     {
-        $id = (int) $args['id'];
-        if ( ! $id )
-
-            return $this->error( _('Arguments Error') );
-
         $record = $this->record;
-        $record->load( $id );
-        if ( ! $record->id )
-
-            return $this->recordNotFound();
+        if ( ! $record->id ) {
+            // try to load record from argument id.
+            if ( ! isset($args['id']) ) {
+                return $this->error('Updating Record requires an ID');
+            }
+            $record->load( $args['id'] );
+            if ( ! $record->id ) {
+                return $this->recordNotFound();
+            }
+        }
 
         $ret = $record->update( $args );
         if (! $ret->success) {

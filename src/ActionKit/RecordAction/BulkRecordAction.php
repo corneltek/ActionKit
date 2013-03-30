@@ -30,10 +30,10 @@ class BulkRecordAction extends Action
         foreach ($itemIds as $id) {
             $record = new $this->recordClass;
             $record->load( (int) $id );
-            if ($record->id)
+            if ($record->id) {
                 $records[] = $record;
+            }
         }
-
         return $records;
     }
 
