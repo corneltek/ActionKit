@@ -6,6 +6,8 @@ namespace ActionKit\View;
  */
 class ManyToManyCheckboxView
 {
+
+
     public function render($relationId, $record, $collection)
     {
         /**
