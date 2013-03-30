@@ -52,7 +52,7 @@ class ActionRunner
      *
      * @return return result array if there is such an action.
      * */
-    public function run($actionName)
+    public function run($actionName, $arguments = array() )
     {
         if ( $this->isInvalidActionName( $actionName ) )
             throw new Exception( "Invalid action name: $actionName." );
@@ -64,8 +64,12 @@ class ActionRunner
         }
 
         /* register results into hash */
-
-        return $this->results[ $actionName ] = $this->dispatch( $class );
+        $action = $this->createAction( $class , $arguments );
+        if (! $action) {
+            throw new Exception( "Can not create action class $class" );
+        }
+        $action();
+        return $this->results[ $actionName ] = $action->getResult();
     }
 
     public function autoload($class)
@@ -156,19 +160,19 @@ class ActionRunner
      *
      * @param string $class
      */
-    public function createAction( $class )
+    public function createAction( $class , $args = array() )
     {
-        $args = array_merge( array() , $_REQUEST );
+        $args = array_merge( $_REQUEST , $args );
 
         if ( isset($args['__ajax_request']) ) {
             unset( $args['__ajax_request'] );
         }
+
         if ( isset($args['action']) ) {
             unset( $args['action'] );
         }
 
         if ( class_exists($class,true) )
-
             return new $class( $args );
 
         /* check if action is in CRUD list */
@@ -189,17 +193,6 @@ class ActionRunner
         }
 
         return new $class( $_REQUEST );
-    }
-
-    public function dispatch( $class )
-    {
-        $act = $this->createAction( $class );
-        if (! $act) {
-            throw new Exception( "Can not create action class $class" );
-        }
-        $act();
-
-        return $act->getResult();
     }
 
     /**
