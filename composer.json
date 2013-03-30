@@ -10,7 +10,7 @@
         "twig\/twig": "1.12.*",
         "corneltek\/cascading-attribute": "~1.2",
         "corneltek\/universal-cache": "~1.0",
-        "corneltek\/formkit": "~1.3"
+        "corneltek\/formkit": "dev-master"
     },
     "suggest": {
         "corneltek\/lazyrecord": "Support Record-based Action"
