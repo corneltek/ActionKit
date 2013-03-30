@@ -35,28 +35,8 @@
         <delete dir="${basedir}/build/coverage"/>
         <delete dir="${basedir}/build/logs"/>
         <delete dir="${basedir}/build/pdepend"/>
-        <delete dir="${basedir}/build/wiki"/>
-        <!-- <delete dir="${basedir}/vendor"/> -->
-        <delete dir="${basedir}/tests/screenshots"/>
-        <delete dir="${basedir}/webroot/assets"/>
-        <delete dir="${basedir}/webroot/static/upload"/>
-        <delete dir="${basedir}/.onion"/>
         <delete file="${basedir}/.lazy.yml"/>
         <delete file="${basedir}/.lazy.php"/>
-        <delete>
-            <fileset dir="${basedir}/config" includes="**/*.php"/>
-        </delete>
-
-        <exec executable="git">
-            <arg value="remote"/>
-            <arg value="update"/>
-            <arg value="--prune"/>
-        </exec>
-
-        <exec executable="git">
-            <arg value="reset"/>
-            <arg value="--hard"/>
-        </exec>
         <!-- <delete>
             <fileset dir="${basedir}/cache"/>
         </delete> -->
