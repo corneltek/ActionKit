@@ -98,14 +98,11 @@ abstract class BaseView
 
 
 
-
-
-
-
     public function getLayout()
     {
-        if ( $this->layout )
+        if ( $this->layout ) {
             return $this->layout;
+        }
         return $this->layout = $this->createLayout();
     }
 
