@@ -6,6 +6,7 @@ use FormKit\Element;
 use FormKit\Widget\Label;
 use FormKit\Widget\HiddenInput;
 use FormKit\Widget\ButtonInput;
+use FormKit\Widget\SubmitInput;
 use FormKit\Widget\CheckboxInput;
 use FormKit\Layout\GenericLayout;
 
@@ -108,55 +109,15 @@ SCRIPT;
             // TODO: Add a view option to the relationship, so that we can define the view for the editor.
 
             // Get the record collection.
+            $viewClass  = isset($relation['view']) ? $relation['view'] : 'ActionKit\View\ManyToManyCheckboxView';
+            $view = new $viewClass;
             $collection = new $relation['collection'];
 
             if ( isset($relation['filter']) ) {
                 call_user_func($relation['filter'], $collection, $record, $this);
             }
-
-
-            $from = $relation['from'];
-            $ul = new Element('ul');
+            $ul = $view->render($relationId, $record, $collection);
             $ul->appendTo($container);
-            $connected = array();
-
-            if ( $record->id && isset($record->{ $relationId }) ) {
-                // so that we can get product_id field since we joined the table.
-                $foreignRecords = $record->{ $relationId };
-                foreach ( $foreignRecords as $fRecord ) {
-                    $fId = $fRecord->id;
-                    $li       = new Element('li');
-                    $label    = new Label;
-                    $hiddenId = new HiddenInput(   "{$relationId}[{$fId}][id]", array( 'value' => $fId ) );
-                    $checkbox = new CheckboxInput( "{$relationId}[{$fId}][_connect]",array( 
-                        'boolean_value' => false,
-                        'value' => 1,
-                    ));
-                    $checkbox->check();
-                    $label->append( $checkbox );
-                    $label->appendText( $fRecord->dataLabel() );
-                    $label->append( $hiddenId );
-                    $li->append($label)->appendTo($ul);
-                    $connected[ $fId ] = $fRecord;
-                }
-            }
-
-            foreach( $collection as $record ) {
-                if ( isset($connected[$record->id]) ) {
-                    continue;
-                }
-                $li = new Element('li');
-                $label = new Label;
-                $hiddenId = new HiddenInput(   "{$relationId}[{$record->id}][id]", array( 'value' => $record->id ) );
-                $checkbox = new CheckboxInput( "{$relationId}[{$record->id}][_connect]",array(
-                    'boolean_value' => false,
-                    'value' => 1,
-                ));
-                $label->append($checkbox);
-                $label->appendText($record->dataLabel());
-                $label->append( $hiddenId );
-                $li->append($label)->appendTo($ul);
-            }
         }
         return $container;
     }
@@ -221,7 +182,7 @@ SCRIPT;
         if ( ! $this->option('no_form') ) {
 
             // Add control buttons
-            $container->append( new FormKit\Widget\SubmitInput );
+            $container->append( new SubmitInput );
 
             // if we have record and the record has an id, render the id field as hidden field.
             if ( ! $this->option('no_signature') ) {
