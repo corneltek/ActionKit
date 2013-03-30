@@ -8,13 +8,16 @@
     ],
     "require": {
         "twig\/twig": "1.12.*",
-        "corneltek\/cascading-attribute": "~1.2"
+        "corneltek\/cascading-attribute": "~1.2",
+        "corneltek\/universal-cache": "~1.0",
+        "corneltek\/formkit": "~1.3"
     },
     "suggest": {
         "corneltek\/lazyrecord": "Support Record-based Action"
     },
     "require-dev": {
-        "corneltek\/phpunit-testmore": "dev-master"
+        "corneltek\/phpunit-testmore": "dev-master",
+        "corneltek\/lazyrecord": "dev-master"
     },
     "autoload": {
         "psr-0": {
