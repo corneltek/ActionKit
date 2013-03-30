@@ -61,6 +61,20 @@ class ProductActionTest extends ModelTestCase
         ok($ret);
     }
 
+
+    public function testNestedFormRendering()
+    {
+        $class = CRUD::generate('Product\\Model\\Product', 'Create');
+        $create = new $class;
+        ok($create);
+        $html = $create->asView()->render();
+        ok($html);
+
+        $dom = new DOMDocument;
+        $dom->load($html);
+        ok($dom);
+    }
+
 }
 
 

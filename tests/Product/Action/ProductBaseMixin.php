@@ -22,35 +22,10 @@ class ProductBaseMixin
          *        We want to make self_key to point the action record itself.
          */
         $this->object->nested = true;
-        $this->object->relationships = array(
-            'types' => array(
-                'has_many' => true,
-                'record' => 'Product\\Model\\ProductType',
-                'self_key' => 'product_id',
-                'foreign_key' => 'id',
-            ),
-        );
-
-        $this->object->relationships['product_categories'] = array(
-            'has_many'    => true,
-            'record'      => 'Product\\Model\\ProductCategory',
-            'self_key'    => 'product_id',
-            'foreign_key' => 'id',
-            'renderable'  => false,
-        );
-        $this->object->relationships['categories'] = array(
-            'many_to_many'    => true,
-            // required from editor
-            'collection'      => 'Product\\Model\\CategoryCollection',
-            'label'           => 'name',
-
-            // for inter relationship processing
-            'from'            => 'product_categories',
-            'inter_foreign_key' => 'category_id',
-            'filter' => function($collection, $record) {
-                return $collection;
-            },
-        );
+        $this->object->relationships['product_categories']['renderable'] = false;
+        $this->object->relationships['categories']['filter'] = function($collection, $record) {
+            return $collection;
+        };
     }
 
     public function schema()

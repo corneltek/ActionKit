@@ -1,6 +1,7 @@
 <?php
-$loader = require 'vendor/autoload.php';
-$loader->add(null,'tests');
+define('ROOT' , dirname(__DIR__) );
+$loader = require ROOT . '/vendor/autoload.php';
+$loader->add(null, ROOT . '/tests');
 
 function __() 
 {

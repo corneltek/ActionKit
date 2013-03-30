@@ -9,8 +9,7 @@ use FormKit\Widget\ButtonInput;
 use FormKit\Widget\SubmitInput;
 use FormKit\Widget\CheckboxInput;
 use FormKit\Layout\GenericLayout;
-
-
+use LazyRecord\Schema\SchemaDeclare;
 
 /**
  *  $view = new StackView( $action, array(
@@ -58,11 +57,13 @@ class StackView extends BaseView
     public function createRelationalActionViewForNewRecord($relationId,$relation)
     {
         // get the record class.
-        $record = new $relation['record'];
+        $foreignSchema = new $relation['foreign']['schema'];
+        $recordClass = $foreignSchema->getModelClass();
+        $record = new $recordClass;
 
         $subview = $this->createRelationalActionView($relationId,$relation);
-        $html = addslashes($subview->render());
-        $button = new ButtonInput;
+        $html    = addslashes($subview->render());
+        $button  = new ButtonInput;
         $button->value = _('Add') . $record->getLabel();
         $button->onclick = <<<SCRIPT
             var self = this;
@@ -91,8 +92,9 @@ SCRIPT;
         $record = $this->getRecord();
         $container = $this->getContainer();
 
+
         // handle has_many records
-        if ( isset($relation['has_many']) ) {
+        if ( SchemaDeclare::has_many === $relation['type'] ) {
             // For each existing (one-many) records, 
             // create it's own subaction view for these existing 
             // records.
@@ -104,13 +106,22 @@ SCRIPT;
                     $container->append($subview);
                 }
             }
-        }
-        elseif ( isset($relation['many_to_many']) ) {
+        } elseif ( SchemaDeclare::many_to_many === $relation['type'] ) {
             // TODO: Add a view option to the relationship, so that we can define the view for the editor.
-
             // Get the record collection.
             $view  = isset($relation['view']) ? new $relation['view'] : new \ActionKit\View\ManyToManyCheckboxView;
-            $collection = new $relation['collection'];
+
+            $middleRelation = $record->schema->getRelation($relation['relation']['id']);
+
+            $middleSchema = new $middleRelation['foreign']['schema'];
+            $middleRecordClass = $middleSchema->getModelClass();
+            $middleRecord = new $middleRecordClass;
+
+            $foreignRelation = $middleRecord->schema->getRelation( $relation['relation']['id2'] ); // which should be 'belongsTo' relation
+            $foreignSchema = new $foreignRelation['foreign']['schema'];
+            $collectionClass = $foreignSchema->getCollectionClass();
+            $collection    = new $collectionClass;
+            
             if ( isset($relation['filter']) ) {
                 call_user_func($relation['filter'], $collection, $record, $this);
             }
@@ -130,7 +141,7 @@ SCRIPT;
         // create another subview for creating new (one-many) record.
         // currently onlly for has_many relationship
         $container = $this->getContainer();
-        if ( isset($relation['has_many']) ) {
+        if ( SchemaDeclare::has_many === $relation['type'] ) {
             $button = $this->createRelationalActionViewForNewRecord($relationId, $relation);
             $container->append($button);
         }
@@ -149,7 +160,7 @@ SCRIPT;
         // in current action, find all relationship information, and iterate 
         // them.
         foreach ($this->action->relationships as $relationId => $relation) {
-            // skip non-renderable relationship definitions
+            // ski$p non-renderable relationship definitions
             if ( isset($relation['renderable']) && $relation['renderable'] === false ) {
                 continue;
             }
@@ -209,7 +220,8 @@ SCRIPT;
     public function createRelationalActionView($relationId, $relation, $record = null)
     {
         if (! $record) {
-            $recordClass = $relation['record'];
+            $foreignSchema = new $relation['foreign']['schema'];
+            $recordClass = $foreignSchema->getModelClass();
             $record      = new $recordClass;
             $action      = $record->asCreateAction();
         } else {

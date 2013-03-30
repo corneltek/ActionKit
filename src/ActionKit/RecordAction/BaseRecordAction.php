@@ -5,6 +5,7 @@ use ActionKit\ColumnConvert;
 use ActionKit\ActionGenerator;
 use ActionKit\Exception\ActionException;
 use ActionKit\CRUD;
+use LazyRecord\Schema\SchemaDeclare;
 
 abstract class BaseRecordAction extends Action
 {
@@ -188,8 +189,18 @@ abstract class BaseRecordAction extends Action
             }
         }
 
-
+        // build relationship config from model schema
+        $relations = $this->record->schema->relations;
+        foreach ( $relations as $rId => $r ) {
+            $this->addRelation($rId, $r);
+        }
     }
+
+
+
+
+
+
 
 
     /**
@@ -222,6 +233,86 @@ abstract class BaseRecordAction extends Action
             }
         }
     }
+
+
+
+    public function hasRelation($relationId)
+    {
+        return isset( $this->relationships[$relationId] );
+    }
+
+
+    public function getRelation($relationId)
+    {
+        if ( isset($this->relationships[$relationId]) ) {
+            return $this->relationships[$relationId];
+        }
+    }
+
+
+
+    /**
+     * Add relationship config
+     *
+     *  $this->addRelation('images',array(
+     *      'has_many' => true,
+     *      'record' => 'Product\\Model\\ProductImage',
+     *      'self_key' => 'product_id',
+     *      'foreign_key' => 'id',
+     *  );
+     *
+     * @param string $relationId
+     * @param array $config relationship config
+     */
+    public function addRelation($relationId,$config) 
+    {
+        $this->relationships[ $relationId ] = $config;
+    }
+
+
+    /**
+     *
+     * array(
+     *    'many_to_many'    => true,
+     *
+     *    // required from editor
+     *    'collection'      => 'Product\\Model\\CategoryCollection',
+     *
+     *    // for inter relationship processing
+     *    'from'            => 'product_categories',
+     *    'inter_foreign_key' => 'category_id',
+     *    'filter' => function($collection, $record) {
+     *        return $collection;
+     *    }
+     * )
+     */
+    /*
+    public function addManyToManyRelation($relationId,$config)
+    {
+        $this->relationships[ $relationId ] = array_merge(array( 
+            'many_to_many' => true,
+        ), $config);
+    }
+
+    public function addHasManyRelation($relationId,$config)
+    {
+        $requiredKeys = array('self_key','record','foreign_key');
+        foreach( $requiredKeys as $k) {
+            if ( ! isset($config[$k]) ) {
+                throw new Exception("key $k is required for has-many relationship");
+            }
+        }
+        $this->relationships[ $relationId ] = array_merge(array( 
+            'has_many' => true,
+        ), $config);
+    }
+    */
+
+    public function removeRelation($id)
+    {
+        unset($this->relationships[$id]);
+    }
+
 
     /**
      * Create CRUD class
@@ -308,6 +399,9 @@ abstract class BaseRecordAction extends Action
 
 
             if ( isset($relation['has_many']) ) {
+                // XXX: use the lazyrecord schema relationship!!!
+                //
+                //
                 // In this behavior, we don't handle the 
                 // previous created records, only the records from the form submit.
                 //
