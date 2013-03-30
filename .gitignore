@@ -16,8 +16,6 @@ cache/
 config/*.php
 coverage/
 docs/_build/
-tests/tmp/
-tests/screenshots/*
 utils/Selenium/
 .lazy.php
 config/application.yml
@@ -35,7 +33,6 @@ cache/
 config/application.yml
 config/database.yml
 config/framework.yml
-tests/screenshots/
 utils/Selenium/
 cache.properties
 *SchemaProxy.php
