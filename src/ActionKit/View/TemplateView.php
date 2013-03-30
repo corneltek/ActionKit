@@ -1,10 +1,11 @@
 <?php
 namespace ActionKit\View;
 use ReflectionObject;
+use Exception;
 use Twig_Loader_Filesystem;
 use Twig_Environment;
 
-class TemplateView
+abstract class TemplateView
 {
     private $_classDir;
 
@@ -24,7 +25,11 @@ class TemplateView
 
     public function createTwigFileSystemLoader()
     {
-        return new Twig_Loader_Filesystem($this->getTemplateDir());
+        $dir = $this->getTemplateDir();
+        if ( ! file_exists($dir) ) {
+            throw RuntimeException("Directory $dir for TemplateView does not exist.");
+        }
+        return new Twig_Loader_Filesystem($dir);
     }
 
     public function createTwigEnvironment()
@@ -41,17 +46,16 @@ class TemplateView
     public function getTemplate($templateFile)
     {
         $twig = $this->createTwigEnvironment();
-        $template = $twig->loadTemplate($templateFile);
-        return $template;
+        return $twig->loadTemplate($templateFile);
     }
 
     /* $twig->render('index.html', array('the' => 'variables', 'go' => 'here')); */
-    public function renderTemplate($template,$arguments = array())
+    public function renderTemplateFile($templateFile,$arguments = array())
     {
+        $template = $this->getTemplate($templateFile);
         return $template->render($arguments);
     }
 
+    abstract public function render();
 }
-
-
 
