@@ -23,9 +23,6 @@ class ProductBaseMixin
          */
         $this->object->nested = true;
         $this->object->relationships['product_categories']['renderable'] = false;
-        $this->object->relationships['categories']['filter'] = function($collection, $record) {
-            return $collection;
-        };
     }
 
     public function schema()

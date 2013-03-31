@@ -112,7 +112,6 @@ SCRIPT;
             // TODO: Add a view option to the relationship, so that we can define the view for the editor.
             // Get the record collection.
             $view  = isset($relation['view']) ? new $relation['view'] : new \ActionKit\View\ManyToManyCheckboxView;
-
             $middleRelation = $record->schema->getRelation($relation['relation_junction']);
             $middleSchema = new $middleRelation['foreign_schema'];
             $middleRecordClass = $middleSchema->getModelClass();
