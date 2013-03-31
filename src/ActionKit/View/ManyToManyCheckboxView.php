@@ -15,7 +15,6 @@ use FormKit\Layout\GenericLayout;
 class ManyToManyCheckboxView
 {
 
-
     public function render($relationId, $record, $collection)
     {
         /**
@@ -36,7 +35,6 @@ class ManyToManyCheckboxView
                 $label    = new Label;
                 $hiddenId = new HiddenInput(   "{$relationId}[{$fId}][id]", array( 'value' => $fId ) );
                 $checkbox = new CheckboxInput( "{$relationId}[{$fId}][_connect]",array( 
-                    'boolean_value' => false,
                     'value' => 1,
                 ));
                 $checkbox->check();
@@ -56,7 +54,6 @@ class ManyToManyCheckboxView
             $label = new Label;
             $hiddenId = new HiddenInput(   "{$relationId}[{$record->id}][id]", array( 'value' => $record->id ) );
             $checkbox = new CheckboxInput( "{$relationId}[{$record->id}][_connect]",array(
-                'boolean_value' => false,
                 'value' => 1,
             ));
             $label->append($checkbox);
