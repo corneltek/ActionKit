@@ -24,6 +24,7 @@ class ManyToManyCheckboxView
          * collection: collection records
          */
         $ul = new Element('ul');
+        $ul->addClass('actionkit-checkbox-view');
         $connected = array();
 
         if ( $record->id && isset($record->{ $relationId }) ) {

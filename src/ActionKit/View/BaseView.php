@@ -11,6 +11,10 @@ use FormKit\Layout\GenericLayout;
  *
  *   $view = new YourView($action,array( ... options ... ));
  *
+ *
+ * A Container
+ *   -> A Layout
+ *
  */
 abstract class BaseView
 {
@@ -27,10 +31,11 @@ abstract class BaseView
 
     public $options = array();
 
-    public $fields;
+    public $fields = array();
 
     public $_built = false;
 
+    public $renderNested = true;
 
     abstract public function build();
 
@@ -47,6 +52,9 @@ abstract class BaseView
         $this->options = $options;
         if ( isset($options['fields']) ) {
             $this->fields = $options['fields'];
+        }
+        if ( isset($options['nested']) ) {
+            $this->renderNested = $options['nested'];
         }
         $this->init();
     }
@@ -78,7 +86,6 @@ abstract class BaseView
     public function createLayout()
     {
         $layout = new GenericLayout;
-
         // initialize layout object here.
         if ( $width = $this->option('width') ) {
             $layout->width( $width );
@@ -92,7 +99,6 @@ abstract class BaseView
         if ( $border = $this->option('border') ) {
             $layout->border(0);
         }
-
         return $layout;
     }
 
@@ -335,5 +341,10 @@ abstract class BaseView
         return $this->getContainer()->render();
     }
 
+    public function renderFields($fields)
+    {
+        $this->fields = $fields;
+        return $this->render();
+    }
 
 }

@@ -20,12 +20,10 @@ use LazyRecord\Schema\SchemaDeclare;
  *  ));
  *  $view->buildRelationalActionViewForExistingRecords($relationId, $relation);
  *  $view->buildRelationalActionViewForNewRecord($relationId,$relation);
- *
  */
 
 class StackView extends BaseView
 {
-
     public $ajax = false;
 
     public function setAjax($ajax)
@@ -177,9 +175,9 @@ SCRIPT;
         $widgets = $this->getAvailableWidgets();
         $this->registerWidgets($widgets);
 
-        // Render relationships in the same form 
+        // Render relationships in the same form
         // If attribute 'nested' is defined.
-        if ($this->action->nested) {
+        if ($this->action->nested && $this->renderNested) {
             $this->buildNestedSection();
         }
 
