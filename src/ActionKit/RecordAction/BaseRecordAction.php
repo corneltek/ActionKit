@@ -457,7 +457,7 @@ abstract class BaseRecordAction extends Action
                 //
                 //
                 //      categories[index][id] = category_id
-                //      categories[index][_connect] = 1 || 0
+                //      categories[index][_connect] = 1 || 0    (should we connect ?)
                 //      
                 $record = $this->record;
                 $middleRelation    = $record->schema->getRelation($relation['relation']['id']);
@@ -492,15 +492,14 @@ abstract class BaseRecordAction extends Action
                     // create the junction record if it is not connected.
                     if ( isset($args['_connect']) && $args['_connect'] ) {
                         if ( ! isset($connected[ $fId ]) ) {
-                            $junctionRecords->create(array(
-                                $middleForeignKey => $fId,
-                            ));
+                            $junctionRecords->create(array( $middleForeignKey => $fId ));
                         }
                     } else {
                         // not connected, but if the connection exists.
                         if ( isset($connected[ $fId ]) ) {
                             $jrs = clone $junctionRecords;
                             $jrs->where(array( $middleForeignKey => $fId ));
+                            // delete the connection
                             $jrs->first()->delete();
                             unset($connected[ $fId ]);
                         }
