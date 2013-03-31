@@ -336,8 +336,8 @@ abstract class BaseRecordAction extends Action
     public function createSubAction($relation,$args)
     {
         $record = null;
-        if ( isset($relation['foreign']['schema']) ) {
-            $schema = new $relation['foreign']['schema'];
+        if ( isset($relation['foreign_schema']) ) {
+            $schema = new $relation['foreign_schema'];
             $recordClass = $schema->getModelClass();
             // create record object, and load it with primary id
             $record = new $recordClass;
@@ -410,8 +410,8 @@ abstract class BaseRecordAction extends Action
                 //
                 // the subactions are not only for records, it may handle
                 // pure action objects.
-                $foreignKey  = $relation['foreign']['column'];
-                $selfKey     = $relation['self']['column'];
+                $foreignKey  = $relation['foreign_column'];
+                $selfKey     = $relation['self_column'];
 
 
                 // the argument here we are expecting is:
