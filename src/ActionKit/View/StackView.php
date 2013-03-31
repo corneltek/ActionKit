@@ -63,6 +63,8 @@ class StackView extends BaseView
 
         $subview = $this->createRelationalActionView($relationId,$relation);
         $html    = addslashes($subview->render());
+
+        // here we create a button to insert the view from javascript.
         $button  = new ButtonInput;
         $button->value = _('Add') . $record->getLabel();
         $button->onclick = <<<SCRIPT
@@ -141,8 +143,8 @@ SCRIPT;
         // currently onlly for has_many relationship
         $container = $this->getContainer();
         if ( SchemaDeclare::has_many === $relation['type'] ) {
-            $button = $this->createRelationalActionViewForNewRecord($relationId, $relation);
-            $container->append($button);
+            $addButton = $this->createRelationalActionViewForNewRecord($relationId, $relation);
+            $container->append($addButton);
         }
         return $container;
     }
@@ -233,7 +235,10 @@ SCRIPT;
         //    categories[index][subtitle]...
         //     
         $formIndex = $action->setParamNamesWithIndex($relationId);
-        $subview = new self($action, array(
+
+        $viewClass = isset($relation['view']) ? $relation['view'] : 'ActionKit\View\StackView';
+
+        $subview = new $viewClass($action, array(
             'no_form' => 1,
             'ajax' => $this->ajax
         ));
