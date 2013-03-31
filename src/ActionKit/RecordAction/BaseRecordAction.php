@@ -6,6 +6,7 @@ use ActionKit\ActionGenerator;
 use ActionKit\Exception\ActionException;
 use ActionKit\CRUD;
 use LazyRecord\Schema\SchemaDeclare;
+use Exception;
 
 abstract class BaseRecordAction extends Action
 {
@@ -491,11 +492,31 @@ abstract class BaseRecordAction extends Action
                     // find junction record or create a new junction record
                     // create the junction record if it is not connected.
                     if ( isset($args['_connect']) && $args['_connect'] ) {
+                        $argsCreate = array_merge( $args , array( $middleForeignKey => $fId ));
+                        unset($argsCreate['_connect']);
+                        unset($argsCreate['id']);
+
+
                         if ( ! isset($connected[ $fId ]) ) {
-                            $junctionRecords->create(array( $middleForeignKey => $fId ));
+                            $ret = $junctionRecords->create($argsCreate);
+                            if ( ! $ret->success ) {
+                                throw new Exception($ret->message);
+                            }
+                        } else {
+                            // update the existing record data.
+                            foreach( $junctionRecords as $r ) {
+                                if ( $r->{ $middleForeignKey } == $fId ) {
+                                    $ret = $r->update($argsCreate);
+                                    if ( ! $ret->success ) {
+                                        throw new Exception($ret->message);
+                                    }
+                                }
+                            }
                         }
+
+
                     } else {
-                        // not connected, but if the connection exists.
+                        // not connected, but if the connection exists, we should delete the connection here.
                         if ( isset($connected[ $fId ]) ) {
                             $jrs = clone $junctionRecords;
                             $jrs->where(array( $middleForeignKey => $fId ));
