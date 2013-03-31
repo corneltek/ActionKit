@@ -460,21 +460,21 @@ abstract class BaseRecordAction extends Action
                 //      categories[index][_connect] = 1 || 0    (should we connect ?)
                 //      
                 $record = $this->record;
-                $middleRelation    = $record->schema->getRelation($relation['relation']['id']);
-                $middleSchema      = new $middleRelation['foreign']['schema'];
+                $middleRelation    = $record->schema->getRelation($relation['relation_junction']);
+                $middleSchema      = new $middleRelation['foreign_schema'];
                 $middleRecordClass = $middleSchema->getModelClass();
                 $middleRecord      = new $middleRecordClass;
 
-                $foreignRelation = $middleRecord->schema->getRelation( $relation['relation']['id2'] ); // which should be 'belongsTo' relation
-                $foreignSchema   = new $foreignRelation['foreign']['schema'];
+                $foreignRelation = $middleRecord->schema->getRelation( $relation['relation_foreign'] ); // which should be 'belongsTo' relation
+                $foreignSchema   = new $foreignRelation['foreign_schema'];
 
                 $collectionClass = $foreignSchema->getCollectionClass();
                 $collection      = new $collectionClass;
 
                 $connected = array();
 
-                $from = $relation['relation']['id'];
-                $middleForeignKey = $foreignRelation['self']['column'];
+                $from = $relation['relation_junction'];
+                $middleForeignKey = $foreignRelation['self_column'];
 
                 $junctionRecords = $record->{$from};
 

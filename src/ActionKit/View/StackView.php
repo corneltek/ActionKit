@@ -57,7 +57,7 @@ class StackView extends BaseView
     public function createRelationalActionViewForNewRecord($relationId,$relation)
     {
         // get the record class.
-        $foreignSchema = new $relation['foreign']['schema'];
+        $foreignSchema = new $relation['foreign_schema'];
         $recordClass = $foreignSchema->getModelClass();
         $record = new $recordClass;
 
@@ -113,13 +113,13 @@ SCRIPT;
             // Get the record collection.
             $view  = isset($relation['view']) ? new $relation['view'] : new \ActionKit\View\ManyToManyCheckboxView;
 
-            $middleRelation = $record->schema->getRelation($relation['relation']['id']);
-            $middleSchema = new $middleRelation['foreign']['schema'];
+            $middleRelation = $record->schema->getRelation($relation['relation_junction']);
+            $middleSchema = new $middleRelation['foreign_schema'];
             $middleRecordClass = $middleSchema->getModelClass();
             $middleRecord = new $middleRecordClass;
 
-            $foreignRelation = $middleRecord->schema->getRelation( $relation['relation']['id2'] ); // which should be 'belongsTo' relation
-            $foreignSchema = new $foreignRelation['foreign']['schema'];
+            $foreignRelation = $middleRecord->schema->getRelation( $relation['relation_foreign'] ); // which should be 'belongsTo' relation
+            $foreignSchema = new $foreignRelation['foreign_schema'];
             $collectionClass = $foreignSchema->getCollectionClass();
             $collection    = new $collectionClass;
             
@@ -221,7 +221,7 @@ SCRIPT;
     public function createRelationalActionView($relationId, $relation, $record = null)
     {
         if (! $record) {
-            $foreignSchema = new $relation['foreign']['schema'];
+            $foreignSchema = new $relation['foreign_schema'];
             $recordClass = $foreignSchema->getModelClass();
             $record      = new $recordClass;
             $action      = $record->asCreateAction();
