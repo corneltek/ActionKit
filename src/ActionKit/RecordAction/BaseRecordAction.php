@@ -498,17 +498,14 @@ abstract class BaseRecordAction extends Action
 
 
                         if ( ! isset($connected[ $fId ]) ) {
-                            $ret = $junctionRecords->create($argsCreate);
-                            if ( ! $ret->success ) {
-                                throw new Exception($ret->message);
-                            }
+                            $newRecord = $junctionRecords->create($argsCreate);
                         } else {
                             // update the existing record data.
                             foreach( $junctionRecords as $r ) {
                                 if ( $r->{ $middleForeignKey } == $fId ) {
                                     $ret = $r->update($argsCreate);
                                     if ( ! $ret->success ) {
-                                        throw new Exception($ret->message);
+                                      print_r( $ret );
                                     }
                                 }
                             }
