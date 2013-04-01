@@ -33,7 +33,7 @@ class ManyToManyCheckboxView
                 $fId = $fRecord->id;
                 $li       = new Element('li');
                 $label    = new Label;
-                $hiddenId = new HiddenInput(   "{$relationId}[{$fId}][id]", array( 'value' => $fId ) );
+                $hiddenId = new HiddenInput(   "{$relationId}[{$fId}][_foreign_id]", array( 'value' => $fId ) );
                 $checkbox = new CheckboxInput( "{$relationId}[{$fId}][_connect]",array( 
                     'value' => 1,
                 ));
@@ -52,7 +52,7 @@ class ManyToManyCheckboxView
             }
             $li = new Element('li');
             $label = new Label;
-            $hiddenId = new HiddenInput(   "{$relationId}[{$record->id}][id]", array( 'value' => $record->id ) );
+            $hiddenId = new HiddenInput(   "{$relationId}[{$record->id}][_foreign_id]", array( 'value' => $record->id ) );
             $checkbox = new CheckboxInput( "{$relationId}[{$record->id}][_connect]",array(
                 'value' => 1,
             ));

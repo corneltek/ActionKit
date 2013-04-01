@@ -487,14 +487,14 @@ abstract class BaseRecordAction extends Action
 
                 foreach ($argsList as $index => $args) {
                     // foreign record primary key
-                    $fId  = $args['id'];
+                    $fId  = $args['_foreign_id'];
 
                     // find junction record or create a new junction record
                     // create the junction record if it is not connected.
                     if ( isset($args['_connect']) && $args['_connect'] ) {
                         $argsCreate = array_merge( $args , array( $middleForeignKey => $fId ));
                         unset($argsCreate['_connect']);
-                        unset($argsCreate['id']);
+                        unset($argsCreate['_foreign_id']);
 
 
                         if ( ! isset($connected[ $fId ]) ) {
