@@ -117,13 +117,14 @@ class ActionRunner
     {
         foreach ( (array) $types as $type ) {
             $class = $prefixNs . '\\Action\\' . $type . $modelName;
-            $this->registerCRUDAction($class,array(
+            $this->crudActions[$class] = array(
                 'prefix'       => $prefixNs . '\\Model',
                 'type'         => $type,
                 'model_name'   => $modelName,
-            ));
+            );
         }
     }
+
 
     public function registerCRUDAction($class,$args)
     {
