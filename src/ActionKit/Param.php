@@ -192,6 +192,14 @@ class Param extends CascadingAttribute
         return new $class( $this->getLabel() );
     }
 
+
+    public function getRenderableCurrentValue()
+    {
+        return $this->value instanceof \LazyRecord\BaseModel ? $this->value->dataKeyValue() : $this->value;
+    }
+
+
+
     /**
      * A simple widget factory for Action Param
      *
@@ -218,7 +226,7 @@ class Param extends CascadingAttribute
         // we should render the value (or default value)
         if ( false === stripos( $class , 'Password' ) ) {
             if ($this->value) {
-                $newAttributes['value'] = $this->value;
+                $newAttributes['value'] = $this->getRenderableCurrentValue();
             } elseif ($this->default) {
                 $newAttributes['value'] = $this->getDefaultValue();
             }

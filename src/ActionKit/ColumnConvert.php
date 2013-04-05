@@ -92,7 +92,7 @@ class ColumnConvert
         if ($column->renderAs) {
             $param->renderAs( $column->renderAs );
         } elseif ($param->validValues || $param->validPairs) {
-            $param->renderAs( 'SelectInput' );
+            $param->renderAs('SelectInput');
         } elseif ($param->name === 'id') {
             $param->renderAs( 'HiddenInput' );
         } else {
