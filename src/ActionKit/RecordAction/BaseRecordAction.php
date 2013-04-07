@@ -191,7 +191,7 @@ abstract class BaseRecordAction extends Action
         }
 
         // build relationship config from model schema
-        $relations = $this->record->schema->relations;
+        $relations = $this->record->getSchema()->relations;
         foreach ( $relations as $rId => $r ) {
             $this->addRelation($rId, $r);
         }
@@ -461,12 +461,12 @@ abstract class BaseRecordAction extends Action
                 //      categories[index][_connect] = 1 || 0    (should we connect ?)
                 //      
                 $record = $this->record;
-                $middleRelation    = $record->schema->getRelation($relation['relation_junction']);
+                $middleRelation    = $record->getSchema()->getRelation($relation['relation_junction']);
                 $middleSchema      = new $middleRelation['foreign_schema'];
                 $middleRecordClass = $middleSchema->getModelClass();
                 $middleRecord      = new $middleRecordClass;
 
-                $foreignRelation = $middleRecord->schema->getRelation( $relation['relation_foreign'] ); // which should be 'belongsTo' relation
+                $foreignRelation = $middleRecord->getSchema()->getRelation( $relation['relation_foreign'] ); // which should be 'belongsTo' relation
                 $foreignSchema   = new $foreignRelation['foreign_schema'];
 
                 $collectionClass = $foreignSchema->getCollectionClass();
