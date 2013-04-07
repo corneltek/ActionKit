@@ -82,6 +82,8 @@ class ActionRunner
             return false;
         }
 
+        // \FB::info('Generate action class: ' . $class);
+
         // Generate the crud action
         //
         // @see registerCRUD method
@@ -269,7 +271,7 @@ class ActionRunner
     
     public function offsetUnset($name)
     {
-        return unset($this->results[$name]);
+        unset( $this->results[$name] );
     }
     
 }
