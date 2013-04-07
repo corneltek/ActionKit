@@ -13,7 +13,7 @@ abstract class Action implements IteratorAggregate
 {
     public $currentUser;
 
-    public $nested = false;
+    public $nested = true;
 
     public $relationships = array();
 
