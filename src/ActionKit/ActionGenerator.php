@@ -137,19 +137,19 @@ CODE;
         $actionClass = $actionNamespace . '\\' . $actionName;
         $code =<<<CODE
 namespace $actionNamespace {
-    use ActionKit\\Action;
-    class $actionName extends Action
+use ActionKit\\Action;
+class $actionName extends Action
+{
+    public function schema()
     {
-        public function schema()
-        {
-        }
-
-        public function run()
-        {
-            return \$this->success('Success!!');
-        }
-
     }
+
+    public function run()
+    {
+        return \$this->success('Success!!');
+    }
+
+}
 }
 CODE;
 
