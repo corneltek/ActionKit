@@ -2,6 +2,7 @@
 namespace ActionKit;
 use Exception;
 use IteratorAggregate;
+use ArrayAccess;
 
 /**
  * Run actions!
@@ -31,7 +32,7 @@ use IteratorAggregate;
  */
 
 class ActionRunner
-    implements IteratorAggregate
+    implements IteratorAggregate, ArrayAccess
 {
     /**
      * @var array Abstract CRUD action pool
@@ -244,9 +245,31 @@ class ActionRunner
         return $self = new static;
     }
 
+    // Implement IteratorAggregate methods
     public function getIterator()
     {
         return new ArrayIterator($this->results);
     }
 
+    // Implement ArrayAccess
+    public function offsetSet($name,$value)
+    {
+        $this->results[ $name ] = $value;
+    }
+    
+    public function offsetExists($name)
+    {
+        return isset($this->results[ $name ]);
+    }
+    
+    public function offsetGet($name)
+    {
+        return $this->results[ $name ];
+    }
+    
+    public function offsetUnset($name)
+    {
+        return unset($this->results[$name]);
+    }
+    
 }
