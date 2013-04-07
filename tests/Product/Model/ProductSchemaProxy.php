@@ -8,6 +8,31 @@ use LazyRecord\Schema\Relationship;
 class ProductSchemaProxy extends RuntimeSchema
 {
 
+    public static $column_names = array (
+  0 => 'name',
+  1 => 'category_id',
+  2 => 'id',
+);
+    public static $column_hash = array (
+  'name' => 1,
+  'category_id' => 1,
+  'id' => 1,
+);
+    public static $column_names_include_virtual = array (
+  0 => 'name',
+  1 => 'category_id',
+  2 => 'id',
+);
+
+    const schema_class = 'Product\\Model\\ProductSchema';
+    const collection_class = 'Product\\Model\\ProductCollection';
+    const model_class = 'Product\\Model\\Product';
+    const model_name = 'Product';
+    const model_namespace = 'Product\\Model';
+    const primary_key = 'id';
+    const table = 'products';
+    const label = 'Product';
+
     public function __construct()
     {
         /** columns might have closure, so it can not be const */
@@ -81,6 +106,15 @@ class ProductSchemaProxy extends RuntimeSchema
       'type' => 3,
       'relation_junction' => 'product_categories',
       'relation_foreign' => 'category',
+    ),
+)),
+  'category' => \LazyRecord\Schema\Relationship::__set_state(array( 
+  'data' => array( 
+      'type' => 4,
+      'self_schema' => 'Product\\Model\\ProductSchema',
+      'self_column' => 'category_id',
+      'foreign_schema' => 'Product\\Model\\Category',
+      'foreign_column' => 'id',
     ),
 )),
 );

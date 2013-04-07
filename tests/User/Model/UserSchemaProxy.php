@@ -8,6 +8,34 @@ use LazyRecord\Schema\Relationship;
 class UserSchemaProxy extends RuntimeSchema
 {
 
+    public static $column_names = array (
+  0 => 'name',
+  1 => 'email',
+  2 => 'password',
+  3 => 'id',
+);
+    public static $column_hash = array (
+  'name' => 1,
+  'email' => 1,
+  'password' => 1,
+  'id' => 1,
+);
+    public static $column_names_include_virtual = array (
+  0 => 'name',
+  1 => 'email',
+  2 => 'password',
+  3 => 'id',
+);
+
+    const schema_class = 'User\\Model\\UserSchema';
+    const collection_class = 'User\\Model\\UserCollection';
+    const model_class = 'User\\Model\\User';
+    const model_name = 'User';
+    const model_namespace = 'User\\Model';
+    const primary_key = 'id';
+    const table = 'users';
+    const label = 'User';
+
     public function __construct()
     {
         /** columns might have closure, so it can not be const */
