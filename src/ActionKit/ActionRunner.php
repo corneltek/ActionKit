@@ -54,11 +54,14 @@ class ActionRunner
      * */
     public function run($actionName, $arguments = array() )
     {
-        if ( $this->isInvalidActionName( $actionName ) )
+        if ( $this->isInvalidActionName( $actionName ) ) {
             throw new Exception( "Invalid action name: $actionName." );
+        }
 
         /* translate :: into php namespace */
         $class = $this->getActionClass( $actionName );
+
+        // call spl to autoload the class
         if ( ! class_exists($class,true) ) {
             throw new Exception( "Action class not found: $actionName $class, you might need to setup action autoloader" );
         }
@@ -75,9 +78,9 @@ class ActionRunner
     public function autoload($class)
     {
         /* check if action is in CRUD list */
-        if ( ! isset( $this->crudActions[$class] ) )
-
+        if ( ! isset( $this->crudActions[$class] ) ) {
             return false;
+        }
 
         // Generate the crud action
         //
@@ -95,7 +98,8 @@ class ActionRunner
 
     public function registerAutoloader()
     {
-        spl_autoload_register(array($this,'autoload'));
+        // use throw and not to prepend
+        spl_autoload_register(array($this,'autoload'),true, false);
     }
 
     /**
@@ -173,8 +177,9 @@ class ActionRunner
             unset( $args['action'] );
         }
 
-        if ( class_exists($class,true) )
+        if ( class_exists($class) ) {
             return new $class( $args );
+        }
 
         /* check if action is in CRUD list */
         if ( isset( $this->crudActions[$class] ) ) {
@@ -190,10 +195,9 @@ class ActionRunner
             //       use a better code generator
             eval( $code );
 
-            return new $class( $_REQUEST );
+            return new $class( $args );
         }
-
-        return new $class( $_REQUEST );
+        return new $class( $args );
     }
 
     /**

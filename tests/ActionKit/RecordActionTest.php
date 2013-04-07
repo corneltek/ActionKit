@@ -6,9 +6,7 @@ class RecordActionTest extends ModelTestCase
 {
     public function getModels()
     {
-        return array( 
-            'Product\Model\ProductSchema'
-        );
+        return array( 'Product\\Model\\ProductSchema' );
     }
 
     public function createProduct( $name )
@@ -24,7 +22,7 @@ class RecordActionTest extends ModelTestCase
 
     public function createProductActionClass($type)
     {
-        return CRUD::generate('Product\Model\Product',$type);
+        return CRUD::generate('Product\\Model\\Product',$type);
     }
 
     public function testRecordCreate()
