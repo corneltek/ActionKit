@@ -34,23 +34,22 @@ class ActionRunner
     implements IteratorAggregate
 {
     /**
-     * Abstract CRUD action pool
-     *
-     * @var array
+     * @var array Abstract CRUD action pool
      */
     public $crudActions = array();
 
     /**
-     * Result pool
-     *
-     * @var array
+     * @var array Result pool
      */
     public $results = array();
 
-    /*
+    /**
      * Check if action request, then dispatch the action class.
      *
-     * @return return result array if there is such an action.
+     *
+     * @param string  $actionName
+     * @param array   $arguments
+     * @return ActionKit\Result result array if there is such an action.
      * */
     public function run($actionName, $arguments = array() )
     {
@@ -86,12 +85,11 @@ class ActionRunner
         //
         // @see registerCRUD method
         $gen = new ActionGenerator(array( 'cache' => true ));
-
         $args = $this->crudActions[$class];
         $code = $gen->generateClassCodeWithNamespace( $args['prefix'], $args['model_name'], $args['type'] )->code;
 
         // TODO: eval is slower than require
-        //       use a better code generator
+        //       use a better code generator here.
         eval( $code );
         return true;
     }
