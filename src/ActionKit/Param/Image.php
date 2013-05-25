@@ -129,7 +129,6 @@ class Image extends Param
             $this->size = $size;
             $this->widgetAttributes['dataWidth'] = $size['width'];
             $this->widgetAttributes['dataHeight'] = $size['height'];
-            return $this->enableAutoResize();
         }
         return $this;
     }
