@@ -101,6 +101,7 @@ class Image extends Param
         } else {
             $this->disableAutoResize();
         }
+        return $this;
     }
 
     public function disableAutoResize() 
