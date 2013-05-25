@@ -94,7 +94,17 @@ class Image extends Param
         $this->putIn("static/upload/");
     }
 
-    public function disableAutoResize() {
+    public function autoResize($enable = true) 
+    {
+        if ($enable) {
+            $this->enableAutoResize();
+        } else {
+            $this->disableAutoResize();
+        }
+    }
+
+    public function disableAutoResize() 
+    {
         $this->widgetAttributes['autoresize_input'] = false;
         $this->widgetAttributes['autoresize_input_check'] = false;
         $this->widgetAttributes['autoresize_type_input'] = false;
