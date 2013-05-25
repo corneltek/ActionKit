@@ -94,15 +94,18 @@ class Image extends Param
         $this->putIn("static/upload/");
     }
 
-    public function size( $size )
-    {
-        if ( ! empty($size) ) {
-            $this->size = $size;
-            $this->widgetAttributes['dataWidth'] = $size['width'];
-            $this->widgetAttributes['dataHeight'] = $size['height'];
-            $this->widgetAttributes['autoresize'] = true;
+    public function disableAutoResize() {
+        $this->widgetAttributes['autoresize_input'] = false;
+        $this->widgetAttributes['autoresize_input_check'] = false;
+        $this->widgetAttributes['autoresize_type_input'] = false;
+        return $this;
+    }
 
-            // initialize autoresize options
+    public function enableAutoResize()
+    {
+        // default autoresize options
+        if ( ! empty($this->size) ) {
+            $this->widgetAttributes['autoresize'] = true;
             $this->widgetAttributes['autoresize_input'] = true;
             $this->widgetAttributes['autoresize_input_check'] = true;
             $this->widgetAttributes['autoresize_type_input'] = true;
@@ -110,14 +113,24 @@ class Image extends Param
                 _('Crop And Scale') => 'crop_and_scale',
                 _('Scale') => 'scale',
             );
-            if (isset($size['width'])) {
+            if (isset($this->size['width'])) {
                 $this->widgetAttributes['autoresize_types'][ _('Max Width') ] = 'max_width';
             }
-            if (isset($size['height'])) {
+            if (isset($this->size['height'])) {
                 $this->widgetAttributes['autoresize_types'][ _('Max Height') ] = 'max_height';
             }
         }
+        return $this;
+    }
 
+    public function size( $size )
+    {
+        if ( ! empty($size) ) {
+            $this->size = $size;
+            $this->widgetAttributes['dataWidth'] = $size['width'];
+            $this->widgetAttributes['dataHeight'] = $size['height'];
+            return $this->enableAutoResize();
+        }
         return $this;
     }
 
