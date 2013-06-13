@@ -237,7 +237,7 @@ class Image extends Param
             return;
         }
 
-        $targetPath = $this->putIn . DIRECTORY_SEPARATOR . $file['name'];
+        $targetPath = trim($this->putIn,DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . trim($file['name'], DIRECTORY_SEPARATOR);
         if ($this->renameFile) {
             $targetPath = call_user_func($this->renameFile,$targetPath);
         }
