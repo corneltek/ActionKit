@@ -54,7 +54,7 @@ class ManyToManyCheckboxView
             $label = new Label;
             $hiddenId = new HiddenInput(   "{$relationId}[{$record->id}][_foreign_id]", array( 'value' => $record->id ) );
             $checkbox = new CheckboxInput( "{$relationId}[{$record->id}][_connect]",array(
-                'value' => 1,
+                'value' => 0,
             ));
             $label->append($checkbox);
             $label->appendText($record->dataLabel());
