@@ -498,8 +498,8 @@ abstract class BaseRecordAction extends Action
 
                         if ( ! isset($connected[ $fId ]) ) {
                             $newRecord = $junctionRecords->create($argsCreate);
-                            $ret = $newRecord->popResult();
-                            $ret->throwExceptionIfFailed();
+                            // $ret = $newRecord->popResult();
+                            // $ret->throwExceptionIfFailed();
                         } else {
                             // update the existing record data.
                             foreach( $junctionRecords as $r ) {
