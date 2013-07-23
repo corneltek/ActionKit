@@ -83,18 +83,16 @@ class ActionRunner
         /* translate :: into php namespace */
         $class = $this->getActionClass( $actionName );
 
-        // call spl to autoload the class
-        if ( ! class_exists($class,true) ) {
-            throw new Exception( "Action class not found: $actionName $class, you might need to setup action autoloader" );
-        }
 
         /* register results into hash */
-        $action = $this->createAction( $class , $arguments );
-        if (! $action) {
-            throw new Exception( "Can not create action class $class" );
+        if ( $action = $this->createAction( $class , $arguments ) ) {
+            $action();
+            return $this->results[ $actionName ] = $action->getResult();
         }
-        $action();
-        return $this->results[ $actionName ] = $action->getResult();
+
+
+
+        throw new Exception( "Can not create action class $class" );
     }
 
     public function autoload($class)
@@ -232,12 +230,11 @@ class ActionRunner
             $gen = new ActionGenerator;
             $code = $gen->generate($class, $args['template'], $args['variables']);
             $cacheFile = $this->getClassCacheFile($class);
-
-            if ( ! file_exists($cacheFile) ) {
+            // if ( ! file_exists($cacheFile) ) {
                 if ( false === file_put_contents($cacheFile, $code) ) {
                     throw new Exception("Can not write action class cache file: $cacheFile");
                 }
-            }
+            // }
             require $cacheFile;
             return new $class($args);
         }
@@ -256,6 +253,13 @@ class ActionRunner
             eval( $code );
             return new $class( $args );
         }
+
+
+        // call spl to autoload the class
+        if ( ! class_exists($class,true) ) {
+            throw new Exception( "Action class not found: $actionName $class, you might need to setup action autoloader" );
+        }
+
         return new $class( $args );
     }
 

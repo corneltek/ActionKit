@@ -11,6 +11,24 @@ class ActionRunnerTest extends \LazyRecord\ModelTestCase
         );
     }
 
+    public function testRegisterAction()
+    {
+        $runner = ActionKit\ActionRunner::getInstance();
+        $runner->registerAutoloader();
+        $runner->registerAction(
+            'User\\Action\\BulkCreateUser',
+            '@ActionKit/RecordAction.html.twig',
+            array(
+                'record_class' => 'User\\Model\\User',
+                'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction'
+            )
+        );
+
+        $result = $runner->run('User::Action::BulkCreateUser',array(
+            'email' => 'foo@foo'
+        ));
+        ok($result);
+    }
 
     public function test()
     {
@@ -19,14 +37,6 @@ class ActionRunnerTest extends \LazyRecord\ModelTestCase
         $runner->registerAutoloader();
         $runner->registerCRUD('User','User',array('Create','Update','Delete'));
 
-        $runner->registerAction(
-            'User\\Action\\BulkCreateUser',
-            '@ActionKit/RecordAction.html.twig',
-            array(
-                'record_class' => 'User',
-                'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction'
-            )
-        );
         $result = $runner->run('User::Action::CreateUser',array(
             'email' => 'foo@foo'
         ));
