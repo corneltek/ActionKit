@@ -48,12 +48,10 @@ class ActionGenerator
         }
     }
 
-    public function addTemplateDir($id, $path)
+    public function addTemplateDir($path)
     {
-        $this->templateDirs[ $id ] = $path;
+        $this->templateDirs[] = $path;
     }
-
-
 
     public function generate($targetClassName, $template, $variables = array())
     {
@@ -74,6 +72,17 @@ class ActionGenerator
         return $code;
     }
 
+    public function getTwigLoader() {
+
+        static $loader;
+        if ( $loader ) {
+            return $loader;
+        }
+        // add ActionKit built-in template path
+        $loader = new Twig_Loader_Filesystem($this->templateDirs);
+        $loader->addPath( __DIR__ . DIRECTORY_SEPARATOR . 'Templates', "ActionKit" );
+        return $loader;
+    }
 
 
     public function getTwig()
@@ -83,15 +92,11 @@ class ActionGenerator
             return $twig;
         }
 
-        $loader = new Twig_Loader_Filesystem(array());
-
-        $twig = new Twig_Environment($loader, array(
+        $loader = $this->getTwigLoader();
+        $env = new Twig_Environment($loader, array(
             'cache' => $this->cacheDir ? $this->cacheDir : false,
         ));
-
-        // add ActionKit built-in template path
-        $loader->addPath( __DIR__ . DIRECTORY_SEPARATOR . 'Templates', "ActionKit" );
-        return $twig;
+        return $env;
     }
 
 
