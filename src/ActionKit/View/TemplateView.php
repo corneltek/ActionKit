@@ -31,6 +31,11 @@ abstract class TemplateView
         return $this->getClassDir() . DIRECTORY_SEPARATOR . 'Templates';
     }
 
+    public function createTwigStringLoader()
+    {
+        return new Twig_Loader_String;
+    }
+
     public function createTwigFileSystemLoader()
     {
         $dir = $this->getTemplateDir();
@@ -61,7 +66,13 @@ abstract class TemplateView
     public function renderTemplateFile($templateFile,$arguments = array())
     {
         $template = $this->getTemplate($templateFile);
-        $arguments = array_merge( array('View' => $this , 'Action' => $this->action ) , $arguments );
+        $arguments = array_merge( array(
+            // the view object.
+            'View' => $this, 
+
+            // the action object.
+            'Action' => $this->action 
+        ), $arguments);
         return $template->render($arguments);
     }
 
