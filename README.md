@@ -485,7 +485,12 @@ To generate custom action:
 
 ```php
 $g = new ActionKit\ActionGenerator;
-$g->generate('SortImage', 'SortRecordAction', array(
+
+$g->register('template name','...template path...');
+
+$g->generate('SortImage', 'template name', array(
+    "base_class" => "SortRecordAction",
+    "record_class" => "ProductBundle\\Model\\ProductImage",
     ... template variable...
 ));
 ```

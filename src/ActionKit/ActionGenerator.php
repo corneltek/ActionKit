@@ -3,6 +3,7 @@ namespace ActionKit;
 use UniversalCache;
 use Twig_Loader_Filesystem;
 use Twig_Environment;
+use ReflectionClass;
 
 /**
  * Action Generator Synopsis
@@ -30,6 +31,9 @@ class ActionGenerator
 
     public $templatePaths = array();
 
+    public $templates = array(
+    );
+
     public function __construct( $options = array() )
     {
         $this->cache = isset($options['cache']) && extension_loaded('apc');
@@ -38,26 +42,55 @@ class ActionGenerator
             $this->cacheDir = $options['cache_dir'];
         } else {
             $this->cacheDir = __DIR__ . DIRECTORY_SEPARATOR . 'Cache';
-            if ( file_exists($this->cacheDir) ) {
+            if ( ! file_exists($this->cacheDir) ) {
                 mkdir($this->cacheDir, 0755, true);
             }
         }
-
-        // add built-in template path
-        $this->templatePaths[] = __DIR__ . DIRECTORY_SEPARATOR . 'Templates';
     }
 
-    public function addTemplatePath($path)
+    public function addTemplateDir($id, $path)
     {
-        $this->templatePaths[] = $path;
+        $this->templateDirs[ $id ] = $path;
     }
+
+
+
+    public function generate($targetClassName, $template, $variables = array())
+    {
+        if ( $this->cache && $code = apc_fetch( 'actionkit:' . $targetClassName ) ) {
+            return $code;
+        }
+
+        $parts = explode("\\",$targetClassName);
+        $variables['target'] = array();
+        $variables['target']['classname'] = array_pop($parts);
+        $variables['target']['namespace'] = join("\\", $parts);
+
+        $twig = $this->getTwig();
+        $code = $twig->render($template, $variables);
+        if ( $this->cache ) {
+            apc_store('actionkit:' . $targetClassName , $code);
+        }
+        return $code;
+    }
+
+
 
     public function getTwig()
     {
-        $loader = new Twig_Loader_Filesystem($this->templatePaths);
+        static $twig;
+        if ( $twig ) {
+            return $twig;
+        }
+
+        $loader = new Twig_Loader_Filesystem(array());
+
         $twig = new Twig_Environment($loader, array(
-            'cache' => $this->cacheDir,
+            'cache' => $this->cacheDir ? $this->cacheDir : false,
         ));
+
+        // add ActionKit built-in template path
+        $loader->addPath( __DIR__ . DIRECTORY_SEPARATOR . 'Templates', "ActionKit" );
         return $twig;
     }
 

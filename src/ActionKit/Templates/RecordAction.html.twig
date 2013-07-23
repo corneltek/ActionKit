@@ -1,10 +1,15 @@
 <?php
-namespace {{actionNamespace}} {
-    use {{fullBaseClass}};
-    class {{actionClass}} extends {{baseClass}}
-    {
-        public $recordClass = '{{shortBaseClass}}';
-    }
-}
-CODE;
+{#
+Required Variables:
 
+1. base_class
+2. record_class
+3. target.namespace
+4. target.classname
+
+#}
+namespace {{target.namespace}};
+class {{target.classname}} extends {{base_class}}
+{
+    public $recordClass = '{{record_class}}';
+}
