@@ -84,12 +84,14 @@ from backend.
 
 A minimal action skeleton:
 
-    use ActionKit\Action;
-    class YourAction extends Action
-    {
-        function run() {
-        }
+``php
+use ActionKit\Action;
+class YourAction extends Action
+{
+    function run() {
     }
+}
+```
 
 To use Action, you should define a `run` method at least,
 in this `run` method, you write your logics, operations,
@@ -98,23 +100,29 @@ then return the result at the end.
 To report success result, you can simple use `success`
 method:
 
-    function run() {
-        return $this->success('Success!!');
-    }
+
+```php
+function run() {
+    return $this->success('Success!!');
+}
+```
 
 You can also pass data to the action result, by appending
 another argument in array:
 
-    function run() {
-        return $this->success('Success', ['user_id' => 1]);
-    }
+```php
+function run() {
+    return $this->success('Success', ['user_id' => 1]);
+}
+```
 
 To report error:
 
-    function run() {
-        return $this->error('Error', ['user_id' => 1]);
-    }
-
+```php
+function run() {
+    return $this->error('Error', ['user_id' => 1]);
+}
+```
 
 ## Action Signature
 
@@ -132,41 +140,45 @@ The convention rule is like below:
 
 ## A Simple Action Skeleton
 
-    class YourAction extends \ActionKit\Action
-    {
 
-        function schema() {
-            $this->param('id')
-                ->renderAs('HiddenInput');
+```php
+class YourAction extends \ActionKit\Action
+{
 
-            $this->param('password')
-                ->renderAs('PasswordInput');
+    function schema() {
+        $this->param('id')
+            ->renderAs('HiddenInput');
 
-            $this->filterOut('hack','hack2','role');
-        }
+        $this->param('password')
+            ->renderAs('PasswordInput');
 
-        function beforeRun() { 
-            // do something
-        }
-
-        function run()
-        {
-            return $this->success( 'Success Helper (point to action result object)' );
-            return $this->error( 'Error Helper (point to action result object)' );
-        }
-
-        function afterRun() 
-        {
-            // do something
-        }
-
+        $this->filterOut('hack','hack2','role');
     }
+
+    function beforeRun() { 
+        // do something
+    }
+
+    function run()
+    {
+        return $this->success( 'Success Helper (point to action result object)' );
+        return $this->error( 'Error Helper (point to action result object)' );
+    }
+
+    function afterRun() 
+    {
+        // do something
+    }
+}
+```
 
 Then the caller:
 
-    $act = new Action( $_REQUEST );
-    $act->invoke();
-    $rs = $a->getResult();
+```php
+$act = new Action( $_REQUEST );
+$act->invoke();
+$rs = $a->getResult();
+```
 
 To take an action, simply call `invoke` method to trigger
 the action.
@@ -181,20 +193,22 @@ Action Schema
 
 ### Synopsis
 
-    class Action 
+```php
+class Action 
+{
+    function schema()
     {
-        function schema()
-        {
-            $this->param('id')->type('integer');
-            $this->param('title')->type('string');
-            $this->param('content')->type('string')->filter( 'html' );  # load html filter
-            $this->param('image','Image')   # Image File Column Class  Action\ImageColumn
-                ->type('file')              # Image and File column class will auto set type = 'file'
-                ->validExtension(array('jpg','png'))
-                ->resize( 100 , 100 )
-                ->putIn( kernel()->getAppWebDir() . DS . 'public' );
-        }
+        $this->param('id')->type('integer');
+        $this->param('title')->type('string');
+        $this->param('content')->type('string')->filter( 'html' );  # load html filter
+        $this->param('image','Image')   # Image File Column Class  Action\ImageColumn
+            ->type('file')              # Image and File column class will auto set type = 'file'
+            ->validExtension(array('jpg','png'))
+            ->resize( 100 , 100 )
+            ->putIn( kernel()->getAppWebDir() . DS . 'public' );
     }
+}
+```
 
 ### Action schema methods
 
@@ -350,43 +364,46 @@ ORM interface methods and the result data conversion.
 RecordAction Synopsis
 ----------------------
 
-    namespace User\Action\UpdateAction;
-    use ActionKit\RecordAction\UpdateRecordAction;
+```php
+namespace User\Action\UpdateAction;
+use ActionKit\RecordAction\UpdateRecordAction;
 
-    class UpdateAction extends UpdateRecordAction {
+class UpdateAction extends UpdateRecordAction {
 
-        function schema() 
-        {
-            // For record actions, we can convert the record columns
-            $this->useRecordSchema();
+    function schema() 
+    {
+        // For record actions, we can convert the record columns
+        $this->useRecordSchema();
 
-            $this->param( 'username' )
-                ->label( _('Username') )
-                ->useSuggestion();
+        $this->param( 'username' )
+            ->label( _('Username') )
+            ->useSuggestion();
 
-            $this->param( 'password' )
-                ->useValidator();
+        $this->param( 'password' )
+            ->useValidator();
 
-            $this->filterOut(array('auth_token'));
-        }
+        $this->filterOut(array('auth_token'));
+    }
 
-        function validatePassword( $value , $args ) 
-        {
-            return $this->valid( $message );
+    function validatePassword( $value , $args ) 
+    {
+        return $this->valid( $message );
 
-            # or
-            return $this->invalid( $message );
-        }
+        # or
+        return $this->invalid( $message );
+    }
 
-        function suggestUsername( $value , $args ) {
-            return;  # not to suggest
-            return $this->suggest( "$value is used. use: " , array( ... ) );
-        }
+    function suggestUsername( $value , $args ) {
+        return;  # not to suggest
+        return $this->suggest( "$value is used. use: " , array( ... ) );
+    }
 
-        function completeCountry( $value , $args ) {
+    function completeCountry( $value , $args ) {
 
-            ...
-        }
+        ...
+    }
+}
+```
 
 ### Messages
 
@@ -447,13 +464,27 @@ created by hands.
 
 To generate CreateRecordAction from a model class name
 
-    $g = new ActionKit\ActionGenerator;
-    $code = $g->generateClassCode( 'App\Model\User' , 'Create' )->code;
+```php
+$g = new ActionKit\ActionGenerator;
+$code = $g->generateClassCode( 'App\Model\User' , 'Create' )->code;
+```
 
 To generate UpdateRecordAction from a model class name
 
-    $g = new ActionKit\ActionGenerator;
-    $code = $g->generateClassCode( 'App\Model\User' , 'Update' )->code;
+```php
+$g = new ActionKit\ActionGenerator;
+$code = $g->generateClassCode( 'App\Model\User' , 'Update' )->code;
+```
+
+To generate custom action:
+
+```php
+$g = new ActionKit\ActionGenerator;
+$g->generate('SortImage', 'SortRecordAction', array(
+    ... template variable...
+));
+```
+
 
 Or even shorter (???):
 
