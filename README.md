@@ -307,32 +307,34 @@ a message string, a data stash.
 
 Here is a simple example to check the result error:
 
-    <?php
+```php
+if( $result->success ) {
 
-    if( $result->success ) {
+} else {
+    // error here
 
-    } else {
-        // error here
-
-    }
-    ?>
+}
+```
 
 To get an action result from an action object.
 
-    $rs = $action->getResult();
-    if( $rs->success ) {
-        $msg = $rs->getMessage();
-        $data = $rs->getData();
-    }
+```php
+$rs = $action->getResult();
+if( $rs->success ) {
+    $msg = $rs->getMessage();
+    $data = $rs->getData();
+}
+```
 
 To get an action result from ActionRunner:
     
-    $runner = ActionKit\Runner::getInstance();
-    if( $result = $runner->getResult( 'Login::...' ) ) {
-        // check the action result
+```php
+$runner = ActionKit\Runner::getInstance();
+if( $result = $runner->getResult( 'Login::...' ) ) {
+    // check the action result
 
-    }
-
+}
+```
 
 ## RecordAction
 
@@ -411,46 +413,49 @@ The `BaseRecordAction` provides the default message interface,
 to override these messages (for both success and error
 message) you can simply override the methods:
 
-    function successMessage(OperationResult $ret) {
-        return _('Your Success Message');
-    }
+```php
+function successMessage(OperationResult $ret) {
+    return _('Your Success Message');
+}
 
-    function errorMessage(OperationResult $ret) {
-        return _('Your Error Message');
-    }
+function errorMessage(OperationResult $ret) {
+    return _('Your Error Message');
+}
+```
 
 ### RecordAction Examples
 
 CreateNews
 
-    <?php
-    namespace News\Action;
-    use ActionKit\RecordAction\CreateRecordAction;
+```php
+namespace News\Action;
+use ActionKit\RecordAction\CreateRecordAction;
 
-    class CreateNews extends CreateRecordAction
-    {
-        public $recordClass = 'News\Model\News';
-    }
-
-    ?>
+class CreateNews extends CreateRecordAction
+{
+    public $recordClass = 'News\Model\News';
+}
+```
 
 UpdateNews
 
-    <?php
+```php
+namespace News\Action;
+use ActionKit\RecordAction\UpdateRecordAction;
 
-    namespace News\Action;
-    use ActionKit\RecordAction\UpdateRecordAction;
-
-    class UpdateNews extends UpdateRecordAction
-    {
-        public $recordClass = 'News\Model\News';
-    }
+class UpdateNews extends UpdateRecordAction
+{
+    public $recordClass = 'News\Model\News';
+}
+```
 
 ### Record Action API
 
-    $record = new User\Model\User( 3 ); // primary key = 3
-    $a = new User\Action\UpdateUser(array( 'nickname' => 'New Name' ) , $record );
-    $a->invoke();   // which calls $record->update(array( 'nickname' => 'New Name' ) );
+```php
+$record = new User\Model\User( 3 ); // primary key = 3
+$a = new User\Action\UpdateUser(array( 'nickname' => 'New Name' ) , $record );
+$a->invoke();   // which calls $record->update(array( 'nickname' => 'New Name' ) );
+```
 
 ### RecordAction schema methods
 
