@@ -41,8 +41,7 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
             'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction',
             'record_class' => 'ProductBundle\\Model\\Product',
         ));
-
-        echo $code;
+        ok( $code );
     }
 
 }
