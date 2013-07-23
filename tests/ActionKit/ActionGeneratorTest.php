@@ -8,7 +8,7 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
         ok( $g );
         $code = $g->generateClassCode( 'App\Model\User' , 'Create' )->code;
         eval($code);
-        ok( class_exists( 'App\\Action\\CreateUser' ) );
+        ok( class_exists( 'App\\Action\\CreateUser') );
     }
 
     public function testCRUDClassFromBaseRecordAction()
@@ -36,7 +36,6 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
     public function testGenerateMethod()
     {
         $g = new ActionKit\ActionGenerator;
-        // $g->register('RecordAction','src/ActionKit/Templates/RecordAction.html.twig');
         $code = $g->generate('ProductBundle\\Action\\CreateRecordProduct','@ActionKit/RecordAction.html.twig',array( 
             'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction',
             'record_class' => 'ProductBundle\\Model\\Product',

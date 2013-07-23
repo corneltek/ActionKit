@@ -25,19 +25,15 @@ use ReflectionClass;
  */
 class ActionGenerator
 {
-    public $cache;
 
     public $cacheDir;
 
-    public $templatePaths = array();
+    public $templateDirs = array();
 
-    public $templates = array(
-    );
+    public $templates = array();
 
     public function __construct( $options = array() )
     {
-        $this->cache = isset($options['cache']) && extension_loaded('apc');
-
         if ( isset($options['cache_dir']) ) {
             $this->cacheDir = $options['cache_dir'];
         } else {
@@ -53,23 +49,16 @@ class ActionGenerator
         $this->templateDirs[] = $path;
     }
 
+
     public function generate($targetClassName, $template, $variables = array())
     {
-        if ( $this->cache && $code = apc_fetch( 'actionkit:' . $targetClassName ) ) {
-            return $code;
-        }
-
         $parts = explode("\\",$targetClassName);
         $variables['target'] = array();
         $variables['target']['classname'] = array_pop($parts);
         $variables['target']['namespace'] = join("\\", $parts);
 
         $twig = $this->getTwig();
-        $code = $twig->render($template, $variables);
-        if ( $this->cache ) {
-            apc_store('actionkit:' . $targetClassName , $code);
-        }
-        return $code;
+        return $twig->render($template, $variables);
     }
 
     public function getTwigLoader() {
@@ -137,15 +126,6 @@ class ActionGenerator
         $actionNs = str_replace('Model','Action', $modelNs);
         $actionFullClass = ltrim($actionNs . '\\' . $actionClass, '\\');
 
-
-        // let's cache the action code
-        if ( $this->cache && $code = apc_fetch( 'action:' . $actionFullClass ) ) {
-            return (object) array(
-                'action_class' => $actionFullClass,
-                'code' => $code
-            );
-        }
-
         // the original ns is the model namespace
         $recordClass  = ltrim($modelNs . '\\' . $modelName, '\\');
         $baseAction   = $type . 'RecordAction';
@@ -159,9 +139,6 @@ namespace $actionNs {
     }
 }
 CODE;
-        if ($this->cache) {
-            apc_store('action:' . $actionFullClass , $code);
-        }
         return (object) array(
             'action_class' => $actionFullClass,
             'code' => $code,

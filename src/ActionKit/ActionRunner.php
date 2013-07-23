@@ -34,6 +34,17 @@ use ArrayAccess;
 class ActionRunner
     implements IteratorAggregate, ArrayAccess
 {
+
+    public $cacheDir;
+
+
+    /**
+     * @var array 
+     */
+    public $dynamicActions = array();
+
+
+
     /**
      * @var array Abstract CRUD action pool
      */
@@ -43,6 +54,17 @@ class ActionRunner
      * @var array Result pool
      */
     public $results = array();
+
+    public function __construct($options = array()) {
+        if ( isset($options['cache_dir']) ) {
+            $this->cacheDir = $options['cache_dir'];
+        } else {
+            $this->cacheDir = __DIR__ . DIRECTORY_SEPARATOR . 'Cache';
+            if ( ! file_exists($this->cacheDir) ) {
+                mkdir($this->cacheDir, 0755, true);
+            }
+        }
+    }
 
     /**
      * Check if action request, then dispatch the action class.
@@ -103,6 +125,18 @@ class ActionRunner
         spl_autoload_register(array($this,'autoload'),true, false);
     }
 
+
+
+
+    public function registerAction($targetActionClass, $templateName, $variables = array() )
+    {
+        $this->dynamicActions[ $targetActionClass ] = array(
+            'template'  => $templateName,
+            'variables' => $variables,
+        );
+    }
+
+
     /**
      * Add CRUD action class to pool, so we can generate these class later
      * if needed. (lazy)
@@ -122,6 +156,11 @@ class ActionRunner
     {
         foreach ( (array) $types as $type ) {
             $class = $prefixNs . '\\Action\\' . $type . $modelName;
+            $this->registerAction( $class , '@ActionKit/RecordAction.html.twig',array( 
+                'record_class' => "$prefixNs\\Model\\$modelName",
+                'base_class' => "ActionKit\\RecordAction\\{$type}RecordAction",
+            ));
+
             $this->crudActions[$class] = array(
                 'prefix'       => $prefixNs . '\\Model',
                 'type'         => $type,
@@ -133,7 +172,8 @@ class ActionRunner
 
     public function registerCRUDAction($class,$args)
     {
-        $this->crudActions[ $class ] = $args;
+        throw new Exception("registerCRUDAction is deprecated.");
+        // $this->crudActions[ $class ] = $args;
     }
 
     public function isInvalidActionName( $actionName )
@@ -161,6 +201,11 @@ class ActionRunner
     }
 
 
+    public function getClassCacheFile($className) 
+    {
+        return $this->cacheDir . DIRECTORY_SEPARATOR . str_replace('\\','_',$className) . '.php';
+    }
+
     /**
      * Create action object
      *
@@ -178,12 +223,26 @@ class ActionRunner
             unset( $args['action'] );
         }
 
-        if ( class_exists($class) ) {
+        if ( class_exists($class, true) ) {
             return new $class( $args );
         }
 
+        if ( isset( $this->dynamicActions[ $class ] ) ) {
+            $args = $this->dynamicActions[ $class ];
+            $gen = new ActionGenerator;
+            $code = $gen->generate($class, $args['template'], $args['variables']);
+            $cacheFile = $this->getClassCacheFile($class);
+
+            if ( ! file_exists($cacheFile) ) {
+                if ( false === file_put_contents($cacheFile, $code) ) {
+                    throw new Exception("Can not write action class cache file: $cacheFile");
+                }
+            }
+            require $cacheFile;
+            return new $class($args);
+        }
         /* check if action is in CRUD list */
-        if ( isset( $this->crudActions[$class] ) ) {
+        else if ( isset( $this->crudActions[$class] ) ) {
 
             /* generate the crud action */
             $args = $this->crudActions[$class];
@@ -195,7 +254,6 @@ class ActionRunner
             // TODO: eval is slower than require
             //       use a better code generator
             eval( $code );
-
             return new $class( $args );
         }
         return new $class( $args );

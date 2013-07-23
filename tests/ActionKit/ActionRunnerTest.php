@@ -19,10 +19,19 @@ class ActionRunnerTest extends \LazyRecord\ModelTestCase
         $runner->registerAutoloader();
         $runner->registerCRUD('User','User',array('Create','Update','Delete'));
 
+        $runner->registerAction(
+            'User\\Action\\BulkCreateUser',
+            '@ActionKit/RecordAction.html.twig',
+            array(
+                'record_class' => 'User',
+                'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction'
+            )
+        );
         $result = $runner->run('User::Action::CreateUser',array(
             'email' => 'foo@foo'
         ));
         ok($result);
+
 
         $json = $result->__toString();
         ok($json,'json output');
