@@ -8,35 +8,45 @@ class BulkCopyRecordAction extends BulkRecordAction
     public $newFields = array('lang');
     public $unsetFields = array();
 
-    public function run()
+    public function preprocessData($data) 
     {
-        $newRecord = new $this->recordClass;
-        $records = $this->loadRecords();
-
-        foreach($records as $record) {
-            $data = $record->getData();
-
-            if ( $pk = $record->getSchema()->primaryKey ) {
-                unset($data[$pk]);
+        if ( ! empty($this->unsetFields) ) {
+            foreach( $this->unsetFields as $field ) {
+                unset($data[$field]);
             }
+        }
 
-            if ( ! empty($this->unsetFields) ) {
-                foreach( $this->unsetFields as $field ) {
+        if ( ! empty($this->newFields) ) {
+            foreach( $this->newFields as $field ) {
+                if ( $newValue = $this->arg($field) ) {
+                    $data[$field] = $newValue;
+                } else {
                     unset($data[$field]);
                 }
             }
+        }
+        return $data;
+    }
 
+    public function unsetPrimaryKey($schema, $data)
+    {
+        if ( $pk = $schema->primaryKey ) {
+            unset($data[$pk]);
+        }
+        return $data;
+    }
 
+    public function run()
+    {
+        $newRecord = new $this->recordClass;
+        $schema = $newRecord->getSchema();
 
-            if ( ! empty($this->newFields) ) {
-                foreach( $this->newFields as $field ) {
-                    if ( $newValue = $this->arg($field) ) {
-                        $data[$field] = $newValue;
-                    } else {
-                        unset($data[$field]);
-                    }
-                }
-            }
+        $records = $this->loadRecords();
+        foreach($records as $record) {
+            $data = $record->getData();
+
+            $data = $this->unsetPrimaryKey($record, $data);
+            $data = $this->preprocessData($data);
 
             $ret = $newRecord->create($data);
             if ( ! $ret->success ) {
