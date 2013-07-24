@@ -5,6 +5,14 @@ abstract class BulkDeleteRecordAction extends BulkRecordAction
 {
     const TYPE = 'bulk_delete';
 
+
+    /*
+     * Define your record class here:
+     *
+     * public $recordClass;
+     */
+
+
     public function run()
     {
         $records = $this->loadRecords();
@@ -12,7 +20,6 @@ abstract class BulkDeleteRecordAction extends BulkRecordAction
             $ret = $record->delete();
         }
         $count = count($records);
-
-        return $this->success( $count . '個項目已刪除成功');
+        return $this->success( $count . '個項目刪除成功');
     }
 }

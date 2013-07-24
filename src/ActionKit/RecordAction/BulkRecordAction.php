@@ -2,6 +2,14 @@
 namespace ActionKit\RecordAction;
 use ActionKit\Action;
 
+
+/**
+ * This action requires 'items' param
+ *
+ *      {
+ *          items: [ 1,2,3,4 ]
+ *      }
+ */
 class BulkRecordAction extends Action
 {
     const TYPE = 'bulk';
@@ -15,9 +23,9 @@ class BulkRecordAction extends Action
 
     public function runValidate()
     {
-        if ( isset( $this->args['items'] ) )
-
+        if ( isset( $this->args['items'] ) ) {
             return false;  // no error
+        }
         return true;
     }
 
