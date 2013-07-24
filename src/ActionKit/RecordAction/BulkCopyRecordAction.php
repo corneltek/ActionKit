@@ -6,7 +6,7 @@ class BulkCopyRecordAction extends BulkRecordAction
     const TYPE = 'bulk_copy';
 
     public $newFields = array('lang');
-    public $copyFields = array();
+    public $unsetFields = array();
 
     public function run()
     {
@@ -14,21 +14,31 @@ class BulkCopyRecordAction extends BulkRecordAction
         $records = $this->loadRecords();
 
         foreach($records as $record) {
-            $args = $record->getData();
+            $data = $record->getData();
 
             if ( $pk = $record->getSchema()->primaryKey ) {
-                unset($args[$pk]);
+                unset($data[$pk]);
             }
 
-            foreach( $this->newFields as $field ) {
-                if ( $newValue = $this->arg([$field]) ) {
-                    $args[$field] = $newValue;
-                } else {
-                    unset($args[$field]);
+            if ( ! empty($this->unsetFields) ) {
+                foreach( $this->unsetFields as $field ) {
+                    unset($data[$field]);
                 }
             }
 
-            $ret = $newRecord->create($args);
+
+
+            if ( ! empty($this->newFields) ) {
+                foreach( $this->newFields as $field ) {
+                    if ( $newValue = $this->arg($field) ) {
+                        $data[$field] = $newValue;
+                    } else {
+                        unset($data[$field]);
+                    }
+                }
+            }
+
+            $ret = $newRecord->create($data);
             if ( ! $ret->success ) {
                 return $this->error($ret->exception);
             }
