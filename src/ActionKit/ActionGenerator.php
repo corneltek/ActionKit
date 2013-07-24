@@ -49,7 +49,6 @@ class ActionGenerator
         $this->templateDirs[] = $path;
     }
 
-
     public function generate($targetClassName, $template, $variables = array())
     {
         $parts = explode("\\",$targetClassName);
