@@ -226,13 +226,13 @@ class ActionRunner
         }
 
         if ( isset( $this->dynamicActions[ $class ] ) ) {
-            $args = $this->dynamicActions[ $class ];
+            $actionArgs = $this->dynamicActions[ $class ];
             $cacheFile = $this->getClassCacheFile($class);
 
             $gen = new ActionGenerator;
             $loader = $gen->getTwigLoader();
-            if (  ! file_exists($cacheFile) || ! $loader->isFresh($args['template'], filemtime($cacheFile) ) ) {
-                $code = $gen->generate($class, $args['template'], $args['variables']);
+            if (  ! file_exists($cacheFile) || ! $loader->isFresh($actionArgs['template'], filemtime($cacheFile) ) ) {
+                $code = $gen->generate($class, $actionArgs['template'], $actionArgs['variables']);
                 if ( false === file_put_contents($cacheFile, $code) ) {
                     throw new Exception("Can not write action class cache file: $cacheFile");
                 }
