@@ -8,6 +8,14 @@ class BulkCopyRecordAction extends BulkRecordAction
     public $newFields = array('lang');
     public $unsetFields = array();
 
+    public function schema()
+    {
+        foreach( $this->newFields as $field ) {
+            $this->param($field);
+        }
+        parent::schema();
+    }
+
     public function preprocessData($data) 
     {
         if ( ! empty($this->unsetFields) ) {
