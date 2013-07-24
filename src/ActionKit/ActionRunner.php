@@ -126,6 +126,13 @@ class ActionRunner
 
 
 
+    /**
+     * Register dynamic action by template.
+     *
+     * @param string $targetActionClass target action class name, full-qualified.
+     * @param string $templateName      source template 
+     * @param array $variables          template variables.
+     */
     public function registerAction($targetActionClass, $templateName, $variables = array() )
     {
         $this->dynamicActions[ $targetActionClass ] = array(
