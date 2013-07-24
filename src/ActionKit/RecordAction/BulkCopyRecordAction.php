@@ -41,6 +41,11 @@ class BulkCopyRecordAction extends BulkRecordAction
 
     }
 
+    public function finalize($records, $newRecords)
+    {
+
+    }
+
     public function unsetPrimaryKey($schema, $data)
     {
         if ( $pk = $schema->primaryKey ) {
@@ -54,6 +59,7 @@ class BulkCopyRecordAction extends BulkRecordAction
         $newRecord = new $this->recordClass;
         $schema = $newRecord->getSchema();
 
+        $newRecords = array();
         $records = $this->loadRecords();
         foreach($records as $record) {
             $data = $record->getData();
@@ -61,7 +67,12 @@ class BulkCopyRecordAction extends BulkRecordAction
             $data = $this->unsetPrimaryKey($schema, $data);
             
             $data = $this->beforeCopy($record, $data);
+
+            $newRecord = new $this->recordClass;
             $ret = $newRecord->create($data);
+
+            $newRecords[] = $newRecord;
+
             if ( ! $ret->success ) {
                 return $this->error($ret->message);
             }
@@ -69,6 +80,8 @@ class BulkCopyRecordAction extends BulkRecordAction
                 return $result;
             }
         }
+
+        $this->finalize( $records, $newRecords );
         return $this->success( count($records) . ' 個項目複製成功。');
     }
 
