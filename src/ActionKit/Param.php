@@ -253,7 +253,9 @@ class Param extends CascadingAttribute
 
         // if it's not a full-qualified class name
         // we should concat class name with default widget namespace
-        if ('+' !== $class[0]) {
+        if ('+' == $class[0]) {
+            $class = substr($class,1);
+        } else {
             $class = $this->widgetNamespace . '\\' . $class;
         }
 
