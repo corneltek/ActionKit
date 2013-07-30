@@ -266,7 +266,7 @@ class ActionRunner
 
         // call spl to autoload the class
         if ( ! class_exists($class,true) ) {
-            throw new Exception( "Action class not found: $actionName $class, you might need to setup action autoloader" );
+            throw new Exception( "Action class not found: $class, you might need to setup action autoloader" );
         }
 
         return new $class( $args );
