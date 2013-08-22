@@ -31,6 +31,11 @@ class File extends Param
         $this->supportedAttributes['putIn'] = self::ATTR_STRING;
         $this->supportedAttributes['sizeLimit'] = self::ATTR_ANY;
         $this->supportedAttributes['renameFile'] = self::ATTR_ANY;
+
+        $this->renameFile = function($filename) {
+            return FileUtils::filename_increase( $filename );
+        };
+        $this->putIn("static/upload/");
     }
 
     public function preinit( & $args )
