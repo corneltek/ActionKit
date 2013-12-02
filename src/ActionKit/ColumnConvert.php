@@ -52,11 +52,22 @@ class ColumnConvert
                         $options[ $label ] = $item->dataKeyValue();
                     }
                     $param->validValues = $options;
-                }
-                // it's a `belongs-to`-like relationship
-                elseif ( is_subclass_of($class,'LazyRecord\\BaseModel', true) ) {
+                } elseif ( is_subclass_of($class,'LazyRecord\\BaseModel', true) ) {
+                    // it's a `belongs-to`-like relationship
                     $class = $class . 'Collection';
                     $collection = new $class;
+                    $options = array();
+                    foreach ($collection as $item) {
+                        $label = method_exists($item,'dataLabel')
+                                ? $item->dataLabel()
+                                : $item->id;
+                        $options[ $label ] = $item->dataKeyValue();
+                    }
+                    $param->validValues = $options;
+                } elseif ( is_subclass_of($class, 'LazyRecord\\Schema\\SchemaDeclare', true) ) {
+                    $schema = new $class;
+                    $collection = $schema->newCollection();
+
                     $options = array();
                     foreach ($collection as $item) {
                         $label = method_exists($item,'dataLabel')
