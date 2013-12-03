@@ -81,6 +81,35 @@ SCRIPT;
         return $button;
     }
 
+    public function buildManyToManyRelationalActionViewForExistingRecords($record, $relationId, $relation) 
+    {
+        // Our default view for ManyToMany relationship
+        $view  = isset($relation['view']) ? new $relation['view'] : new \ActionKit\View\ManyToManyCheckboxView;
+        $collection = $relation->newForeignForeignCollection(
+            $record->getSchema()->getRelation($relation['relation_junction'])
+        );
+        return $view->render($relationId, $record, $collection);
+    }
+
+
+    /**
+     * For each existing (one-many) records, 
+     * create it's own subaction view for these existing 
+     * records.
+     */
+    public function buildOneToManyRelationalActionViewForExistingRecords($record, $relationId, $relation)
+    {
+        $container = new Element('div');
+
+        // If the record is loaded and the relation is defined
+        if ( $record->id && isset($record->{ $relationId }) ) {
+            foreach ($record->{ $relationId } as $subrecord) {
+                $subview = $this->createRelationalActionView($relationId, $relation, $subrecord);
+                $container->append($subview);
+            }
+        }
+        return $container;
+    }
 
     public function buildRelationalActionViewForExistingRecords($relationId, $relation = null)
     {
@@ -92,32 +121,13 @@ SCRIPT;
         $record = $this->getRecord();
         $container = $this->getContainer();
 
-
         // handle has_many records
         if ( SchemaDeclare::has_many === $relation['type'] ) {
-            // For each existing (one-many) records, 
-            // create it's own subaction view for these existing 
-            // records.
-
-            // If the record is loaded and the relation is defined
-            if ( $record->id && isset($record->{ $relationId }) ) {
-                foreach ($record->{ $relationId } as $subrecord) {
-                    $subview = $this->createRelationalActionView($relationId, $relation, $subrecord);
-                    $container->append($subview);
-                }
-            }
+            $contentContainer = $this->buildOneToManyRelationalActionViewForExistingRecords($record, $relationId, $relation );
+            $contentContainer->appendTo($container);
         } elseif ( SchemaDeclare::many_to_many === $relation['type'] ) {
-            // TODO: Add a view option to the relationship, so that we can define the view for the editor.
-            // Get the record collection.
-
-            // Our default view for ManyToMany relationship
-            $view  = isset($relation['view']) ? new $relation['view'] : new \ActionKit\View\ManyToManyCheckboxView;
-            $collection = $relation->newForeignForeignCollection(
-                $record->getSchema()->getRelation($relation['relation_junction'])
-            );
-
-            $ul = $view->render($relationId, $record, $collection);
-            $ul->appendTo($container);
+            $contentContainer = $this->buildManyToManyRelationalActionViewForExistingRecords($record, $relationId, $relation);
+            $contentContainer->appendTo($container);
         }
         return $container;
     }
