@@ -89,13 +89,11 @@ SCRIPT;
         return $view->render($relationId, $record, $collection);
     }
 
-    /*
-    public function renderManyToManyEditor($relationId, $superset)
+    public function renderManyToManyEditor($record, $relationId, $superset)
     {
         $view  = isset($relation['view']) ? new $relation['view'] : new \ActionKit\View\ManyToManyCheckboxView;
-        return $view->render($relationId, $record, $collection);
+        return $view->render($relationId, $record, $superset);
     }
-    */
 
 
     /**

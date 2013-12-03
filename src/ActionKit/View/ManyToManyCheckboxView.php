@@ -81,7 +81,7 @@ class ManyToManyCheckboxView
     /**
      * @param string                    $relationId the relationship id of the record.
      * @param LazyRecord\BaseModel      $record     the record object.
-     * @param LazyRecord\BaseCollection $collection the colletion object.
+     * @param LazyRecord\BaseCollection $collection the superset colletion object.
      */
     public function render($relationId, $record, $collection)
     {
