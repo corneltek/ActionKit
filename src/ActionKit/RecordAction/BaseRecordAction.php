@@ -390,6 +390,21 @@ abstract class BaseRecordAction extends Action
     }
 
 
+    public function fetchOneToManyRelationCollection($relationId) {
+        $record = $this->record;
+        if ( $record->id && isset($record->{ $relationId }) ) {
+            return $record->{$relationId};
+        }
+    }
+
+    public function fetchManyToManyRelationCollection($relationId) {
+        $relation = $this->getRelation($relationId);
+        return $relation->newForeignForeignCollection(
+            $this->record->getSchema()->getRelation($relation['relation_junction'])
+        );
+    }
+
+
     public function processSubActions()
     {
         foreach ($this->relationships as $relationId => $relation) {
