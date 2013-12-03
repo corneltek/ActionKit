@@ -109,24 +109,24 @@ SCRIPT;
         } elseif ( SchemaDeclare::many_to_many === $relation['type'] ) {
             // TODO: Add a view option to the relationship, so that we can define the view for the editor.
             // Get the record collection.
+
+            // Our default view for ManyToMany relationship
             $view  = isset($relation['view']) ? new $relation['view'] : new \ActionKit\View\ManyToManyCheckboxView;
+
             $middleRelation = $record->getSchema()->getRelation($relation['relation_junction']);
             $middleSchema = new $middleRelation['foreign_schema'];
-            $middleRecordClass = $middleSchema->getModelClass();
-            $middleRecord = new $middleRecordClass;
 
-            $foreignRelation = $middleRecord->getSchema()->getRelation( $relation['relation_foreign'] ); // which should be 'belongsTo' relation
-            $foreignSchema = new $foreignRelation['foreign_schema'];
-            $collectionClass = $foreignSchema->getCollectionClass();
-            $collection    = new $collectionClass;
+            $foreignRelation = $middleSchema->getRelation( $relation['relation_foreign'] ); // which should be 'belongsTo' relation
 
-            $collection = $relation->applyFilter($collection);
+            $collection = $foreignRelation->newForeignCollection();
+            $relation->applyFilter($collection); // apply this filter to the foreign collection.
 
             $ul = $view->render($relationId, $record, $collection);
             $ul->appendTo($container);
         }
         return $container;
     }
+
 
 
     public function buildRelationalActionViewForNewRecord($relationId, $relation = null)
