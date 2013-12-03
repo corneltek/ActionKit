@@ -38,8 +38,10 @@ class Template
         return $this->getClassDir() . DIRECTORY_SEPARATOR . 'Templates';
     }
 
-    /* $template->render('@ActionKit/index.html', array('the' => 'variables', 'go' => 'here')); */
-    public function renderTemplateFile($templateFile, $arguments = array())
+    /**
+     * $template->render('@ActionKit/index.html', array('the' => 'variables', 'go' => 'here')); 
+     */
+    public function render($templateFile, $arguments = array())
     {
         $template = $this->environment->loadTemplate($templateFile);
         return $template->render($arguments);
