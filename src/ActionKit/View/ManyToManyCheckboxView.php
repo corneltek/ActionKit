@@ -27,6 +27,10 @@ class ManyToManyCheckboxView
 
     /**
      * Render a checkbox list base on the subset and superset collections.
+     *
+     * @param string $relationId the relationship id, used to render the form field key.
+     * @param BaseCollection[]   the related collection.
+     * @param BaseCollection[]   the superset collection.
      */
     public function _renderList($relationId, $subset, $superset) 
     {
