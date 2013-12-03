@@ -81,8 +81,12 @@ SCRIPT;
         return $button;
     }
 
-    public function buildManyToManyRelationalActionViewForExistingRecords($record, $relationId, $relation) 
+    public function buildManyToManyRelationalActionViewForExistingRecords($record, $relationId, $relation = null) 
     {
+        if ( ! $relation ) {
+            $relation = $this->action->getRelation($relationId);
+        }
+
         // Our default view for ManyToMany relationship
         $view  = isset($relation['view']) ? new $relation['view'] : new \ActionKit\View\ManyToManyCheckboxView;
         $collection = $relation->newForeignForeignCollection(
@@ -97,8 +101,11 @@ SCRIPT;
      * create it's own subaction view for these existing 
      * records.
      */
-    public function buildOneToManyRelationalActionViewForExistingRecords($record, $relationId, $relation)
+    public function buildOneToManyRelationalActionViewForExistingRecords($record, $relationId, $relation = null)
     {
+        if ( ! $relation ) {
+            $relation = $this->action->getRelation($relationId);
+        }
         $container = new Element('div');
 
         // If the record is loaded and the relation is defined
