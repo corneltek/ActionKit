@@ -163,7 +163,11 @@ SCRIPT;
                 continue;
             }
             $this->buildRelationalActionViewForExistingRecords($relationId, $relation);
-            $this->buildRelationalActionViewForNewRecord($relationId,$relation);
+
+            // currently we only support rendering new record form for "has many"
+            if ( SchemaDeclare::has_many === $relation['type'] ) {
+                $this->buildRelationalActionViewForNewRecord($relationId,$relation);
+            }
         }
     }
 
