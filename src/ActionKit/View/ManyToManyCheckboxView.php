@@ -19,7 +19,7 @@ class ManyToManyCheckboxView
     /**
      * Render a checkbox list base on the subset and superset collections.
      */
-    public function _render2($subset, $superset) 
+    public function _render2($relationId, $subset, $superset) 
     {
         $ul = new Element('ul');
         $ul->addClass('actionkit-checkbox-view');
@@ -51,6 +51,7 @@ class ManyToManyCheckboxView
             $label->append( $hiddenId );
             $li->append($label)->appendTo($ul);
         }
+        return $ul;
     }
 
 
@@ -62,6 +63,7 @@ class ManyToManyCheckboxView
      */
     public function render($relationId, $record, $collection)
     {
+        return $this->_render2( $relationId, $record->{$relationId}, $collection );
         /**
          * $record: the main record
          * relationId: the relationship id
