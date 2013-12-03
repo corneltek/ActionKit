@@ -119,10 +119,9 @@ SCRIPT;
             $foreignSchema = new $foreignRelation['foreign_schema'];
             $collectionClass = $foreignSchema->getCollectionClass();
             $collection    = new $collectionClass;
-            
-            if ( isset($relation['filter']) ) {
-                call_user_func($relation['filter'], $collection, $record, $this);
-            }
+
+            $collection = $relation->applyFilter($collection);
+
             $ul = $view->render($relationId, $record, $collection);
             $ul->appendTo($container);
         }
