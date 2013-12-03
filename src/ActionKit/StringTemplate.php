@@ -22,7 +22,7 @@ class StringTemplate
 
     public function render($arguments = array() ) 
     {
-        return $template->render($arguments);
+        return $this->template->render($arguments);
     }
 }
 
