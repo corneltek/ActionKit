@@ -13,24 +13,25 @@ class Template
 
     public $environment;
 
+    public $config;
+
     public function __construct($config = array()) 
     {
-        $dir = $this->getTemplateDir();
-        if ( ! file_exists($dir) ) {
-            throw RuntimeException("Directory $dir for TemplateView does not exist.");
-        }
-        $this->loader =  new Twig_Loader_Filesystem($dir);
-        $this->environment = new Twig_Environment($this->loader, $config);
+        $this->config = $config;
     }
 
+    public function setClassDirFrom($object)
+    {
+        $ref = new ReflectionObject($object);
+        return $this->_classDir = dirname($ref->getFilename());
+    }
 
     public function getClassDir()
     {
         if ( $this->_classDir ) {
             return $this->_classDir;
         }
-        $ref = new ReflectionObject($this);
-        return $this->_classDir = dirname($ref->getFilename());
+        return $this->setClassDirFrom($this);
     }
 
     public function getTemplateDir()
@@ -43,6 +44,14 @@ class Template
      */
     public function render($templateFile, $arguments = array())
     {
+        $dir = $this->getTemplateDir();
+        if ( ! file_exists($dir) ) {
+            throw RuntimeException("Directory $dir for TemplateView does not exist.");
+        }
+        $this->loader =  new Twig_Loader_Filesystem($dir);
+        $this->environment = new Twig_Environment($this->loader, $this->config);
+
+
         $template = $this->environment->loadTemplate($templateFile);
         return $template->render($arguments);
     }

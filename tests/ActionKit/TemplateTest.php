@@ -13,11 +13,11 @@ class TemplateTest extends PHPUnit_Framework_TestCase
         is('1', $output);
     }
 
-
     public function testTemplate()
     {
         $t = new Template;
         ok($t);
+        ok($t->getClassDir());
     }
 }
 
