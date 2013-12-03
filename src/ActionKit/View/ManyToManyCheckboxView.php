@@ -16,6 +16,43 @@ class ManyToManyCheckboxView
 {
 
 
+    /**
+     * Render a checkbox list base on the subset and superset collections.
+     */
+    public function _render2($subset, $superset) 
+    {
+        $ul = new Element('ul');
+        $ul->addClass('actionkit-checkbox-view');
+
+        $checked = array();
+        foreach( $subset as $item ) {
+            $checked[ $id ] = $item;
+        }
+
+        // now we should render the superset
+        foreach( $superset as $item ) {
+            $id = $item->id;
+            $li       = new Element('li');
+            $label    = new Label;
+            $hiddenId = new HiddenInput(   "{$relationId}[{$id}][_foreign_id]", array( 'value' => $id ) );
+
+            $checkboxValue = ( isset($checked[$id]) ) ? 1 : 0;
+
+            $checkbox = new CheckboxInput( "{$relationId}[{$id}][_connect]",array( 
+                'value' => $checkboxValue,
+            ));
+
+            if ( $checkboxValue ) {
+                $checkbox->check();
+            }
+            $label->append( $checkbox );
+
+            $label->appendText( $item->dataLabel() );
+            $label->append( $hiddenId );
+            $li->append($label)->appendTo($ul);
+        }
+    }
+
 
 
     /**
