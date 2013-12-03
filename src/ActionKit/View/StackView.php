@@ -83,7 +83,7 @@ SCRIPT;
 
     public function buildManyToManyRelationalActionViewForExistingRecords($record, $relationId, $relation = null) 
     {
-        $collection = $this->action->fetchManyToManyRelationCollection($relationId);
+        $collection = $record->fetchManyToManyRelationCollection($relationId);
         // Our default view for ManyToMany relationship
         $view  = isset($relation['view']) ? new $relation['view'] : new \ActionKit\View\ManyToManyCheckboxView;
         return $view->render($relationId, $record, $collection);
@@ -104,7 +104,7 @@ SCRIPT;
         $container = new Element('div');
 
         // If the record is loaded and the relation is defined
-        if ( $collection = $this->action->fetchOneToManyRelationCollection($relationId) ) {
+        if ( $collection = $record->fetchOneToManyRelationCollection($relationId) ) {
             foreach ($collection as $subrecord) {
                 $subview = $this->createRelationalActionView($relationId, $relation, $subrecord);
                 $container->append($subview);
