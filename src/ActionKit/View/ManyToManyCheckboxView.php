@@ -20,7 +20,7 @@ class ManyToManyCheckboxView
     {
         $checked = array();
         foreach( $subset as $item ) {
-            $checked[ $id ] = $item;
+            $checked[ $item->id ] = $item;
         }
         return $checked;
     }
