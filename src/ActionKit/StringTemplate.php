@@ -1,5 +1,6 @@
 <?php
 namespace ActionKit;
+use RuntimeException;
 use Twig_Loader_Filesystem;
 use Twig_Loader_String;
 use Twig_Environment;

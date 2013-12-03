@@ -2,6 +2,7 @@
 namespace ActionKit;
 use ReflectionObject;
 use Exception;
+use RuntimeException;
 use Twig_Loader_Filesystem;
 use Twig_Environment;
 
