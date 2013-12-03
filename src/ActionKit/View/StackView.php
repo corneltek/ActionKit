@@ -112,14 +112,9 @@ SCRIPT;
 
             // Our default view for ManyToMany relationship
             $view  = isset($relation['view']) ? new $relation['view'] : new \ActionKit\View\ManyToManyCheckboxView;
-
-            $middleRelation = $record->getSchema()->getRelation($relation['relation_junction']);
-            $middleSchema = new $middleRelation['foreign_schema'];
-
-            $foreignRelation = $middleSchema->getRelation( $relation['relation_foreign'] ); // which should be 'belongsTo' relation
-
-            $collection = $foreignRelation->newForeignCollection();
-            $relation->applyFilter($collection); // apply this filter to the foreign collection.
+            $collection = $relation->newForeignForeignCollection(
+                $record->getSchema()->getRelation($relation['relation_junction'])
+            );
 
             $ul = $view->render($relationId, $record, $collection);
             $ul->appendTo($container);

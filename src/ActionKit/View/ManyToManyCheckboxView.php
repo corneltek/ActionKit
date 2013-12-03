@@ -85,7 +85,9 @@ class ManyToManyCheckboxView
      */
     public function render($relationId, $record, $collection)
     {
-        return $this->renderList( $relationId, $record->id ? $record->{$relationId} : null , $collection );
+        return $this->renderList( $relationId,
+            ($record->id ? $record->{$relationId} : null),
+            $collection);
         /**
          * $record: the main record
          * relationId: the relationship id
