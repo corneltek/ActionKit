@@ -20,6 +20,15 @@ class Template
         $this->config = $config;
     }
 
+    public function init() {
+        $dir = $this->getTemplateDir();
+        if ( ! file_exists($dir) ) {
+            throw RuntimeException("Directory $dir for TemplateView does not exist.");
+        }
+        $this->loader =  new Twig_Loader_Filesystem($dir);
+        $this->environment = new Twig_Environment($this->loader, $this->config);
+    }
+
     public function setClassDirFrom($object)
     {
         $ref = new ReflectionObject($object);
@@ -39,19 +48,12 @@ class Template
         return $this->getClassDir() . DIRECTORY_SEPARATOR . 'Templates';
     }
 
+
     /**
      * $template->render('@ActionKit/index.html', array('the' => 'variables', 'go' => 'here')); 
      */
     public function render($templateFile, $arguments = array())
     {
-        $dir = $this->getTemplateDir();
-        if ( ! file_exists($dir) ) {
-            throw RuntimeException("Directory $dir for TemplateView does not exist.");
-        }
-        $this->loader =  new Twig_Loader_Filesystem($dir);
-        $this->environment = new Twig_Environment($this->loader, $this->config);
-
-
         $template = $this->environment->loadTemplate($templateFile);
         return $template->render($arguments);
     }

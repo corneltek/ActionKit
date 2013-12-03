@@ -17,6 +17,7 @@ abstract class TemplateView
         $this->action = $action;
         $this->template = new Template;
         $this->template->setClassDirFrom($this);
+        $this->template->init();
     }
 
     /**

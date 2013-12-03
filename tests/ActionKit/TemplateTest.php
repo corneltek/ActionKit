@@ -16,6 +16,7 @@ class TemplateTest extends PHPUnit_Framework_TestCase
     public function testTemplate()
     {
         $t = new Template;
+        $t->init();
         ok($t);
         ok($t->getClassDir());
     }
