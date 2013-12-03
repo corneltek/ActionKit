@@ -47,7 +47,6 @@ class ManyToManyCheckboxView
             $checkbox->check();
         }
         $label->append( $checkbox );
-
         $label->appendText( $item->dataLabel() );
         $label->append( $hiddenId );
         $li->append($label);
@@ -71,7 +70,7 @@ class ManyToManyCheckboxView
         // now we should render the superset, and set the checkbox to be 
         // connected from the $checked array.
         foreach( $superset as $item ) {
-            $li = $this->renderItem( $relationId, $item, isset($checked[$id]) );
+            $li = $this->renderItem( $relationId, $item, isset($checked[$item->id]) );
             $li->appendTo($ul);
         }
         return $ul;
