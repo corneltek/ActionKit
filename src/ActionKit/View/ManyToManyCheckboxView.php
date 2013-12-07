@@ -32,6 +32,7 @@ use FormKit\Layout\GenericLayout;
 class ManyToManyCheckboxView
 {
 
+    public $checked = array();
 
     public function _createCheckedMap($subset) 
     {
@@ -50,7 +51,7 @@ class ManyToManyCheckboxView
      * @param BaseModel $item      Record object.
      * @return Element('li')
      */
-    public function renderItem($relationId, $item, $on = false) 
+    public function renderItem($relationId, $subset, $item, $on = false) 
     {
         $id = $item->id;
         $li       = new Element('li');
@@ -82,12 +83,10 @@ class ManyToManyCheckboxView
         $ul = new Element('ul');
         $ul->addClass('actionkit-checkbox-view');
 
-        $checked = $subset ? $this->_createCheckedMap($subset) : array();
-
         // now we should render the superset, and set the checkbox to be 
-        // connected from the $checked array.
+        // connected from the $this->checked array.
         foreach( $superset as $item ) {
-            $li = $this->renderItem( $relationId, $item, isset($checked[$item->id]) );
+            $li = $this->renderItem( $relationId, $subset, $item, isset($this->checked[$item->id]) );
             $li->appendTo($ul);
         }
         return $ul;
@@ -98,12 +97,20 @@ class ManyToManyCheckboxView
     /**
      * @param string                    $relationId the relationship id of the record.
      * @param LazyRecord\BaseModel      $record     the record object.
+     * @param LazyRecord\BaseCollection $subset     the subset colletion object.
      * @param LazyRecord\BaseCollection $collection the superset colletion object.
      */
-    public function render($relationId, $record, $collection)
+    public function render($relationId, $record, $subset = null, $collection = null)
     {
+        if ( ! $subset ) {
+            $subset = ($record->id ? $record->{$relationId} : null);
+        }
+        if ( ! $collection  ) {
+            $collection = $record->fetchManyToManyRelationCollection($relationId);
+        }
+        $this->checked = $subset ? $this->_createCheckedMap($subset) : array();
         return $this->renderList( $relationId,
-            ($record->id ? $record->{$relationId} : null),
+            $subset,
             $collection);
     }
 }

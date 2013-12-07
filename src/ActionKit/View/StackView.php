@@ -10,6 +10,8 @@ use FormKit\Widget\SubmitInput;
 use FormKit\Widget\CheckboxInput;
 use FormKit\Layout\GenericLayout;
 use LazyRecord\Schema\SchemaDeclare;
+use LazyRecord\BaseModel;
+use LazyRecord\BaseCollection;
 
 /**
  *  $view = new StackView( $action, array(
@@ -81,12 +83,24 @@ SCRIPT;
         return $button;
     }
 
-    public function buildManyToManyRelationalActionViewForExistingRecords($record, $relationId, $relation = null) 
+
+    /**
+     * build ManyToMany RelationalActionView For existing junctional records
+     *
+     * @param $record     BaseModel         the main record
+     * @param $relationId string            the relationship id
+     * @param $relation   array             the relationship data.
+     * @param $subset     BaseCollection    the subset collection (junction data, for rendering the checked items)
+     * @param $collection BaseCollection    the collection (for rendering the list)
+     */
+    public function buildManyToManyRelationalActionViewForExistingRecords($record, $relationId, $relation = null, $subset = null, $collection = null)
     {
-        $collection = $record->fetchManyToManyRelationCollection($relationId);
         // Our default view for ManyToMany relationship
+        if ( ! $relation ) {
+            $relation = $this->action->getRelation($relationId);
+        }
         $view  = isset($relation['view']) ? new $relation['view'] : new \ActionKit\View\ManyToManyCheckboxView;
-        return $view->render($relationId, $record, $collection);
+        return $view->render($relationId, $record, $subset, $collection);
     }
 
     public function renderManyToManyEditor($record, $relationId, $superset)
@@ -134,7 +148,7 @@ SCRIPT;
             $contentContainer = $this->buildOneToManyRelationalActionViewForExistingRecords($record, $relationId, $relation );
             $contentContainer->appendTo($container);
         } elseif ( SchemaDeclare::many_to_many === $relation['type'] ) {
-            $contentContainer = $this->buildManyToManyRelationalActionViewForExistingRecords($record, $relationId, $relation);
+            $contentContainer = $this->buildManyToManyRelationalActionViewForExistingRecords($record, $relationId, $relation  /* $subset, $collection */ );
             $contentContainer->appendTo($container);
         }
         return $container;
