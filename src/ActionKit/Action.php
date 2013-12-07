@@ -53,6 +53,11 @@ abstract class Action implements IteratorAggregate
     public $enableValidation = true;
 
 
+    /**
+     * @var array mix-in instances
+     */
+    public $mixins = array();
+
 
     /**
      * @var array Converted & Fixed $_FILES
@@ -82,13 +87,26 @@ abstract class Action implements IteratorAggregate
 
         $this->request = new HttpRequest;
         $this->result  = new Result;
+        $this->mixins = $this->mixins();
 
-
+        foreach( $this->mixins as $mixin ) {
+            // save action object
+            $mixin->action = $this;
+        }
 
         $this->preinit();
+        foreach( $this->mixins as $mixin ) {
+            $mixin->preinit();
+        }
 
         // initialize parameter objects
         $this->schema();
+
+        // intiailize schema from mixin classes later, 
+        // so that we can use mixin to override the default options.
+        foreach( $this->mixins as $mixin ) {
+            $mixin->schema();
+        }
 
         // use the schema definitions to filter arguments
         $this->args = $this->_filterArguments($args);
@@ -125,11 +143,25 @@ abstract class Action implements IteratorAggregate
         foreach ($this->params as $param) {
             $param->postinit( $this->args );
         }
+
+
+
         $this->postinit();
+        foreach( $this->mixins as $mixin ) {
+            $mixin->postinit();
+        }
 
         // save request arguments
         $this->result->args( $this->args );
     }
+
+
+    public function mixins() {
+        return array( 
+            /* new MixinClass( $this, [params] ) */
+        );
+    }
+
 
     /**
      * Rewrite param names with index, this method is for
@@ -935,6 +967,13 @@ abstract class Action implements IteratorAggregate
         return false;
     }
 
+    public function __call($m , $args ) {
+        foreach( $this->mixins as $mixin ) {
+            if ( method_exists($mixin, $m) ) {
+                return call_user_func_array(array($mixin,$m), $args);
+            }
+        }
+    }
 
 
 

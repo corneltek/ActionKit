@@ -18,6 +18,8 @@ class ProductSchemaProxy extends RuntimeSchema
   'category_id' => 1,
   'id' => 1,
 );
+    public static $mixin_classes = array (
+);
     public static $column_names_include_virtual = array (
   0 => 'name',
   1 => 'category_id',
@@ -113,7 +115,7 @@ class ProductSchemaProxy extends RuntimeSchema
       'type' => 4,
       'self_schema' => 'Product\\Model\\ProductSchema',
       'self_column' => 'category_id',
-      'foreign_schema' => 'Product\\Model\\Category',
+      'foreign_schema' => 'Product\\Model\\CategorySchema',
       'foreign_column' => 'id',
     ),
 )),

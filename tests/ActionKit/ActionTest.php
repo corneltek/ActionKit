@@ -1,8 +1,24 @@
 <?php
 use ActionKit\Action;
+use ActionKit\MixinAction;
+
+class FakeMixin extends MixinAction {
+
+    public function schema() {
+        $this->param('handle')->type('string');
+    }
+
+}
 
 class ImageParamTestAction extends Action {
-    function schema() {
+
+    public function mixins() {
+        return array( 
+            new FakeMixin($this),
+        );
+    }
+
+    public function schema() {
         $this->param('image','Image');
     }
 }
