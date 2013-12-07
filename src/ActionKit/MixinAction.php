@@ -15,11 +15,17 @@ class MixinAction
 
     public function postinit() {  }
 
-    public function beforeRun() {  }
+    public function beforeRun() { 
+        return true;
+    }
 
-    public function afterRun() {  }
+    public function afterRun() { 
+        return true;
+    }
 
-    public function run() {  }
+    public function run() { 
+        return true;
+    }
 
     public function schema() { 
         /*
