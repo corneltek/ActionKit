@@ -89,11 +89,6 @@ abstract class Action implements IteratorAggregate
         $this->result  = new Result;
         $this->mixins = $this->mixins();
 
-        foreach( $this->mixins as $mixin ) {
-            // save action object
-            $mixin->action = $this;
-        }
-
         $this->preinit();
         foreach( $this->mixins as $mixin ) {
             $mixin->preinit();
