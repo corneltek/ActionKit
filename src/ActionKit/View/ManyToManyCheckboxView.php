@@ -13,7 +13,7 @@ use FormKit\Layout\GenericLayout;
  * Render many-to-many relationship records as a checkbox list.
  *
  *
- * Usage in twig template:
+ Usage in twig template:
 
     {% set subview = CRUD.Action.asView('ActionKit\\View\\StackView',{ "no_form": 1 }) %}
 
@@ -22,6 +22,11 @@ use FormKit\Layout\GenericLayout;
     {{ subview.buildManyToManyRelationalActionViewForExistingRecords(CRUD.Record, 'categories').render() |raw }}
 
     {{ subview.renderManyToManyEditor(CRUD.Record,'categories', categories) |raw}}
+
+  Or you can use it directly:
+
+    $view = new \ActionKit\View\ManyToManyCheckboxView;
+    echo $view->render($relationId, $record, $superset);
 
  */
 class ManyToManyCheckboxView

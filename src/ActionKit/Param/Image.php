@@ -3,6 +3,7 @@ namespace ActionKit\Param;
 use ActionKit\Param;
 use Phifty\UploadFile;
 use Exception;
+use RuntimeException;
 use SimpleImage;
 use Phifty\FileUtils;
 
@@ -146,8 +147,8 @@ class Image extends Param
 
     public function getImager()
     {
+        // XXX: move this phifty-core dependency out.
         kernel()->library->load('simpleimage');
-
         return new SimpleImage;
     }
 
@@ -159,34 +160,35 @@ class Image extends Param
             return $ret;
         }
 
-        // Consider required and optional situations.
-        if (@$_FILES[ $this->name ]['tmp_name']) {
+        // XXX: Consider required and optional situations.
+        if ( isset($_FILES[ $this->name ]['tmp_name']) && $_FILES[ $this->name ]['tmp_name'] )  {
             $file = new UploadFile( $this->name );
-            if ( $this->validExtensions )
-                if ( ! $file->validateExtension( $this->validExtensions ) )
-
+            if ( $this->validExtensions ) {
+                if ( ! $file->validateExtension( $this->validExtensions ) ) {
                     return array( false, _('Invalid File Extension: ') . $this->name );
+                }
+            }
 
-            if ( $this->sizeLimit )
-                if ( ! $file->validateSize( $this->sizeLimit ) )
-
+            if ( $this->sizeLimit ) {
+                if ( ! $file->validateSize( $this->sizeLimit ) ) {
                     return array( false, _("The uploaded file exceeds the size limitation. ") . FileUtils::pretty_size($this->sizeLimit * 1024) );
+                }
+            }
         }
-
         return true;
     }
 
     // XXX: should be inhertied from Param\File.
     public function hintFromSizeLimit()
     {
-        if ($this->sizeLimit) {
-            if ( $this->hint )
+        if ( $this->sizeLimit ) {
+            if ( $this->hint ) {
                 $this->hint .= '<br/>';
-            else
+            } else {
                 $this->hint = '';
-            $this->hint .= '檔案大小限制: ' . FileUtils::pretty_size($this->sizeLimit*1024);
+            }
+            $this->hint .= '檔案大小限制: ' . FileUtils::pretty_size( $this->sizeLimit * 1024);
         }
-
         return $this;
     }
 
@@ -205,11 +207,19 @@ class Image extends Param
         return $this;
     }
 
+
+    /**
+     * This init method move the uploaded file to the target directory.
+     *
+     * @param array $args request arguments ($_REQUEST)
+     */
     public function init( & $args )
     {
         // constructing file
         $replacingRemote = false;
         $file = null;
+
+        // get file info from $_FILES, we have the accessor from the action class.
         if ( isset($this->action->files[ $this->name ])
             && $this->action->files[$this->name]['name'] )
         {
@@ -248,19 +258,19 @@ class Image extends Param
             } elseif ( isset($file['tmp_name']) ) {
                 copy($file['tmp_name'], $targetPath);
             } else {
-                throw new Exception("source field not found.");
-
+                throw new RuntimeException("source field not found.");
                 return;
             }
         } else {
             // XXX: merge this
             if ($replacingRemote) {
                 if ( isset($file['saved_path']) ) {
-                    if ( $targetPath !== $file['saved_path'] )
+                    if ( $targetPath !== $file['saved_path'] ) {
                         copy($file['saved_path'], $targetPath);
+                    }
                 }
             } elseif ( move_uploaded_file($file['tmp_name'],$targetPath) === false ) {
-                throw new Exception('File upload failed.');
+                throw new RuntimeException('File upload failed.');
             }
         }
 
@@ -273,10 +283,10 @@ class Image extends Param
         if ( isset($args[$this->name . '_autoresize']) && $this->size ) {
             $t = @$args[$this->name . '_autoresize_type' ] ?: 'crop_and_scale';
             $classes = array(
-                'max_width'      => 'ActionKit\Param\Image\MaxWidthResize',
-                'max_height'     => 'ActionKit\Param\Image\MaxHeightResize',
-                'scale'          => 'ActionKit\Param\Image\ScaleResize',
-                'crop_and_scale' => 'ActionKit\Param\Image\CropAndScaleResize',
+                'max_width'      => 'ActionKit\\Param\\Image\\MaxWidthResize',
+                'max_height'     => 'ActionKit\\Param\\Image\\MaxHeightResize',
+                'scale'          => 'ActionKit\\Param\\Image\\ScaleResize',
+                'crop_and_scale' => 'ActionKit\\Param\\Image\\CropAndScaleResize',
             );
 
             // echo "resizing {$this->name} with $t\n";
@@ -287,7 +297,7 @@ class Image extends Param
                 $resizer = new $c($this);
                 $resizer->resize( $targetPath );
             } else {
-                throw new Exception("Unsupported autoresize_type $t");
+                throw new RuntimeException("Unsupported autoresize_type $t");
             }
         }
     }
