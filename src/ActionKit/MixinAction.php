@@ -19,6 +19,8 @@ class MixinAction
 
     public function afterRun() {  }
 
+    public function run() {  }
+
     public function schema() { 
         /*
         $this->param('...');
