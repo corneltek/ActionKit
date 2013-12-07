@@ -15,6 +15,10 @@ class MixinAction
 
     public function postinit() {  }
 
+    public function beforeRun() {  }
+
+    public function afterRun() {  }
+
     public function schema() { 
         /*
         $this->param('...');

@@ -25,7 +25,7 @@ class ImageParamTestAction extends Action {
 
 class TestTakeFilterAction extends Action {
 
-    function schema() {
+    public function schema() {
         $this->param('extra1');
         $this->param('extra2');
         $this->param('extra3');

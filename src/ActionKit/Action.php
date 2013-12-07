@@ -333,12 +333,32 @@ abstract class Action implements IteratorAggregate
         /* run column methods */
         // XXX: merge them all...
         $this->beforeRun();
+        foreach( $this->mixins as $mixin ) {
+            $mixin->beforeRun();
+        }
+
         if ( $this->enableValidation and $this->runValidate() ) {  // if found error, return false;
             return false;
         }
-        $ret = $this->run();
-        $this->afterRun();
-        return $ret;
+        if ( false === $this->run() ) {
+            return false;
+        }
+
+        foreach( $this->mixins as $mixin ) {
+            if ( false === $mixin->run() ) {
+                return false;
+            }
+        }
+
+        if ( false === $this->afterRun() ) {
+            return false;
+        }
+        foreach( $this->mixins as $mixin ) {
+            if ( false === $mixin->afterRun() ) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public function __invoke()
