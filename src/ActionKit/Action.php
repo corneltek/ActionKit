@@ -157,13 +157,6 @@ class Action implements IteratorAggregate
         );
     }
 
-    public function initParamsFromColumns($columns, $record = null) {
-        foreach ( $columns as $column ) {
-            if ( ! isset($this->params[$column->name] ) ) {
-                $this->params[ $column->name ] = ColumnConvert::toParam( $column , $record );
-            }
-        }
-    }
 
 
     /**

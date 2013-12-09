@@ -8,7 +8,7 @@ use ActionKit\CRUD;
 use LazyRecord\Schema\SchemaDeclare;
 use Exception;
 
-abstract class BaseRecordAction extends Action
+class BaseRecordAction extends Action
 {
     const TYPE = 'base';
 
@@ -26,9 +26,14 @@ abstract class BaseRecordAction extends Action
 
     public $enableLoadRecord = true;
 
-    abstract public function successMessage($ret);
+    public function successMessage($ret) { 
+        return $ret->message;
+    }
 
-    abstract public function errorMessage($ret);
+    public function errorMessage($ret) {
+        return $ret->message;
+    }
+
 
     /**
      * Construct an action object.
@@ -54,8 +59,12 @@ abstract class BaseRecordAction extends Action
     public function __construct( $args = array(), $record = null, $currentUser = null )
     {
         // record name is in Camel case
+        if ( ! $this->recordClass && $record ) {
+            $this->recordClass = get_class($record);
+        }
+
         if ( ! $this->recordClass ) {
-            throw new ActionException( sprintf('Record class is not specified.' , $this ));
+            throw new ActionException( sprintf('recordClass is not defined.' , $this ));
         }
 
         if ( $record && ! is_subclass_of($record,'LazyRecord\\BaseModel',true) ) {
@@ -84,6 +93,7 @@ abstract class BaseRecordAction extends Action
             $this->loadRecordValuesToParams();
         }
     }
+
 
 
     /**
@@ -135,6 +145,13 @@ abstract class BaseRecordAction extends Action
         $this->initParamsFromColumns( $this->record->getColumns(true), $this->record );
     }
 
+    public function initParamsFromColumns($columns, $record = null) {
+        foreach ( $columns as $column ) {
+            if ( ! isset($this->params[$column->name] ) ) {
+                $this->params[ $column->name ] = ColumnConvert::toParam( $column , $record );
+            }
+        }
+    }
 
     /**
      * Default base record action schema

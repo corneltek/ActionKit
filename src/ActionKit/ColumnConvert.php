@@ -2,6 +2,7 @@
 namespace ActionKit;
 use ActionKit\Param;
 use ActionKit\Action;
+use ActionKit\RecordAction\BaseRecordAction;
 use Exception;
 
 /**
@@ -13,11 +14,11 @@ use Exception;
 class ColumnConvert
 {
     // Convert a LazyRecord schema to action
-    public static function convertSchemaToAction($schema) {
+    public static function convertSchemaToAction($schema, $record = null) {
         $columns = $schema->getColumns(true);
-        $action = new Action;
+        $action = new BaseRecordAction(array(), $record);
         // no actual record is null
-        $action->initParamsFromColumns($columns, null);
+        $action->initParamsFromColumns($columns, $record);
         return $action;
     }
 
