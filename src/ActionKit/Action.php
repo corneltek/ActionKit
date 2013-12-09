@@ -708,9 +708,7 @@ class Action implements IteratorAggregate
     public function redirectLater( $path , $secs = 1 )
     {
         if ( $this->isAjax() ) {
-            // XXX: more support.
-            $this->result->redirect( $path );
-
+            $this->result->redirect( $path, $secs );
             return;
         } else {
             header("Refresh: $secs; url=$path");

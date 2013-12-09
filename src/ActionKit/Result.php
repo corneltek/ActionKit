@@ -39,6 +39,8 @@ class Result
      */
     public $redirect;
 
+    public $redirectDelay;
+
     /**
      * @var array action can return data.
      * */
@@ -188,10 +190,10 @@ class Result
      *
      * @param string $path
      */
-    public function redirect( $path )
+    public function redirect( $path , $delaySeconds = 0 )
     {
         $this->redirect = $path;
-
+        $this->redirectDelay = $delaySeconds;
         return $this;
     }
 
@@ -335,6 +337,9 @@ class Result
 
         if ($this->redirect) {
             $ret['redirect'] = $this->redirect;
+            if ( $this->redirectDelay ) {
+                $ret['delay'] = $this->redirectDelay;
+            }
         }
 
         return $ret;
