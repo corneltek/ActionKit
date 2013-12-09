@@ -9,7 +9,7 @@ use Universal\Http\FilesParameter;
 use InvalidArgumentException;
 use IteratorAggregate;
 
-abstract class Action implements IteratorAggregate
+class Action implements IteratorAggregate
 {
     public $currentUser;
 
@@ -155,6 +155,14 @@ abstract class Action implements IteratorAggregate
         return array( 
             /* new MixinClass( $this, [params] ) */
         );
+    }
+
+    public function initParamsFromColumns($columns, $record = null) {
+        foreach ( $columns as $column ) {
+            if ( ! isset($this->params[$column->name] ) ) {
+                $this->params[ $column->name ] = ColumnConvert::toParam( $column , $record );
+            }
+        }
     }
 
 

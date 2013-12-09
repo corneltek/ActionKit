@@ -132,11 +132,7 @@ abstract class BaseRecordAction extends Action
         if (! $this->record) {
             throw new ActionException('Record object is empty.', $this );
         }
-        foreach ( $this->record->getColumns(true) as $column ) {
-            if ( ! isset($this->params[$column->name] ) ) {
-                $this->params[ $column->name ] = ColumnConvert::toParam( $column , $this->record );
-            }
-        }
+        $this->initParamsFromColumns( $this->record->getColumns(true), $this->record );
     }
 
 

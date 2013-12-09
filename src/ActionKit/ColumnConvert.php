@@ -1,6 +1,7 @@
 <?php
 namespace ActionKit;
 use ActionKit\Param;
+use ActionKit\Action;
 use Exception;
 
 /**
@@ -11,14 +12,24 @@ use Exception;
  */
 class ColumnConvert
 {
+    // Convert a LazyRecord schema to action
+    public static function convertSchemaToAction($schema) {
+        $columns = $schema->getColumns(true);
+        $action = new Action;
+        // no actual record is null
+        $action->initParamsFromColumns($columns, null);
+        return $action;
+    }
+
     public static function toParam( $column , $record = null )
     {
         $name = $column->name;
         $param = new Param( $name );
         foreach ($column->attributes as $k => $v) {
             // if the model column validator is not compatible with action validator
-            if ( $k === 'validator' )
+            if ( $k === 'validator' ) {
                 continue;
+            }
             $param->$k = $v;
         }
 
