@@ -148,7 +148,10 @@ class BaseRecordAction extends Action
     public function initParamsFromColumns($columns, $record = null) {
         foreach ( $columns as $column ) {
             if ( ! isset($this->params[$column->name] ) ) {
-                $this->params[ $column->name ] = ColumnConvert::toParam( $column , $record );
+                // do not render this field if renderable === false
+                if ( false !== $column->get('renderable') ) {
+                    $this->params[ $column->name ] = ColumnConvert::toParam( $column , $record );
+                }
             }
         }
     }
