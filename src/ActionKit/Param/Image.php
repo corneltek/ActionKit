@@ -126,10 +126,10 @@ class Image extends Param
                 _('Scale') => 'scale',
             );
             if (isset($this->size['width'])) {
-                $this->widgetAttributes['autoresize_types'][ _('Max Width') ] = 'max_width';
+                $this->widgetAttributes['autoresize_types'][ _('Fit Width') ] = 'max_width';
             }
             if (isset($this->size['height'])) {
-                $this->widgetAttributes['autoresize_types'][ _('Max Height') ] = 'max_height';
+                $this->widgetAttributes['autoresize_types'][ _('Fit Height') ] = 'max_height';
             }
         }
         return $this;
