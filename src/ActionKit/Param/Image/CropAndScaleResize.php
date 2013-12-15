@@ -15,11 +15,15 @@ class CropAndScaleResize
         if (isset($this->param->size['height'])
             && isset($this->param->size['width']) )
         {
-            $h = $this->param->size['height'];
-            $w = $this->param->size['width'];
+            $h = intval($this->param->size['height']);
+            $w = intval($this->param->size['width']);
             $image = $this->param->getImager();
             $image->load( $targetPath );
-            $image->cropOuterAndScale($w,$h);
+
+            $size = getimagesize($targetPath);
+            if ( $size[0] > $w || $size[1] > $h ) {
+                $image->cropOuterAndScale($w,$h);
+            }
             $image->save( $targetPath , null , $this->param->compression );
         }
     }

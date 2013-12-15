@@ -12,7 +12,7 @@ abstract class UpdateRecordAction
         if ( ! $record->id ) {
             // try to load record from argument id.
             if ( ! isset($args['id']) ) {
-                return $this->error('Updating Record requires an ID');
+                return $this->error(_('Updating Record requires an ID'));
             }
             $record->load( $args['id'] );
             if ( ! $record->id ) {
