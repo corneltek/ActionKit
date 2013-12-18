@@ -248,22 +248,31 @@ class Action implements IteratorAggregate
     {
         // skip __ajax_request field
         if ( $name === '__ajax_request' )
-
-            return;
+            return true;
 
         if ( ! isset($this->params[ $name ] ) ) {
-            return;
+            return true;
+
             // just skip it.
             $this->result->addValidation( $name, array(
                 'valid' => false,
                 'message' => "Contains invalid arguments: $name",
                 'field' => $name,
             ));
-
             return true;
         }
 
         $param = $this->params[ $name ];
+
+        /*
+         * $ret contains:
+         *
+         *    [ boolean pass, string message ]
+         *
+         * or 
+         *
+         *    [ boolean pass ]
+         */
         $ret = (array) $param->validate( @$this->args[$name] );
         if ( is_array($ret) ) {
             if ($ret[0]) { // success
@@ -274,14 +283,12 @@ class Action implements IteratorAggregate
                     'message' => @$ret[1],
                     'field' => $name,
                 ));  // $ret[1] = message
-
-                return true;
+                return false;
             }
         } else {
             throw new \Exception("Unknown validate return value of $name => " . $this->getName() );
         }
-
-        return false;
+        return true;
     }
 
     /**
@@ -289,27 +296,28 @@ class Action implements IteratorAggregate
      *
      * Foreach parameters, validate the parameter through validateParam method.
      *
-     * @return bool error flag, returns TRUE on error.
+     * @return bool pass flag, returns FALSE on error.
      */
     public function runValidate()
     {
         /* it's different behavior when running validation for create,update,delete,
          *
          * for generic action, just traverse all params. */
-        $error = false;
+        $foundError = false;
         foreach ($this->params as $name => $param) {
-            $hasError = $this->validateParam( $name );
-            if ($hasError) {
-                $error = true;
+            if ( false === $this->validateParam( $name ) ) {
+                $foundError = true;
             }
         }
 
         // we do this here because we need to validate all param(s)
-        if ($error) {
-            $this->result->error( _('Validation Error') );
+        if ($foundError) {
+            $this->result->error( _(Messages::get('validation.error') ) );
+            return false;
         }
 
-        return $error;
+        // OK
+        return true;
     }
 
 
@@ -333,7 +341,7 @@ class Action implements IteratorAggregate
             $mixin->beforeRun();
         }
 
-        if ( $this->enableValidation and $this->runValidate() ) {  // if found error, return false;
+        if ( $this->enableValidation && false === $this->runValidate() ) {  // if found error, return true;
             return false;
         }
         if ( false === $this->run() ) {
@@ -559,7 +567,12 @@ class Action implements IteratorAggregate
     public function setArgument($name,$value)
     {
         $this->args[ $name ] = $value ;
+        return $this;
+    }
 
+    public function setArg($name, $value)
+    {
+        $this->args[ $name ] = $value ;
         return $this;
     }
 

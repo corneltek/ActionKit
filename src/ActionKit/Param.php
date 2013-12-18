@@ -2,6 +2,7 @@
 namespace ActionKit;
 use CascadingAttribute;
 use FormKit;
+use ActionKit\Messages;
 
 class Param extends CascadingAttribute
 {
@@ -88,17 +89,21 @@ class Param extends CascadingAttribute
             if ( $this->required
                 && ( ! isset($_FILES[ $this->name ]['tmp_name']) && ! isset($_REQUEST[$this->name]) )
             ) {
-                return array(false, __('File Field %1 is required.' , $this->getLabel()  ) );
+                return array(false, __( Messages::get('file.required') , $this->getLabel()  ) );
             }
         } else {
-            if ( $this->required && ! isset($_REQUEST[ $this->name ]) && ! $this->default ) {
-                return array(false, __('Field %1 is required.' , $this->getLabel()  ) );
+            if ( $this->required 
+                && ( ! isset($_REQUEST[ $this->name ])
+                        || ! $_REQUEST[$this->name] 
+                    )
+                && ! $this->default ) 
+            {
+                return array(false, __( Messages::get('param.required') , $this->getLabel()  ) );
             }
         }
         if ($this->validator) {
             return call_user_func($this->validator,$value);
         }
-
         return true;
     }
 

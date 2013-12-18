@@ -1,6 +1,7 @@
 <?php
 namespace ActionKit;
 use Exception;
+use ActionKit\Messages;
 
 class Result
 {
@@ -332,8 +333,9 @@ class Result
             $ret = array_merge( $ret , $this->completion );
         }
 
-        if ( $this->validations )
+        if ( $this->validations ) {
             $ret['validations'] = $this->validations;
+        }
 
         if ($this->redirect) {
             $ret['redirect'] = $this->redirect;

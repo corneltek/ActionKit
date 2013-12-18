@@ -86,7 +86,7 @@ class ActionRunner
 
         /* register results into hash */
         if ( $action = $this->createAction( $class , $arguments ) ) {
-            $action();
+            $action->invoke();
             return $this->results[ $actionName ] = $action->getResult();
         }
 
