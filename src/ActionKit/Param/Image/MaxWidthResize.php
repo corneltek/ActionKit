@@ -5,9 +5,14 @@ class MaxWidthResize
 {
     public $param;
 
+
     public function __construct($param)
     {
         $this->param = $param;
+    }
+
+    public function label() {
+        return _('Fit To Width');
     }
 
     public function resize($targetPath)

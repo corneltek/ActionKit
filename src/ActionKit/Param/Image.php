@@ -203,7 +203,6 @@ class Image extends Param
         if ( $this->size && isset($this->size['width']) && isset($this->size['height']) ) {
             $this->hint .= '<br/> 圖片大小: ' . $this->size['width'] . 'x' . $this->size['height'];
         }
-
         return $this;
     }
 

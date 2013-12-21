@@ -10,6 +10,11 @@ class ScaleResize
         $this->param = $param;
     }
 
+    public function label()
+    {
+        return _('Scale');
+    }
+
     public function resize($targetPath)
     {
         if (isset($this->param->size['height'])

@@ -24,9 +24,9 @@ class BulkRecordAction extends Action
     public function runValidate()
     {
         if ( isset( $this->args['items'] ) ) {
-            return false;  // no error
+            return true;  // no error
         }
-        return true;
+        return false;
     }
 
     // TODO: we should use

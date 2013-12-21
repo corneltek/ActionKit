@@ -239,6 +239,41 @@ class Action implements IteratorAggregate
         return $this;
     }
 
+    public function invalidField($n, $message) {
+        $this->result->addValidation($n, array(
+            'valid' => false,
+            'message' => $message,
+            'field' => $n,
+        ));
+    }
+
+    public function requireArg($n) {
+        $v = $this->arg($n);
+        if ( $v === null || $v === "" ) {
+            $param = $this->getParam($n);
+            $this->result->addValidation($n, array(
+                'valid' => false,
+                'message' => __(Messages::get('param.required'), $param ? $param->getLabel() : $n ),
+                'field' => $n,
+            ));
+            return false;
+        }
+        return true;
+    }
+
+    public function requireArgs() {
+        $ns = func_get_args();
+        $satisfied = true;
+        foreach( $ns as $n ) {
+            if ( false === $this->requireArg($n) ) {
+                $satisfied = false;
+            }
+        }
+        return $satisfied;
+    }
+
+
+
     /**
      * Run parameter validator to validate argument.
      *

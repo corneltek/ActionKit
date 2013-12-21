@@ -49,17 +49,18 @@ abstract class UpdateRecordAction
         $error = false;
         foreach ($this->args as $key => $value) {
             /* skip action column */
-            if ( $key === 'action' || $key === '__ajax_request' )
+            if ( $key === 'action' || $key === '__ajax_request' ) {
                 continue;
-
-            $hasError = $this->validateparam( $key );
-            if ( $hasError )
+            }
+            if ( false === $this->validateparam( $key ) ) {
                 $error = true;
+            }
         }
-        if ( $error )
+        if ( $error ) {
             $this->result->error( _('Validation Error') );
-
-        return $error;
+            return false;
+        }
+        return true;
     }
 
     public function recordNotFound()

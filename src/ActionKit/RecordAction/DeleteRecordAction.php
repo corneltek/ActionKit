@@ -28,10 +28,10 @@ abstract class DeleteRecordAction
      */
     public function runValidate()
     {
-        if ( isset( $this->args['id'] ) )
-
-            return false;
-        return true;
+        if ( isset( $this->args['id'] ) ) {
+            return true;
+        }
+        return false;
     }
 
     public function successMessage($ret)

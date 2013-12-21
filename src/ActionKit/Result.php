@@ -182,9 +182,20 @@ class Result
                 array_push( $errors , $attrs['invalid'] );
             }
         }
-
         return $errors;
     }
+
+
+    public function hasInvalidMessages() {
+        foreach ($this->validations as $field => $attrs) {
+            if ( isset($attrs['valid']) && $attrs['valid'] === false) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 
     /**
      * Set redirect path

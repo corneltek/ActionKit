@@ -10,6 +10,11 @@ class CropAndScaleResize
         $this->param = $param;
     }
 
+    public function label()
+    {
+        return _('Crop Then Scale');
+    }
+
     public function resize($targetPath)
     {
         if (isset($this->param->size['height'])

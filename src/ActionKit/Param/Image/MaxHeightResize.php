@@ -10,6 +10,11 @@ class MaxHeightResize
         $this->param = $param;
     }
 
+    public function label()
+    {
+        return _('Fit To Height');
+    }
+
     public function resize($targetPath)
     {
         if (isset($this->param->size['height'])) {
