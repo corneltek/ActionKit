@@ -17,6 +17,8 @@ class Action implements IteratorAggregate
 
     public $relationships = array();
 
+    public $actionFieldName = 'action';
+
     /**
      * @var array
      */
@@ -167,14 +169,12 @@ class Action implements IteratorAggregate
      * relationId[ index ][column2] = value
      *
      * @param string $key
-     * @param string $index
+     * @param string $index The default index key for rendering field index name.
      *
      * @return string index number
      */
     public function setParamNamesWithIndex($key, $index = null)
     {
-        // The default index key for rendering field index name.
-        //
         // if the record is loaded, use the primary key as identity.
         // if not, use timestamp simply, hope seconds is enough.
         if (! $index) {
@@ -185,7 +185,7 @@ class Action implements IteratorAggregate
         foreach ($this->params as $name => $param) {
             $param->name = sprintf('%s[%s][%s]', $key, $index, $param->name);
         }
-
+        $this->actionFieldName = sprintf('%s[%s][%s]', $key, $index, $this->actionFieldName);
         return $index;
     }
 
@@ -930,7 +930,7 @@ class Action implements IteratorAggregate
      */
     public function createSignatureWidget()
     {
-        return new \FormKit\Widget\HiddenInput('action', array( 'value' => $this->getSignature() ));
+        return new \FormKit\Widget\HiddenInput($this->actionFieldName, array( 'value' => $this->getSignature() ));
     }
 
 
