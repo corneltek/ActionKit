@@ -6,24 +6,40 @@ abstract class UpdateRecordAction
 {
     const TYPE = 'update';
 
+    public $loadByArray = false;
+
+    public function loadRecord($args) {
+        if ( ! isset($args['id']) && ! $this->loadByArray ) {
+            return $this->error(_('Updating record requires an ID'));
+        }
+        if ( $this->loadByArray ) {
+            $ret = $this->record->load($args);
+        } elseif ( isset($args['id']) ) {
+            $ret = $this->record->load( $args['id'] );
+        } else {
+            return $this->error( _('Require an ID to update record.') );
+        }
+        if ( ! $ret->success ) {
+            return $this->error(__('Load Error: %1', $ret->message));
+        }
+        if ( ! $this->record->id ) {
+            return $this->recordNotFound();
+        }
+        return true;
+    }
+
     public function update( $args )
     {
         $record = $this->record;
         if ( ! $record->id ) {
-            // try to load record from argument id.
-            if ( ! isset($args['id']) ) {
-                return $this->error(_('Updating Record requires an ID'));
-            }
-            $record->load( $args['id'] );
-            if ( ! $record->id ) {
-                return $this->recordNotFound();
+            if ( false === $this->loadRecord($args) ) {
+                return false;
             }
         }
 
         $ret = $record->update( $args );
         if (! $ret->success) {
             $this->convertRecordValidation( $ret );
-
             return $this->updateError( $ret );
         }
 

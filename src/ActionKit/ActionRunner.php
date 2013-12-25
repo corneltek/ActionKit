@@ -304,6 +304,10 @@ class ActionRunner
         return isset($this->results[$name]);
     }
 
+    public function setResult($name, $result) {
+        $this->results[$name] = $result;
+    }
+
     public function removeResult($name)
     {
         unset( $this->results[$name] );
