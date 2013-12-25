@@ -87,7 +87,6 @@ class BaseRecordAction extends Action
         // initialize schema , init base action stuff
         parent::__construct( $args , $currentUser );
 
-
         if ( $this->record->id ) {
             // load record values to params
             $this->loadRecordValuesToParams();
@@ -115,8 +114,9 @@ class BaseRecordAction extends Action
         /* load record value */
         foreach ( $this->record->getColumns(true) as $column ) {
             if ($val = $this->record->{ $column->name }) {
-                if ( isset($this->params[ $column->name ]) )
+                if ( isset($this->params[ $column->name ]) ) {
                     $this->params[ $column->name ]->value = $val;
+                }
             }
         }
     }
@@ -143,6 +143,11 @@ class BaseRecordAction extends Action
             throw new ActionException('Record object is empty.', $this );
         }
         $this->initParamsFromColumns( $this->record->getColumns(true), $this->record );
+    }
+
+    public function resetParams() {
+        // reset params
+        $this->params = array();
     }
 
     public function initParamsFromColumns($columns, $record = null) {

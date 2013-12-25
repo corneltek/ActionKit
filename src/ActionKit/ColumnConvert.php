@@ -18,6 +18,7 @@ class ColumnConvert
         $columns = $schema->getColumns(true);
         $action = new BaseRecordAction(array(), $record);
         // no actual record is null
+        $action->resetParams();
         $action->initParamsFromColumns($columns, $record);
         return $action;
     }
