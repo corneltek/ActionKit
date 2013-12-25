@@ -560,6 +560,9 @@ class Action implements IteratorAggregate
         } else { die('arg error.'); }
     }
 
+    public function defined($name) {
+        return isset($this->args[$name]);
+    }
 
     /**
      * @return array
