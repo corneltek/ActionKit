@@ -8,6 +8,8 @@ abstract class UpdateRecordAction
 
     public $loadByArray = false;
 
+    public $enableLoadRecord = true;
+
     public function loadRecord($args) {
         if ( ! isset($args['id']) && ! $this->loadByArray ) {
             return $this->error(_('Updating record requires an ID'));

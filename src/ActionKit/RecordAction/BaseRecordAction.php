@@ -24,7 +24,7 @@ class BaseRecordAction extends Action
      */
     public $recordClass;
 
-    public $enableLoadRecord = true;
+    public $enableLoadRecord = false;
 
     public function successMessage($ret) { 
         return $ret->message;

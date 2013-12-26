@@ -6,6 +6,8 @@ abstract class DeleteRecordAction
 {
     const TYPE = 'delete';
 
+    public $enableLoadRecord = true;
+
     public function run()
     {
         /* default run method , to run create action */
