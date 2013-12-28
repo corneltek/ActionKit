@@ -15,8 +15,12 @@ class Messages
     }
 
     static public function get($msgId) {
+        if ( $msgId != _($msgId) ) {
+            return _($msgId);
+        }
+
         if ( isset(self::$messages[$msgId]) ) {
-            return self::$messages[ $msgId ];
+            return self::$messages[$msgId];
         }
         // pass to gettext to translate
         // throw new Exception("MessageId $msgId is not defined.");
