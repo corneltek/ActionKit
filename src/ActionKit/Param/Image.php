@@ -36,11 +36,11 @@ class ImageResizeProcess
         'crop_and_scale' => 'ActionKit\\Param\\Image\\CropAndScaleResize',
     );
 
-    static public function create($identity, $param)
+    static public function create($t, $param)
     {
-        if ( isset($this->classes[$t]) ) {
-            $c = $this->classes[$t];
-            return new $c($this, $param);
+        if ( isset(self::$classes[$t]) ) {
+            $c = self::$classes[$t];
+            return new $c($param);
         }
         return null;
     }
