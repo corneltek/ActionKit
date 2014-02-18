@@ -26,6 +26,29 @@ use Phifty\FileUtils;
  *  }
  *
  */
+
+class ImageResizeProcess 
+{
+    static public $classes = array(
+        'max_width'      => 'ActionKit\\Param\\Image\\MaxWidthResize',
+        'max_height'     => 'ActionKit\\Param\\Image\\MaxHeightResize',
+        'scale'          => 'ActionKit\\Param\\Image\\ScaleResize',
+        'crop_and_scale' => 'ActionKit\\Param\\Image\\CropAndScaleResize',
+    );
+
+    static public function create($identity, $param)
+    {
+        if ( isset($this->classes[$t]) ) {
+            $c = $this->classes[$t];
+            return new $c($this, $param);
+        }
+        return null;
+    }
+
+
+}
+
+
 class Image extends Param
 {
 
@@ -35,6 +58,7 @@ class Image extends Param
     /* image column attributes */
     public $resizeWidth;
     public $resizeHeight;
+
 
     /**
      * @var array image size info, if this size info is specified, data-width,
@@ -279,24 +303,23 @@ class Image extends Param
         $this->action->files[ $this->name ]['saved_path'] = $targetPath;
         $this->action->addData( $this->name , $targetPath );
 
+        // if the auto-resize is specified from front-end
         if ( isset($args[$this->name . '_autoresize']) && $this->size ) {
             $t = @$args[$this->name . '_autoresize_type' ] ?: 'crop_and_scale';
-            $classes = array(
-                'max_width'      => 'ActionKit\\Param\\Image\\MaxWidthResize',
-                'max_height'     => 'ActionKit\\Param\\Image\\MaxHeightResize',
-                'scale'          => 'ActionKit\\Param\\Image\\ScaleResize',
-                'crop_and_scale' => 'ActionKit\\Param\\Image\\CropAndScaleResize',
-            );
-
-            // echo "resizing {$this->name} with $t\n";
-            // print_r( $this->size );
-
-            if ( isset($classes[$t]) ) {
-                $c = $classes[$t];
-                $resizer = new $c($this);
-                $resizer->resize( $targetPath );
+            if ( $process = ImageResizeProcess::create($t, $this) ) {
+                $process->resize( $targetPath );
             } else {
                 throw new RuntimeException("Unsupported autoresize_type $t");
+            }
+        } else {
+            if ( $rWidth = $this->resizeWidth ) {
+                if ( $process = ImageResizeProcess::create('max_width', $this) ) {
+                    $process->resize($targetPath);
+                }
+            } else if ( $rHeight = $this->resizeHeight ) {
+                if ( $process = ImageResizeProcess::create('max_height', $this) ) {
+                    $process->resize($targetPath);
+                }
             }
         }
     }

@@ -17,11 +17,13 @@ class MaxHeightResize
 
     public function resize($targetPath)
     {
-        if (isset($this->param->size['height'])) {
-            $maxHeight = $this->param->size['height'];
-        } elseif ($this->param->resizeHeight) {
+        if ($this->param->resizeHeight) {
             $maxHeight = $this->param->resizeHeight;
-        }
+        } elseif (isset($this->param->size['height'])) {
+            $maxHeight = $this->param->size['height'];
+        }       
+
+
         if ($maxHeight) {
             $image = $this->param->getImager();
             $image->load( $targetPath );

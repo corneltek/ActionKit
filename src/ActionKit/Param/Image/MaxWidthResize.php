@@ -17,11 +17,13 @@ class MaxWidthResize
 
     public function resize($targetPath)
     {
-        if (isset($this->param->size['width'])) {
-            $maxWidth = $this->param->size['width'];
-        } elseif ($this->param->resizeWidth) {
+        if ($this->param->resizeWidth) {
             $maxWidth = $this->param->resizeWidth;
+        } else if (isset($this->param->size['width'])) {
+            $maxWidth = $this->param->size['width'];
         }
+
+
         if ($maxWidth) {
             $image = $this->param->getImager();
             $image->load( $targetPath );
