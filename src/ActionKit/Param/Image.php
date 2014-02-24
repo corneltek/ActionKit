@@ -98,7 +98,7 @@ class Image extends Param
         if (! $this->putIn) {
             throw new Exception( "putIn attribute is not defined." );
         }
-        futil_mkdir_if_not_exists(PH_APP_ROOT . DIRECTORY_SEPARATOR . 'webroot' . DIRECTORY_SEPARATOR . $this->putIn, 0755, true);
+        futil_mkdir_if_not_exists(PH_APP_ROOT . DIRECTORY_SEPARATOR . 'webroot' . DIRECTORY_SEPARATOR . $this->putIn, 0777, true);
     }
 
     public function build()
@@ -239,7 +239,7 @@ class Image extends Param
     public function init( & $args )
     {
         // constructing file
-        $replacingRemote = false;
+        $replaceRemoteFile = false;
         $file = null;
 
         // get file info from $_FILES, we have the accessor from the action class.
@@ -251,7 +251,7 @@ class Image extends Param
             $file = FileUtils::fileobject_from_path(
                 $this->action->args[$this->name]
             );
-            $replacingRemote = true;
+            $replaceRemoteFile = true;
         } elseif ($this->sourceField) {
             if ( $this->action->hasFile($this->sourceField) ) {
                 $file = $this->action->getFile($this->sourceField);
@@ -286,7 +286,7 @@ class Image extends Param
             }
         } else {
             // XXX: merge this
-            if ($replacingRemote) {
+            if ($replaceRemoteFile) {
                 if ( isset($file['saved_path']) ) {
                     if ( $targetPath !== $file['saved_path'] ) {
                         copy($file['saved_path'], $targetPath);
