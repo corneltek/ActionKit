@@ -149,11 +149,11 @@ class Image extends Param
                 _('Crop And Scale') => 'crop_and_scale',
                 _('Scale') => 'scale',
             );
-            if (isset($this->size['width'])) {
-                $this->widgetAttributes['autoresize_types'][ _('Fit To Width') ] = 'max_width';
+            if (isset($this->size['width']) || $this->resizeWidth) {
+                $this->widgetAttributes['autoresize_types'][ _('Fit Width') ] = 'max_width';
             }
-            if (isset($this->size['height'])) {
-                $this->widgetAttributes['autoresize_types'][ _('Fit To Height') ] = 'max_height';
+            if (isset($this->size['height']) || $this->resizeHeight) {
+                $this->widgetAttributes['autoresize_types'][ _('Fit Height') ] = 'max_height';
             }
         }
         return $this;
@@ -239,7 +239,8 @@ class Image extends Param
     public function init( & $args )
     {
         // constructing file
-        $replaceRemoteFile = false;
+        $replace = false;
+        $hasUpload = false;
         $file = null;
 
         // get file info from $_FILES, we have the accessor from the action class.
@@ -247,55 +248,70 @@ class Image extends Param
             && $this->action->files[$this->name]['name'] )
         {
             $file = $this->action->getFile($this->name);
-        } elseif ( isset($this->action->args[$this->name]) ) {
-            $file = FileUtils::fileobject_from_path(
-                $this->action->args[$this->name]
-            );
-            $replaceRemoteFile = true;
-        } elseif ($this->sourceField) {
-            if ( $this->action->hasFile($this->sourceField) ) {
+            $hasUpload = true;
+        }
+        elseif ( isset($this->action->args[$this->name]) ) 
+        {
+            // If this input is a remote input file, which is a string sent from POST or GET method.
+            $file = FileUtils::fileobject_from_path( $this->action->args[$this->name]);
+            $replace = true;
+        }
+        elseif ($this->sourceField) 
+        {
+            // if there is no file found in $_FILES, we copy the file from another field's upload ($_FILES)
+            if ( $this->action->hasFile($this->sourceField) ) 
+            {
                 $file = $this->action->getFile($this->sourceField);
             }
-            // check values from POST or GET path to string
-            elseif ( isset( $this->action->args[$this->sourceField] ) ) {
-                // rebuild $_FILES arguments from file path (string) .
-                $file = FileUtils::fileobject_from_path(
-                    $this->action->args[$this->sourceField]
-                );
+            elseif ( isset( $this->action->args[$this->sourceField] ) ) 
+            {
+                // If not, check another field's upload (either from POST or GET method)
+                // Rebuild $_FILES arguments from file path (string) .
+                $file = FileUtils::fileobject_from_path( $this->action->args[$this->sourceField] );
             }
         }
 
+
+        // Still not found any file.
         if ( empty($file) || ! isset($file['name']) || !$file['name'] ) {
             // XXX: unset( $args[ $this->name ] );
             return;
         }
 
-        $targetPath = trim($this->putIn,DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . trim($file['name'], DIRECTORY_SEPARATOR);
-        if ($this->renameFile) {
-            $targetPath = call_user_func($this->renameFile,$targetPath);
+        $webroot = PH_APP_ROOT . DIRECTORY_SEPARATOR . 'webroot';
+
+        // the default save path
+        if ( $replace ) {
+            $targetPath = $file['saved_path'];
+        } else {
+            $targetPath = trim($this->putIn, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . trim($file['name'], DIRECTORY_SEPARATOR);
+            if ($this->renameFile) {
+                $targetPath = call_user_func($this->renameFile, $targetPath);
+            }
         }
 
-        if ($this->sourceField) {
-            if ( isset($file['saved_path']) ) {
-                copy($file['saved_path'], $targetPath);
-            } elseif ( isset($file['tmp_name']) ) {
-                copy($file['tmp_name'], $targetPath);
-            } else {
-                throw new RuntimeException("source field not found.");
-                return;
-            }
-        } else {
-            // XXX: merge this
-            if ($replaceRemoteFile) {
-                if ( isset($file['saved_path']) ) {
-                    if ( $targetPath !== $file['saved_path'] ) {
-                        copy($file['saved_path'], $targetPath);
+        if ( ! $replace )  {
+            if ( $hasUpload ) {
+                if ( isset($file['saved_path']) && file_exists($webroot . DIRECTORY_SEPARATOR . $file['saved_path']) ) {
+                    copy( $file['saved_path'], $targetPath);
+                } else {
+                    if ( move_uploaded_file($file['tmp_name'], $targetPath) === false ) {
+                        throw new RuntimeException('File upload failed, Can not move uploaded file.');
                     }
+                    $file['saved_path'] = $targetPath;
+                    $_FILES[ $this->name ]['saved_path'] = $targetPath;
+                } 
+            } elseif ( $this->sourceField ) {
+                // no upload, so we decide to copy one from our source field file.
+                if ( isset($file['saved_path']) ) {
+                    copy( $file['saved_path'], $targetPath);
                 }
-            } elseif ( move_uploaded_file($file['tmp_name'],$targetPath) === false ) {
-                throw new RuntimeException('File upload failed.');
+                elseif ( isset($file['tmp_name']) ) {
+                    copy( $file['tmp_name'], $targetPath);
+                }
             }
         }
+
 
         // update field path from target path
         $args[$this->name]  = $targetPath;
