@@ -63,6 +63,8 @@ class Action implements IteratorAggregate
 
     /**
      * @var array Converted & Fixed $_FILES
+     *
+     * TODO: use static array
      */
     public $files = array();
 

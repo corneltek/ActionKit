@@ -7,6 +7,25 @@ use RuntimeException;
 use SimpleImage;
 use Phifty\FileUtils;
 
+function filename_increase($path)
+{
+    if ( ! file_exists($path) )
+        return $path;
+    $pos = strrpos( $path , '.' );
+    if ($pos !== false) {
+        $filepath = substr($path, 0 , $pos);
+        $extension = substr($path, $pos);
+        $newfilepath = $filepath . $extension;
+        $i = 1;
+        while ( file_exists($newfilepath) ) {
+            $newfilepath = $filepath . "_" . ($i++)  . $extension;
+        }
+        return $newfilepath;
+    }
+
+    return $path;
+}
+
 /**
  * Preprocess image data fields
  *
@@ -80,7 +99,7 @@ class Image extends Param
     /**
      * @var string relative path to webroot path.
      */
-    public $putIn;
+    public $putIn = 'upload';
 
     /**
      * @var integer file size limit (default to 2048KB)
@@ -95,9 +114,6 @@ class Image extends Param
 
     public function preinit( & $args )
     {
-        if (! $this->putIn) {
-            throw new Exception( "putIn attribute is not defined." );
-        }
         futil_mkdir_if_not_exists(PH_APP_ROOT . DIRECTORY_SEPARATOR . 'webroot' . DIRECTORY_SEPARATOR . $this->putIn, 0777, true);
     }
 
@@ -110,13 +126,12 @@ class Image extends Param
         $this->supportedAttributes[ 'renameFile'] = self::ATTR_ANY;
         $this->supportedAttributes[ 'compression' ] = self::ATTR_ANY;
         $this->renameFile = function($filename) {
-            return FileUtils::filename_increase( $filename );
+            return filename_increase( $filename );
         };
         $this->renderAs('ThumbImageFileInput',array(
             /* prefix path for widget rendering */
             'prefix' => '/',
         ));
-        $this->putIn("static/upload/");
     }
 
     public function autoResize($enable = true) 
@@ -278,37 +293,37 @@ class Image extends Param
             return;
         }
 
-        $webroot = PH_APP_ROOT . DIRECTORY_SEPARATOR . 'webroot';
-
         // the default save path
-        if ( $replace ) {
-            $targetPath = $file['saved_path'];
+        $targetPath = trim($this->putIn, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . trim($file['name'], DIRECTORY_SEPARATOR);
+        if ($this->renameFile) {
+            $targetPath = call_user_func($this->renameFile, $targetPath);
         } else {
-            $targetPath = trim($this->putIn, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . trim($file['name'], DIRECTORY_SEPARATOR);
-            if ($this->renameFile) {
-                $targetPath = call_user_func($this->renameFile, $targetPath);
-            }
+            $targetPath = filename_increase( $targetPath );
         }
 
-        if ( ! $replace )  {
-            if ( $hasUpload ) {
-                if ( isset($file['saved_path']) && file_exists($webroot . DIRECTORY_SEPARATOR . $file['saved_path']) ) {
-                    copy( $file['saved_path'], $targetPath);
-                } else {
-                    if ( move_uploaded_file($file['tmp_name'], $targetPath) === false ) {
-                        throw new RuntimeException('File upload failed, Can not move uploaded file.');
-                    }
-                    $file['saved_path'] = $targetPath;
-                    $_FILES[ $this->name ]['saved_path'] = $targetPath;
-                } 
-            } elseif ( $this->sourceField ) {
-                // no upload, so we decide to copy one from our source field file.
-                if ( isset($file['saved_path']) ) {
-                    copy( $file['saved_path'], $targetPath);
+        while ( file_exists( $targetPath ) ) {
+            $targetPath = filename_increase( $targetPath );
+        }
+
+        if ( $hasUpload ) {
+            if ( isset($file['saved_path']) && file_exists($file['saved_path']) ) {
+                copy( $file['saved_path'], $targetPath);
+            } else {
+                if ( move_uploaded_file($file['tmp_name'], $targetPath) === false ) {
+                    throw new RuntimeException('File upload failed, Can not move uploaded file.');
                 }
-                elseif ( isset($file['tmp_name']) ) {
-                    copy( $file['tmp_name'], $targetPath);
-                }
+                $file['saved_path'] = $targetPath;
+                $_FILES[ $this->name ]['saved_path'] = $targetPath;
+            } 
+        } elseif ( $this->sourceField ) {
+            // no upload, so we decide to copy one from our source field file.
+            if ( isset($file['saved_path']) ) {
+                copy( $file['saved_path'], $targetPath);
+            }
+            elseif ( isset($file['tmp_name']) ) {
+                copy( $file['tmp_name'], $targetPath);
+            } else {
+                throw new RuntimeException('Can not copy image from source field, unknown error.');
             }
         }
 

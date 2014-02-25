@@ -451,9 +451,14 @@ class BaseRecordAction extends Action
                 $selfKey     = $relation['self_column'];
 
 
-                // the argument here we are expecting is:
+                // the argument here we expect from form post is:
                 //
                 //     $args[relationId][index][field_name] => value
+                // 
+                // the input name is layouted like this:
+                //
+                //     <input name="images[1][image]" value="..."
+                //     <input name="images[1][title]" value="..."
                 //
                 // where the index is 'the relational record id' or the timestamp.
                 //
@@ -468,13 +473,15 @@ class BaseRecordAction extends Action
 
                     // get file arguments from fixed $_FILES array.
                     // the ->files array is fixed in Action::__construct method
+                    /*
                     $files = array();
                     if ( isset($this->files[ $relationId ][ $index ]) ) {
                         $files = $this->files[ $relationId ][ $index ];
                     }
+                    */
 
                     $action = $this->createSubAction($relation, $args);
-                    $action->files = $files;
+                    $action->files = $this->files;
                     if ( $action->invoke() === false ) {
                         // transfrer the error result to self,
                         // then report error.
