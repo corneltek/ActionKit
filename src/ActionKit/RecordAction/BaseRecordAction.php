@@ -473,15 +473,14 @@ class BaseRecordAction extends Action
 
                     // get file arguments from fixed $_FILES array.
                     // the ->files array is fixed in Action::__construct method
-                    /*
-                    $files = array();
-                    if ( isset($this->files[ $relationId ][ $index ]) ) {
-                        $files = $this->files[ $relationId ][ $index ];
-                    }
-                    */
 
+                    if ( isset($this->files[ $relationId ][ $index ]) ) {
+                        $args['_FILES'] = $this->files[ $relationId ][ $index ];
+                    } else {
+                        $args['_FILES'] = array();
+                    }
                     $action = $this->createSubAction($relation, $args);
-                    $action->files = $this->files;
+
                     if ( $action->invoke() === false ) {
                         // transfrer the error result to self,
                         // then report error.

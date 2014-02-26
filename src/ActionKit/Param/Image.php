@@ -259,8 +259,7 @@ class Image extends Param
         $file = null;
 
         // get file info from $_FILES, we have the accessor from the action class.
-        if ( isset($this->action->files[ $this->name ])
-            && $this->action->files[$this->name]['name'] )
+        if ( isset($this->action->files[ $this->name ]) && $this->action->files[$this->name]['name'] )
         {
             $file = $this->action->getFile($this->name);
             $hasUpload = true;
@@ -313,25 +312,39 @@ class Image extends Param
                     throw new RuntimeException('File upload failed, Can not move uploaded file.');
                 }
                 $file['saved_path'] = $targetPath;
-                $_FILES[ $this->name ]['saved_path'] = $targetPath;
             } 
         } elseif ( $this->sourceField ) {
             // no upload, so we decide to copy one from our source field file.
-            if ( isset($file['saved_path']) ) {
+            if ( isset($file['saved_path']) && file_exists($file['tmp_name']) )
+            {
                 copy( $file['saved_path'], $targetPath);
             }
-            elseif ( isset($file['tmp_name']) ) {
+            elseif ( isset($file['tmp_name']) && file_exists($file['tmp_name']) ) 
+            {
                 copy( $file['tmp_name'], $targetPath);
-            } else {
-                throw new RuntimeException('Can not copy image from source field, unknown error.');
+            }
+            else 
+            {
+                echo "Action: " , get_class($this->action) , "\n";
+                echo "Field: " , $this->name , "\n";
+                echo "File:\n";
+                print_r($file);
+                echo "Files:\n";
+                print_r($this->action->files);
+                echo "Args:\n";
+                print_r($this->action->args);
+                throw new RuntimeException('Can not copy image from source field, unknown error: ' 
+                    . join(', ', array( get_class($this->action), $this->name))
+                );
             }
         }
 
 
         // update field path from target path
-        $args[$this->name]  = $targetPath;
+        $args[$this->name]                 = $targetPath;
         $this->action->args[ $this->name ] = $targetPath; // for source field
         $this->action->files[ $this->name ]['saved_path'] = $targetPath;
+
         $this->action->addData( $this->name , $targetPath );
 
         // if the auto-resize is specified from front-end

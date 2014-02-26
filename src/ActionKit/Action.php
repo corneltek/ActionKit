@@ -76,8 +76,11 @@ class Action implements IteratorAggregate
      */
     public function __construct( $args = array() , $currentUser = null )
     {
-        // always fix $_FILES
-        if ( isset($_FILES) && ! empty($_FILES) ) {
+
+        if ( isset($args['_FILES']) ) {
+            $this->files = $args['_FILES'];
+        } elseif ( isset($_FILES) && ! empty($_FILES) ) {
+            // if not, always fix $_FILES
             $this->files = \Universal\Http\FilesParameter::fix_files_array($_FILES);
         }
 
