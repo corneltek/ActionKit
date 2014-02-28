@@ -337,6 +337,8 @@ class Image extends Param
                     . join(', ', array( get_class($this->action), $this->name))
                 );
             }
+        } elseif ( isset($file['saved_path']) && file_exists($file['saved_path']) ) {
+            copy( $file['saved_path'], $targetPath);
         }
 
 
