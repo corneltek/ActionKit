@@ -276,18 +276,18 @@ class Result
     public function success( $message = null )
     {
         $this->type = 'success';
-        if ( $message )
+        if ( $message ) {
             $this->message = $message;
-
+        }
         return $this;
     }
 
     public function error( $message = null )
     {
         $this->type = 'error';
-        if ( $message )
+        if ( $message ) {
             $this->message = $message;
-
+        }
         return $this;
     }
 
@@ -336,11 +336,11 @@ class Result
             $ret[ 'message' ] = $this->message;
         }
 
-        if ('success' === $this->type) {
+        if ($this->data) {
             $ret['data'] = $this->data;
-        } elseif ('error' === $this->type) {
-            $ret['data']  = $this->data;
-        } elseif ('completion' === $this->type) {
+        }
+
+        if ('completion' === $this->type) {
             $ret = array_merge( $ret , $this->completion );
         }
 

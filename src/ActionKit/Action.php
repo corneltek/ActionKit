@@ -1019,9 +1019,9 @@ class Action implements IteratorAggregate
     public function success( $message , $data = null )
     {
         $this->result->success( $message );
-        if ( $data )
+        if ( $data ) {
             $this->result->mergeData( $data );
-
+        }
         return true;
     }
 
@@ -1030,10 +1030,12 @@ class Action implements IteratorAggregate
      *
      * @param string $message Error message
      */
-    public function error( $message )
+    public function error($message, $data = null )
     {
         $this->result->error( $message );
-
+        if ( $data ) {
+            $this->result->mergeData( $data );
+        }
         return false;
     }
 
