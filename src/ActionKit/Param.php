@@ -35,6 +35,8 @@ class Param extends CascadingAttribute
     /* valid pair values */
     public $validPairs;
 
+    public $optionValues;
+
     /* default value */
     public $default;
 
@@ -176,8 +178,15 @@ class Param extends CascadingAttribute
         if ( is_callable($this->validValues) ) {
             return call_user_func($this->validValues);
         }
-
         return $this->validValues;
+    }
+
+    public function getOptionValues()
+    {
+        if ( is_callable($this->optionValues) ) {
+            return call_user_func($this->optionValues);
+        }
+        return $this->optionValues;
     }
 
     public function createHintWidget($widgetClass = null , $attributes = array() )
@@ -222,7 +231,10 @@ class Param extends CascadingAttribute
 
         if ($this->validValues) {
             $newAttributes['options'] = $this->getValidValues();
+        } elseif ($this->optionValues) {
+            $newAttributes['options'] = $this->getOptionValues();
         }
+
         if ($this->immutable) {
             $newAttributes['readonly'] = true;
         }

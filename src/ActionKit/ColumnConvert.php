@@ -50,13 +50,13 @@ class ColumnConvert
         }
 
         // convert related collection model to validValues
-        if ($param->refer) {
+        if ($param->refer && ! $this->param->validValues) {
             if ( class_exists($param->refer,true) ) {
-                $class = $param->refer;
+                $referClass = $param->refer;
 
                 // it's a `has many`-like relationship
-                if ( is_subclass_of($class,'LazyRecord\\BaseCollection', true) ) {
-                    $collection = new $class;
+                if ( is_subclass_of($referClass,'LazyRecord\\BaseCollection', true) ) {
+                    $collection = new $referClass;
                     $options = array();
                     foreach ($collection as $item) {
                         $label = method_exists($item,'dataLabel')
@@ -65,9 +65,9 @@ class ColumnConvert
                         $options[ $label ] = $item->dataKeyValue();
                     }
                     $param->validValues = $options;
-                } elseif ( is_subclass_of($class,'LazyRecord\\BaseModel', true) ) {
+                } elseif ( is_subclass_of($referClass,'LazyRecord\\BaseModel', true) ) {
                     // it's a `belongs-to`-like relationship
-                    $class = $class . 'Collection';
+                    $class = $referClass . 'Collection';
                     $collection = new $class;
                     $options = array();
                     foreach ($collection as $item) {
@@ -77,8 +77,8 @@ class ColumnConvert
                         $options[ $label ] = $item->dataKeyValue();
                     }
                     $param->validValues = $options;
-                } elseif ( is_subclass_of($class, 'LazyRecord\\Schema\\SchemaDeclare', true) ) {
-                    $schema = new $class;
+                } elseif ( is_subclass_of($referClass, 'LazyRecord\\Schema\\SchemaDeclare', true) ) {
+                    $schema = new $referClass;
                     $collection = $schema->newCollection();
 
                     $options = array();
@@ -115,8 +115,8 @@ class ColumnConvert
 
         if ($column->renderAs) {
             $param->renderAs( $column->renderAs );
-        } elseif ($param->validValues || $param->validPairs) {
-            $param->renderAs('SelectInput');
+        } elseif ($param->validValues || $param->validPairs || $param->optionValues) {
+            $param->renderAs( 'SelectInput' );
         } elseif ($param->name === 'id') {
             $param->renderAs( 'HiddenInput' );
         } else {
