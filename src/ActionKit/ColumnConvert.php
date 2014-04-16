@@ -50,7 +50,7 @@ class ColumnConvert
         }
 
         // convert related collection model to validValues
-        if ($param->refer && ! $this->param->validValues) {
+        if ($param->refer && ! $param->validValues) {
             if ( class_exists($param->refer,true) ) {
                 $referClass = $param->refer;
 
