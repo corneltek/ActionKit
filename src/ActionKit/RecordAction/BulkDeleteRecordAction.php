@@ -17,7 +17,8 @@ abstract class BulkDeleteRecordAction extends BulkRecordAction
     {
         $records = $this->loadRecords();
         foreach ($records as $record) {
-            $ret = $record->delete();
+            $delete = $record->asDeleteAction();
+            $delete->run();
         }
         return $this->success( count($records) . '個項目刪除成功');
     }

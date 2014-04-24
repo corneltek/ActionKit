@@ -11,6 +11,35 @@ abstract class DeleteRecordAction
     public function run()
     {
         /* default run method , to run create action */
+        $record = $this->record;
+        $schema = $record->getSchema();
+        $data = $record->getData();
+        foreach( $data as $name => $val ) {
+            if ( $val == null ) {
+                continue;
+            }
+            $column = $schema->getColumn( $name );
+            switch( $column->contentType ) {
+                case "ImageFile":
+                case "File":
+                    if ( file_exists($val) ) {
+                        unlink($val);
+                    }
+                    break;
+            }
+        }
+
+        $relations = $schema->getRelations();
+        foreach( $relations as $rId => $relation ) {
+            if ( ! $relation->isHasMany() ) {
+                continue;
+            }
+            $relatedRecords = $record->{ $rId };
+            $relatedRecords->fetch();
+            foreach( $relatedRecords as $rr ) {
+                $rr->delete();
+            }
+        }
 
         return $this->doDelete( $this->args );
     }

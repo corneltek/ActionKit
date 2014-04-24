@@ -137,9 +137,6 @@ class BulkCopyRecordAction extends BulkRecordAction
         $newRecord = new $this->recordClass;
         $schema = $newRecord->getSchema();
 
-        $relations = $schema->getRelations();
-
-
         $newRecords = array();
         $records = $this->loadRecords();
         foreach($records as $record) {
