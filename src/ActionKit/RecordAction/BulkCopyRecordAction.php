@@ -1,6 +1,7 @@
 <?php
 namespace ActionKit\RecordAction;
 use Exception;
+use Phifty\FileUtils;
 
 function duplicate_file($from) {
     $to = FileUtils::filename_increase($from);
