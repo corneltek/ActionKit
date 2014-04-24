@@ -7,6 +7,7 @@ abstract class DeleteRecordAction
     const TYPE = 'delete';
 
     public $enableLoadRecord = true;
+    public $unlink= true;
 
     public function run()
     {
@@ -22,7 +23,7 @@ abstract class DeleteRecordAction
             switch( $column->contentType ) {
                 case "ImageFile":
                 case "File":
-                    if ( file_exists($val) ) {
+                    if ( $this->unlink && file_exists($val) ) {
                         unlink($val);
                     }
                     break;
