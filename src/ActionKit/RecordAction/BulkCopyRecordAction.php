@@ -2,7 +2,7 @@
 namespace ActionKit\RecordAction;
 use Exception;
 
-public function filename_increase($path)
+function filename_increase($path)
 {
     if ( ! file_exists($path) ) {
         return $path;
