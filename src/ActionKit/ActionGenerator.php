@@ -66,23 +66,59 @@ class ActionGenerator
         $variables['target']['namespace'] = join("\\", $parts);
         $twig = $this->getTwig();
         return $twig->render($template, $variables);
-        /*
-        TODO: here is the new code to generate class....
+    }
 
-        $baseClass = $variables['base_class'];
+
+    /**
+     * The new generate method to generate action class
+     *
+     * @param string $targetClassName
+     * @param array  $options
+     *
+     * @synopsis
+     *
+     *    $template = $g->generate2('ProductBundle\\Action\\SortProductImage', [ 
+     *              'base_class' => 'SortablePlugin\\Action\\SortRecordAction',
+     *              'constants' => [
+     *                  ...
+     *              ],
+     *              'properties' => [
+     *                  'recordClass' => 'ProductBundle\\Model\\ProductImage',
+     *                  'fields' => '....',
+     *              ],
+     *    ]);
+     *    $template->addMethod(...); // extra operations
+     *
+     *
+     */
+    public function generate2($targetClassName, $options = array() )
+    {
         $recordClass = $variables['record_class'];
         $classTemplate = new ClassTemplate($targetClassName);
-        $classTemplate->useClass($baseClass);
 
-        // this is to support backward-compatible for classes like 'SortablePlugin\\Action\\SortRecordAction'
-        $_p = explode('\\',$baseClass);
-        $baseClassName = end($_p);
+        if ( isset($options['base_class']) ) {
+            $baseClass = $options['base_class'];
+            $classTemplate->useClass($baseClass);
 
-        $classTemplate->extendClass($baseClassName);
-        $classTemplate->addProperty('recordClass',$variables['record_class']);
-        return $classTemplate->render();
-         */
+            $_p = explode('\\',$baseClass);
+            $baseClassName = end($_p);
+            $classTemplate->extendClass($baseClassName);
+        }
+
+        if ( isset($options['properties']) ) {
+            foreach( $options['properties'] as $name => $value ) {
+                $classTemplate->addProperty($name, $value);
+            }
+        }
+        if ( isset($options['constants']) ) {
+            foreach( $options['constants'] as $name => $value ) {
+                $classTemplate->addConst($name, $value);
+            }
+        }
+        return $classTemplate;
     }
+
+
 
     public function getTwigLoader() {
 
