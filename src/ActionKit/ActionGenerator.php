@@ -115,7 +115,7 @@ class ActionGenerator
      * @param string $modelName
      * @param string $type
      *
-     * @return string class code
+     * @return ClassTemplate
      */
     public function generateClassCodeWithNamespace( $modelNs , $modelName , $type )
     {
@@ -138,6 +138,13 @@ class ActionGenerator
     }
 
 
+    /**
+     * Generate a generic action class code with an empty schema, run methods
+     *
+     * @param string $namespaceName the parent namespace of the 'Action' namespace.
+     * @param string $actionName    the action class name (short class name)
+     * @return ClassTemplate
+     */
     public function generateActionClassCode($namespaceName,$actionName)
     {
         $classTemplate = new ClassTemplate("$namespaceName\\Action\\$actionName");
@@ -145,29 +152,6 @@ class ActionGenerator
         $classTemplate->extendClass("Action");
         $classTemplate->addMethod('public','schema', [] , '');
         $classTemplate->addMethod('public','run', [] , 'return $this->success("Success!");');
-
-
-        /*
-        $actionNamespace = $namespaceName . '\\Action';
-        $actionClass = $actionNamespace . '\\' . $actionName;
-        $code =<<<CODE
-namespace $actionNamespace {
-use ActionKit\\Action;
-class $actionName extends Action
-{
-    public function schema()
-    {
-    }
-
-    public function run()
-    {
-        return \$this->success('Success!!');
-    }
-
-}
-}
-CODE;
-        */
         return $classTemplate;
     }
 

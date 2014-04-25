@@ -192,9 +192,13 @@ class ActionRunner
         return isset($_REQUEST['__ajax_request']);
     }
 
-    /*
-     * replace action name "::" charactors with "\"
-     * */
+    /**
+     * Convert action signature into the actual full-qualified class name.
+     *
+     * This method replaces "::" charactors with "\" from action signature string.
+     *
+     * @param string $actionName
+     */
     public function getActionClass( $actionName )
     {
         // replace :: with '\'
@@ -202,6 +206,13 @@ class ActionRunner
     }
 
 
+
+    /**
+     * Return the cache path of the class name
+     *
+     * @param string $className
+     * @return string path
+     */
     public function getClassCacheFile($className) 
     {
         return $this->cacheDir . DIRECTORY_SEPARATOR . str_replace('\\','_',$className) . '.php';
