@@ -31,6 +31,29 @@ class ProductActionTest extends ModelTestCase
         $product->delete();
     }
 
+
+
+    public function testAsCreateAction() {
+        $product = new Product\Model\Product;
+        ok($product, 'object created');
+        $create = $product->asCreateAction([ 'name' => 'TestProduct' ]);
+        ok( $create->run() , 'action run' );
+
+
+        $product = $create->getRecord();
+        ok($id = $product->id, 'product created');
+
+
+        $delete = $product->asDeleteAction();
+        ok( $delete->run() );
+
+        $product = new Product\Model\Product( $id );
+        ok( ! $product->id, 'product should be deleted.');
+    }
+
+
+
+
     public function testUpdateRecordAction()
     {
         $product = new Product\Model\Product;

@@ -11,11 +11,13 @@ class ProductSchemaProxy extends RuntimeSchema
     public static $column_names = array (
   0 => 'name',
   1 => 'category_id',
-  2 => 'id',
+  2 => 'cover_image',
+  3 => 'id',
 );
     public static $column_hash = array (
   'name' => 1,
   'category_id' => 1,
+  'cover_image' => 1,
   'id' => 1,
 );
     public static $mixin_classes = array (
@@ -23,7 +25,8 @@ class ProductSchemaProxy extends RuntimeSchema
     public static $column_names_include_virtual = array (
   0 => 'name',
   1 => 'category_id',
-  2 => 'id',
+  2 => 'cover_image',
+  3 => 'id',
 );
 
     const schema_class = 'Product\\Model\\ProductSchema';
@@ -64,6 +67,19 @@ class ProductSchemaProxy extends RuntimeSchema
           'label' => '產品類別',
         ),
     ),
+  'cover_image' => array( 
+      'name' => 'cover_image',
+      'attributes' => array( 
+          'type' => 'varchar(250)',
+          'isa' => 'str',
+          'size' => 250,
+          'label' => '首頁封面圖',
+          'contentType' => 'ImageFile',
+          'renderAs' => 'ThumbImageFileInput',
+          'widgetAttributes' => array( 
+            ),
+        ),
+    ),
   'id' => array( 
       'name' => 'id',
       'attributes' => array( 
@@ -78,6 +94,7 @@ class ProductSchemaProxy extends RuntimeSchema
   'id',
   'name',
   'category_id',
+  'cover_image',
 );
         $this->primaryKey      = 'id';
         $this->table           = 'products';
@@ -123,6 +140,16 @@ class ProductSchemaProxy extends RuntimeSchema
         $this->readSourceId    = 'default';
         $this->writeSourceId    = 'default';
         parent::__construct();
+    }
+
+    /**
+     * Code block for message id parser.
+     */
+    private function __() {
+        _('Product');
+        _('Name');
+        _('產品類別');
+        _('首頁封面圖');
     }
 
 }

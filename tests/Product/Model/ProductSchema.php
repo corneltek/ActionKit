@@ -21,6 +21,13 @@ class ProductSchema extends SchemaDeclare
             ->renderAs('SelectInput')
             ->label('產品類別');
 
+        $this->column('cover_image')
+            ->varchar(250)
+            ->label('首頁封面圖')
+            ->contentType('ImageFile')
+            ->renderAs('ThumbImageFileInput')
+            ;
+
         $this->many('types',              'Product\Model\ProductTypeSchema' , 'product_id' , 'id' );  # to product id => image product_id
         $this->many('product_categories', 'Product\Model\ProductCategorySchema', 'product_id', 'id' );
         $this->manyToMany('categories',  'product_categories' , 'category');
