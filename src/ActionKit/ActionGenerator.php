@@ -50,15 +50,38 @@ class ActionGenerator
         $this->templateDirs[] = $path;
     }
 
-    public function generate($targetClassName, $template, $variables = array())
+
+    /**
+     * This method generates class code based on the template file from Twig
+     * 
+     */
+    // $template = $gen->generate($class, $actionArgs['template'], $actionArgs['variables']);
+    // $variables['base_class']
+    // $variables['record_class']
+    public function generate($targetClassName, $template = null, $variables = array())
     {
         $parts = explode("\\",$targetClassName);
         $variables['target'] = array();
         $variables['target']['classname'] = array_pop($parts);
         $variables['target']['namespace'] = join("\\", $parts);
-
         $twig = $this->getTwig();
         return $twig->render($template, $variables);
+        /*
+        TODO: here is the new code to generate class....
+
+        $baseClass = $variables['base_class'];
+        $recordClass = $variables['record_class'];
+        $classTemplate = new ClassTemplate($targetClassName);
+        $classTemplate->useClass($baseClass);
+
+        // this is to support backward-compatible for classes like 'SortablePlugin\\Action\\SortRecordAction'
+        $_p = explode('\\',$baseClass);
+        $baseClassName = end($_p);
+
+        $classTemplate->extendClass($baseClassName);
+        $classTemplate->addProperty('recordClass',$variables['record_class']);
+        return $classTemplate->render();
+         */
     }
 
     public function getTwigLoader() {
@@ -73,14 +96,12 @@ class ActionGenerator
         return $loader;
     }
 
-
     public function getTwig()
     {
         static $twig;
         if ( $twig ) {
             return $twig;
         }
-
         $loader = $this->getTwigLoader();
         $env = new Twig_Environment($loader, array(
             'cache' => $this->cacheDir ? $this->cacheDir : false,
