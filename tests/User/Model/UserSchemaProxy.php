@@ -94,4 +94,11 @@ class UserSchemaProxy extends RuntimeSchema
         parent::__construct();
     }
 
+    /**
+     * Code block for message id parser.
+     */
+    private function __() {
+        _('User');
+    }
+
 }

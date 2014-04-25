@@ -14,10 +14,19 @@ class ProductActionTest extends ModelTestCase
         return array( 'Product\\Model\\ProductSchema' );
     }
 
-    public function testCreateRecordAction()
+
+    public function recordProvider() {
+        return [ 
+            [ new Product\Model\Product ],
+        ];
+    }
+
+
+    /**
+     * @dataProvider recordProvider
+     */
+    public function testCreateRecordAction($product)
     {
-        $product = new Product\Model\Product;
-        ok($product);
 
         $class = CRUD::generate('Product\\Model\\Product', 'Create');
         ok($class);
