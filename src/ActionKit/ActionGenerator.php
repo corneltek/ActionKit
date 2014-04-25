@@ -4,6 +4,7 @@ use UniversalCache;
 use Twig_Loader_Filesystem;
 use Twig_Environment;
 use ReflectionClass;
+use ClassTemplate\ClassTemplate;
 
 /**
  * Action Generator Synopsis
@@ -129,24 +130,24 @@ class ActionGenerator
         $recordClass  = ltrim($modelNs . '\\' . $modelName, '\\');
         $baseAction   = $type . 'RecordAction';
 
-        $code =<<<CODE
-namespace $actionNs {
-    use ActionKit\\RecordAction\\$baseAction;
-    class $actionClass extends $baseAction
-    {
-        public \$recordClass = '$recordClass';
-    }
-}
-CODE;
-        return (object) array(
-            'action_class' => $actionFullClass,
-            'code' => $code,
-        );
+        $classTemplate = new ClassTemplate($actionFullClass);
+        $classTemplate->useClass("\\ActionKit\\RecordAction\\$baseAction");
+        $classTemplate->extendClass("\\ActionKit\\RecordAction\\$baseAction");
+        $classTemplate->addProperty('recordClass',$recordClass);
+        return $classTemplate;
     }
 
 
     public function generateActionClassCode($namespaceName,$actionName)
     {
+        $classTemplate = new ClassTemplate("$namespaceName\\Action\\$actionName");
+        $classTemplate->useClass("\\ActionKit\\Action");
+        $classTemplate->extendClass("Action");
+        $classTemplate->addMethod('public','schema', [] , '');
+        $classTemplate->addMethod('public','run', [] , 'return $this->success("Success!");');
+
+
+        /*
         $actionNamespace = $namespaceName . '\\Action';
         $actionClass = $actionNamespace . '\\' . $actionName;
         $code =<<<CODE
@@ -166,11 +167,8 @@ class $actionName extends Action
 }
 }
 CODE;
-
-        return (object) array(
-            'action_class' => $actionClass,
-            'code' => $code,
-        );
+        */
+        return $classTemplate;
     }
 
 }

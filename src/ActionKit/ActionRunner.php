@@ -109,12 +109,8 @@ class ActionRunner
         // @see registerCRUD method
         $gen = new ActionGenerator(array( 'cache' => true ));
         $args = $this->crudActions[$class];
-        $code = $gen->generateClassCodeWithNamespace( $args['prefix'], $args['model_name'], $args['type'] )->code;
-
-        // TODO: eval is slower than require
-        //       use a better code generator here.
-        eval( $code );
-        return true;
+        $template = $gen->generateClassCodeWithNamespace( $args['prefix'], $args['model_name'], $args['type'] );
+        return $this->loadClassTemplate($class, $template);
     }
 
     public function registerAutoloader()
@@ -211,6 +207,31 @@ class ActionRunner
         return $this->cacheDir . DIRECTORY_SEPARATOR . str_replace('\\','_',$className) . '.php';
     }
 
+
+    /**
+     *
+     * @param string $className
+     * @param ClassTemplate the class template object
+     */
+    public function loadClassTemplate($className, $template)
+    {
+        if ( class_exists($className, true) ) {
+            return true;
+        }
+
+        $cacheFile = $this->getClassCacheFile($className);
+        if ( file_exists($cacheFile) ) {
+            require $cacheFile;
+            return true;
+        }
+
+        // generate cache file
+        file_put_contents($cacheFile, $template->render());
+        return require $cacheFile;
+    }
+
+
+
     /**
      * Create action object
      *
@@ -239,8 +260,8 @@ class ActionRunner
             $gen = new ActionGenerator;
             $loader = $gen->getTwigLoader();
             if (  ! file_exists($cacheFile) || ! $loader->isFresh($actionArgs['template'], filemtime($cacheFile) ) ) {
-                $code = $gen->generate($class, $actionArgs['template'], $actionArgs['variables']);
-                if ( false === file_put_contents($cacheFile, $code) ) {
+                $template = $gen->generate($class, $actionArgs['template'], $actionArgs['variables']);
+                if ( false === file_put_contents($cacheFile, $template->render() ) ) {
                     throw new Exception("Can not write action class cache file: $cacheFile");
                 }
             }
@@ -255,11 +276,8 @@ class ActionRunner
 
             // please see registerCRUD method
             $gen = new ActionGenerator(array( 'cache' => true ));
-            $code = $gen->generateClassCodeWithNamespace( $args['prefix'], $args['model_name'], $args['type'] )->code;
-
-            // TODO: eval is slower than require
-            //       use a better code generator
-            eval( $code );
+            $template = $gen->generateClassCodeWithNamespace( $args['prefix'], $args['model_name'], $args['type'] );
+            $this->loadClassTemplate($class, $template);
             return new $class( $args );
         }
 

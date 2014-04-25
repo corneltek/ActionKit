@@ -7,13 +7,14 @@ class CRUD
     public static function generate($recordClass, $type)
     {
         $gen = new ActionGenerator(array( 'cache' => true ));
-        $ret = $gen->generateClassCode( $recordClass , $type );
+        $template = $gen->generateClassCode( $recordClass , $type );
+        $className = $template->class->getFullName();
 
         // trigger spl classloader if needed.
-        if ( class_exists($ret->action_class,true) ) {
-            return $ret->action_class;
+        if ( class_exists($className ,true) ) {
+            return $className;
         }
-        eval( $ret->code );
-        return $ret->action_class;
+        $template->load();
+        return $className;
     }
 }
