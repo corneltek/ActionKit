@@ -1,5 +1,5 @@
 <?php
-namespace Product\Model;
+namespace ProductBundle\Model;
 
 use LazyRecord;
 use LazyRecord\Schema\RuntimeSchema;
@@ -26,11 +26,11 @@ class ProductCategorySchemaProxy extends RuntimeSchema
   2 => 'id',
 );
 
-    const schema_class = 'Product\\Model\\ProductCategorySchema';
-    const collection_class = 'Product\\Model\\ProductCategoryCollection';
-    const model_class = 'Product\\Model\\ProductCategory';
+    const schema_class = 'ProductBundle\\Model\\ProductCategorySchema';
+    const collection_class = 'ProductBundle\\Model\\ProductCategoryCollection';
+    const model_class = 'ProductBundle\\Model\\ProductCategory';
     const model_name = 'ProductCategory';
-    const model_namespace = 'Product\\Model';
+    const model_namespace = 'ProductBundle\\Model';
     const primary_key = 'id';
     const table = 'product_category_junction';
     const label = 'ProductCategory';
@@ -70,25 +70,25 @@ class ProductCategorySchemaProxy extends RuntimeSchema
 );
         $this->primaryKey      = 'id';
         $this->table           = 'product_category_junction';
-        $this->modelClass      = 'Product\\Model\\ProductCategory';
-        $this->collectionClass = 'Product\\Model\\ProductCategoryCollection';
+        $this->modelClass      = 'ProductBundle\\Model\\ProductCategory';
+        $this->collectionClass = 'ProductBundle\\Model\\ProductCategoryCollection';
         $this->label           = 'ProductCategory';
         $this->relations       = array( 
   'category' => \LazyRecord\Schema\Relationship::__set_state(array( 
   'data' => array( 
       'type' => 4,
-      'self_schema' => 'Product\\Model\\ProductCategorySchema',
+      'self_schema' => 'ProductBundle\\Model\\ProductCategorySchema',
       'self_column' => 'category_id',
-      'foreign_schema' => 'Product\\Model\\CategorySchema',
+      'foreign_schema' => 'ProductBundle\\Model\\CategorySchema',
       'foreign_column' => 'id',
     ),
 )),
   'product' => \LazyRecord\Schema\Relationship::__set_state(array( 
   'data' => array( 
       'type' => 4,
-      'self_schema' => 'Product\\Model\\ProductCategorySchema',
+      'self_schema' => 'ProductBundle\\Model\\ProductCategorySchema',
       'self_column' => 'product_id',
-      'foreign_schema' => 'Product\\Model\\ProductSchema',
+      'foreign_schema' => 'ProductBundle\\Model\\ProductSchema',
       'foreign_column' => 'id',
     ),
 )),

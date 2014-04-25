@@ -29,32 +29,11 @@ class ProductSchema extends SchemaDeclare
 
         $this->column('description')
             ->text()
+            ;
 
         $this->column('content')
             ->text()
             ->renderAs('TextareaInput');
-
-            $this->column('feature_content')
-                ->text()
-                ->label('產品功能')
-                ->renderAs('TextareaInput')
-                ;
-        }
-
-            $this->column('spec_content')
-                ->text()
-                ->renderAs('TextareaInput')
-                ;
-        }
-
-        // image for zooming
-            $this->column('zoom_image')
-                ->varchar(128)
-                ->label(_('產品放大圖'))
-                ->renderAs('ThumbImageFileInput')
-                ->contentType('ImageFile')
-                ;
-        }
 
         // always enable this
         $this->column('category_id')
@@ -107,49 +86,14 @@ class ProductSchema extends SchemaDeclare
         $this->column('token')
             ->varchar(128)
             ->label( _('秘密編號') )
-            ->desc( _('使用者必須透過這組秘密編號的網址才能看到這個產品。') );
+            ->desc( _('使用者必須透過這組秘密編號的網址才能看到這個產品。') )
+            ;
 
         $this->column('hide')
             ->boolean()
             ->default(false)
             ->label(_('隱藏這個產品'))
             ->desc( _('目錄頁不要顯示這個產品，但是可以從網址列看到這個產品頁') );
-
-            $this->column('cover_image')
-                ->varchar(250)
-                ->label('首頁封面圖')
-                ->contentType('ImageFile')
-                ->renderAs('ThumbImageFileInput');
-            /*
-            $this->column('cover_image')
-                ->varchar(250)
-                ->label('首頁封面圖')
-                ->renderAs('ThumbImageFileInput');
-             */
-        }
-
-            $this->column('spec_image')
-                ->varchar(250)
-                ->label('規格主圖')
-                ->contentType('ImageFile')
-                ->renderAs('ThumbImageFileInput');
-
-            $this->column('spec_thumb')
-                ->varchar(250)
-                ->label('規格縮圖')
-                ->contentType('ImageFile')
-                ->renderAs('ThumbImageFileInput');
-        }
-
-            $this->column('options_content')->text()->label('選配');
-        }
-
-        }
-
-        if( kernel()->bundle('StatusPlugin') ) {
-        }
-
-
 
         $this->many( 'product_features', 'ProductBundle\\Model\\ProductFeatureSchema', 'product_id', 'id' );
         $this->manyToMany( 'features',   'product_features' , 'feature' );
@@ -171,46 +115,22 @@ class ProductSchema extends SchemaDeclare
         $this->many('types',      'ProductBundle\\Model\\ProductTypeSchema' , 'product_id' , 'id' );
 
         $this->many('resources',  'ProductBundle\\Model\\ResourceSchema' , 'product_id' , 'id' );  # to product id => image product_id
-        $this->many('files',      'ProductBundle\\Model\\ProductFileSchema', 'product_id', 'id');
 
-        if ( kernel()->bundle('RecipeBundle') ) {
-            $this->many('product_recipes','ProductBundle\\Model\\ProductRecipeSchema','product_id','id');
-            $this->manyToMany( 'recipes',   'product_recipes' , 'recipe' );
-        }
+        $this->many( 'subsections', 'ProductBundle\\Model\\ProductSubsectionSchema', 'product_id', 'id' )
+            ->order('ordering','ASC')
+            ->renderable(false);
 
-        /*
-        }
-        */
-            $this->many( 'subsections', 'ProductBundle\\Model\\ProductSubsectionSchema', 'product_id', 'id' )
-                ->order('ordering','ASC')
-                ->renderable(false);
-        }
-            $this->many( 'links', 'ProductBundle\\Model\\ProductLinkSchema', 'product_id', 'id' )
-                ->order('ordering','ASC')
-                ->renderable(false);
-        }
-            $this->many( 'product_usecases', 'ProductBundle\\Model\\ProductUseCaseSchema', 'product_id', 'id' )
-                ->order('ordering','ASC')
-                ->renderable(false);
+        $this->many( 'links', 'ProductBundle\\Model\\ProductLinkSchema', 'product_id', 'id' )
+            ->order('ordering','ASC')
+            ->renderable(false);
 
-            $this->manyToMany( 'usecases',   'product_usecases' , 'usecase' )
-                ->filter(function($collection) {
-                    $collection->order('lang','desc');
-                    return $collection;
-                });
-        }
-
-                $this->many( 'product_categories', 'ProductBundle\\Model\\ProductCategorySchema', 'product_id', 'id' )
-                    ->renderable(false);
-                $this->manyToMany( 'categories',   'product_categories' , 'category' )
-                    ->filter(function($collection) {
-                        $collection->order('lang','desc');
-                        return $collection;
-                    });
-            } else {
-                $this->belongsTo( 'category' , 'ProductBundle\\Model\\CategorySchema','id','category_id');
-            }
-        }
+        $this->many( 'product_categories', 'ProductBundle\\Model\\ProductCategorySchema', 'product_id', 'id' )
+            ->renderable(false);
+        $this->manyToMany( 'categories',   'product_categories' , 'category' )
+            ->filter(function($collection) {
+                $collection->order('lang','desc');
+                return $collection;
+            });
     }
 
     public function bootstrap($product) 

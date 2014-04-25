@@ -1,39 +1,42 @@
 <?php
-namespace Product\Model;
+namespace ProductBundle\Model;
 
 use LazyRecord;
 use LazyRecord\Schema\RuntimeSchema;
 use LazyRecord\Schema\Relationship;
 
-class ProductTypeSchemaProxy extends RuntimeSchema
+class ResourceSchemaProxy extends RuntimeSchema
 {
 
     public static $column_names = array (
   0 => 'product_id',
-  1 => 'name',
-  2 => 'id',
+  1 => 'url',
+  2 => 'html',
+  3 => 'id',
 );
     public static $column_hash = array (
   'product_id' => 1,
-  'name' => 1,
+  'url' => 1,
+  'html' => 1,
   'id' => 1,
 );
     public static $mixin_classes = array (
 );
     public static $column_names_include_virtual = array (
   0 => 'product_id',
-  1 => 'name',
-  2 => 'id',
+  1 => 'url',
+  2 => 'html',
+  3 => 'id',
 );
 
-    const schema_class = 'Product\\Model\\ProductTypeSchema';
-    const collection_class = 'Product\\Model\\ProductTypeCollection';
-    const model_class = 'Product\\Model\\ProductType';
-    const model_name = 'ProductType';
-    const model_namespace = 'Product\\Model';
+    const schema_class = 'ProductBundle\\Model\\ResourceSchema';
+    const collection_class = 'ProductBundle\\Model\\ResourceCollection';
+    const model_class = 'ProductBundle\\Model\\Resource';
+    const model_name = 'Resource';
+    const model_namespace = 'ProductBundle\\Model';
     const primary_key = 'id';
-    const table = 'product_types';
-    const label = 'ProductType';
+    const table = 'product_resources';
+    const label = 'Resource';
 
     public function __construct()
     {
@@ -44,21 +47,29 @@ class ProductTypeSchemaProxy extends RuntimeSchema
       'attributes' => array( 
           'type' => 'integer',
           'isa' => 'int',
-          'label' => 'Product',
-          'renderAs' => 'SelectInput',
-          'widgetAttributes' => array( 
-            ),
-          'refer' => 'Product\\Model\\Product',
+          'refer' => 'ProductBundle\\Model\\Product',
+          'label' => '產品',
         ),
     ),
-  'name' => array( 
-      'name' => 'name',
+  'url' => array( 
+      'name' => 'url',
       'attributes' => array( 
-          'type' => 'varchar(120)',
+          'type' => 'varchar(256)',
           'isa' => 'str',
-          'size' => 120,
-          'required' => true,
-          'label' => 'Name',
+          'size' => 256,
+          'label' => '網址',
+        ),
+    ),
+  'html' => array( 
+      'name' => 'html',
+      'attributes' => array( 
+          'type' => 'varchar(512)',
+          'isa' => 'str',
+          'size' => 512,
+          'label' => '內嵌 HTML',
+          'renderAs' => 'TextareaInput',
+          'widgetAttributes' => array( 
+            ),
         ),
     ),
   'id' => array( 
@@ -74,20 +85,21 @@ class ProductTypeSchemaProxy extends RuntimeSchema
         $this->columnNames     = array( 
   'id',
   'product_id',
-  'name',
+  'url',
+  'html',
 );
         $this->primaryKey      = 'id';
-        $this->table           = 'product_types';
-        $this->modelClass      = 'Product\\Model\\ProductType';
-        $this->collectionClass = 'Product\\Model\\ProductTypeCollection';
-        $this->label           = 'ProductType';
+        $this->table           = 'product_resources';
+        $this->modelClass      = 'ProductBundle\\Model\\Resource';
+        $this->collectionClass = 'ProductBundle\\Model\\ResourceCollection';
+        $this->label           = 'Resource';
         $this->relations       = array( 
   'product' => \LazyRecord\Schema\Relationship::__set_state(array( 
   'data' => array( 
       'type' => 4,
-      'self_schema' => 'Product\\Model\\ProductTypeSchema',
+      'self_schema' => 'ProductBundle\\Model\\ResourceSchema',
       'self_column' => 'product_id',
-      'foreign_schema' => 'Product\\Model\\ProductSchema',
+      'foreign_schema' => 'ProductBundle\\Model\\ProductSchema',
       'foreign_column' => 'id',
     ),
 )),
@@ -101,9 +113,10 @@ class ProductTypeSchemaProxy extends RuntimeSchema
      * Code block for message id parser.
      */
     private function __() {
-        _('ProductType');
-        _('Product');
-        _('Name');
+        _('Resource');
+        _('產品');
+        _('網址');
+        _('內嵌 HTML');
     }
 
 }

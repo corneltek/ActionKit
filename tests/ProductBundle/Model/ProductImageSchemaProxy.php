@@ -1,39 +1,42 @@
 <?php
-namespace Product\Model;
+namespace ProductBundle\Model;
 
 use LazyRecord;
 use LazyRecord\Schema\RuntimeSchema;
 use LazyRecord\Schema\Relationship;
 
-class ProductTypeSchemaProxy extends RuntimeSchema
+class ProductImageSchemaProxy extends RuntimeSchema
 {
 
     public static $column_names = array (
   0 => 'product_id',
-  1 => 'name',
-  2 => 'id',
+  1 => 'title',
+  2 => 'large',
+  3 => 'id',
 );
     public static $column_hash = array (
   'product_id' => 1,
-  'name' => 1,
+  'title' => 1,
+  'large' => 1,
   'id' => 1,
 );
     public static $mixin_classes = array (
 );
     public static $column_names_include_virtual = array (
   0 => 'product_id',
-  1 => 'name',
-  2 => 'id',
+  1 => 'title',
+  2 => 'large',
+  3 => 'id',
 );
 
-    const schema_class = 'Product\\Model\\ProductTypeSchema';
-    const collection_class = 'Product\\Model\\ProductTypeCollection';
-    const model_class = 'Product\\Model\\ProductType';
-    const model_name = 'ProductType';
-    const model_namespace = 'Product\\Model';
+    const schema_class = 'ProductBundle\\Model\\ProductImageSchema';
+    const collection_class = 'ProductBundle\\Model\\ProductImageCollection';
+    const model_class = 'ProductBundle\\Model\\ProductImage';
+    const model_name = 'ProductImage';
+    const model_namespace = 'ProductBundle\\Model';
     const primary_key = 'id';
-    const table = 'product_types';
-    const label = 'ProductType';
+    const table = 'product_images';
+    const label = '產品圖';
 
     public function __construct()
     {
@@ -44,21 +47,29 @@ class ProductTypeSchemaProxy extends RuntimeSchema
       'attributes' => array( 
           'type' => 'integer',
           'isa' => 'int',
-          'label' => 'Product',
+          'refer' => 'ProductBundle\\Model\\Product',
           'renderAs' => 'SelectInput',
           'widgetAttributes' => array( 
             ),
-          'refer' => 'Product\\Model\\Product',
+          'label' => '產品',
         ),
     ),
-  'name' => array( 
-      'name' => 'name',
+  'title' => array( 
+      'name' => 'title',
       'attributes' => array( 
-          'type' => 'varchar(120)',
+          'type' => 'varchar(130)',
           'isa' => 'str',
-          'size' => 120,
-          'required' => true,
-          'label' => 'Name',
+          'size' => 130,
+          'label' => '圖片標題',
+        ),
+    ),
+  'large' => array( 
+      'name' => 'large',
+      'attributes' => array( 
+          'type' => 'varchar(130)',
+          'isa' => 'str',
+          'size' => 130,
+          'label' => '最大圖',
         ),
     ),
   'id' => array( 
@@ -74,20 +85,21 @@ class ProductTypeSchemaProxy extends RuntimeSchema
         $this->columnNames     = array( 
   'id',
   'product_id',
-  'name',
+  'title',
+  'large',
 );
         $this->primaryKey      = 'id';
-        $this->table           = 'product_types';
-        $this->modelClass      = 'Product\\Model\\ProductType';
-        $this->collectionClass = 'Product\\Model\\ProductTypeCollection';
-        $this->label           = 'ProductType';
+        $this->table           = 'product_images';
+        $this->modelClass      = 'ProductBundle\\Model\\ProductImage';
+        $this->collectionClass = 'ProductBundle\\Model\\ProductImageCollection';
+        $this->label           = '產品圖';
         $this->relations       = array( 
   'product' => \LazyRecord\Schema\Relationship::__set_state(array( 
   'data' => array( 
       'type' => 4,
-      'self_schema' => 'Product\\Model\\ProductTypeSchema',
+      'self_schema' => 'ProductBundle\\Model\\ProductImageSchema',
       'self_column' => 'product_id',
-      'foreign_schema' => 'Product\\Model\\ProductSchema',
+      'foreign_schema' => 'ProductBundle\\Model\\ProductSchema',
       'foreign_column' => 'id',
     ),
 )),
@@ -101,9 +113,10 @@ class ProductTypeSchemaProxy extends RuntimeSchema
      * Code block for message id parser.
      */
     private function __() {
-        _('ProductType');
-        _('Product');
-        _('Name');
+        _('產品圖');
+        _('產品');
+        _('圖片標題');
+        _('最大圖');
     }
 
 }

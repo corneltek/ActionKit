@@ -52,7 +52,6 @@ class CategorySchema extends SchemaDeclare
             ->label(_('程式用操作碼'));
 
 
-        $this->many('files','ProductBundle\\Model\\CategoryFile','category_id','id');
         $this->many('subcategories','ProductBundle\\Model\\CategorySchema','parent_id','id');
         $this->belongsTo('parent','ProductBundle\\Model\\CategorySchema','id','parent_id');
 
