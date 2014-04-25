@@ -1,10 +1,28 @@
 <?php
 namespace ActionKit\RecordAction;
 use Exception;
-use Phifty\FileUtils;
+
+public function filename_increase($path)
+{
+    if ( ! file_exists($path) ) {
+        return $path;
+    }
+    $pos = strrpos( $path , '.' );
+    if ($pos !== false) {
+        $filepath = substr($path, 0 , $pos);
+        $extension = substr($path, $pos);
+        $newfilepath = $filepath . $extension;
+        $i = 1;
+        while ( file_exists($newfilepath) ) {
+            $newfilepath = $filepath . " (" . $i++ . ")" . $extension;
+        }
+        return $newfilepath;
+    }
+    return $path;
+}
 
 function duplicate_file($from) {
-    $to = FileUtils::filename_increase($from);
+    $to = filename_increase($from);
     copy($from , $to);
     return $to;
 }
