@@ -2,9 +2,13 @@
 namespace ActionKit\RecordAction;
 use Exception;
 
-function filename_increase($path)
+/**
+ * @param string $path     file path.
+ * @param string $basepath basepath for checking file existence
+ */
+function filename_increase($path, $basepath = "./")
 {
-    if ( ! file_exists($path) ) {
+    if ( ! file_exists($basepath . $path) ) {
         return $path;
     }
     $pos = strrpos( $path , '.' );
@@ -13,8 +17,8 @@ function filename_increase($path)
         $extension = substr($path, $pos);
         $newfilepath = $filepath . $extension;
         $i = 1;
-        while ( file_exists($newfilepath) ) {
-            $newfilepath = $filepath . " (" . $i++ . ")" . $extension;
+        while ( file_exists($basepath . $newfilepath) ) {
+            $newfilepath = $filepath . "_" . $i++ . $extension;
         }
         return $newfilepath;
     }
@@ -39,6 +43,7 @@ function duplicate_data($data, $schema) {
         $column = $schema->getColumn($name);
 
         switch( $column->contentType ) {
+        case "File":
         case "ImageFile":
             $newData[ $name ] = duplicate_file($val);
             break;
@@ -51,49 +56,6 @@ function duplicate_data($data, $schema) {
     }
     return $newData;
 }
-
-function duplicate_record($record, $schema, $data = null) {
-    $data = $data ?: $record->getData();
-    $newData = duplicate_data($data, $schema);
-
-    $newRecord = $schema->newModel();
-    $ret = $newRecord->create($newData);
-    if (! $ret->success) {
-        throw new Exception($ret->message);
-    }
-    // XXX: check error
-
-    $relations = $schema->getRelations();
-    foreach( $relations as $rId => $relation ) {
-        if ( ! $relation->isHasMany() ) {
-            continue;
-        }
-
-        // var_dump( $relation ); 
-
-        $foreignRecord = $relation->newForeignModel();
-        $foreignColumnName = $relation['foreign_column'];
-
-        // fetch the related records
-        if ( isset($record->{ $rId }) ) {
-            $relatedRecords = $record->{ $rId };
-            $relatedRecords->fetch();
-
-            foreach( $relatedRecords as $relatedRecord ) {
-                $relatedRecordData = duplicate_data( $relatedRecord->getData() , $relatedRecord->getSchema() );
-                $relatedRecordData[ $foreignColumnName ] = $newRecord->id; // override the foreign column to the new record primary key
-                $ret = $foreignRecord->create($relatedRecordData);
-                if (! $ret->success) {
-                    throw new Exception($ret->message);
-                }
-                // XXX: check error
-            }
-
-        }
-    }
-    return $newRecord;
-}
-
 
 
 class BulkCopyRecordAction extends BulkRecordAction
@@ -120,7 +82,8 @@ class BulkCopyRecordAction extends BulkRecordAction
         parent::schema();
     }
 
-    public function beforeCopy($record, $data) 
+
+    public function prepareData($data) 
     {
         if ( ! empty($this->unsetFields) ) {
             foreach( $this->unsetFields as $field ) {
@@ -138,6 +101,10 @@ class BulkCopyRecordAction extends BulkRecordAction
             }
         }
         return $data;
+    }
+
+    public function beforeCopy($record, $data) 
+    {
     }
 
     public function afterCopy($record, $data, $newRecord) 
@@ -159,10 +126,12 @@ class BulkCopyRecordAction extends BulkRecordAction
         $records = $this->loadRecords();
         foreach($records as $record) {
             $newData = $record->getData();
-            $newData = $this->beforeCopy($record, $newData);
+            $newData = $this->prepareData($newData);
+
+            $this->beforeCopy($record, $newData);
 
             try {
-                $newRecord = duplicate_record($record, $schema, $newData);
+                $newRecord = $this->duplicateRecord($record, $schema, $newData);
                 if ( $result = $this->afterCopy($record, $newData, $newRecord) ) {
                     return $result;
                 }
@@ -174,6 +143,50 @@ class BulkCopyRecordAction extends BulkRecordAction
         $this->finalize( $records, $newRecords );
         return $this->success( count($newRecords) . ' 個項目複製成功。');
     }
+
+    public function duplicateRecord($record, $schema, $data = null) {
+        $data = $data ?: $record->getData();
+        $newData = duplicate_data($data, $schema);
+
+        $newRecord = $schema->newModel();
+        $ret = $newRecord->create($newData);
+        if (! $ret->success) {
+            throw new Exception($ret->message);
+        }
+        // XXX: check error
+
+        $relations = $schema->getRelations();
+        foreach( $relations as $rId => $relation ) {
+            if ( ! $relation->isHasMany() ) {
+                continue;
+            }
+
+            // var_dump( $relation ); 
+
+            $foreignRecord = $relation->newForeignModel();
+            $foreignColumnName = $relation['foreign_column'];
+
+            // fetch the related records
+            if ( isset($record->{ $rId }) ) {
+                $relatedRecords = $record->{ $rId };
+                $relatedRecords->fetch();
+
+                foreach( $relatedRecords as $relatedRecord ) {
+                    $relatedRecordData = duplicate_data( $relatedRecord->getData() , $relatedRecord->getSchema() );
+                    $relatedRecordData[ $foreignColumnName ] = $newRecord->id; // override the foreign column to the new record primary key
+                    $ret = $foreignRecord->create($relatedRecordData);
+                    if (! $ret->success) {
+                        throw new Exception($ret->message);
+                    }
+                    // XXX: check error
+                }
+
+            }
+        }
+        return $newRecord;
+    }
+
+
 
 }
 
