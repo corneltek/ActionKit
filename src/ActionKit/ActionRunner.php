@@ -255,21 +255,6 @@ class ActionRunner
     }
 
     /**
-     * Convert action signature into the actual full-qualified class name.
-     *
-     * This method replaces "::" charactors with "\" from action signature string.
-     *
-     * @param string $actionName
-     */
-    public function getActionClass( $actionName )
-    {
-        // replace :: with '\'
-        return str_replace( '::' , '\\' , $actionName );
-    }
-
-
-
-    /**
      * Return the cache path of the class name
      *
      * @param string $className
