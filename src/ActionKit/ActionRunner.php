@@ -41,7 +41,9 @@ class ActionRunner
     /**
      * @var array 
      */
-    public $dynamicActions = array();
+    protected $dynamicActions = array();
+
+    protected $dynamicActionsNew = array();
 
 
 
@@ -95,22 +97,57 @@ class ActionRunner
         throw new Exception( "Can not create action class $class" );
     }
 
-    public function autoload($class)
+    public function loadClass($class) 
     {
-        /* check if action is in CRUD list */
-        if ( ! isset( $this->crudActions[$class] ) ) {
-            return false;
+        if ( isset($this->dynamicActionsNew[$class]) ) {
+            $actionArgs = $this->dynamicActionsNew[ $class ];
+            $cacheFile = $this->getClassCacheFile($class, $actionArgs);
+            $gen = new ActionGenerator;
+            $loader = $gen->getTwigLoader();
+            // filemtime($cacheFile) 
+            if (  ! file_exists($cacheFile) ) {
+                $template = $gen->generate2($class, $actionArgs);
+                if ( false === $template->writeTo($cacheFile) ) {
+                    throw new Exception("Can not write action class cache file: $cacheFile");
+                }
+            }
+            require $cacheFile;
+            return true;
         }
 
-        // \FB::info('Generate action class: ' . $class);
+        if ( isset( $this->dynamicActions[ $class ] ) ) {
+            $actionArgs = $this->dynamicActions[ $class ];
+            $cacheFile = $this->getClassCacheFile($class);
 
-        // Generate the crud action
-        //
-        // @see registerCRUD method
-        $gen = new ActionGenerator(array( 'cache' => true ));
-        $args = $this->crudActions[$class];
-        $template = $gen->generateClassCodeWithNamespace( $args['ns'] , $args['model_name'], $args['type'] );
-        return $this->loadClassTemplate($class, $template);
+            $gen = new ActionGenerator;
+            $loader = $gen->getTwigLoader();
+            if (  ! file_exists($cacheFile) || ! $loader->isFresh($actionArgs['template'], filemtime($cacheFile) ) ) {
+                $template = $gen->generate($class, $actionArgs['template'], $actionArgs['variables']);
+                if ( false === file_put_contents($cacheFile, $template->render() ) ) {
+                    throw new Exception("Can not write action class cache file: $cacheFile");
+                }
+            }
+            require $cacheFile;
+            return true;
+        }
+
+
+        // backward compatible code
+        if ( isset( $this->crudActions[$class] ) ) {
+            // \FB::info('Generate action class: ' . $class);
+            // Generate the crud action
+            //
+            // @see registerCRUD method
+            $gen = new ActionGenerator(array( 'cache' => true ));
+            $args = $this->crudActions[$class];
+            $template = $gen->generateClassCodeWithNamespace( $args['ns'] , $args['model_name'], $args['type'] );
+            return $this->loadClassTemplate($class, $template);
+        }
+    }
+
+    public function autoload($class)
+    {
+        return $this->loadClass($class);
     }
 
     public function registerAutoloader()
@@ -118,7 +155,6 @@ class ActionRunner
         // use throw and not to prepend
         spl_autoload_register(array($this,'autoload'),true, false);
     }
-
 
 
 
@@ -137,8 +173,15 @@ class ActionRunner
         );
     }
 
-    public function registerDynamicAction($targetActionClass, $options = array() ) {
-        // $this->dynamicActions[ $targetActionClass ] = $options;
+
+    /**
+     * $this->registerAction2('App\Action\SortProductType',[ 
+     *  'extends'    => '....',
+     *  'properties' => [ 'recordClass' => .... ]
+     * ]);
+     */
+    public function register($targetActionClass, $options = array() ) {
+        $this->dynamicActionsNew[ $targetActionClass ] = $options;
     }
 
     /**
@@ -160,24 +203,18 @@ class ActionRunner
     {
         foreach ( (array) $types as $type ) {
             $class = $ns . '\\Action\\' . $type . $modelName;
-            $this->registerAction( $class , '@ActionKit/RecordAction.html.twig',array( 
-                'record_class' => "$ns\\Model\\$modelName",
-                'base_class' => "ActionKit\\RecordAction\\{$type}RecordAction",
-            ));
-
+            $this->register( $class , [
+                'extends' => "\\ActionKit\\RecordAction\\{$type}RecordAction",
+                'properties' => [
+                    'recordClass' => "$ns\\Model\\$modelName",
+                ],
+            ]);
             $this->crudActions[$class] = array(
                 'ns'           => $ns,
                 'type'         => $type,
                 'model_name'   => $modelName,
             );
         }
-    }
-
-
-    public function registerCRUDAction($class,$args)
-    {
-        throw new Exception("registerCRUDAction is deprecated.");
-        // $this->crudActions[ $class ] = $args;
     }
 
     public function isInvalidActionName( $actionName )
@@ -216,9 +253,10 @@ class ActionRunner
      * @param string $className
      * @return string path
      */
-    public function getClassCacheFile($className) 
+    public function getClassCacheFile($className, $params = array())
     {
-        return $this->cacheDir . DIRECTORY_SEPARATOR . str_replace('\\','_',$className) . '.php';
+        $chk = empty($params) ? '' : md5(serialize($params));
+        return $this->cacheDir . DIRECTORY_SEPARATOR . str_replace('\\','_',$className) . $chk . '.php';
     }
 
 
@@ -229,10 +267,6 @@ class ActionRunner
      */
     public function loadClassTemplate($className, $template)
     {
-        if ( class_exists($className, true) ) {
-            return true;
-        }
-
         $cacheFile = $this->getClassCacheFile($className);
         if ( file_exists($cacheFile) ) {
             require $cacheFile;
@@ -240,7 +274,7 @@ class ActionRunner
         }
 
         // generate cache file
-        file_put_contents($cacheFile, $template->render());
+        $template->writeTo($cacheFile);
         return require $cacheFile;
     }
 
@@ -267,34 +301,7 @@ class ActionRunner
             return new $class( $args );
         }
 
-        if ( isset( $this->dynamicActions[ $class ] ) ) {
-            $actionArgs = $this->dynamicActions[ $class ];
-            $cacheFile = $this->getClassCacheFile($class);
-
-            $gen = new ActionGenerator;
-            $loader = $gen->getTwigLoader();
-            if (  ! file_exists($cacheFile) || ! $loader->isFresh($actionArgs['template'], filemtime($cacheFile) ) ) {
-                $template = $gen->generate($class, $actionArgs['template'], $actionArgs['variables']);
-                if ( false === file_put_contents($cacheFile, $template->render() ) ) {
-                    throw new Exception("Can not write action class cache file: $cacheFile");
-                }
-            }
-            require $cacheFile;
-            return new $class($args);
-        }
-        /* check if action is in CRUD list */
-        else if ( isset( $this->crudActions[$class] ) ) {
-
-            /* generate the crud action */
-            $args = $this->crudActions[$class];
-
-            // please see registerCRUD method
-            $gen = new ActionGenerator(array( 'cache' => true ));
-            $template = $gen->generateClassCodeWithNamespace( $args['ns'], $args['model_name'], $args['type'] );
-            $this->loadClassTemplate($class, $template);
-            return new $class( $args );
-        }
-
+        $this->loadClass($class);
 
         // call spl to autoload the class
         if ( ! class_exists($class,true) ) {
