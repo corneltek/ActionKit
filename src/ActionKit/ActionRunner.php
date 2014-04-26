@@ -109,7 +109,7 @@ class ActionRunner
         // @see registerCRUD method
         $gen = new ActionGenerator(array( 'cache' => true ));
         $args = $this->crudActions[$class];
-        $template = $gen->generateClassCodeWithNamespace( $args['prefix'], $args['model_name'], $args['type'] );
+        $template = $gen->generateClassCodeWithNamespace( $args['ns'] , $args['model_name'], $args['type'] );
         return $this->loadClassTemplate($class, $template);
     }
 
@@ -137,6 +137,9 @@ class ActionRunner
         );
     }
 
+    public function registerDynamicAction($targetActionClass, $options = array() ) {
+        // $this->dynamicActions[ $targetActionClass ] = $options;
+    }
 
     /**
      * Add CRUD action class to pool, so we can generate these class later
@@ -153,17 +156,17 @@ class ActionRunner
      * @param string $modelName model name
      * @param array  $types     action types
      */
-    public function registerCRUD( $prefixNs , $modelName , $types )
+    public function registerCRUD( $ns , $modelName , $types )
     {
         foreach ( (array) $types as $type ) {
-            $class = $prefixNs . '\\Action\\' . $type . $modelName;
+            $class = $ns . '\\Action\\' . $type . $modelName;
             $this->registerAction( $class , '@ActionKit/RecordAction.html.twig',array( 
-                'record_class' => "$prefixNs\\Model\\$modelName",
+                'record_class' => "$ns\\Model\\$modelName",
                 'base_class' => "ActionKit\\RecordAction\\{$type}RecordAction",
             ));
 
             $this->crudActions[$class] = array(
-                'prefix'       => $prefixNs . '\\Model',
+                'ns'           => $ns,
                 'type'         => $type,
                 'model_name'   => $modelName,
             );
@@ -287,7 +290,7 @@ class ActionRunner
 
             // please see registerCRUD method
             $gen = new ActionGenerator(array( 'cache' => true ));
-            $template = $gen->generateClassCodeWithNamespace( $args['prefix'], $args['model_name'], $args['type'] );
+            $template = $gen->generateClassCodeWithNamespace( $args['ns'], $args['model_name'], $args['type'] );
             $this->loadClassTemplate($class, $template);
             return new $class( $args );
         }

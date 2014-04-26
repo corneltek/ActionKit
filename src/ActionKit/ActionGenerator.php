@@ -78,7 +78,7 @@ class ActionGenerator
      * @synopsis
      *
      *    $template = $g->generate2('ProductBundle\\Action\\SortProductImage', [ 
-     *              'base_class' => 'SortablePlugin\\Action\\SortRecordAction',
+     *              'extends' => 'SortablePlugin\\Action\\SortRecordAction',
      *              'constants' => [
      *                  ...
      *              ],
@@ -93,16 +93,10 @@ class ActionGenerator
      */
     public function generate2($targetClassName, $options = array() )
     {
-        $recordClass = $variables['record_class'];
         $classTemplate = new ClassTemplate($targetClassName);
 
-        if ( isset($options['base_class']) ) {
-            $baseClass = $options['base_class'];
-            $classTemplate->useClass($baseClass);
-
-            $_p = explode('\\',$baseClass);
-            $baseClassName = end($_p);
-            $classTemplate->extendClass($baseClassName);
+        if ( isset($options['extends']) ) {
+            $classTemplate->extendClass($options['extends']);
         }
 
         if ( isset($options['properties']) ) {
@@ -152,13 +146,15 @@ class ActionGenerator
      *
      * @param string $modelClass full-qualified model class name
      * @param string $type action type
+     *
+     *
+     *  $g->generateClassCode( 'App\Model\User', 'Create' ); // generates App\Action\CreateUser
+     *
      */
     public function generateClassCode( $modelClass , $type )
     {
-        $ps = explode('\\', ltrim($modelClass) );
-        $modelName = array_pop($ps);
-        $ns = join("\\", $ps);
-        return $this->generateClassCodeWithNamespace($ns, $modelName, $type);
+        list($modelNs, $modelName) = explode('\\Model\\', $modelClass);
+        return $this->generateClassCodeWithNamespace($modelNs, $modelName, $type);
     }
 
     /**
@@ -174,21 +170,19 @@ class ActionGenerator
      *
      * @return ClassTemplate
      */
-    public function generateClassCodeWithNamespace( $modelNs , $modelName , $type )
+    public function generateClassCodeWithNamespace($ns, $modelName , $type )
     {
-        $modelNs = ltrim($modelNs,'\\');
+        $ns = ltrim($ns,'\\');
         $actionClass  = $type . $modelName;
 
         // here we translate App\Model\Book to App\Action\CreateBook or something
-        $actionNs = str_replace('Model','Action', $modelNs);
-        $actionFullClass = ltrim($actionNs . '\\' . $actionClass, '\\');
+        $actionFullClass = $ns . '\\Action\\' . $actionClass;
 
         // the original ns is the model namespace
-        $recordClass  = ltrim($modelNs . '\\' . $modelName, '\\');
+        $recordClass  = $ns . '\\Model\\' . $modelName;
         $baseAction   = $type . 'RecordAction';
 
         $classTemplate = new ClassTemplate($actionFullClass);
-        $classTemplate->useClass("\\ActionKit\\RecordAction\\$baseAction");
         $classTemplate->extendClass("\\ActionKit\\RecordAction\\$baseAction");
         $classTemplate->addProperty('recordClass',$recordClass);
         return $classTemplate;
