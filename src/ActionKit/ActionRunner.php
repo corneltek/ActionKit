@@ -97,12 +97,10 @@ class ActionRunner
         $class = Utils::toActionClass($actionName);
 
         /* register results into hash */
-        if ( $action = $this->createAction( $class , $arguments ) ) {
+        if ( $action = $this->createAction($class, $arguments ) ) {
             $action->invoke();
             return $this->results[ $actionName ] = $action->getResult();
         }
-
-
 
         throw new Exception( "Can not create action class $class" );
     }
@@ -127,7 +125,6 @@ class ActionRunner
         if ( isset( $this->dynamicActions[ $class ] ) ) {
             $actionArgs = $this->dynamicActions[ $class ];
             $cacheFile = $this->getClassCacheFile($class);
-
             $loader = $this->generator->getTwigLoader();
             if (  ! file_exists($cacheFile) || ! $loader->isFresh($actionArgs['template'], filemtime($cacheFile) ) ) {
                 $code = $this->generator->generate($class, $actionArgs['template'], $actionArgs['variables']);
@@ -261,9 +258,9 @@ class ActionRunner
      * @param string $className
      * @return string path
      */
-    public function getClassCacheFile($className, $params = array())
+    public function getClassCacheFile($className, $params = null)
     {
-        $chk = empty($params) ? '' : md5(serialize($params));
+        $chk = $params ? md5(serialize($params)) : '';
         return $this->cacheDir . DIRECTORY_SEPARATOR . str_replace('\\','_',$className) . $chk . '.php';
     }
 
