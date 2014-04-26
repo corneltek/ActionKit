@@ -9,6 +9,11 @@ class Utils
     public static function validateActionName($actionName) {
         return ! preg_match( '/[^A-Za-z0-9:]/i' , $actionName  );
     }
+
+    public static function toActionClass( $sig ) {
+        // replace :: with '\'
+        return str_replace( '::' , '\\' , $sig );
+    }
 }
 
 

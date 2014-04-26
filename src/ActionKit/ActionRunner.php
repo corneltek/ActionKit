@@ -89,13 +89,12 @@ class ActionRunner
      * */
     public function run($actionName, $arguments = array() )
     {
-        if ( $this->isInvalidActionName( $actionName ) ) {
+        if ( ! Utils::validateActionName( $actionName ) ) {
             throw new Exception( "Invalid action name: $actionName." );
         }
 
         /* translate :: into php namespace */
-        $class = $this->getActionClass( $actionName );
-
+        $class = Utils::toActionClass($actionName);
 
         /* register results into hash */
         if ( $action = $this->createAction( $class , $arguments ) ) {
