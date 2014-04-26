@@ -276,19 +276,6 @@ class ActionRunner
     }
 
 
-    /**
-     *
-     * @param string $className
-     * @param ClassTemplate the class template object
-     */
-    public function loadClassTemplate($className, $template)
-    {
-        // generate cache file
-        $template->writeTo($cacheFile);
-        return require $cacheFile;
-    }
-
-
 
     /**
      * Create action object
