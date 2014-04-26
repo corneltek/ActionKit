@@ -35,7 +35,7 @@ class ActionRunnerTest extends \LazyRecord\ModelTestCase
         $runner = ActionKit\ActionRunner::getInstance();
         ok($runner);
         $runner->registerAutoloader();
-        $runner->registerCRUD('User','User',array('Create','Update','Delete'));
+        $runner->registerRecordAction('User','User',array('Create','Update','Delete'));
 
         $result = $runner->run('User::Action::CreateUser',[ 
             'email' => 'foo@foo'

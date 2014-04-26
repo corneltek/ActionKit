@@ -144,7 +144,7 @@ class ActionRunner
             // \FB::info('Generate action class: ' . $class);
             // Generate the crud action
             //
-            // @see registerCRUD method
+            // @see registerRecordAction method
             $args = $this->crudActions[$class];
             $template = $this->generator->generateRecordActionNs( $args['ns'] , $args['model_name'], $args['type'] );
             return $this->loadClassTemplate($class, $template);
@@ -177,9 +177,9 @@ class ActionRunner
 
 
     /**
-     * $this->registerAction2('App\Action\SortProductType',[ 
-     *  'extends'    => '....',
-     *  'properties' => [ 'recordClass' => .... ]
+     * $this->register('App\Action\SortProductType',[ 
+     *    'extends'    => '....',
+     *    'properties' => [ 'recordClass' => .... ]
      * ]);
      */
     public function register($targetActionClass, $options = array() ) {
@@ -190,7 +190,7 @@ class ActionRunner
      * Add CRUD action class to pool, so we can generate these class later
      * if needed. (lazy)
      *
-     *   - registerCRUD( 'News' , 'News' , array('Create','Update') );
+     *   - registerRecordAction( 'News' , 'News' , array('Create','Update') );
      *
      * Which generates:
      *
@@ -201,7 +201,7 @@ class ActionRunner
      * @param string $modelName model name
      * @param array  $types     action types
      */
-    public function registerCRUD( $ns , $modelName , $types )
+    public function registerRecordAction( $ns , $modelName , $types )
     {
         foreach ( (array) $types as $type ) {
             $class = $ns . '\\Action\\' . $type . $modelName;
@@ -218,6 +218,12 @@ class ActionRunner
             );
         }
     }
+
+    public function registerCRUD( $ns , $modelName , $types )
+    {
+        $this->registerRecordAction( $ns, $modelName, $types );
+    }
+
 
     public function isInvalidActionName( $actionName )
     {
