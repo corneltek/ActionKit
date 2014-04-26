@@ -140,7 +140,7 @@ class ActionRunner
             // @see registerCRUD method
             $gen = new ActionGenerator(array( 'cache' => true ));
             $args = $this->crudActions[$class];
-            $template = $gen->generateClassCodeWithNamespace( $args['ns'] , $args['model_name'], $args['type'] );
+            $template = $gen->generateRecordActionNs( $args['ns'] , $args['model_name'], $args['type'] );
             return $this->loadClassTemplate($class, $template);
         }
     }

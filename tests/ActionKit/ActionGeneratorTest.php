@@ -6,7 +6,7 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
     {
         $g = new ActionKit\ActionGenerator;
         ok( $g );
-        $template = $g->generateClassCode( 'App\\Model\\User' , 'Create' );
+        $template = $g->generateRecordAction( 'App\\Model\\User' , 'Create' );
         $template->load();
         ok( class_exists( '\\App\\Action\\CreateUser') );
     }

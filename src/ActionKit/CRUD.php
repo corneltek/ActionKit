@@ -7,7 +7,7 @@ class CRUD
     public static function generate($recordClass, $type)
     {
         $gen = new ActionGenerator(array( 'cache' => true ));
-        $template = $gen->generateClassCode( $recordClass , $type );
+        $template = $gen->generateRecordAction( $recordClass , $type );
         $className = $template->class->getFullName();
 
         // trigger spl classloader if needed.

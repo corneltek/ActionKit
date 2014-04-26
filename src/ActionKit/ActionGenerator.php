@@ -156,13 +156,13 @@ class ActionGenerator
      * @param string $type action type
      *
      *
-     *  $g->generateClassCode( 'App\Model\User', 'Create' ); // generates App\Action\CreateUser
+     *  $g->generateRecordAction( 'App\Model\User', 'Create' ); // generates App\Action\CreateUser
      *
      */
-    public function generateClassCode( $modelClass , $type )
+    public function generateRecordAction( $modelClass , $type )
     {
         list($modelNs, $modelName) = explode('\\Model\\', $modelClass);
-        return $this->generateClassCodeWithNamespace($modelNs, $modelName, $type);
+        return $this->generateRecordActionNs($modelNs, $modelName, $type);
     }
 
     /**
@@ -178,7 +178,7 @@ class ActionGenerator
      *
      * @return ClassTemplate
      */
-    public function generateClassCodeWithNamespace($ns, $modelName , $type)
+    public function generateRecordActionNs($ns, $modelName , $type)
     {
         $ns = ltrim($ns,'\\');
         // here we translate App\Model\Book to App\Action\CreateBook or something
