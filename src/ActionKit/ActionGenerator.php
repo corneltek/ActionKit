@@ -94,11 +94,13 @@ class ActionGenerator
     public function generate2($targetClassName, $options = array() )
     {
         $classTemplate = new ClassTemplate($targetClassName);
+        // general use statement
+        $classTemplate->useClass('\\ActionKit\\Action');
+        $classTemplate->useClass('\\ActionKit\\RecordAction\\BaseRecordAction');
 
         if ( isset($options['extends']) ) {
             $classTemplate->extendClass($options['extends']);
         }
-
         if ( isset($options['properties']) ) {
             foreach( $options['properties'] as $name => $value ) {
                 $classTemplate->addProperty($name, $value);
@@ -166,26 +168,23 @@ class ActionGenerator
      *
      * @param string $ns
      * @param string $modelName
-     * @param string $type
+     * @param string $type  RecordAction Type
      *
      * @return ClassTemplate
      */
-    public function generateClassCodeWithNamespace($ns, $modelName , $type )
+    public function generateClassCodeWithNamespace($ns, $modelName , $type)
     {
         $ns = ltrim($ns,'\\');
-        $actionClass  = $type . $modelName;
-
         // here we translate App\Model\Book to App\Action\CreateBook or something
-        $actionFullClass = $ns . '\\Action\\' . $actionClass;
-
-        // the original ns is the model namespace
+        $actionFullClass = $ns . '\\Action\\' . $type . $modelName;
         $recordClass  = $ns . '\\Model\\' . $modelName;
         $baseAction   = $type . 'RecordAction';
-
-        $classTemplate = new ClassTemplate($actionFullClass);
-        $classTemplate->extendClass("\\ActionKit\\RecordAction\\$baseAction");
-        $classTemplate->addProperty('recordClass',$recordClass);
-        return $classTemplate;
+        return $this->generate2($actionFullClass, [ 
+            'extends' => "\\ActionKit\\RecordAction\\$baseAction",
+            'properties' => [ 
+                'recordClass' => $recordClass,
+            ],
+        ]);
     }
 
 
