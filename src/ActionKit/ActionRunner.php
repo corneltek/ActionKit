@@ -69,8 +69,7 @@ class ActionRunner
                 mkdir($this->cacheDir, 0755, true);
             }
         }
-
-        $this->generator = new ActionGenerator(array( 'cache' => true ));
+        $this->generator = new ActionGenerator(array( 'cache' => true , 'cache_dir' => $this->cacheDir ));
     }
 
     /**
