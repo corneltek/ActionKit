@@ -213,4 +213,33 @@ class ActionGenerator
         return $classTemplate;
     }
 
+
+
+    /**
+     * Return the cache path of the class name
+     *
+     * @param string $className
+     * @return string path
+     */
+    public function getClassCacheFile($className, $params = null)
+    {
+        $chk = $params ? md5(serialize($params)) : '';
+        return $this->cacheDir . DIRECTORY_SEPARATOR . str_replace('\\','_',$className) . $chk . '.php';
+    }
+
+    /**
+     * Load the class cache file
+     *
+     * @param string $className the action class
+     */
+    public function loadClassCache($className, $params = null) {
+        $file = $this->getClassCacheFile($className, $params);
+        if ( file_exists($file) ) {
+            require $file;
+            return true;
+        }
+        return false;
+    }
+
+
 }

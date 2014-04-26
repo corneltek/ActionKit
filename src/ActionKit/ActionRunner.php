@@ -266,6 +266,9 @@ class ActionRunner
         return $this->cacheDir . DIRECTORY_SEPARATOR . str_replace('\\','_',$className) . $chk . '.php';
     }
 
+    /**
+     * Load the class cache file
+     */
     public function loadClassCache($className, $params = null) {
         $file = $this->getClassCacheFile($className, $params);
         if ( file_exists($file) ) {
