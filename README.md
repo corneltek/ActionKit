@@ -84,7 +84,7 @@ from backend.
 
 A minimal action skeleton:
 
-``php
+```php
 use ActionKit\Action;
 class YourAction extends Action
 {
