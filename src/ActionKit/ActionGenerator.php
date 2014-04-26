@@ -53,7 +53,8 @@ class ActionGenerator
 
     /**
      * This method generates class code based on the template file from Twig
-     * 
+     *
+     * XXX: is going to be deprecated.
      */
     // $template = $gen->generate($class, $actionArgs['template'], $actionArgs['variables']);
     // $variables['base_class']
