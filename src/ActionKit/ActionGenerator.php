@@ -98,11 +98,13 @@ class ActionGenerator
         // general use statement
         $classTemplate->useClass('\\ActionKit\\Action');
         $classTemplate->useClass('\\ActionKit\\RecordAction\\BaseRecordAction');
+        /*
         $classTemplate->useClass('\\ActionKit\\RecordAction\\CreateRecordAction');
         $classTemplate->useClass('\\ActionKit\\RecordAction\\UpdateRecordAction');
         $classTemplate->useClass('\\ActionKit\\RecordAction\\DeleteRecordAction');
         $classTemplate->useClass('\\ActionKit\\RecordAction\\BulkDeleteRecordAction');
         $classTemplate->useClass('\\ActionKit\\RecordAction\\BulkCreateRecordAction');
+        */
 
         if ( isset($options['extends']) ) {
             $classTemplate->extendClass($options['extends']);
@@ -186,7 +188,7 @@ class ActionGenerator
         $recordClass  = $ns . '\\Model\\' . $modelName;
         $baseAction   = $type . 'RecordAction';
         return $this->generate2($actionFullClass, [ 
-            'extends' => $baseAction,
+            'extends' => '\\ActionKit\\RecordAction\\' . $baseAction,
             'properties' => [ 
                 'recordClass' => $recordClass,
             ],

@@ -40,15 +40,21 @@ class ActionRunner
 
     /**
      * @var array 
+     * @DEPRECATED
      */
     protected $dynamicActions = array();
 
+
+    /**
+     * @var array The new action class generator pool
+     */
     protected $dynamicActionsNew = array();
 
 
 
     /**
      * @var array Abstract CRUD action pool
+     * @DEPRECATED
      */
     public $crudActions = array();
 
@@ -124,8 +130,8 @@ class ActionRunner
 
             $loader = $this->generator->getTwigLoader();
             if (  ! file_exists($cacheFile) || ! $loader->isFresh($actionArgs['template'], filemtime($cacheFile) ) ) {
-                $template = $this->generator->generate($class, $actionArgs['template'], $actionArgs['variables']);
-                if ( false === file_put_contents($cacheFile, $template->render() ) ) {
+                $code = $this->generator->generate($class, $actionArgs['template'], $actionArgs['variables']);
+                if ( false === file_put_contents($cacheFile, $code) ) {
                     throw new Exception("Can not write action class cache file: $cacheFile");
                 }
             }
