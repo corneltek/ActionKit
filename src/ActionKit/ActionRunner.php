@@ -139,8 +139,7 @@ class ActionRunner
             return true;
         }
 
-
-        // backward compatible code
+        // DEPRECATED: backward compatible code
         if ( isset( $this->crudActions[$class] ) ) {
             // \FB::info('Generate action class: ' . $class);
             // Generate the crud action
@@ -152,21 +151,17 @@ class ActionRunner
         }
     }
 
-    public function autoload($class)
-    {
-        return $this->loadClass($class);
-    }
-
     public function registerAutoloader()
     {
         // use throw and not to prepend
-        spl_autoload_register(array($this,'autoload'),true, false);
+        spl_autoload_register(array($this,'loadClass'),true, false);
     }
-
 
 
     /**
      * Register dynamic action by template.
+     *
+     * XXX: deprecated
      *
      * @param string $targetActionClass target action class name, full-qualified.
      * @param string $templateName      source template 
