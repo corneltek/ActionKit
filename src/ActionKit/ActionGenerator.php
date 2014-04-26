@@ -198,9 +198,9 @@ class ActionGenerator
      */
     public function generateActionClassCode($namespaceName,$actionName)
     {
-        $classTemplate = new ClassTemplate("$namespaceName\\Action\\$actionName");
-        $classTemplate->useClass("\\ActionKit\\Action");
-        $classTemplate->extendClass("Action");
+        $classTemplate = $this->generate2("$namespaceName\\Action\\$actionName", [ 
+            'extends' => 'Action',
+        ]);
         $classTemplate->addMethod('public','schema', [] , '');
         $classTemplate->addMethod('public','run', [] , 'return $this->success("Success!");');
         return $classTemplate;
