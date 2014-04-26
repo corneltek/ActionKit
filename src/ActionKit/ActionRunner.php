@@ -57,7 +57,10 @@ class ActionRunner
      */
     public $results = array();
 
+    public $generator;
+
     public function __construct($options = array()) {
+
         if ( isset($options['cache_dir']) ) {
             $this->cacheDir = $options['cache_dir'];
         } else {
@@ -66,6 +69,8 @@ class ActionRunner
                 mkdir($this->cacheDir, 0755, true);
             }
         }
+
+        $this->generator = new ActionGenerator(array( 'cache' => true ));
     }
 
     /**
@@ -102,11 +107,10 @@ class ActionRunner
         if ( isset($this->dynamicActionsNew[$class]) ) {
             $actionArgs = $this->dynamicActionsNew[ $class ];
             $cacheFile = $this->getClassCacheFile($class, $actionArgs);
-            $gen = new ActionGenerator;
-            $loader = $gen->getTwigLoader();
+            $loader = $this->generator->getTwigLoader();
             // filemtime($cacheFile) 
             if (  ! file_exists($cacheFile) ) {
-                $template = $gen->generate2($class, $actionArgs);
+                $template = $this->generator->generate2($class, $actionArgs);
                 if ( false === $template->writeTo($cacheFile) ) {
                     throw new Exception("Can not write action class cache file: $cacheFile");
                 }
@@ -119,10 +123,9 @@ class ActionRunner
             $actionArgs = $this->dynamicActions[ $class ];
             $cacheFile = $this->getClassCacheFile($class);
 
-            $gen = new ActionGenerator;
-            $loader = $gen->getTwigLoader();
+            $loader = $this->generator->getTwigLoader();
             if (  ! file_exists($cacheFile) || ! $loader->isFresh($actionArgs['template'], filemtime($cacheFile) ) ) {
-                $template = $gen->generate($class, $actionArgs['template'], $actionArgs['variables']);
+                $template = $this->generator->generate($class, $actionArgs['template'], $actionArgs['variables']);
                 if ( false === file_put_contents($cacheFile, $template->render() ) ) {
                     throw new Exception("Can not write action class cache file: $cacheFile");
                 }
@@ -138,9 +141,8 @@ class ActionRunner
             // Generate the crud action
             //
             // @see registerCRUD method
-            $gen = new ActionGenerator(array( 'cache' => true ));
             $args = $this->crudActions[$class];
-            $template = $gen->generateRecordActionNs( $args['ns'] , $args['model_name'], $args['type'] );
+            $template = $this->generator->generateRecordActionNs( $args['ns'] , $args['model_name'], $args['type'] );
             return $this->loadClassTemplate($class, $template);
         }
     }
