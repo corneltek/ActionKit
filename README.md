@@ -3,21 +3,28 @@ ActionKit
 
 ActionKit is library let you share the business logics across controllers, pages, ajax requests.
 
-Sometimes, you need shared code across your controllers, however, then you
-might write a shared controller class to share common code, but this approach
-might work well for small applications, but when your application is getting
-bigger and bigger, it will be very complex to share the common code.
+Sometimes, you need shared code across your controllers, you might sit down and
+write a shared controller class to share the common code for reuse. This
+approach might work well for small applications, when your application is
+getting bigger and bigger, it will be very complex to share the common code,
+and hardly to maintain.
 
-So the ActionKit is a way to wrap your common code up, and make these common
-code, reuseable in everywhere in the application.
+ActionKit provides a way to wrap your common code up, and make these common
+code reuseable in everywhere in the application.
 
 Besides of sharing the logics across your controllers, you may also define the
 parameters with types, validators, form widget type and a lot of parameter
 options, and render your Action as a web form.
 
-You don't need to handle the ajax mechanisums, controller handlers, parameter
-validations, ActionKit\\Action does all the jobs for you automatically, so you
-can focus on the core logics that you only need to handle.
+    [Web Form] => [Input: paramters] => [ Parameter Validation ] 
+            => [Execute the logic in Action]  
+                => [Return result: Success or Failure, Data: processed data]
+                    => [Render result on the web page]
+
+Hence, you don't need to handle the ajax mechanisums, controller handlers,
+parameter validations, ActionKit\\Action does all the jobs for you
+automatically, so you can focus on the core logics that you only need to
+handle.
 
 Action is just like API (application programming interface),
 which can be triggered from HTTP requests, Ajax requests, or
