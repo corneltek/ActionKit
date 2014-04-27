@@ -1,13 +1,14 @@
 ActionKit
 =========
 
-ActionKit is library let you share the business logics across controllers, pages, ajax requests.
+ActionKit is a library that let you share the business logics across
+controllers, pages, ajax requests.
 
-Sometimes, you need shared code across your controllers, you might sit down and
-write a shared controller class to share the common code for reuse. This
-approach might work well for small applications, when your application is
-getting bigger and bigger, it will be very complex to share the common code,
-and hardly to maintain.
+Sometimes, you need to reuse code across your controllers, pages, ajax
+requests, you might sit down and write a shared controller class to share the
+common code for reuse. This approach might work well for small applications,
+when your application is getting bigger and bigger, it will be very complex to
+share the common code, and hard to maintain.
 
 ActionKit provides a way to wrap your common code up, and make these common
 code reuseable in everywhere in the application.
