@@ -7,7 +7,7 @@ controllers, pages, ajax requests.
 Sometimes, you need to reuse code across your controllers, pages, ajax
 requests, you might sit down and write a shared controller class to share the
 common code for reuse. This approach might work well for small applications,
-when your application is getting bigger and bigger, it will be very complex to
+, however, when your application is getting bigger and bigger, it will be very complex to
 share the common code, and hard to maintain.
 
 ActionKit provides a way to wrap your common code up, and make these common
