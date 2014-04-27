@@ -1,12 +1,27 @@
 ActionKit
 =========
 
-ActionKit let you separate logics and these logics and be
-reused in anywhere.
+ActionKit is library let you share the business logics across controllers, pages, ajax requests.
 
-Action is much more like API (application programming interface),
+Sometimes, you need shared code across your controllers, however, then you
+might write a shared controller class to share common code, but this approach
+might work well for small applications, but when your application is getting
+bigger and bigger, it will be very complex to share the common code.
+
+So the ActionKit is a way to wrap your common code up, and make these common
+code, reuseable in everywhere in the application.
+
+Besides of sharing the logics across your controllers, you may also define the
+parameters with types, validators, form widget type and a lot of parameter
+options, and render your Action as a web form.
+
+You don't need to handle the ajax mechanisums, controller handlers, parameter
+validations, ActionKit\\Action does all the jobs for you automatically, so you
+can focus on the core logics that you only need to handle.
+
+Action is just like API (application programming interface),
 which can be triggered from HTTP requests, Ajax requests, or
-from backend.
+from backend, here is the work flow:
 
 
                |~~~~~~~~~~~~~~~~~~~~~~~~~~|
