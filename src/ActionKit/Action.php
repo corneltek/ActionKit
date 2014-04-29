@@ -72,9 +72,9 @@ class Action implements IteratorAggregate
      * Constructing Action objects
      *
      * @param array $args        The request arguments
-     * @param mixed $currentUser
+     * @param mixed $options
      */
-    public function __construct( $args = array() , $currentUser = null )
+    public function __construct( $args = array() , $options = array() )
     {
 
         if ( isset($args['_FILES']) ) {
@@ -88,8 +88,8 @@ class Action implements IteratorAggregate
             throw new Exception('Action arguments of ' . get_class($this) . ' is not an array.');
         }
 
-        if ( $currentUser ) {
-            $this->currentUser = $currentUser;
+        if ( isset($options['current_user']) ) {
+            $this->currentUser = $options['current_user'];
         }
 
         $this->request = new HttpRequest;

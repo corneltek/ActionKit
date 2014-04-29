@@ -38,7 +38,7 @@ class BaseRecordAction extends Action
     /**
      * Construct an action object.
      *
-     *    $action = new UpdateProductAction(array( ... ), new Product, $currentUser);
+     *    $action = new UpdateProductAction(array( ... ), new Product, $options);
      *
      *
      * Here we override the default __construct from Action class.
@@ -56,7 +56,7 @@ class BaseRecordAction extends Action
      * @param array                $args
      * @param LazyRecord\BaseModel $record
      */
-    public function __construct( $args = array(), $record = null, $currentUser = null )
+    public function __construct( $args = array(), $record = null, $options = array() )
     {
         // record name is in Camel case
         if ( ! $this->recordClass && $record ) {
@@ -85,7 +85,7 @@ class BaseRecordAction extends Action
         }
 
         // initialize schema , init base action stuff
-        parent::__construct( $args , $currentUser );
+        parent::__construct( $args , $options );
 
         if ( $this->record->id ) {
             // load record values to params
