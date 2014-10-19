@@ -65,7 +65,7 @@ class ManyToManyCheckboxView
             $checkbox->check();
         }
         $label->append( $checkbox );
-        $label->appendText( $item->dataLabel() );
+        $label->append( $item->dataLabel() );
         $label->append( $hiddenId );
         $li->append($label);
         return $li;

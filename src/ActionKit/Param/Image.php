@@ -6,6 +6,8 @@ use Exception;
 use RuntimeException;
 use SimpleImage;
 use Phifty\FileUtils;
+use ActionKit\RecordAction\UpdateRecordAction;
+use ActionKit\RecordAction\CreateRecordAction;
 
 function filename_increase($path)
 {
@@ -287,7 +289,7 @@ class Image extends Param
 
 
         // Still not found any file.
-        if ( empty($file) || ! isset($file['name']) || !$file['name'] ) {
+        if ( !$file || empty($file) || ! isset($file['name']) || !$file['name'] ) {
             // XXX: unset( $args[ $this->name ] );
             return;
         }
@@ -300,11 +302,11 @@ class Image extends Param
             $targetPath = filename_increase( $targetPath );
         }
 
-        while ( file_exists( $targetPath ) ) {
+        while (file_exists( $targetPath )) {
             $targetPath = filename_increase( $targetPath );
         }
 
-        if ( $hasUpload ) {
+        if ($hasUpload) {
             if ( isset($file['saved_path']) && file_exists($file['saved_path']) ) {
                 copy( $file['saved_path'], $targetPath);
             } else {
@@ -314,10 +316,16 @@ class Image extends Param
                 $file['saved_path'] = $targetPath;
             } 
         } elseif ( $this->sourceField ) {
-            // no upload, so we decide to copy one from our source field file.
-            if ( isset($file['saved_path']) && file_exists($file['tmp_name']) )
+            // Skip updating from source field if it's a update action
+            if ($this->action instanceof UpdateRecordAction) {
+                return;
+            }
+
+
+            // Upload not found, so we decide to copy one from our source field file.
+            if ( isset($file['saved_path']) && file_exists($file['saved_path']) )
             {
-                copy( $file['saved_path'], $targetPath);
+                copy($file['saved_path'], $targetPath);
             }
             elseif ( isset($file['tmp_name']) && file_exists($file['tmp_name']) ) 
             {
@@ -325,8 +333,9 @@ class Image extends Param
             }
             else 
             {
+                // Upload not found and source field is also empty.
                 echo "Action: " , get_class($this->action) , "\n";
-                echo "Field: " , $this->name , "\n";
+                echo "Current Field: " , $this->name , "\n";
                 echo "File:\n";
                 print_r($file);
                 echo "Files:\n";
