@@ -68,6 +68,8 @@ class Action implements IteratorAggregate
      */
     public $files = array();
 
+    public $enableCSRFToken = false;
+
     /**
      * Constructing Action objects
      *
