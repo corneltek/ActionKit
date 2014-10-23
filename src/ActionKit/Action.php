@@ -68,6 +68,9 @@ class Action implements IteratorAggregate
      */
     public $files = array();
 
+    /**
+     * @var boolean Enable CSRF token 
+     */
     public $enableCSRFToken = false;
 
     /**
@@ -76,7 +79,7 @@ class Action implements IteratorAggregate
      * @param array $args        The request arguments
      * @param mixed $options
      */
-    public function __construct( $args = array() , $options = array() )
+    public function __construct(array $args = array(), array $options = array())
     {
 
         if ( isset($args['_FILES']) ) {
@@ -86,11 +89,7 @@ class Action implements IteratorAggregate
             $this->files = \Universal\Http\FilesParameter::fix_files_array($_FILES);
         }
 
-        if ( ! is_array($args) ) {
-            throw new Exception('Action arguments of ' . get_class($this) . ' is not an array.');
-        }
-
-        if ( isset($options['current_user']) ) {
+        if (isset($options['current_user'])) {
             $this->currentUser = $options['current_user'];
         }
 
@@ -196,6 +195,11 @@ class Action implements IteratorAggregate
         return $index;
     }
 
+    /**
+     * Takes few fields only
+     *
+     * $this->takes('field1', 'field2');
+     */
     public function takes($fields)
     {
         $args = func_get_args();
@@ -208,7 +212,7 @@ class Action implements IteratorAggregate
         return $this;
     }
 
-    public function _filterArguments($args)
+    public function _filterArguments(array $args)
     {
         // find immutable params and unset them
         foreach ($this->params as $name => $param) {
@@ -529,7 +533,7 @@ class Action implements IteratorAggregate
      *
      * @param mixed Current user object.
      */
-    public function setCurrentUser( $user )
+    public function setCurrentUser($user)
     {
         $this->currentUser = $user;
     }
@@ -540,7 +544,7 @@ class Action implements IteratorAggregate
      *
      * @return bool
      */
-    public function currentUserCan( $user )
+    public function currentUserCan($user)
     {
         return $this->record->currentUserCan( $this->type , $this->args , $user );
     }
@@ -627,7 +631,7 @@ class Action implements IteratorAggregate
      *
      * @param array
      */
-    public function setArgs($args)
+    public function setArgs(array $args)
     {
         $this->args = array_merge($this->args , $args );
 
@@ -651,7 +655,7 @@ class Action implements IteratorAggregate
      *     $this->param('image', 'image' ); // use ActionKit\Param\Image
      *
      */
-    public function param( $field , $type = null )
+    public function param($field, $type = null )
     {
         // default column class
         $class = 'ActionKit\\Param';
@@ -882,7 +886,7 @@ class Action implements IteratorAggregate
      * @param string $name  parameter name
      * @param array  $attrs
      */
-    public function renderLabel( $name , $attrs = array() )
+    public function renderLabel($name, $attrs = array() )
     {
         $label = $this->getParam( $name )->createLabelWidget();
 
@@ -896,7 +900,7 @@ class Action implements IteratorAggregate
      * @param  string[] $fields Field names
      * @return string   HTML string
      */
-    public function renderWidgets( $fields , $type = null, $attributes = array() )
+    public function renderWidgets(array $fields , $type = null, $attributes = array() )
     {
         $html = '';
         foreach ($fields as $field) {
@@ -912,7 +916,7 @@ class Action implements IteratorAggregate
      * @param  array  $attrs Attributes
      * @return string HTML string
      */
-    public function renderSubmitWidget($attrs = array() )
+    public function renderSubmitWidget(array $attrs = array() )
     {
         $submit = new FormKit\Widget\SubmitInput;
 
@@ -927,7 +931,7 @@ class Action implements IteratorAggregate
      * @param  array  $attrs Attributes
      * @return string HTML string
      */
-    public function renderButtonWidget($attrs = array() )
+    public function renderButtonWidget(array $attrs = array() )
     {
         $button = new FormKit\Widget\ButtonInput;
         return $button->render($attrs);
@@ -951,7 +955,7 @@ class Action implements IteratorAggregate
      *
      * @return string Hidden input HTML
      */
-    public function renderSignatureWidget($attrs = array() )
+    public function renderSignatureWidget(array $attrs = array() )
     {
         $hidden = $this->createSignatureWidget();
         return $hidden->render( $attrs );
@@ -969,7 +973,7 @@ class Action implements IteratorAggregate
      * @param  array  $attrs field attributes
      * @return string HTML string
      */
-    public function render( $name = null , $attrs = array() )
+    public function render($name = null, $attrs = array() )
     {
         if ($name) {
             if ( $widget = $this->widget( $name ) ) {

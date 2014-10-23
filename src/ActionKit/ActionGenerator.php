@@ -33,13 +33,13 @@ class ActionGenerator
 
     public $templates = array();
 
-    public function __construct( $options = array() )
+    public function __construct(array $options = array() )
     {
         if ( isset($options['cache_dir']) ) {
             $this->cacheDir = $options['cache_dir'];
         } else {
             $this->cacheDir = __DIR__ . DIRECTORY_SEPARATOR . 'Cache';
-            if ( ! file_exists($this->cacheDir) ) {
+            if (! file_exists($this->cacheDir)) {
                 mkdir($this->cacheDir, 0755, true);
             }
         }
@@ -95,7 +95,8 @@ class ActionGenerator
     public function generate2($targetClassName, $options = array() )
     {
         $classTemplate = new ClassTemplate($targetClassName);
-        // general use statement
+
+        // General use statement
         $classTemplate->useClass('\\ActionKit\\Action');
         $classTemplate->useClass('\\ActionKit\\RecordAction\\BaseRecordAction');
         /*
@@ -161,7 +162,7 @@ class ActionGenerator
      *  $g->generateRecordAction( 'App\Model\User', 'Create' ); // generates App\Action\CreateUser
      *
      */
-    public function generateRecordAction( $modelClass , $type )
+    public function generateRecordAction($modelClass , $type )
     {
         list($modelNs, $modelName) = explode('\\Model\\', $modelClass);
         return $this->generateRecordActionNs($modelNs, $modelName, $type);
@@ -221,9 +222,9 @@ class ActionGenerator
      * @param string $className
      * @return string path
      */
-    public function getClassCacheFile($className, $params = null)
+    public function getClassCacheFile($className, array $params = array())
     {
-        $chk = $params ? md5(serialize($params)) : '';
+        $chk = ! empty($params) ? md5(serialize($params)) : '';
         return $this->cacheDir . DIRECTORY_SEPARATOR . str_replace('\\','_',$className) . $chk . '.php';
     }
 
@@ -232,7 +233,7 @@ class ActionGenerator
      *
      * @param string $className the action class
      */
-    public function loadClassCache($className, $params = null) {
+    public function loadClassCache($className, array $params = array()) {
         $file = $this->getClassCacheFile($className, $params);
         if ( file_exists($file) ) {
             require $file;

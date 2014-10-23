@@ -58,14 +58,26 @@ class StackViewTest extends PHPUnit_Framework_TestCase
         $html = $view->render();
         ok($html);
         like('#<form\s#',$html);
-        /*
-        select_ok('.formkit-widget',8,$html);
-        select_ok('.formkit-widget-text',2,$html);
-        select_ok('.formkit-widget-select',1,$html);
-        select_ok('.formkit-label',3,$html);
-        select_ok('input[name=last_name]',true,$html);
-        select_ok('input[name=first_name]',true,$html);
-        */
+
+        $resultDom = new DOMDocument;
+        $resultDom->loadXML($html);
+
+        $finder = new DomXPath($resultDom);
+
+        $nodes = $finder->query("//*[contains(@class, 'formkit-widget')]");
+        is(8, $nodes->length);
+
+        $nodes = $finder->query("//*[contains(@class, 'formkit-widget-text')]");
+        is(2, $nodes->length);
+
+        $nodes = $finder->query("//*[contains(@class, 'formkit-label')]");
+        is(3, $nodes->length);
+
+        $nodes = $finder->query("//input[@name='last_name']");
+        is(1, $nodes->length);
+
+        $nodes = $finder->query("//input[@name='first_name']");
+        is(1, $nodes->length);
     }
 }
 
