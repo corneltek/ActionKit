@@ -57,12 +57,17 @@ class StackViewTest extends PHPUnit_Framework_TestCase
 
         $html = $view->render();
         ok($html);
-        like('#<form\s#',$html);
 
         $resultDom = new DOMDocument;
         $resultDom->loadXML($html);
 
         $finder = new DomXPath($resultDom);
+
+        $nodes = $finder->query("//form");
+        is(1, $nodes->length);
+
+        $nodes = $finder->query("//input");
+        is(4, $nodes->length);
 
         $nodes = $finder->query("//*[contains(@class, 'formkit-widget')]");
         is(8, $nodes->length);
