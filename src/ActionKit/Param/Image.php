@@ -114,6 +114,8 @@ class Image extends Param
 
     public $renameFile;
 
+    public $argumentPostFilter;
+
     public function preinit( & $args )
     {
         futil_mkdir_if_not_exists(PH_APP_ROOT . DIRECTORY_SEPARATOR . 'webroot' . DIRECTORY_SEPARATOR . $this->putIn, 0777, true);
@@ -127,6 +129,7 @@ class Image extends Param
         $this->supportedAttributes[ 'prefix' ] = self::ATTR_STRING;
         $this->supportedAttributes[ 'renameFile'] = self::ATTR_ANY;
         $this->supportedAttributes[ 'compression' ] = self::ATTR_ANY;
+        $this->supportedAttributes[ 'argumentPostFilter' ] = self::ATTR_ANY;
         $this->renameFile = function($filename) {
             return filename_increase( $filename );
         };
@@ -314,7 +317,7 @@ class Image extends Param
                     throw new RuntimeException('File upload failed, Can not move uploaded file.');
                 }
                 $file['saved_path'] = $targetPath;
-            } 
+            }
         } elseif ( $this->sourceField ) {
             // Skip updating from source field if it's a update action
             if ($this->action instanceof UpdateRecordAction) {
@@ -351,9 +354,17 @@ class Image extends Param
         }
 
 
-        // update field path from target path
-        $args[$this->name]                 = $targetPath;
-        $this->action->args[ $this->name ] = $targetPath; // for source field
+        // Update field path from target path
+        //
+        // argumentPostFilter is used for processing the value before inserting the data into database.
+        if ($this->argumentPostFilter) {
+            $a = call_user_func($this->argumentPostFilter, $targetPath);
+            $args[$this->name]                 = $a;
+            $this->action->args[ $this->name ] = $a; // for source field
+        } else {
+            $args[$this->name]                 = $targetPath;
+            $this->action->args[ $this->name ] = $targetPath; // for source field
+        }
         $this->action->files[ $this->name ]['saved_path'] = $targetPath;
 
         $this->action->addData( $this->name , $targetPath );
