@@ -297,7 +297,7 @@ class Image extends Param
         // the default save path
         $targetPath = trim($this->putIn, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . trim($file['name'], DIRECTORY_SEPARATOR);
         if ($this->renameFile) {
-            $targetPath = call_user_func($this->renameFile, $targetPath);
+            $targetPath = call_user_func($this->renameFile, $targetPath, $file);
         } else {
             $targetPath = filename_increase( $targetPath );
         }
