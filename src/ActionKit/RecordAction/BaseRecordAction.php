@@ -428,10 +428,25 @@ class BaseRecordAction extends Action
 
     public function processSubActions()
     {
+        // TODO: Find the type of $relation
         foreach ($this->relationships as $relationId => $relation) {
 
-            $argsList = $this->arg( $relationId );
-            if ( ! $argsList) {
+            // Fetch the arguments from:
+            //
+            //     name="relationship[index][...]"
+            //
+            // Hence the structure of $argsList is:
+            //
+            //     [
+            //       {index} => { field1 => ... , field2 => ... },
+            //       {index} => { field1 => ... , field2 => ... },
+            //       {index} => { field1 => ... , field2 => ... },
+            //     ]
+            //
+            // The {index} here is only used for identify the argument duplication.
+            //
+            $argsList = $this->arg($relationId);
+            if (! $argsList) {
                 continue;
             }
 
@@ -464,16 +479,15 @@ class BaseRecordAction extends Action
                 //
                 // so let us iterating these fields
                 foreach ($argsList as $index => $args) {
-                    // before here, we've loaded/created the record,
-                    // so that we already have a record id.
+                    // before here, we've loaded/created the main record,
+                    // so that we already have the id of the main record.
 
-                    // we should update related records with the main record id
+                    // we should update the related records with the main record id
                     // by using self_key and foreign_key
                     $args[$foreignKey] = $this->record->{$selfKey};
 
-                    // get file arguments from fixed $_FILES array.
+                    // Get the file arguments from fixed $_FILES array.
                     // the ->files array is fixed in Action::__construct method
-
                     if ( isset($this->files[ $relationId ][ $index ]) ) {
                         $args['_FILES'] = $this->files[ $relationId ][ $index ];
                     } else {

@@ -8,18 +8,20 @@ abstract class CreateRecordAction
 
     public $enableLoadRecord = false;
 
+    public $recordResult;
+
     public function create($args)
     {
-        $ret = $this->record->create( $args );
+        $ret = $this->record->create($args);
 
         /* error checking */
         if (false === $ret->success) {
             $this->convertRecordValidation( $ret );
-            if ( function_exists('fb') ) {
-                fb( $ret->message );
-                fb( $ret->exception );
-                fb( $ret->sql );
-                fb( $ret->vars );
+            if (function_exists('fb')) {
+                fb($ret->message);
+                fb($ret->exception);
+                fb($ret->sql);
+                fb($ret->vars);
             }
 
             return $this->createError( $ret );
