@@ -209,6 +209,7 @@ class Param extends CascadingAttribute
 
     public function getRenderableCurrentValue()
     {
+        // XXX: we should handle "false", "true", and "NULL"
         return $this->value instanceof \LazyRecord\BaseModel ? $this->value->dataKeyValue() : $this->value;
     }
 
@@ -242,7 +243,8 @@ class Param extends CascadingAttribute
         // for inputs (except password input),
         // we should render the value (or default value)
         if ( false === stripos( $class , 'Password' ) ) {
-            if ($this->value) {
+            // The Param class should respect the data type
+            if ($this->value !== NULL) {
                 $newAttributes['value'] = $this->getRenderableCurrentValue();
             } elseif ($this->default) {
                 $newAttributes['value'] = $this->getDefaultValue();
