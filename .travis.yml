@@ -24,4 +24,6 @@ after_script:
   - php vendor/bin/coveralls -v
 
 cache:
-  - vendor
+  apt: true
+  directories:
+    - vendor
