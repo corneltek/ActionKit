@@ -11,13 +11,13 @@ class ProductActionTest extends ModelTestCase
 
     public function getModels()
     {
-        return array( 'Product\\Model\\ProductSchema' );
+        return array( 'ProductBundle\\Model\\ProductSchema' );
     }
 
 
     public function recordProvider() {
         return [ 
-            [ new Product\Model\Product ],
+            [ new ProductBundle\Model\Product ],
         ];
     }
 
@@ -27,8 +27,7 @@ class ProductActionTest extends ModelTestCase
      */
     public function testCreateRecordAction($product)
     {
-
-        $class = CRUD::generate('Product\\Model\\Product', 'Create');
+        $class = CRUD::generate('ProductBundle\\Model\\Product', 'Create');
         ok($class);
 
         $create = new $class( array( 'name' => 'A' ), $product);
@@ -43,7 +42,7 @@ class ProductActionTest extends ModelTestCase
 
 
     public function testAsCreateAction() {
-        $product = new Product\Model\Product;
+        $product = new ProductBundle\Model\Product;
         ok($product, 'object created');
         $create = $product->asCreateAction([ 'name' => 'TestProduct' ]);
         ok( $create->run() , 'action run' );
@@ -54,9 +53,9 @@ class ProductActionTest extends ModelTestCase
 
 
         $delete = $product->asDeleteAction();
-        ok( $delete->run() );
+        ok($delete->run());
 
-        $product = new Product\Model\Product( $id );
+        $product = new ProductBundle\Model\Product( $id );
         ok( ! $product->id, 'product should be deleted.');
     }
 
@@ -65,14 +64,14 @@ class ProductActionTest extends ModelTestCase
 
     public function testUpdateRecordAction()
     {
-        $product = new Product\Model\Product;
+        $product = new ProductBundle\Model\Product;
         ok($product);
         $ret = $product->create(array( 
             'name' => 'B',
         ));
         ok($ret->success,'record created.');
 
-        $class = CRUD::generate('Product\\Model\\Product', 'Update');
+        $class = CRUD::generate('ProductBundle\\Model\\Product', 'Update');
         ok($class);
 
         $update = new $class( array( 'id' => $product->id, 'name' => 'C' ), $product);
@@ -85,7 +84,7 @@ class ProductActionTest extends ModelTestCase
         ok($ret->success);
 
 
-        $class = CRUD::generate('Product\\Model\\Product', 'Delete');
+        $class = CRUD::generate('ProductBundle\\Model\\Product', 'Delete');
         ok($class);
 
         $delete = new $class(array( 'id' => $product->id ), $product);
@@ -96,7 +95,7 @@ class ProductActionTest extends ModelTestCase
 
     public function testNestedFormRendering()
     {
-        $class = CRUD::generate('Product\\Model\\Product', 'Create');
+        $class = CRUD::generate('ProductBundle\\Model\\Product', 'Create');
         $create = new $class;
         ok($create);
         $html = $create->asView()->render();

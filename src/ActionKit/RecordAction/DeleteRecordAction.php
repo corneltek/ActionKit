@@ -37,7 +37,7 @@ abstract class DeleteRecordAction
             }
             $relatedRecords = $record->{ $rId };
             $relatedRecords->fetch();
-            foreach( $relatedRecords as $rr ) {
+            foreach($relatedRecords as $rr) {
                 $rr->delete();
             }
         }

@@ -7,7 +7,7 @@ class ProductPropertySchema extends SchemaDeclare
     public function schema() 
     {
         $this->column('name')->varchar(64);
-        $this->column('value')->varchar(512);
+        $this->column('val')->varchar(512);
         $this->column('product_id')
             ->integer()
             ->refer( 'ProductBundle\\Model\\ProductSchema')

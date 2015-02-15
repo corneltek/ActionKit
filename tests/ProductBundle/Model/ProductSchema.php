@@ -39,11 +39,6 @@ class ProductSchema extends SchemaDeclare
         $this->column('category_id')
             ->refer('ProductBundle\\Model\\CategorySchema')
             ->integer()
-            ->renderAs('+CRUD\\Widget\\QuickCRUDSelectInput',array(
-                'record_class' => 'ProductBundle\\Model\\Category',
-                'dialog_path' => '/bs/product_category/crud/quick_create',
-                'allow_empty' => true,
-            ))
             ->label(_('產品類別'));
 
         /* is a cover product ? show this product in some specific pages? */
@@ -99,17 +94,14 @@ class ProductSchema extends SchemaDeclare
         $this->manyToMany( 'features',   'product_features' , 'feature' );
 
 
-        $this->many( 'product_products', 'ProductBundle\\Model\\ProductProductSchema', 'product_id', 'id' )
-                ->order('ordering','ASC');
+        $this->many( 'product_products', 'ProductBundle\\Model\\ProductProductSchema', 'product_id', 'id' );
 
         $this->manyToMany( 'related_products',   'product_products' , 'related_product' );
 
 
-        $this->many('images',     'ProductBundle\\Model\\ProductImageSchema' , 'product_id' , 'id' )
-            ->order('ordering','ASC');
+        $this->many('images',     'ProductBundle\\Model\\ProductImageSchema' , 'product_id' , 'id' );
 
-        $this->many('properties',     'ProductBundle\\Model\\ProductPropertySchema' , 'product_id' , 'id' )
-            ->order('ordering','ASC');
+        $this->many('properties',     'ProductBundle\\Model\\ProductPropertySchema' , 'product_id' , 'id' );
 
             ;  # to product id => image product_id
         $this->many('types',      'ProductBundle\\Model\\ProductTypeSchema' , 'product_id' , 'id' );
@@ -117,18 +109,15 @@ class ProductSchema extends SchemaDeclare
         $this->many('resources',  'ProductBundle\\Model\\ResourceSchema' , 'product_id' , 'id' );  # to product id => image product_id
 
         $this->many( 'subsections', 'ProductBundle\\Model\\ProductSubsectionSchema', 'product_id', 'id' )
-            ->order('ordering','ASC')
             ->renderable(false);
 
         $this->many( 'links', 'ProductBundle\\Model\\ProductLinkSchema', 'product_id', 'id' )
-            ->order('ordering','ASC')
             ->renderable(false);
 
         $this->many( 'product_categories', 'ProductBundle\\Model\\ProductCategorySchema', 'product_id', 'id' )
             ->renderable(false);
         $this->manyToMany( 'categories',   'product_categories' , 'category' )
             ->filter(function($collection) {
-                $collection->order('lang','desc');
                 return $collection;
             });
     }

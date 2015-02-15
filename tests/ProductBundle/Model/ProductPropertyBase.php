@@ -20,13 +20,13 @@ class ProductPropertyBase  extends BaseModel {
 
 public static $column_names = array (
   0 => 'name',
-  1 => 'value',
+  1 => 'val',
   2 => 'product_id',
   3 => 'id',
 );
 public static $column_hash = array (
   'name' => 1,
-  'value' => 1,
+  'val' => 1,
   'product_id' => 1,
   'id' => 1,
 );
@@ -46,9 +46,9 @@ public static $mixin_classes = array (
     }
 }
 
-    public function getValue() {
-    if (isset($this->_data['value'])) {
-        return $this->_data['value'];
+    public function getVal() {
+    if (isset($this->_data['val'])) {
+        return $this->_data['val'];
     }
 }
 
