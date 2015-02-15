@@ -14,6 +14,7 @@ before_script:
   - composer self-update
   - composer require satooshi/php-coveralls:dev-master --no-update --dev
   - composer install --dev
+  - php vendor/bin/lazy build-conf db/config/database.testing.yml
   - php vendor/bin/lazy schema build -f
   - php vendor/bin/lazy sql --rebuild
 
