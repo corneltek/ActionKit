@@ -1,11 +1,22 @@
 <?php
+/**
+This is an auto-generated file,
+Please DO NOT modify this file directly.
+*/
 namespace ProductBundle\Model;
 
-class ProductTypeBase  extends \LazyRecord\BaseModel {
-const schema_proxy_class = 'ProductBundle\\Model\\ProductTypeSchemaProxy';
-const collection_class = 'ProductBundle\\Model\\ProductTypeCollection';
-const model_class = 'ProductBundle\\Model\\ProductType';
-const table = 'product_types';
+use LazyRecord\BaseModel;
+
+class ProductTypeBase  extends BaseModel {
+
+    const schema_proxy_class = 'ProductBundle\\Model\\ProductTypeSchemaProxy';
+    const collection_class = 'ProductBundle\\Model\\ProductTypeCollection';
+    const model_class = 'ProductBundle\\Model\\ProductType';
+    const table = 'product_types';
+    const read_source_id = 'default';
+    const write_source_id = 'default';
+    const primary_key = 'id';
+
 
 public static $column_names = array (
   0 => 'product_id',
@@ -24,11 +35,42 @@ public static $column_hash = array (
 public static $mixin_classes = array (
 );
 
-
-
-    /**
-     * Code block for message id parser.
-     */
-    private function __() {
-            }
+    public function getSchema() {
+    if ($this->_schema) {
+       return $this->_schema;
+    }
+    return $this->_schema = \LazyRecord\Schema\SchemaLoader::load('ProductBundle\\Model\\ProductTypeSchemaProxy');
 }
+
+    public function getProductId() {
+    if (isset($this->_data['product_id'])) {
+        return $this->_data['product_id'];
+    }
+}
+
+    public function getName() {
+    if (isset($this->_data['name'])) {
+        return $this->_data['name'];
+    }
+}
+
+    public function getQuantity() {
+    if (isset($this->_data['quantity'])) {
+        return $this->_data['quantity'];
+    }
+}
+
+    public function getComment() {
+    if (isset($this->_data['comment'])) {
+        return $this->_data['comment'];
+    }
+}
+
+    public function getId() {
+    if (isset($this->_data['id'])) {
+        return $this->_data['id'];
+    }
+}
+
+}
+

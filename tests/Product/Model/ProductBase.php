@@ -1,11 +1,22 @@
 <?php
+/**
+This is an auto-generated file,
+Please DO NOT modify this file directly.
+*/
 namespace Product\Model;
 
-class ProductBase  extends \LazyRecord\BaseModel {
-const schema_proxy_class = 'Product\\Model\\ProductSchemaProxy';
-const collection_class = 'Product\\Model\\ProductCollection';
-const model_class = 'Product\\Model\\Product';
-const table = 'products';
+use LazyRecord\BaseModel;
+
+class ProductBase  extends BaseModel {
+
+    const schema_proxy_class = 'Product\\Model\\ProductSchemaProxy';
+    const collection_class = 'Product\\Model\\ProductCollection';
+    const model_class = 'Product\\Model\\Product';
+    const table = 'products';
+    const read_source_id = 'default';
+    const write_source_id = 'default';
+    const primary_key = 'id';
+
 
 public static $column_names = array (
   0 => 'name',
@@ -22,11 +33,36 @@ public static $column_hash = array (
 public static $mixin_classes = array (
 );
 
-
-
-    /**
-     * Code block for message id parser.
-     */
-    private function __() {
-            }
+    public function getSchema() {
+    if ($this->_schema) {
+       return $this->_schema;
+    }
+    return $this->_schema = \LazyRecord\Schema\SchemaLoader::load('Product\\Model\\ProductSchemaProxy');
 }
+
+    public function getName() {
+    if (isset($this->_data['name'])) {
+        return $this->_data['name'];
+    }
+}
+
+    public function getCategoryId() {
+    if (isset($this->_data['category_id'])) {
+        return $this->_data['category_id'];
+    }
+}
+
+    public function getCoverImage() {
+    if (isset($this->_data['cover_image'])) {
+        return $this->_data['cover_image'];
+    }
+}
+
+    public function getId() {
+    if (isset($this->_data['id'])) {
+        return $this->_data['id'];
+    }
+}
+
+}
+

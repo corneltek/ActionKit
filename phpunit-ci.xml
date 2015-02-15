@@ -19,7 +19,7 @@
   </filter>
   <testsuites>
         <testsuite name="Tests">
-            <directory suffix="Test.php">tests</directory>
+            <directory suffix="Test.php">tests/ActionKit</directory>
         </testsuite>
   </testsuites>
 

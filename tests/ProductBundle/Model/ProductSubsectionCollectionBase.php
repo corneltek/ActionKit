@@ -1,17 +1,21 @@
 <?php
+/**
+This is an auto-generated file,
+Please DO NOT modify this file directly.
+*/
 namespace ProductBundle\Model;
 
-class ProductSubsectionCollectionBase  extends \LazyRecord\BaseCollection {
-const schema_proxy_class = '\\ProductBundle\\Model\\ProductSubsectionSchemaProxy';
-const model_class = '\\ProductBundle\\Model\\ProductSubsection';
-const table = 'product_subsections';
+use LazyRecord\BaseCollection;
+
+class ProductSubsectionCollectionBase  extends BaseCollection {
+
+    const schema_proxy_class = 'ProductBundle\\Model\\ProductSubsectionSchemaProxy';
+    const model_class = 'ProductBundle\\Model\\ProductSubsection';
+    const table = 'product_subsections';
+    const read_source_id = 'default';
+    const write_source_id = 'default';
 
 
 
-
-    /**
-     * Code block for message id parser.
-     */
-    private function __() {
-            }
 }
+

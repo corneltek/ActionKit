@@ -1,11 +1,22 @@
 <?php
+/**
+This is an auto-generated file,
+Please DO NOT modify this file directly.
+*/
 namespace ProductBundle\Model;
 
-class ProductLinkBase  extends \LazyRecord\BaseModel {
-const schema_proxy_class = 'ProductBundle\\Model\\ProductLinkSchemaProxy';
-const collection_class = 'ProductBundle\\Model\\ProductLinkCollection';
-const model_class = 'ProductBundle\\Model\\ProductLink';
-const table = 'product_links';
+use LazyRecord\BaseModel;
+
+class ProductLinkBase  extends BaseModel {
+
+    const schema_proxy_class = 'ProductBundle\\Model\\ProductLinkSchemaProxy';
+    const collection_class = 'ProductBundle\\Model\\ProductLinkCollection';
+    const model_class = 'ProductBundle\\Model\\ProductLink';
+    const table = 'product_links';
+    const read_source_id = 'default';
+    const write_source_id = 'default';
+    const primary_key = 'id';
+
 
 public static $column_names = array (
   0 => 'label',
@@ -22,11 +33,36 @@ public static $column_hash = array (
 public static $mixin_classes = array (
 );
 
-
-
-    /**
-     * Code block for message id parser.
-     */
-    private function __() {
-            }
+    public function getSchema() {
+    if ($this->_schema) {
+       return $this->_schema;
+    }
+    return $this->_schema = \LazyRecord\Schema\SchemaLoader::load('ProductBundle\\Model\\ProductLinkSchemaProxy');
 }
+
+    public function getLabel() {
+    if (isset($this->_data['label'])) {
+        return $this->_data['label'];
+    }
+}
+
+    public function getUrl() {
+    if (isset($this->_data['url'])) {
+        return $this->_data['url'];
+    }
+}
+
+    public function getProductId() {
+    if (isset($this->_data['product_id'])) {
+        return $this->_data['product_id'];
+    }
+}
+
+    public function getId() {
+    if (isset($this->_data['id'])) {
+        return $this->_data['id'];
+    }
+}
+
+}
+

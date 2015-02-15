@@ -345,7 +345,7 @@ To get an action result from an action object.
 $rs = $action->getResult();
 if( $rs->success ) {
     $msg = $rs->getMessage();
-    $data = $rs->getData();
+    $data = $rs->getStashedData();
 }
 ```
 

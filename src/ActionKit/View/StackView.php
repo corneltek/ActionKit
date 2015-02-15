@@ -10,6 +10,7 @@ use FormKit\Widget\SubmitInput;
 use FormKit\Widget\CheckboxInput;
 use FormKit\Layout\GenericLayout;
 use LazyRecord\Schema\SchemaDeclare;
+use LazyRecord\Schema\Relationship;
 use LazyRecord\BaseModel;
 use LazyRecord\BaseCollection;
 
@@ -143,11 +144,11 @@ SCRIPT;
         $record = $this->getRecord();
         $container = $this->getContainer();
 
-        // handle has_many records
-        if ( SchemaDeclare::has_many === $relation['type'] ) {
+        // handle HAS_MANY records
+        if ( Relationship::HAS_MANY === $relation['type'] ) {
             $contentContainer = $this->buildOneToManyRelationalActionViewForExistingRecords($record, $relationId, $relation );
             $contentContainer->appendTo($container);
-        } elseif ( SchemaDeclare::many_to_many === $relation['type'] ) {
+        } elseif ( Relationship::MANY_TO_MANY === $relation['type'] ) {
             $contentContainer = $this->buildManyToManyRelationalActionViewForExistingRecords($record, $relationId, $relation  /* $subset, $collection */ );
             $contentContainer->appendTo($container);
         }
@@ -163,9 +164,9 @@ SCRIPT;
         }
 
         // create another subview for creating new (one-many) record.
-        // currently onlly for has_many relationship
+        // currently onlly for HAS_MANY relationship
         $container = $this->getContainer();
-        if ( SchemaDeclare::has_many === $relation['type'] ) {
+        if ( Relationship::HAS_MANY === $relation['type'] ) {
             $addButton = $this->createRelationalActionViewForNewRecord($relationId, $relation);
             $container->append($addButton);
         }
@@ -191,7 +192,7 @@ SCRIPT;
             $this->buildRelationalActionViewForExistingRecords($relationId, $relation);
 
             // currently we only support rendering new record form for "has many"
-            if ( SchemaDeclare::has_many === $relation['type'] ) {
+            if ( Relationship::HAS_MANY === $relation['type'] ) {
                 $this->buildRelationalActionViewForNewRecord($relationId,$relation);
             }
         }

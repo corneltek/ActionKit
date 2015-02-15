@@ -450,7 +450,7 @@ class BaseRecordAction extends Action
                 continue;
             }
 
-            if ( SchemaDeclare::has_many === $relation['type'] ) {
+            if ( Relationship::HAS_MANY === $relation['type'] ) {
                 // XXX: use the lazyrecord schema relationship!!!
                 //
                 //

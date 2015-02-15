@@ -10,7 +10,7 @@ class BulkZhConvertRecordAction extends BulkRecordAction
     public function convertRecords($convertion,$records)
     {
         foreach ($records as $record) {
-            $args = $record->getData();
+            $args = $record->getStashedData();
             $newArgs = array();
             foreach ($this->convertionKeys as $key) {
                 if ( ! isset($args[$key]) )

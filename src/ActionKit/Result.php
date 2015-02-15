@@ -104,7 +104,7 @@ class Result
         return 'completion' === $this->type;
     }
 
-    public function getData()
+    public function getStashedData()
     {
         return $this->data;
     }

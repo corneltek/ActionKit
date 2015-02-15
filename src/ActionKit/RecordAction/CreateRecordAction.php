@@ -26,7 +26,7 @@ abstract class CreateRecordAction
 
             return $this->createError( $ret );
         }
-        $this->result->data( $this->record->getData() );
+        $this->result->data( $this->record->getStashedData() );
 
         return $this->createSuccess( $ret );
     }
