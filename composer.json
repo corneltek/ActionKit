@@ -1,5 +1,5 @@
 {
-    "name": "corneltek\/actionkit",
+    "name": "corneltek/actionkit",
     "authors": [
         {
             "name": "c9s",
@@ -7,24 +7,24 @@
         }
     ],
     "require": {
-        "twig\/twig": "1.12.*",
-        "corneltek\/cascading-attribute": "~1.2",
-        "corneltek\/universal-cache": "~1.0",
-        "corneltek\/universal": "~1.0",
-        "corneltek\/class-template": "*",
-        "corneltek\/formkit": "~1.3"
+        "twig/twig": "1.12.*",
+        "corneltek/cascading-attribute": "~1.2",
+        "corneltek/universal-cache": "~1.0",
+        "corneltek/universal": "~1.0",
+        "corneltek/class-template": "*",
+        "corneltek/formkit": "~1.3"
     },
     "suggest": {
-        "corneltek\/lazyrecord": "Support Record-based Action"
+        "corneltek/lazyrecord": "Support Record-based Action"
     },
     "require-dev": {
-        "corneltek\/phpunit-testmore": "dev-master",
-        "corneltek\/lazyrecord": "dev-master"
+        "corneltek/phpunit-testmore": "dev-master",
+        "corneltek/lazyrecord": "dev-master"
     },
     "autoload": {
         "psr-0": {
             "ActionKit": "src"
         }
     },
-    "version": "1.5.1"
+    "version": "1.5.2"
 }
