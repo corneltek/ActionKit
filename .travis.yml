@@ -13,7 +13,7 @@ before_script:
   - phpenv rehash
   - composer self-update
   - composer require satooshi/php-coveralls:dev-master --no-update --dev
-  - composer install --dev
+  - composer install --dev --prefer-source
   - php vendor/bin/lazy build-conf db/config/database.testing.yml
   - php vendor/bin/lazy schema build -f
   - php vendor/bin/lazy sql --rebuild
