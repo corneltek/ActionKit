@@ -4,6 +4,7 @@ use Exception;
 use FormKit;
 use ActionKit\Param;
 use ActionKit\Result;
+use ActionKit\CsrfToken;
 use Universal\Http\HttpRequest;
 use Universal\Http\FilesParameter;
 use InvalidArgumentException;
@@ -71,7 +72,7 @@ class Action implements IteratorAggregate
     /**
      * @var boolean Enable CSRF token 
      */
-    public $enableCSRFToken = false;
+    public $enableCSRFToken = true;
 
     /**
      * Constructing Action objects
@@ -113,6 +114,13 @@ class Action implements IteratorAggregate
 
         // use the schema definitions to filter arguments
         $this->args = $this->_filterArguments($args);
+        
+        session_start();
+        if( $this->enableCSRFToken && isset($this->args['csrftoken']) == false) {
+            $this->param('csrftoken');
+            $this->params['csrftoken']->widgetClass = 'HiddenInput';
+            $this->params['csrftoken']->value = (new CsrfToken())->generateToken();
+        }
 
         if ( $relationId = $this->arg('__nested') ) {
             $this->setParamNamesWithIndex($relationId);

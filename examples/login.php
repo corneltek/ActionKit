@@ -5,6 +5,7 @@
 require '../vendor/autoload.php';
 use ActionKit\Action;
 use ActionKit\ActionRunner;
+use ActionKit\CsrfToken;
 
 class MyLoginAction extends Action {
 
@@ -14,11 +15,16 @@ class MyLoginAction extends Action {
     }
 
     public function run() {
-        if($this->arg('email') == 'test@test.com' &&
+        if( $this->enableValidation && 
+            (new CsrfToken())->checkToken($this->arg('csrftoken')) == false) {
+            return $this->error('token should be filter out.');
+        }
+        
+        if( $this->arg('email') == 'test@test.com' &&
             $this->arg('password') == 'test') {
             return $this->success('登入成功');
         } else {
-            if($this->arg('email') != 'test@test.com') {
+            if( $this->arg('email') != 'test@test.com') {
                 return $this->error('無此帳號');
             } else if($this->arg('password') != 'test') {
                 return $this->error('密碼錯誤');
@@ -38,8 +44,7 @@ if (isset($_POST['action'])) {
     $result = $runner->run($sig, $_POST);
     //var_dump($result);
     echo $result->getMessage();
+} else {
+    $action = new MyLoginAction;
+    echo $action->asView()->render();  // implies view class ActionKit\View\StackView
 }
-
-$action = new MyLoginAction;
-echo $action->asView()->render();  // implies view class ActionKit\View\StackView
-
