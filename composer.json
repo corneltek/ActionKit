@@ -3,7 +3,7 @@
     "authors": [
         {
             "name": "c9s",
-            "email": "cornelius.howl@gmail.com"
+            "email": "yoanlin93+composer@gmail.com"
         }
     ],
     "require": {
@@ -22,8 +22,8 @@
         "corneltek/lazyrecord": "dev-master"
     },
     "autoload": {
-        "psr-0": {
-            "ActionKit": "src"
+        "psr-4": {
+            "ActionKit\\": "src/ActionKit/"
         }
     },
     "license": "MIT",

@@ -605,8 +605,10 @@ everything for you.
 
 to create an action view, you can simple calls the `createView` method
 
-    $view = $action->createView('+AdminUI\Action\StackView');
-    $view->render(array( ... render options ... ));
+```php
+$view = $action->createView('+AdminUI\Action\StackView');
+$view->render(array( ... render options ... ));
+```
 
 ### Action rendering throught built-in StackView
 
@@ -615,9 +617,11 @@ the form elements are automatically generated.
 
 Here is a StackView synopsis:
 
-    $action = new SomeWhatAction;
-    $view = new ActionKit\View\StackView($action, array( ... options ... ));
-    $view->render();
+```php
+$action = new SomeWhatAction;
+$view = new ActionKit\View\StackView($action, array( ... options ... ));
+$view->render();
+```
 
 Use case:
 
@@ -682,15 +686,16 @@ automatically through the Dynamic Action Generator.
 
 In controller, you can initialize a action object:
 
+```php
+function updateAction() {
+    $changePasswordAction = new User\Action\ChangePassword( array( 
+        ... values to override field values ... ) , $record );
 
-    function updateAction() {
-        $changePasswordAction = new User\Action\ChangePassword( array( 
-            ... values to override field values ... ) , $record );
-
-        return $this->render('some_path.html',array( 
-            'changePasswordAction' => $changePasswordAction
-        ));
-    }
+    return $this->render('some_path.html',array( 
+        'changePasswordAction' => $changePasswordAction
+    ));
+}
+```
 
 Then in template, you can call action API to render these
 fields by these methods, eg `renderSignatureWidget` ,
@@ -755,17 +760,20 @@ call runAction function in following forms:
 And in the below example, we send `Stock::Action::DeleteTransaction` to backend with a record id
 to delete a transaction record, if it's successful, then fade remove the elements from HTML.
 
-    <div class="txn">
-        <div class="txn-status txn-status-{{ txn.status }}">{{ txn.display('status') }}</div>
-        <div class="txn-delete">
-            <input type="button" 
-                onclick=" runAction('Stock::Action::DeleteTransaction', { 
-                                id: {{ txn.id }} 
-                            }, { 
-                                confirm: '確定刪除嗎? ', 
-                                remove: $(this).parents('.txn')
-                            });" value="刪除"/>
-        </div>
+
+```twig
+<div class="txn">
+    <div class="txn-status txn-status-{{ txn.status }}">{{ txn.display('status') }}</div>
+    <div class="txn-delete">
+        <input type="button" 
+            onclick=" runAction('Stock::Action::DeleteTransaction', { 
+                            id: {{ txn.id }} 
+                        }, { 
+                            confirm: '確定刪除嗎? ', 
+                            remove: $(this).parents('.txn')
+                        });" value="刪除"/>
     </div>
+</div>
+```
 
 
