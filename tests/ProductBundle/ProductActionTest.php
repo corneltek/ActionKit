@@ -1,5 +1,5 @@
 <?php
-use LazyRecord\ModelTestCase;
+use LazyRecord\Testing\ModelTestCase;
 use ActionKit\CRUD;
 
 /**

@@ -1,6 +1,6 @@
 <?php
 use ActionKit\CRUD;
-use LazyRecord\ModelTestCase;
+use LazyRecord\Testing\ModelTestCase;
 
 class CRUDTest extends ModelTestCase
 {
