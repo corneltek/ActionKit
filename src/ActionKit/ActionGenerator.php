@@ -4,7 +4,7 @@ use UniversalCache;
 use Twig_Loader_Filesystem;
 use Twig_Environment;
 use ReflectionClass;
-use ClassTemplate\ClassTemplate;
+use ClassTemplate\TemplateClassFile;
 
 /**
  * Action Generator Synopsis
@@ -94,33 +94,33 @@ class ActionGenerator
      */
     public function generate2($targetClassName, $options = array() )
     {
-        $classTemplate = new ClassTemplate($targetClassName);
+        $templateClassFile = new TemplateClassFile($targetClassName);
 
         // General use statement
-        $classTemplate->useClass('\\ActionKit\\Action');
-        $classTemplate->useClass('\\ActionKit\\RecordAction\\BaseRecordAction');
+        $templateClassFile->useClass('\\ActionKit\\Action');
+        $templateClassFile->useClass('\\ActionKit\\RecordAction\\BaseRecordAction');
         /*
-        $classTemplate->useClass('\\ActionKit\\RecordAction\\CreateRecordAction');
-        $classTemplate->useClass('\\ActionKit\\RecordAction\\UpdateRecordAction');
-        $classTemplate->useClass('\\ActionKit\\RecordAction\\DeleteRecordAction');
-        $classTemplate->useClass('\\ActionKit\\RecordAction\\BulkDeleteRecordAction');
-        $classTemplate->useClass('\\ActionKit\\RecordAction\\BulkCreateRecordAction');
+        $templateClassFile->useClass('\\ActionKit\\RecordAction\\CreateRecordAction');
+        $templateClassFile->useClass('\\ActionKit\\RecordAction\\UpdateRecordAction');
+        $templateClassFile->useClass('\\ActionKit\\RecordAction\\DeleteRecordAction');
+        $templateClassFile->useClass('\\ActionKit\\RecordAction\\BulkDeleteRecordAction');
+        $templateClassFile->useClass('\\ActionKit\\RecordAction\\BulkCreateRecordAction');
         */
 
         if ( isset($options['extends']) ) {
-            $classTemplate->extendClass($options['extends']);
+            $templateClassFile->extendClass($options['extends']);
         }
         if ( isset($options['properties']) ) {
             foreach( $options['properties'] as $name => $value ) {
-                $classTemplate->addProperty($name, $value);
+                $templateClassFile->addProperty($name, $value);
             }
         }
         if ( isset($options['constants']) ) {
             foreach( $options['constants'] as $name => $value ) {
-                $classTemplate->addConst($name, $value);
+                $templateClassFile->addConst($name, $value);
             }
         }
-        return $classTemplate;
+        return $templateClassFile;
     }
 
 

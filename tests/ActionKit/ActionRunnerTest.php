@@ -1,6 +1,6 @@
 <?php
 
-class ActionRunnerTest extends \LazyRecord\ModelTestCase
+class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
 {
 
     public function getModels()
