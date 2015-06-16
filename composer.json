@@ -26,5 +26,6 @@
             "ActionKit": "src"
         }
     },
+    "license": "MIT",
     "version": "1.5.2"
 }
