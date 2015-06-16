@@ -114,7 +114,7 @@ A minimal action skeleton:
 use ActionKit\Action;
 class YourAction extends Action
 {
-    function run() {
+    public function run() {
     }
 }
 ```
@@ -524,29 +524,34 @@ $g->generate('SortImage', 'template name', array(
 
 Or even shorter (???):
 
-    use ActionKit\RecordAction\BaseRecordAction;
-    $class = BaseRecordAction::createCRUDClass( 'App\Model\Post' , 'Create' );
+```php
+use ActionKit\RecordAction\BaseRecordAction;
+$class = BaseRecordAction::createCRUDClass( 'App\Model\Post' , 'Create' );
+```
 
 Or create record actions from record object:
 
-    $post = new Post;
-    $update = $post->asUpdateAction();
-    $create = $post->asCreateAction();
-    $delete = $post->asDeleteAction();
-
+```php
+$post = new Post;
+$update = $post->asUpdateAction();
+$create = $post->asCreateAction();
+$delete = $post->asDeleteAction();
+```
 
 ## Action Widget
 
 Action widgets depends on the parameter definition,
 the default widget type is TextInput.
 
-    $post = new Post;
-    $update = $post->asUpdateAction();
-    $html = $update->widget('title')->render();
-    $html = $update->widget('title')->render( array( 'class' => '....' ));
+```php
+$post = new Post;
+$update = $post->asUpdateAction();
+$html = $update->widget('title')->render();
+$html = $update->widget('title')->render( array( 'class' => '....' ));
 
-    $html = $update->render('title',array( /* attributes.... */ ));
-    $html = $update->render( null, array( /* attributes */ )  );
+$html = $update->render('title',array( /* attributes.... */ ));
+$html = $update->render( null, array( /* attributes */ )  );
+```
 
 In action schema, the parameters you defined can
 generate form widgets (with FormKit) automatically.
@@ -556,47 +561,57 @@ your parameters in your action schema.
 
 For example:
 
-    class YourAction extends Action {
-        function schema() {
-            $this->param('name')
-                ->renderAs('TextInput');
-        }
+```php
+class YourAction extends Action {
+    function schema() {
+        $this->param('name')
+            ->renderAs('TextInput');
     }
+}
+```
 
 And then, to get the form widget through Action object,
 you can do:
 
-    $action = new YourAction;
-    $widget = $a->widget('name');
+```php
+$action = new YourAction;
+$widget = $a->widget('name');
+```
 
 And to render it:
 
-    $html = $widget->render(array(  
-        'class' => 'extra-class'
-        'id' => 'field-id'
-    ));
+```php
+$html = $widget->render(array(  
+    'class' => 'extra-class'
+    'id' => 'field-id'
+));
+```
 
 For other type widgets, like SelectInput you can specify
 `options`:
 
-        $a->widget('user_type')->render(array( 
-            'options' => array(
-                'Option 1' => '1'
-                'Option 2' => '2'
-                'Group Option' => array(
-                    'Suboption 1' => '2.1'
-                    'Suboption 2' => '2.2'
-                )
-            )
-        ));
+```php
+$a->widget('user_type')->render(array( 
+    'options' => array(
+        'Option 1' => '1'
+        'Option 2' => '2'
+        'Group Option' => array(
+            'Suboption 1' => '2.1'
+            'Suboption 2' => '2.2'
+        )
+    )
+));
+```
 
 You can also force a form widget type for widget method,
 which will override the widget type that you defined
 previously:
 
-    $a->widget('confirmed','RadioInput')->render(array(
-        'false', 'true'
-    ));
+```php
+$a->widget('confirmed','RadioInput')->render(array(
+    'false', 'true'
+));
+```
 
 ## Action View
 
@@ -625,24 +640,30 @@ $view->render();
 
 Use case:
 
-    $action = new User\Action\ChangePassword;
-    $view = new ActionKit\View\StackView( $action );
-    echo $view->render();
+```php
+$action = new User\Action\ChangePassword;
+$view = new ActionKit\View\StackView( $action );
+echo $view->render();
+```
 
 And you can render action view via Action's `asView` method:
 
+```php
     echo $action->asView('ActionKit\View\StackView')->render();
-
     echo $action->asView()->render();  // implies view class ActionKit\View\StackView
+```
 
 So that if you're in Twig template, you can do:
 
-    {{ action.asView('ActionKit\\View\\StackView').render()|raw}}
+```twig
+{{ action.asView('ActionKit\\View\\StackView').render()|raw}}
+```
 
 You can also pass extra options to View class:
 
-    echo $action->asView('ActionKit\View\StackView', array( ... view options ... ))->render();
-
+```php
+echo $action->asView('ActionKit\View\StackView', array( ... view options ... ))->render();
+```
 
 ## Action Rendering (render by pure HTML elements)
 
@@ -651,16 +672,18 @@ action class, in this example we trigger the
 `User\Action\UpdateUser` action, which is generated
 automatically through the Dynamic Action Generator.
 
-    <form method="post">
-        <!-- action signature -->
-        <input type="hidden" name="action"
-            value="User::Action::UpdateUser"/>   
+```html
+<form method="post">
+    <!-- action signature -->
+    <input type="hidden" name="action"
+        value="User::Action::UpdateUser"/>   
 
-        <!-- action fields -->
-        <input type="text" name="account" value="c9s"/>
+    <!-- action fields -->
+    <input type="text" name="account" value="c9s"/>
 
-        <input type="submit"/>
-    </form>
+    <input type="submit"/>
+</form>
+```
 
 
 ## Action Rendering and Action.js integration
@@ -701,46 +724,48 @@ Then in template, you can call action API to render these
 fields by these methods, eg `renderSignatureWidget` ,
 `renderWidget` , `renderLabel` , `renderSubmitWidget`..etc:
 
-    <form method="post">
-        # This renders a field named "action" with action signature "User::Action::ChangePassword" 
-        {{ changePasswordAction.renderSignatureWidget |raw}}
+```twig
+<form method="post">
+    # This renders a field named "action" with action signature "User::Action::ChangePassword" 
+    {{ changePasswordAction.renderSignatureWidget |raw}}
 
+    {% if CRUD.Record.id %}
+        {{ forms.hidden('id', CRUD.Record.id) }}
+    {% endif %}
+
+    <h5>Change/Setup password</h5>
+
+    <div class="v-field">
+        <div class="label">{% trans 'Password' %}</div>
+        <div class="input">
+            {{ changePasswordAction.widget('password1').render() |raw }}
+        </div>
+    </div>
+
+    <div class="v-field">
+        <div class="label">{% trans 'Password' %}</div>
+        <div class="input">
+            {{ changePasswordAction.widget('password1').render() |raw }}
+        </div>
+    </div>
+
+    <div class="v-field">
+        <div class="label">{% trans 'Password Confirm' %}</div>
+        <div class="input">
+            {{ changePasswordAction.widget('password2').render() |raw }}
+        </div>
+    </div>
+
+    <div class="button-group">
         {% if CRUD.Record.id %}
-            {{ forms.hidden('id', CRUD.Record.id) }}
+            {{ changePasswordAction.renderSubmitWidget({ class: 'create button', value: _('Save') }) |raw }}
+        {% else %}
+            {{ changePasswordAction.renderSubmitWidget({ class: 'create button', value: _('Create') }) |raw }}
         {% endif %}
-
-        <h5>Change/Setup password</h5>
-
-        <div class="v-field">
-            <div class="label">{% trans 'Password' %}</div>
-            <div class="input">
-                {{ changePasswordAction.widget('password1').render() |raw }}
-            </div>
-        </div>
-
-        <div class="v-field">
-            <div class="label">{% trans 'Password' %}</div>
-            <div class="input">
-                {{ changePasswordAction.widget('password1').render() |raw }}
-            </div>
-        </div>
-
-        <div class="v-field">
-            <div class="label">{% trans 'Password Confirm' %}</div>
-            <div class="input">
-                {{ changePasswordAction.widget('password2').render() |raw }}
-            </div>
-        </div>
-
-        <div class="button-group">
-            {% if CRUD.Record.id %}
-                {{ changePasswordAction.renderSubmitWidget({ class: 'create button', value: _('Save') }) |raw }}
-            {% else %}
-                {{ changePasswordAction.renderSubmitWidget({ class: 'create button', value: _('Create') }) |raw }}
-            {% endif %}
-            {{ changePasswordAction.renderButtonWidget({ class: 'button', value: _('Close'), onclick: 'Region.of(this).fadeRemove();' }) |raw}}
-        </div>
-    </form>
+        {{ changePasswordAction.renderButtonWidget({ class: 'button', value: _('Close'), onclick: 'Region.of(this).fadeRemove();' }) |raw}}
+    </div>
+</form>
+```
 
 ## Front-end Action API
 
