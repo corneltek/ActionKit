@@ -2,6 +2,7 @@ ActionKit
 =========
 
 [![Coverage Status](https://coveralls.io/repos/c9s/ActionKit/badge.svg?branch=master)](https://coveralls.io/r/c9s/ActionKit?branch=master)
+[![Build Status](https://travis-ci.org/c9s/ActionKit.svg?branch=master)](https://travis-ci.org/c9s/ActionKit)
 
 ActionKit is a library that let you share the business logics across
 controllers, pages, ajax requests.
