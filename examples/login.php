@@ -5,7 +5,7 @@
 require '../vendor/autoload.php';
 use ActionKit\Action;
 use ActionKit\ActionRunner;
-use ActionKit\CsrfToken;
+use ActionKit\CsrfTokenProvider;
 
 class MyLoginAction extends Action {
 
@@ -16,7 +16,7 @@ class MyLoginAction extends Action {
 
     public function run() {
         if( $this->enableValidation && 
-            (new CsrfToken())->checkToken($this->arg('csrftoken')) == false) {
+            (new CsrfTokenProvider())->checkToken($this->arg('csrftoken')) == false) {
             return $this->error('token should be filter out.');
         }
         

@@ -1,20 +1,47 @@
 <?php
 namespace ActionKit;
+use ActionKit\CsrfToken;
 use Exception;
 
 class CsrfTokenProvider {
-    
-    protected $timeout = 300;
-    protected $tokenSessionId = '_csrf_token';
 
-    public function __construct($timeout=300, $tokenSessionId = '_csrf_token'){
-        $this->timeout = $timeout;
+    public $tokenSessionId = '_csrf_token';
+    public $timeout = 300;
+
+    public function __construct($tokenSessionId = '_csrf_token', $timeout=300){
         $this->tokenSessionId = $tokenSessionId;
+        $this->timeout = $timeout;
     }
 
-    public function randomString($len = 10) {
-        // Characters that may look like other characters in different fonts
-        // have been omitted.
+    public function generateToken() {
+        $token = new CsrfToken($this->tokenSessionId, $this->timeout);
+        $token->time = time();
+        $token->salt = $this->randomString(32);
+        $token->sessid = session_id();
+        $token->ip = $_SERVER['REMOTE_ADDR'];
+
+        $_SESSION[$token->tokenSessionId] = serialize($token);
+
+        $hash = $this->calculateHash($token);
+        return base64_encode($hash);
+    }
+
+    public function checkToken($hashCsrfToken) {
+        $token = $this->getToken();
+        if ($token != null) {
+            if (!$token->checkExpiry($_SERVER['REQUEST_TIME'])) {
+                return false;
+            }
+            $tokenHash = base64_decode($hashCsrfToken);
+            $generatedHash = $this->calculateHash($token);
+            if ($tokenHash and $generatedHash) {
+                return $tokenHash == $generatedHash;
+            }
+        }
+        return false;
+    }
+
+    protected function randomString($len = 10) {
         $rString = '';
         $chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789';
         $charsTotal  = strlen($chars);
@@ -25,17 +52,14 @@ class CsrfTokenProvider {
         return $rString;
     }
     
-    protected function calculateHash() {
-        return sha1(implode('', $_SESSION[$this->tokenSessionId]));
+    protected function calculateHash($token) {
+        return sha1($_SESSION[$token->tokenSessionId]);
     }
-
-    public function generateToken() {
-        $_SESSION[$this->tokenSessionId] = array();
-        $_SESSION[$this->tokenSessionId]['time'] = time();
-        $_SESSION[$this->tokenSessionId]['salt'] = $this->randomString(32);
-        $_SESSION[$this->tokenSessionId]['sessid'] = session_id();
-        $_SESSION[$this->tokenSessionId]['ip'] = $_SERVER['REMOTE_ADDR'];
-        $hash = $this->calculateHash();
-        return base64_encode($hash);
+    
+    protected function getToken() {
+        if (isset($_SESSION[$this->tokenSessionId])) {
+            return unserialize($_SESSION[$this->tokenSessionId]);
+        } 
+        return null;
     }
 }
