@@ -9,9 +9,9 @@
     "require": {
         "twig\/twig": "~1",
         "corneltek\/cascading-attribute": "~1.2",
-        "corneltek\/universal-cache": "~1.0",
-        "corneltek\/universal": "~1.0",
-        "corneltek/class-template": "*",
+        "corneltek\/universal-cache": "~1",
+        "corneltek\/universal": "~1",
+        "corneltek/class-template": "~2",
         "corneltek\/formkit": "~1"
     },
     "suggest": {
