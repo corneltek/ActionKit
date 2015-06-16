@@ -14,11 +14,11 @@ class MyLoginAction extends Action {
     }
 
     public function run() {
-        if($this->arg('email') == 'azole@pchome.com.tw' &&
+        if($this->arg('email') == 'test@test.com' &&
             $this->arg('password') == 'test') {
             return $this->success('登入成功');
         } else {
-            if($this->arg('email') != 'azole@pchome.com.tw') {
+            if($this->arg('email') != 'test@test.com') {
                 return $this->error('無此帳號');
             } else if($this->arg('password') != 'test') {
                 return $this->error('密碼錯誤');
