@@ -67,10 +67,10 @@ class StackViewTest extends PHPUnit_Framework_TestCase
         is(1, $nodes->length);
 
         $nodes = $finder->query("//input");
-        is(4, $nodes->length);
+        is(5, $nodes->length);
 
         $nodes = $finder->query("//*[contains(@class, 'formkit-widget')]");
-        is(8, $nodes->length);
+        is(9, $nodes->length);
 
         $nodes = $finder->query("//*[contains(@class, 'formkit-widget-text')]");
         is(2, $nodes->length);

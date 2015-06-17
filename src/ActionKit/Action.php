@@ -4,6 +4,7 @@ use Exception;
 use FormKit;
 use ActionKit\Param;
 use ActionKit\Result;
+use ActionKit\CsrfTokenProvider;
 use Universal\Http\HttpRequest;
 use Universal\Http\FilesParameter;
 use InvalidArgumentException;
@@ -71,7 +72,7 @@ class Action implements IteratorAggregate
     /**
      * @var boolean Enable CSRF token 
      */
-    public $enableCSRFToken = false;
+    public $enableCSRFToken = true;
 
     /**
      * Constructing Action objects
@@ -113,6 +114,16 @@ class Action implements IteratorAggregate
 
         // use the schema definitions to filter arguments
         $this->args = $this->_filterArguments($args);
+        
+        if ( $this->enableCSRFToken && !isset($this->args['_csrf_token']) ) {
+            $token = CsrfTokenProvider::loadTokenWithSessionKey('_csrf_token', true);
+            if ( $token == null || !$token->checkExpiry($_SERVER['REQUEST_TIME']) ) {
+                $token = CsrfTokenProvider::generateToken();
+            }
+            $this->param('_csrf_token')
+                 ->renderAs('HiddenInput')
+                 ->default($token->hash);
+        }
 
         if ( $relationId = $this->arg('__nested') ) {
             $this->setParamNamesWithIndex($relationId);
@@ -385,6 +396,13 @@ class Action implements IteratorAggregate
         $this->beforeRun();
         foreach( $this->mixins as $mixin ) {
             $mixin->beforeRun();
+        }
+
+        if ( session_id() && $this->enableCSRFToken) {
+            $token = CsrfTokenProvider::loadTokenWithSessionKey(); 
+            if ( !CsrfTokenProvider::verifyToken($token, $this->arg('_csrf_token'))) {
+                return false;
+            }
         }
 
         if ( $this->enableValidation && false === $this->runValidate() ) {  // if found error, return true;

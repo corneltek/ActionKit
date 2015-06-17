@@ -10,6 +10,7 @@
 
   <php>
     <env name="DB_SQLITE_DSN" value="sqlite:tests.db"/>
+    <server name="REMOTE_ADDR" value="0.0.0.0" />
   </php>
 
   <filter>
