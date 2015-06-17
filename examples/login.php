@@ -30,8 +30,8 @@ class MyLoginAction extends Action {
     }
 }
 
-$container = ActionKit\ServiceContainer::getInstance();
-$runner = new ActionKit\ActionRunner(null, $container);
+$container = new ActionKit\ServiceContainer;
+$runner = new ActionKit\ActionRunner($container);
 
 // you can also run action directly
 // $result = $runner->run('MyLoginAction',array( 'email' => '...', 'password' => '...' ));

@@ -13,8 +13,8 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
 
     public function testRegisterAction()
     {
-        $container = ActionKit\ServiceContainer::getInstance();
-        $runner = new ActionKit\ActionRunner(null, $container);
+        $container = new ActionKit\ServiceContainer;
+        $runner = new ActionKit\ActionRunner($container);
         $runner->registerAutoloader();
         $runner->registerAction(
             'User\\Action\\BulkCreateUser',
@@ -33,8 +33,8 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
 
     public function test()
     {
-        $container = ActionKit\ServiceContainer::getInstance();
-        $runner = new ActionKit\ActionRunner(null, $container);
+        $container = new ActionKit\ServiceContainer;
+        $runner = new ActionKit\ActionRunner($container);
         ok($runner);
         $runner->registerAutoloader();
         $runner->registerRecordAction('User','User',array('Create','Update','Delete'));

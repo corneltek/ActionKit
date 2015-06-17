@@ -8,10 +8,11 @@ use ActionKit\ActionGenerator;
  * Provided services:
  *
  *    actionGenerator:  ActionKit\ActionGenerator
+ *    cache_dir
  *
  * Usage:
  *
- *    $container = ServiceContainer::getInstance();
+ *    $container = new ServiceContainer;
  *    $generator = $container['actionGenerator'];
  *
  */
@@ -20,18 +21,12 @@ class ServiceContainer extends Container
 
     public function __construct()
     {
-        $this['actionGenerator'] = function($c) {
-            return new ActionGenerator;
+        $self = $this;
+
+        $this['cache_dir'] = __DIR__ . DIRECTORY_SEPARATOR . 'Cache';
+
+        $this['actionGenerator'] = function($c) use($self) {
+            return new ActionGenerator(array( 'cache' => true , 'cache_dir' => $self['cache_dir'] ));
         };
-    }
-
-    public static function getInstance()
-    {
-        static $self;
-        if ( $self ) {
-            return $self;
-        }
-
-        return $self = new static;
     }
 }
