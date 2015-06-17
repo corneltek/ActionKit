@@ -66,7 +66,7 @@ class ActionRunner
 
     public $generator;
 
-    public function __construct($options = array()) {
+    public function __construct($options = array(), $container = null) {
 
         if ( isset($options['cache_dir']) ) {
             $this->cacheDir = $options['cache_dir'];
@@ -76,7 +76,12 @@ class ActionRunner
                 mkdir($this->cacheDir, 0755, true);
             }
         }
-        $this->generator = new ActionGenerator(array( 'cache' => true , 'cache_dir' => $this->cacheDir ));
+
+        if ( $container) {
+            $this->generator = $container['actionGenerator'];
+        } else {
+            $this->generator = new ActionGenerator(array( 'cache' => true , 'cache_dir' => $this->cacheDir ));
+        }
     }
 
     /**

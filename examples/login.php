@@ -6,6 +6,7 @@ require '../vendor/autoload.php';
 session_start();
 use ActionKit\Action;
 use ActionKit\ActionRunner;
+use ActionKit\ServiceContainer;
 
 class MyLoginAction extends Action {
 
@@ -29,7 +30,8 @@ class MyLoginAction extends Action {
     }
 }
 
-$runner = ActionKit\ActionRunner::getInstance();
+$container = ActionKit\ServiceContainer::getInstance();
+$runner = new ActionKit\ActionRunner(null, $container);
 
 // you can also run action directly
 // $result = $runner->run('MyLoginAction',array( 'email' => '...', 'password' => '...' ));
