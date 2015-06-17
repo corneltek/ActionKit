@@ -16,7 +16,7 @@ class MyLoginAction extends Action {
 
     public function run() {
         if( $this->enableValidation && 
-            (new CsrfTokenProvider())->checkToken($this->arg('csrftoken')) == false) {
+            CsrfTokenProvider::checkToken($this->arg('_csrf_token')) == false) {
             return $this->error('token should be filter out.');
         }
         

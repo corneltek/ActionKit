@@ -5,35 +5,27 @@ use Exception;
 
 class CsrfTokenProvider {
 
-    public $tokenSessionId = '_csrf_token';
-    public $timeout = 300;
-
-    public function __construct($tokenSessionId = '_csrf_token', $timeout=300){
-        $this->tokenSessionId = $tokenSessionId;
-        $this->timeout = $timeout;
-    }
-
-    public function generateToken() {
-        $token = new CsrfToken($this->tokenSessionId, $this->timeout);
+    static public function generateToken($tokenSessionId = '_csrf_token', $timeout = 300) {
+        $token = new CsrfToken($tokenSessionId, $timeout);
         $token->time = time();
-        $token->salt = $this->randomString(32);
+        $token->salt = CsrfTokenProvider::randomString(32);
         $token->sessid = session_id();
         $token->ip = $_SERVER['REMOTE_ADDR'];
 
         $_SESSION[$token->tokenSessionId] = serialize($token);
 
-        $hash = $this->calculateHash($token);
+        $hash = CsrfTokenProvider::calculateHash($token);
         return base64_encode($hash);
     }
 
-    public function checkToken($hashCsrfToken) {
-        $token = $this->getToken();
+    static public function checkToken($hashCsrfToken) {
+        $token = CsrfTokenProvider::loadTokenWithSessionKey();
         if ($token != null) {
             if (!$token->checkExpiry($_SERVER['REQUEST_TIME'])) {
                 return false;
             }
             $tokenHash = base64_decode($hashCsrfToken);
-            $generatedHash = $this->calculateHash($token);
+            $generatedHash = CsrfTokenProvider::calculateHash($token);
             if ($tokenHash and $generatedHash) {
                 return $tokenHash == $generatedHash;
             }
@@ -41,7 +33,7 @@ class CsrfTokenProvider {
         return false;
     }
 
-    protected function randomString($len = 10) {
+    static protected function randomString($len = 10) {
         $rString = '';
         $chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789';
         $charsTotal  = strlen($chars);
@@ -52,13 +44,13 @@ class CsrfTokenProvider {
         return $rString;
     }
     
-    protected function calculateHash($token) {
+    static protected function calculateHash(CsrfToken $token) {
         return sha1($_SESSION[$token->tokenSessionId]);
     }
-    
-    protected function getToken() {
-        if (isset($_SESSION[$this->tokenSessionId])) {
-            return unserialize($_SESSION[$this->tokenSessionId]);
+
+    static protected function loadTokenWithSessionKey($key = '_csrf_token') {
+        if (isset($_SESSION[$key])) {
+            return unserialize($_SESSION[$key]);
         } 
         return null;
     }
