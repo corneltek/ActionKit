@@ -58,7 +58,7 @@ class CsrfTokenProvider {
         return null;
     }
 
-    static public function encodeToken(CsrfToken $token) {
+    static protected function encodeToken(CsrfToken $token) {
         $hash = self::calculateHash($token);
         return base64_encode($hash);
     }
