@@ -16,12 +16,7 @@ class MyLoginAction extends Action {
     }
 
     public function run() {
-        $token = CsrfTokenProvider::loadTokenWithSessionKey();
-        if( $this->enableValidation && 
-            CsrfTokenProvider::verifyToken($token, $this->arg('_csrf_token')) == false) {
-            return $this->error('token should be filter out.');
-        }
-        
+
         if( $this->arg('email') == 'test@test.com' &&
             $this->arg('password') == 'test') {
             return $this->success('登入成功');

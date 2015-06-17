@@ -394,6 +394,13 @@ class Action implements IteratorAggregate
             $mixin->beforeRun();
         }
 
+        $token = CsrfTokenProvider::loadTokenWithSessionKey();
+        if( session_id() && 
+            $this->enableValidation && 
+            CsrfTokenProvider::verifyToken($token, $this->arg('_csrf_token')) == false) {
+            return false;
+        }
+
         if ( $this->enableValidation && false === $this->runValidate() ) {  // if found error, return true;
             return false;
         }
