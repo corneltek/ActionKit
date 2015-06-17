@@ -117,7 +117,7 @@ class Action implements IteratorAggregate
         
         if ( $this->enableCSRFToken && !isset($this->args['_csrf_token']) ) {
             $token = CsrfTokenProvider::loadTokenWithSessionKey('_csrf_token', true);
-            if ( !$token->checkExpiry(time()) ) {
+            if ( $token == null || !$token->checkExpiry($_SERVER['REQUEST_TIME']) ) {
                 $token = CsrfTokenProvider::generateToken();
             }
             $this->param('_csrf_token')
