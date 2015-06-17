@@ -3,6 +3,7 @@
  * php -S localhost:3333 -t example
  */
 require '../vendor/autoload.php';
+session_start();
 use ActionKit\Action;
 use ActionKit\ActionRunner;
 use ActionKit\CsrfTokenProvider;

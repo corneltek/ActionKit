@@ -115,7 +115,6 @@ class Action implements IteratorAggregate
         // use the schema definitions to filter arguments
         $this->args = $this->_filterArguments($args);
         
-        session_start();
         if( $this->enableCSRFToken && isset($this->args['_csrf_token']) == false) {
             $this->param('_csrf_token')
                  ->renderAs('HiddenInput')
