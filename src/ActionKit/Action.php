@@ -397,7 +397,7 @@ class Action implements IteratorAggregate
         $token = CsrfTokenProvider::loadTokenWithSessionKey();
         if ( session_id() && 
             $this->enableCSRFToken && 
-            CsrfTokenProvider::verifyToken($token, $this->arg('_csrf_token')) == false) {
+            !CsrfTokenProvider::verifyToken($token, $this->arg('_csrf_token'))) {
             return false;
         }
 
