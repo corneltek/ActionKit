@@ -16,8 +16,9 @@ class MyLoginAction extends Action {
     }
 
     public function run() {
+        $token = CsrfTokenProvider::loadTokenWithSessionKey();
         if( $this->enableValidation && 
-            CsrfTokenProvider::checkToken($this->arg('_csrf_token')) == false) {
+            CsrfTokenProvider::verifyToken($token, $this->arg('_csrf_token')) == false) {
             return $this->error('token should be filter out.');
         }
         

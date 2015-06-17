@@ -10,6 +10,7 @@ class CsrfToken {
     public $salt;
     public $sessid;
     public $ip;
+    public $hash;
 
     public function __construct($tokenSessionId, $timeout){
         $this->timeout = $timeout;

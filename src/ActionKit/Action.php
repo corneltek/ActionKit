@@ -118,7 +118,7 @@ class Action implements IteratorAggregate
         if( $this->enableCSRFToken && isset($this->args['_csrf_token']) == false) {
             $this->param('_csrf_token')
                  ->renderAs('HiddenInput')
-                 ->default(CsrfTokenProvider::generateToken());
+                 ->default(CsrfTokenProvider::generateToken()->hash);
         }
 
         if ( $relationId = $this->arg('__nested') ) {

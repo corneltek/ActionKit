@@ -14,17 +14,16 @@ class CsrfTokenProvider {
 
         $_SESSION[$token->tokenSessionId] = serialize($token);
 
-        $hash = CsrfTokenProvider::calculateHash($token);
-        return base64_encode($hash);
+        $token->hash = CsrfTokenProvider::encodeToken($token);
+        return $token;
     }
 
-    static public function checkToken($hashCsrfToken) {
-        $token = CsrfTokenProvider::loadTokenWithSessionKey();
+    static public function verifyToken(CsrfToken $token, $tokenHash) {
         if ($token != null) {
             if (!$token->checkExpiry($_SERVER['REQUEST_TIME'])) {
                 return false;
             }
-            $tokenHash = base64_decode($hashCsrfToken);
+            $tokenHash = base64_decode($tokenHash);
             $generatedHash = CsrfTokenProvider::calculateHash($token);
             if ($tokenHash and $generatedHash) {
                 return $tokenHash == $generatedHash;
@@ -48,10 +47,15 @@ class CsrfTokenProvider {
         return sha1($_SESSION[$token->tokenSessionId]);
     }
 
-    static protected function loadTokenWithSessionKey($key = '_csrf_token') {
+    static public function loadTokenWithSessionKey($key = '_csrf_token') {
         if (isset($_SESSION[$key])) {
             return unserialize($_SESSION[$key]);
         } 
         return null;
+    }
+
+    static public function encodeToken(CsrfToken $token) {
+        $hash = self::calculateHash($token);
+        return base64_encode($hash);
     }
 }
