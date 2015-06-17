@@ -5,14 +5,14 @@ use Exception;
 
 class CsrfTokenProvider {
 
-    static public function generateToken($tokenSessionId = '_csrf_token', $timeout = 300) {
-        $token = new CsrfToken($tokenSessionId, $timeout);
+    static public function generateToken($sessionKey = '_csrf_token', $timeout = 300) {
+        $token = new CsrfToken($sessionKey, $timeout);
         $token->time = time();
         $token->salt = self::randomString(32);
-        $token->sessid = session_id();
+        $token->sessionId = session_id();
         $token->ip = $_SERVER['REMOTE_ADDR'];
 
-        $_SESSION[$token->tokenSessionId] = serialize($token);
+        $_SESSION[$token->sessionKey] = serialize($token);
 
         $token->hash = self::encodeToken($token);
         return $token;
@@ -44,7 +44,7 @@ class CsrfTokenProvider {
     }
     
     static protected function calculateHash(CsrfToken $token) {
-        return sha1($_SESSION[$token->tokenSessionId]);
+        return sha1($_SESSION[$token->sessionKey]);
     }
 
     static public function loadTokenWithSessionKey($key = '_csrf_token', $withHash = false) {

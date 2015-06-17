@@ -4,20 +4,24 @@ use Exception;
 
 class CsrfToken {
     
-    public $tokenSessionId;
-    public $timeout;
+    public $sessionKey;
+
+    /**
+     * @var int time to live of the token. using seconds.
+     */
+    public $ttl;
     public $time;
     public $salt;
-    public $sessid;
+    public $sessionId;
     public $ip;
     public $hash;
 
-    public function __construct($tokenSessionId, $timeout){
-        $this->timeout = $timeout;
-        $this->tokenSessionId = $tokenSessionId;
+    public function __construct($sessionKey, $ttl){
+        $this->ttl = $ttl;
+        $this->sessionKey = $sessionKey;
     }
 
     public function checkExpiry($time) {
-        return ($time - $this->time) < $this->timeout;
+        return ($time - $this->time) < $this->ttl;
     }
 }

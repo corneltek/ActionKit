@@ -16,16 +16,16 @@ class CsrfTokenProvider extends PHPUnit_Framework_TestCase
         $token = $this->token;
         ok($token); 
         
-        is('_csrf_token', $token->tokenSessionId);
-        is('300', $token->timeout);
+        is('_csrf_token', $token->sessionKey);
+        is('300', $token->ttl);
         ok($token->hash);
         ok($_SESSION['_csrf_token']);
 
         $tokenWithKey = $this->tokenWithKey;
         ok($tokenWithKey); 
         
-        is('test_token', $tokenWithKey->tokenSessionId);
-        is('500', $tokenWithKey->timeout);
+        is('test_token', $tokenWithKey->sessionKey);
+        is('500', $tokenWithKey->ttl);
         ok($tokenWithKey->hash);
         ok($_SESSION['test_token']);
     }
@@ -43,7 +43,7 @@ class CsrfTokenProvider extends PHPUnit_Framework_TestCase
 
         $tokenWithKey = ActionKit\CsrfTokenProvider::loadTokenWithSessionKey('test_token');
         ok($tokenWithKey);
-        is('test_token', $tokenWithKey->tokenSessionId);
+        is('test_token', $tokenWithKey->sessionKey);
         is($this->tokenWithKey->salt, $tokenWithKey->salt);
     }
 
