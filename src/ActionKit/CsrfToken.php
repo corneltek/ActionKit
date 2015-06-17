@@ -10,7 +10,7 @@ class CsrfToken {
      * @var int time to live of the token. using seconds.
      */
     public $ttl;
-    public $time;
+    public $timestamp;
     public $salt;
     public $sessionId;
     public $ip;
@@ -21,7 +21,7 @@ class CsrfToken {
         $this->sessionKey = $sessionKey;
     }
 
-    public function checkExpiry($time) {
-        return ($time - $this->time) < $this->ttl;
+    public function checkExpiry($timestamp) {
+        return ($timestamp - $this->timestamp) < $this->ttl;
     }
 }

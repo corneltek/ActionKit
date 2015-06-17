@@ -5,9 +5,9 @@ use Exception;
 
 class CsrfTokenProvider {
 
-    static public function generateToken($sessionKey = '_csrf_token', $timeout = 300) {
-        $token = new CsrfToken($sessionKey, $timeout);
-        $token->time = time();
+    static public function generateToken($sessionKey = '_csrf_token', $ttl = 300) {
+        $token = new CsrfToken($sessionKey, $ttl);
+        $token->timestamp = time();
         $token->salt = self::randomString(32);
         $token->sessionId = session_id();
         $token->ip = $_SERVER['REMOTE_ADDR'];
