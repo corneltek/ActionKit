@@ -8,13 +8,13 @@ class CsrfTokenProvider {
     static public function generateToken($tokenSessionId = '_csrf_token', $timeout = 300) {
         $token = new CsrfToken($tokenSessionId, $timeout);
         $token->time = time();
-        $token->salt = CsrfTokenProvider::randomString(32);
+        $token->salt = self::randomString(32);
         $token->sessid = session_id();
         $token->ip = $_SERVER['REMOTE_ADDR'];
 
         $_SESSION[$token->tokenSessionId] = serialize($token);
 
-        $token->hash = CsrfTokenProvider::encodeToken($token);
+        $token->hash = self::encodeToken($token);
         return $token;
     }
 
@@ -24,7 +24,7 @@ class CsrfTokenProvider {
                 return false;
             }
             $tokenHash = base64_decode($tokenHash);
-            $generatedHash = CsrfTokenProvider::calculateHash($token);
+            $generatedHash = self::calculateHash($token);
             if ($tokenHash and $generatedHash) {
                 return $tokenHash == $generatedHash;
             }
@@ -47,9 +47,13 @@ class CsrfTokenProvider {
         return sha1($_SESSION[$token->tokenSessionId]);
     }
 
-    static public function loadTokenWithSessionKey($key = '_csrf_token') {
+    static public function loadTokenWithSessionKey($key = '_csrf_token', $withHash = false) {
         if (isset($_SESSION[$key])) {
-            return unserialize($_SESSION[$key]);
+            $token = unserialize($_SESSION[$key]);
+            if ( $withHash) {
+                $token->hash = self::encodeToken($token);
+            }
+            return $token;
         } 
         return null;
     }

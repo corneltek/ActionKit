@@ -115,10 +115,14 @@ class Action implements IteratorAggregate
         // use the schema definitions to filter arguments
         $this->args = $this->_filterArguments($args);
         
-        if ( $this->enableCSRFToken && isset($this->args['_csrf_token']) == false) {
+        if ( $this->enableCSRFToken && !isset($this->args['_csrf_token']) ) {
+            $token = CsrfTokenProvider::loadTokenWithSessionKey('_csrf_token', true);
+            if ( !$token->checkExpiry(time()) ) {
+                $token = CsrfTokenProvider::generateToken();
+            }
             $this->param('_csrf_token')
                  ->renderAs('HiddenInput')
-                 ->default(CsrfTokenProvider::generateToken()->hash);
+                 ->default($token->hash);
         }
 
         if ( $relationId = $this->arg('__nested') ) {
