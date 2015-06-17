@@ -6,7 +6,6 @@ require '../vendor/autoload.php';
 session_start();
 use ActionKit\Action;
 use ActionKit\ActionRunner;
-use ActionKit\CsrfTokenProvider;
 
 class MyLoginAction extends Action {
 
@@ -17,7 +16,7 @@ class MyLoginAction extends Action {
 
     public function run() {
 
-        if( $this->arg('email') == 'test@test.com' &&
+        if ( $this->arg('email') == 'test@test.com' &&
             $this->arg('password') == 'test') {
             return $this->success('登入成功');
         } else {
