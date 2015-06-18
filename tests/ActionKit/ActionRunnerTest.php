@@ -58,17 +58,12 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
         $container = new ActionKit\ServiceContainer;
         $runner = new ActionKit\ActionRunner($container);
         
-        //ob_start();
         $result = $runner->handleWith(STDOUT, array(
             'action' => 'User::Action::CreateUser',
             '__ajax_request' => 1,
             'email' => 'foo@foo'
-        ));
+        ));        
         is(true, $result);
-        // $output = ob_get_contents();
-        // is('{"args":{"email":"foo@foo"},"success":true,"message":"User Record is created.","data":{"email":"foo@foo","id":1}}', $output);
-        // ob_end_clean();
-        // echo "output:".$output;
     }
 
     /**
@@ -79,6 +74,7 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
         $container = new ActionKit\ServiceContainer;
         $runner = new ActionKit\ActionRunner($container);
         $result = $runner->handleWith(STDOUT, array(
+            '__ajax_request' => 1,
             'action' => "_invalid"
         ));
     }
@@ -90,7 +86,7 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
     {
         $container = new ActionKit\ServiceContainer;
         $runner = new ActionKit\ActionRunner($container);
-        $result = $runner->handleWith(STDOUT, array());  
+        $result = $runner->handleWith(STDOUT, array('__ajax_request' => 1,));  
         
     }
 
@@ -102,21 +98,8 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
         $container = new ActionKit\ServiceContainer;
         $runner = new ActionKit\ActionRunner($container);
         $result = $runner->handleWith(STDOUT, array(
-            'action' => "User::Action::NotFoundAction"
-        )); 
-    }
-
-    /**
-    *   @expectedException  ActionKit\Exception\UnableToWriteCacheException
-    */
-    public function testHandleWithUnableToWriteCacheException()
-    {
-        $container = new ActionKit\ServiceContainer;
-        $container['cache_dir'] = '/InvalidCacheDir';
-        $runner = new ActionKit\ActionRunner($container);
-        $result = $runner->handleWith(STDOUT, array(
-            'action' => 'User::Action::CreateUser',
-            'email' => 'foo@foo'
+            'action' => "User::Action::NotFoundAction",
+            '__ajax_request' => 1,
         )); 
     }
 }

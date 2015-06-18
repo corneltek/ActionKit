@@ -5,6 +5,9 @@ use IteratorAggregate;
 use ArrayAccess;
 use ActionKit\Utils;
 use ActionKit\Exception\InvalidActionNameException;
+use ActionKit\Exception\ActionNotFoundException;
+use ActionKit\Exception\UnableToWriteCacheException;
+
 /**
  * Run actions!
  *
@@ -110,37 +113,29 @@ class ActionRunner
         throw new Exception( "Can not create action class $class" );
     }
 
-    public function runWith($arguments) 
+    public function runWith($request) 
     {
-        $actionKey = isset($arguments['__action']) ? '__action' : 'action';
-        if (isset($arguments[$actionKey])) {
-            $actionName = $arguments[$actionKey];
-            unset($arguments[$actionKey]);
-        } else {
+        if (!$request->getActionName()) {
             throw new InvalidActionNameException("");
         }
-        if ( ! Utils::validateActionName( $actionName ) ) {
-            throw new InvalidActionNameException( "Invalid action name: $actionName.");
+        if ( ! Utils::validateActionName( $request->getActionName() ) ) {
+            throw new InvalidActionNameException( "Invalid action name: " . $request->getActionName() . ".");
         }
 
-        if (isset($arguments['__ajax_request'])) {
-            $actionName = $arguments['__ajax_request'];
-            unset($arguments['__ajax_request']);
-        }
-        return $this->run($actionName, $arguments);
+        return $this->run($request->getActionName(), $request->getArguments());
     }
 
     public function handleWith($stream, $arguments = array())
     {
         try {
-            $isAjax = isset($_REQUEST['__ajax_request']);
-            $result = $this->runWith($arguments);
-            if ( $result && $isAjax) {
+            $request = new ActionRequest($arguments);
+            $result = $this->runWith($request);
+            if ( $result && $request->isAjax()) {
                 // Deprecated:
                 // The text/plain seems work for IE8 (IE8 wraps the 
                 // content with a '<pre>' tag.
-                // header('Cache-Control: no-cache');
-                // header('Content-Type: text/plain; Charset=utf-8');
+                @header('Cache-Control: no-cache');
+                @header('Content-Type: text/plain; Charset=utf-8');
                 // Since we are using "textContent" instead of "innerHTML" attributes
                 // we should output the correct json mime type.
                 // header('Content-Type: application/json; Charset=utf-8');
@@ -148,8 +143,8 @@ class ActionRunner
                 return true;
             }
         } catch(Exception $e) {
-            //header('HTTP/1.0 403');
-            if ( $isAjax ) {
+            @header('HTTP/1.0 403');
+            if ( $request->isAjax() ) {
                 fwrite($stream, json_encode(array(
                         'error' => 1,
                         'message' => $e->getMessage(),
@@ -175,7 +170,7 @@ class ActionRunner
 
             $template = $this->generator->generate2($class, $actionArgs);
             if ( false === $template->writeTo($cacheFile) ) {
-                throw new Exception("Can not write action class cache file: $cacheFile");
+                throw new UnableToWriteCacheException("Can not write action class cache file: $cacheFile");
             }
             require $cacheFile;
             return true;
@@ -196,7 +191,7 @@ class ActionRunner
 
             $code = $this->generator->generate($class, $actionArgs['template'], $actionArgs['variables']);
             if ( false === file_put_contents($cacheFile, $code) ) {
-                throw new Exception("Can not write action class cache file: $cacheFile");
+                throw new UnableToWriteCacheException("Can not write action class cache file: $cacheFile");
             }
             require $cacheFile;
             return true;
@@ -361,7 +356,7 @@ class ActionRunner
 
         // call spl to autoload the class
         if ( ! class_exists($class,true) ) {
-            throw new Exception( "Action class not found: $class, you might need to setup action autoloader" );
+            throw new ActionNotFoundException( "Action class not found: $class, you might need to setup action autoloader" );
         }
 
         return new $class( $args );
