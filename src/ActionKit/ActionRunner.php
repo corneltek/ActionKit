@@ -69,7 +69,7 @@ class ActionRunner
     public function __construct($options = array()) {
 
         if ($options instanceof ServiceContainer) {
-            $this->generator = $options['actionGenerator'];
+            $this->generator = $options['generator'];
             $this->cacheDir = $options['cache_dir'];
         } else {
             if ( isset($options['cache_dir']) ) {
