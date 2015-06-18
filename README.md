@@ -35,7 +35,7 @@ which can be triggered from HTTP requests, Ajax requests, or
 from backend, here is the work flow:
 
 
-![Flow Chart](http://i.imgur.com/hNboFPm.jpg)
+![ActionKit - PHP](http://i.imgur.com/GtA3Prz.png)
 
 
 ## A Basic Action
