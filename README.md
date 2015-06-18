@@ -35,7 +35,7 @@ which can be triggered from HTTP requests, Ajax requests, or
 from backend, here is the work flow:
 
 
-![http://i.imgur.com/hNboFPm.jpg](Flow Chart)
+![Flow Chart](http://i.imgur.com/hNboFPm.jpg)
 
 
 ## A Basic Action
