@@ -7,6 +7,7 @@ use ActionKit\Utils;
 use ActionKit\Exception\InvalidActionNameException;
 use ActionKit\Exception\ActionNotFoundException;
 use ActionKit\Exception\UnableToWriteCacheException;
+use ActionKit\Exception\UnableToCreateActionException;
 
 /**
  * Run actions!
@@ -98,7 +99,7 @@ class ActionRunner
     public function run($actionName, $arguments = array() )
     {
         if ( ! Utils::validateActionName( $actionName ) ) {
-            throw new Exception( "Invalid action name: $actionName." );
+            throw new InvalidActionNameException( "Invalid action name: $actionName." );
         }
 
         /* translate :: into php namespace */
@@ -110,7 +111,7 @@ class ActionRunner
             return $this->results[ $actionName ] = $action->getResult();
         }
 
-        throw new Exception( "Can not create action class $class" );
+        throw new UnableToCreateActionException( "Can not create action class $class" );
     }
 
     public function runWith($request) 
