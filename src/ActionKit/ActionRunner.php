@@ -4,7 +4,7 @@ use Exception;
 use IteratorAggregate;
 use ArrayAccess;
 use ActionKit\Utils;
-
+use ActionKit\Exception\InvalidActionNameException;
 /**
  * Run actions!
  *
@@ -108,6 +108,57 @@ class ActionRunner
         }
 
         throw new Exception( "Can not create action class $class" );
+    }
+
+    public function runWith($arguments) 
+    {
+        $actionKey = isset($arguments['__action']) ? '__action' : 'action';
+        if (isset($arguments[$actionKey])) {
+            $actionName = $arguments[$actionKey];
+            unset($arguments[$actionKey]);
+        } else {
+            throw new InvalidActionNameException("");
+        }
+        if ( ! Utils::validateActionName( $actionName ) ) {
+            throw new InvalidActionNameException( "Invalid action name: $actionName.");
+        }
+
+        if (isset($arguments['__ajax_request'])) {
+            $actionName = $arguments['__ajax_request'];
+            unset($arguments['__ajax_request']);
+        }
+        return $this->run($actionName, $arguments);
+    }
+
+    public function handleWith($stream, $arguments = array())
+    {
+        try {
+            $isAjax = isset($_REQUEST['__ajax_request']);
+            $result = $this->runWith($arguments);
+            if ( $result && $isAjax) {
+                // Deprecated:
+                // The text/plain seems work for IE8 (IE8 wraps the 
+                // content with a '<pre>' tag.
+                // header('Cache-Control: no-cache');
+                // header('Content-Type: text/plain; Charset=utf-8');
+                // Since we are using "textContent" instead of "innerHTML" attributes
+                // we should output the correct json mime type.
+                // header('Content-Type: application/json; Charset=utf-8');
+                fwrite($stream, $result->__toString());
+                return true;
+            }
+        } catch(Exception $e) {
+            //header('HTTP/1.0 403');
+            if ( $isAjax ) {
+                fwrite($stream, json_encode(array(
+                        'error' => 1,
+                        'message' => $e->getMessage(),
+                        'line' => $e->getLine(),
+                        'file' => $e->getFile(),
+                )));
+            } 
+            throw $e;
+        }
     }
 
     public function loadClass($class) 

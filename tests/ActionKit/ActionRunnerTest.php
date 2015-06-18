@@ -58,11 +58,17 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
         $container = new ActionKit\ServiceContainer;
         $runner = new ActionKit\ActionRunner($container);
         
+        //ob_start();
         $result = $runner->handleWith(STDOUT, array(
             'action' => 'User::Action::CreateUser',
+            '__ajax_request' => 1,
             'email' => 'foo@foo'
         ));
         is(true, $result);
+        // $output = ob_get_contents();
+        // is('{"args":{"email":"foo@foo"},"success":true,"message":"User Record is created.","data":{"email":"foo@foo","id":1}}', $output);
+        // ob_end_clean();
+        // echo "output:".$output;
     }
 
     /**
@@ -74,7 +80,7 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
         $runner = new ActionKit\ActionRunner($container);
         $result = $runner->handleWith(STDOUT, array(
             'action' => "_invalid"
-        ));  
+        ));
     }
 
     /**
@@ -85,6 +91,7 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
         $container = new ActionKit\ServiceContainer;
         $runner = new ActionKit\ActionRunner($container);
         $result = $runner->handleWith(STDOUT, array());  
+        
     }
 
     /**
@@ -112,11 +119,5 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
             'email' => 'foo@foo'
         )); 
     }
-
-    // MissingCacheDirectoryException
-    // ActionNotFoundException
-    // InvalidActionNameException
-    // UnableToCreateActionException
-    // UnableToWriteCacheException
 }
 
