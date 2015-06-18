@@ -15,7 +15,8 @@ ActionKit\CRUD::generate('Product\\Model\\ProductType', 'Update');
 // handle actions
 if ( isset($_REQUEST['action']) ) {
     try {
-        $runner = ActionKit\ActionRunner::getInstance();
+        $container = new ActionKit\ServiceContainer;
+        $runner = new ActionKit\ActionRunner($container);
         $result = $runner->run( $_REQUEST['action'] );
         if ( $result && $runner->isAjax() ) {
             // Deprecated:

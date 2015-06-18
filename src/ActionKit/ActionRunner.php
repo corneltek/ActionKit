@@ -68,15 +68,20 @@ class ActionRunner
 
     public function __construct($options = array()) {
 
-        if ( isset($options['cache_dir']) ) {
+        if ($options instanceof ServiceContainer) {
+            $this->generator = $options['generator'];
             $this->cacheDir = $options['cache_dir'];
         } else {
-            $this->cacheDir = __DIR__ . DIRECTORY_SEPARATOR . 'Cache';
-            if ( ! file_exists($this->cacheDir) ) {
-                mkdir($this->cacheDir, 0755, true);
+            if ( isset($options['cache_dir']) ) {
+                $this->cacheDir = $options['cache_dir'];
+            } else {
+                $this->cacheDir = __DIR__ . DIRECTORY_SEPARATOR . 'Cache';
+                if ( ! file_exists($this->cacheDir) ) {
+                    mkdir($this->cacheDir, 0755, true);
+                }
             }
+            $this->generator = new ActionGenerator(array( 'cache' => true , 'cache_dir' => $this->cacheDir ));
         }
-        $this->generator = new ActionGenerator(array( 'cache' => true , 'cache_dir' => $this->cacheDir ));
     }
 
     /**
