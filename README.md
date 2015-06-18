@@ -35,75 +35,7 @@ which can be triggered from HTTP requests, Ajax requests, or
 from backend, here is the work flow:
 
 
-               |~~~~~~~~~~~~~~~~~~~~~~~~~~|
-               |     Backend PHP          |
-               \__________________________/
-                          |
-                    [Create Action]
-                          |
-                     [Action View]
-                          |
-           [Create form widgets from parameters]
-                          |
-                          |
-              [Render Widgets as HTML]
-                          |
-                          |
-                  |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|
-          /---->  |       Web Forms              |
-          |       \______________________________/
-          |           |                     |
-       (Action.js)    |                  (Action.js)
-          |           |                     |
-          |       [ HTTP POST Request] [Ajax Request ]
-          ^           |                     |
-          |           ￬                     ￬
-          |           |                     |
-          |     /---------------------------------------------\
-          |     | Action Runner: dispatch action by Signature |
-          |     \---------------------------------------------/
-          |                  |
-          |                  | 
-          |                  ↓
-          |       /----------------------------------------\
-          |       |        Action                          |
-          |       |        +-------------------------------+
-          |       |        |  BaseRecordAction             |
-          |       |        |  Create, Update, Delete       |
-          |       \--------+-------------------------------/
-          |           |             |
-          |           |             |
-          |       [  Argument Filtering ]
-          |           |             |
-          |           |             |
-          |       [  Action Validation  ]
-          |           |             |
-          ^           |             ↓
-          |           |    [Database Operation]
-          |           ￬             |
-          ^           |             |
-          |           |             ↓
-          |       [ Action Result, success or fail ]
-          ^           |                 |
-          |           |                 |
-          |       [JSON Response]       |
-          |           |                 |
-          \--<--<--<--/                 |
-                                        |
-                        /---------------/
-                        |
-           /---------------------------\
-           |        Controller         |   
-           \---------------------------/
-                        |
-                        |               ☜ You Can Handle Action
-                        |                  Results in Controller or Template
-                        ￬
-                        |
-            [ Template Engine, like Twig ]
-                        |
-                        |
-            [ HTML Page with Action Result ] ---->---> [ Web Browser ]
+![http://i.imgur.com/hNboFPm.jpg](Flow Chart)
 
 
 ## A Basic Action
