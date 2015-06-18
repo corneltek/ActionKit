@@ -52,5 +52,71 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
         ok($data->data);
         ok($data->data->id);
     }
+
+    public function testHandleWith()
+    {
+        $container = new ActionKit\ServiceContainer;
+        $runner = new ActionKit\ActionRunner($container);
+        
+        $result = $runner->handleWith(STDOUT, array(
+            'action' => 'User::Action::CreateUser',
+            'email' => 'foo@foo'
+        ));
+        is(true, $result);
+    }
+
+    /**
+    *   @expectedException  ActionKit\Exception\InvalidActionNameException
+    */
+    public function testHandleWithInvalidActionNameException()
+    {
+        $container = new ActionKit\ServiceContainer;
+        $runner = new ActionKit\ActionRunner($container);
+        $result = $runner->handleWith(STDOUT, array(
+            'action' => "_invalid"
+        ));  
+    }
+
+    /**
+    *   @expectedException  ActionKit\Exception\InvalidActionNameException
+    */
+    public function testHandleWithInvalidActionNameExceptionWithEmptyActionName()
+    {
+        $container = new ActionKit\ServiceContainer;
+        $runner = new ActionKit\ActionRunner($container);
+        $result = $runner->handleWith(STDOUT, array());  
+    }
+
+    /**
+    *   @expectedException  ActionKit\Exception\ActionNotFoundException
+    */
+    public function testHandleWithActionNotFoundException()
+    {
+        $container = new ActionKit\ServiceContainer;
+        $runner = new ActionKit\ActionRunner($container);
+        $result = $runner->handleWith(STDOUT, array(
+            'action' => "User::Action::NotFoundAction"
+        )); 
+    }
+
+    /**
+    *   @expectedException  ActionKit\Exception\UnableToWriteCacheException
+    */
+    public function testHandleWithUnableToWriteCacheException()
+    {
+        $container = new ActionKit\ServiceContainer;
+        $container['cache_dir'] = '/InvalidCacheDir';
+        $runner = new ActionKit\ActionRunner($container);
+        $result = $runner->handleWith(STDOUT, array(
+            'action' => 'User::Action::CreateUser',
+            'email' => 'foo@foo'
+        )); 
+    }
+
+    // MissingCacheDirectoryException
+    // ActionNotFoundException
+    // InvalidActionNameException
+    // UnableToCreateActionException
+    // UnableToWriteCacheException
 }
 
