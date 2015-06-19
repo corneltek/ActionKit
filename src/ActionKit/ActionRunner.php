@@ -96,7 +96,7 @@ class ActionRunner
      * @param array   $arguments
      * @return ActionKit\Result result array if there is such an action.
      * */
-    public function run($actionName, $arguments = array() )
+    public function run($actionName, array $arguments = array() )
     {
         if ( ! Utils::validateActionName( $actionName ) ) {
             throw new InvalidActionNameException( "Invalid action name: $actionName." );
@@ -114,7 +114,7 @@ class ActionRunner
         throw new UnableToCreateActionException( "Can not create action class $class" );
     }
 
-    public function runWith($request) 
+    public function runWith(ActionRequest $request) 
     {
         if (!$request->getActionName()) {
             throw new InvalidActionNameException("");
@@ -126,7 +126,7 @@ class ActionRunner
         return $this->run($request->getActionName(), $request->getArguments());
     }
 
-    public function handleWith($stream, $arguments = array())
+    public function handleWith($stream, array $arguments = array())
     {
         try {
             $request = new ActionRequest($arguments);
@@ -152,8 +152,9 @@ class ActionRunner
                         'line' => $e->getLine(),
                         'file' => $e->getFile(),
                 )));
-            } 
-            throw $e;
+            } else {
+                throw $e;
+            }
         }
     }
 

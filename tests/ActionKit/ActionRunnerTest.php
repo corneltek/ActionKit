@@ -74,7 +74,6 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
         $container = new ActionKit\ServiceContainer;
         $runner = new ActionKit\ActionRunner($container);
         $result = $runner->handleWith(STDOUT, array(
-            '__ajax_request' => 1,
             'action' => "_invalid"
         ));
     }
@@ -86,7 +85,7 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
     {
         $container = new ActionKit\ServiceContainer;
         $runner = new ActionKit\ActionRunner($container);
-        $result = $runner->handleWith(STDOUT, array('__ajax_request' => 1,));  
+        $result = $runner->handleWith(STDOUT, array());  
         
     }
 
@@ -99,7 +98,6 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
         $runner = new ActionKit\ActionRunner($container);
         $result = $runner->handleWith(STDOUT, array(
             'action' => "User::Action::NotFoundAction",
-            '__ajax_request' => 1,
         )); 
     }
 }

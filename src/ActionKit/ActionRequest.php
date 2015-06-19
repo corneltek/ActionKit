@@ -1,6 +1,6 @@
 <?php
 namespace ActionKit;
-use ActionKit\Exception\InvalidActionNameException;
+use ActionKit\Utils;
 
 class ActionRequest {
 
