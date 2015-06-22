@@ -123,7 +123,14 @@ class ActionGenerator
         return $templateClassFile;
     }
 
-
+    /**
+     * The new generate method to generate action class with action template
+     */
+    public function generate3($templateName, $class, $cacheFile, array $actionArgs = array())
+    {
+        $actionTemplate = $this->loadTemplate($templateName);
+        return $actionTemplate->generate($class, $cacheFile, $actionArgs);
+    }
 
     public function getTwigLoader() {
 
@@ -242,5 +249,26 @@ class ActionGenerator
         return false;
     }
 
+    /**
+     * register action template
+     * @param object $template the action template object
+     */
+    public function registerTemplate($template)
+    {
+        $this->templates[$template->getTemplateName()] = $template;
+    }
 
+    /**
+     * load action template object with action template name
+     * @param string $templateName the action template name
+     * @return object action template object
+     */
+    public function loadTemplate($templateName)
+    {
+        if ( isset($this->templates[$templateName])) {
+            return $this->templates[$templateName];
+        } else {
+            throw new Exception("load $templateName template failed.");
+        }
+    }
 }

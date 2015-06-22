@@ -55,6 +55,7 @@ class ActionRunner
      */
     protected $dynamicActionsNew = array();
 
+    protected $dynamicActionsWithTemplate = array();
 
 
     /**
@@ -160,6 +161,19 @@ class ActionRunner
 
     public function loadClass($class) 
     {
+        if ( isset($this->dynamicActionsWithTemplate[$class]) ) {
+            $templateName = $this->dynamicActionsWithTemplate[$class]['templateName'];
+            $actionArgs = $this->dynamicActionsWithTemplate[$class]['actionArgs'];
+            if ( $this->loadClassCache($class, $actionArgs) ) {
+                return true;
+            }
+
+            $cacheFile = $this->getClassCacheFile($class, $actionArgs);
+            $this->generator->generate3($templateName, $class, $cacheFile, $actionArgs);
+
+            require $cacheFile;
+            return true;
+        }
         if ( isset($this->dynamicActionsNew[$class]) ) {
             $actionArgs = $this->dynamicActionsNew[ $class ];
 
@@ -168,7 +182,8 @@ class ActionRunner
             }
 
             $cacheFile = $this->getClassCacheFile($class, $actionArgs);
-            $loader = $this->generator->getTwigLoader();
+            // TODO: remove unused code
+            //$loader = $this->generator->getTwigLoader();
 
             $template = $this->generator->generate2($class, $actionArgs);
             if ( false === $template->writeTo($cacheFile) ) {
@@ -186,7 +201,8 @@ class ActionRunner
             }
 
             $cacheFile = $this->getClassCacheFile($class, $actionArgs);
-            $loader = $this->generator->getTwigLoader();
+            // TODO: remove unused code
+            //$loader = $this->generator->getTwigLoader();
 
             // Move the file fresh checking to loadClassCache method
             // if ( ! $loader->isFresh($actionArgs['template'], filemtime($cacheFile) ) ) {
@@ -242,6 +258,19 @@ class ActionRunner
         );
     }
 
+    public function registerActionWithTemplate($templateName, array $options)
+    {
+        $template = $this->generator->loadTemplate($templateName);
+        $template->register($this, $options);
+    }
+
+    public function registerWithTemplate($targetActionClass, $templateName, array $actionArgs = array())
+    {
+        $this->dynamicActionsWithTemplate[$targetActionClass] = array(
+            'templateName' => $templateName,
+            'actionArgs' => $actionArgs
+        );
+    }
 
     /**
      * $this->register('App\Action\SortProductType',[ 
@@ -270,6 +299,7 @@ class ActionRunner
      */
     public function registerRecordAction( $ns , $modelName , $types )
     {
+
         foreach ( (array) $types as $type ) {
             $class = $ns . '\\Action\\' . $type . $modelName;
             $this->register( $class , [
