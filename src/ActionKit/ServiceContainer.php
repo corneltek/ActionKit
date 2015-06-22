@@ -23,10 +23,8 @@ class ServiceContainer extends Container
     {
         $self = $this;
 
-        $this['cache_dir'] = __DIR__ . DIRECTORY_SEPARATOR . 'Cache';
-
         $this['generator'] = function($c) use($self) {
-            return new ActionGenerator(array( 'cache' => true , 'cache_dir' => $self['cache_dir'] ));
+            return new ActionGenerator(array( 'cache' => true ));
         };
     }
 }

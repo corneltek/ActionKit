@@ -1,5 +1,5 @@
 <?php
-use ActionKit\CRUD;
+use ActionKit\RecordAction\BaseRecordAction;
 use LazyRecord\Testing\ModelTestCase;
 
 class RecordActionTest extends ModelTestCase
@@ -22,7 +22,7 @@ class RecordActionTest extends ModelTestCase
 
     public function createProductActionClass($type)
     {
-        return CRUD::generate('Product\\Model\\Product',$type);
+        return BaseRecordAction::createCRUDClass('Product\\Model\\Product',$type);
     }
 
     public function testRecordCreate()

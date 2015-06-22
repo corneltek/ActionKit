@@ -39,29 +39,7 @@ use ActionKit\Exception\UnableToCreateActionException;
 class ActionRunner
     implements IteratorAggregate, ArrayAccess
 {
-
-    public $cacheDir;
-
-
-    /**
-     * @var array 
-     * @DEPRECATED
-     */
-    protected $dynamicActions = array();
-
-
-    /**
-     * @var array The new action class generator pool
-     */
-    protected $dynamicActionsNew = array();
-
-
-
-    /**
-     * @var array Abstract CRUD action pool
-     * @DEPRECATED
-     */
-    public $crudActions = array();
+    public $dynamicActions = array();
 
     /**
      * @var array Result pool
@@ -74,17 +52,12 @@ class ActionRunner
 
         if ($options instanceof ServiceContainer) {
             $this->generator = $options['generator'];
-            $this->cacheDir = $options['cache_dir'];
         } else {
+            $options_generator = array();
             if ( isset($options['cache_dir']) ) {
-                $this->cacheDir = $options['cache_dir'];
-            } else {
-                $this->cacheDir = __DIR__ . DIRECTORY_SEPARATOR . 'Cache';
-                if ( ! file_exists($this->cacheDir) ) {
-                    mkdir($this->cacheDir, 0755, true);
-                }
-            }
-            $this->generator = new ActionGenerator(array( 'cache' => true , 'cache_dir' => $this->cacheDir ));
+                $options_generator['cache_dir'] = $options['cache_dir'];
+            } 
+            $this->generator = new ActionGenerator($options_generator);
         }
     }
 
@@ -160,61 +133,15 @@ class ActionRunner
 
     public function loadClass($class) 
     {
-        if ( isset($this->dynamicActionsNew[$class]) ) {
-            $actionArgs = $this->dynamicActionsNew[ $class ];
-
-            if ( $this->loadClassCache($class, $actionArgs) ) {
+        if ( isset($this->dynamicActions[$class]) ) {
+            $templateName = $this->dynamicActions[$class]['actionTemplateName'];
+            $actionArgs = $this->dynamicActions[$class]['actionArgs'];
+            if ( $this->generator->loadClassCache($class, $actionArgs) ) {
                 return true;
             }
 
-            $cacheFile = $this->getClassCacheFile($class, $actionArgs);
-            $loader = $this->generator->getTwigLoader();
-
-            $template = $this->generator->generate2($class, $actionArgs);
-            if ( false === $template->writeTo($cacheFile) ) {
-                throw new UnableToWriteCacheException("Can not write action class cache file: $cacheFile");
-            }
-            require $cacheFile;
+            $this->generator->generate($templateName, $class, $actionArgs);
             return true;
-        }
-
-        if ( isset( $this->dynamicActions[ $class ] ) ) {
-            $actionArgs = $this->dynamicActions[ $class ];
-
-            if ( $this->loadClassCache($class, $actionArgs) ) {
-                return true;
-            }
-
-            $cacheFile = $this->getClassCacheFile($class, $actionArgs);
-            $loader = $this->generator->getTwigLoader();
-
-            // Move the file fresh checking to loadClassCache method
-            // if ( ! $loader->isFresh($actionArgs['template'], filemtime($cacheFile) ) ) {
-
-            $code = $this->generator->generate($class, $actionArgs['template'], $actionArgs['variables']);
-            if ( false === file_put_contents($cacheFile, $code) ) {
-                throw new UnableToWriteCacheException("Can not write action class cache file: $cacheFile");
-            }
-            require $cacheFile;
-            return true;
-        }
-
-        // DEPRECATED: backward compatible code
-        if ( isset( $this->crudActions[$class] ) ) {
-            // \FB::info('Generate action class: ' . $class);
-            // Generate the crud action
-            //
-            // @see registerRecordAction method
-            $args = $this->crudActions[$class];
-
-            if ( $this->loadClassCache($className, $args) ) {
-                return true;
-            }
-
-            $template = $this->generator->generateRecordActionNs( $args['ns'] , $args['model_name'], $args['type'] );
-            $cacheFile = $this->getClassCacheFile($className, $args);
-            $template->writeTo($cacheFile);
-            require $cacheFile;
         }
     }
 
@@ -224,73 +151,19 @@ class ActionRunner
         spl_autoload_register(array($this,'loadClass'),true, false);
     }
 
-
-    /**
-     * Register dynamic action by template.
-     *
-     * XXX: deprecated
-     *
-     * @param string $targetActionClass target action class name, full-qualified.
-     * @param string $templateName      source template 
-     * @param array $variables          template variables.
-     */
-    public function registerAction($targetActionClass, $templateName, $variables = array() )
+    public function registerAction($actionTemplateName, array $options)
     {
-        $this->dynamicActions[ $targetActionClass ] = array(
-            'template'  => $templateName,
-            'variables' => $variables,
+        $template = $this->generator->loadTemplate($actionTemplateName);
+        $template->register($this, $actionTemplateName, $options);
+    }
+
+    public function register($targetActionClass, $actionTemplateName, array $actionArgs = array())
+    {
+        $this->dynamicActions[$targetActionClass] = array(
+            'actionTemplateName' => $actionTemplateName,
+            'actionArgs' => $actionArgs
         );
     }
-
-
-    /**
-     * $this->register('App\Action\SortProductType',[ 
-     *    'extends'    => '....',
-     *    'properties' => [ 'recordClass' => .... ]
-     * ]);
-     */
-    public function register($targetActionClass, $options = array() ) {
-        $this->dynamicActionsNew[ $targetActionClass ] = $options;
-    }
-
-    /**
-     * Add CRUD action class to pool, so we can generate these class later
-     * if needed. (lazy)
-     *
-     *   - registerRecordAction( 'News' , 'News' , array('Create','Update') );
-     *
-     * Which generates:
-     *
-     *    News\Action\CreateNews
-     *    News\Action\UpdateNews
-     *
-     * @param string $ns        namespace name
-     * @param string $modelName model name
-     * @param array  $types     action types
-     */
-    public function registerRecordAction( $ns , $modelName , $types )
-    {
-        foreach ( (array) $types as $type ) {
-            $class = $ns . '\\Action\\' . $type . $modelName;
-            $this->register( $class , [
-                'extends' => "\\ActionKit\\RecordAction\\{$type}RecordAction",
-                'properties' => [
-                    'recordClass' => "$ns\\Model\\$modelName",
-                ],
-            ]);
-            $this->crudActions[$class] = array(
-                'ns'           => $ns,
-                'type'         => $type,
-                'model_name'   => $modelName,
-            );
-        }
-    }
-
-    public function registerCRUD( $ns , $modelName , $types )
-    {
-        $this->registerRecordAction( $ns, $modelName, $types );
-    }
-
 
     public function isInvalidActionName( $actionName )
     {
@@ -306,32 +179,6 @@ class ActionRunner
     {
         return isset($_REQUEST['__ajax_request']);
     }
-
-    /**
-     * Return the cache path of the class name
-     *
-     * @param string $className
-     * @return string path
-     */
-    public function getClassCacheFile($className, $params = null)
-    {
-        $chk = $params ? md5(serialize($params)) : '';
-        return $this->cacheDir . DIRECTORY_SEPARATOR . str_replace('\\','_',$className) . $chk . '.php';
-    }
-
-    /**
-     * Load the class cache file
-     */
-    public function loadClassCache($className, $params = null) {
-        $file = $this->getClassCacheFile($className, $params);
-        if ( file_exists($file) ) {
-            require $file;
-            return true;
-        }
-        return false;
-    }
-
-
 
     /**
      * Create action object

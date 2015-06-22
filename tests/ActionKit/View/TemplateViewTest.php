@@ -4,7 +4,7 @@ class TemplateViewTest extends PHPUnit_Framework_TestCase
 {
     public function test()
     {
-        $actionClass = ActionKit\CRUD::generate('User\Model\User','Create');
+        $actionClass = ActionKit\RecordAction\BaseRecordAction::createCRUDClass('User\Model\User','Create');
         $action = new $actionClass;
         ok($action);
 
