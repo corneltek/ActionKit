@@ -52,5 +52,58 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
         ok($data->data);
         ok($data->data->id);
     }
-}
 
+    public function testHandleWith()
+    {
+        $container = new ActionKit\ServiceContainer;
+        $runner = new ActionKit\ActionRunner($container);
+
+        $stream = fopen('php://memory', 'rw');
+        $result = $runner->handleWith($stream, array(
+            'action' => 'User::Action::CreateUser',
+            '__ajax_request' => 1,
+            'email' => 'foo@foo'
+        ));
+        is(true, $result);
+
+        fseek($stream, 0);
+        $output = stream_get_contents($stream);
+        $expected_output = '{"args":{"email":"foo@foo"},"success":true,"message":"User Record is created.","data":{"email":"foo@foo","id":1}}';
+        is($expected_output, $output);
+    }
+
+    /**
+    *   @expectedException  ActionKit\Exception\InvalidActionNameException
+    */
+    public function testHandleWithInvalidActionNameException()
+    {
+        $container = new ActionKit\ServiceContainer;
+        $runner = new ActionKit\ActionRunner($container);
+        $result = $runner->handleWith(STDOUT, array(
+            'action' => "_invalid"
+        ));
+    }
+
+    /**
+    *   @expectedException  ActionKit\Exception\InvalidActionNameException
+    */
+    public function testHandleWithInvalidActionNameExceptionWithEmptyActionName()
+    {
+        $container = new ActionKit\ServiceContainer;
+        $runner = new ActionKit\ActionRunner($container);
+        $result = $runner->handleWith(STDOUT, array());  
+        
+    }
+
+    /**
+    *   @expectedException  ActionKit\Exception\ActionNotFoundException
+    */
+    public function testHandleWithActionNotFoundException()
+    {
+        $container = new ActionKit\ServiceContainer;
+        $runner = new ActionKit\ActionRunner($container);
+        $result = $runner->handleWith(STDOUT, array(
+            'action' => "User::Action::NotFoundAction",
+        )); 
+    }
+}
