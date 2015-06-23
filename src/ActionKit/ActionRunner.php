@@ -39,21 +39,7 @@ use ActionKit\Exception\UnableToCreateActionException;
 class ActionRunner
     implements IteratorAggregate, ArrayAccess
 {
-
-    /**
-     * @var array 
-     * @DEPRECATED
-     */
-    protected $dynamicActions = array();
-
-
-    /**
-     * @var array The new action class generator pool
-     */
-    protected $dynamicActionsNew = array();
-
     protected $dynamicActionsWithTemplate = array();
-
 
     /**
      * @var array Abstract CRUD action pool
@@ -169,42 +155,6 @@ class ActionRunner
 
             return true;
         }
-        if ( isset($this->dynamicActionsNew[$class]) ) {
-            $actionArgs = $this->dynamicActionsNew[ $class ];
-
-            if ( $this->generator->loadClassCache($class, $actionArgs) ) {
-                return true;
-            }
-
-            $cacheFile = $this->getClassCacheFile($class, $actionArgs);
-
-            $template = $this->generator->generate2($class, $actionArgs);
-            if ( false === $template->writeTo($cacheFile) ) {
-                throw new UnableToWriteCacheException("Can not write action class cache file: $cacheFile");
-            }
-            require $cacheFile;
-            return true;
-        }
-
-        if ( isset( $this->dynamicActions[ $class ] ) ) {
-            $actionArgs = $this->dynamicActions[ $class ];
-
-            if ( $this->generator->loadClassCache($class, $actionArgs) ) {
-                return true;
-            }
-
-            $cacheFile = $this->getClassCacheFile($class, $actionArgs);
-
-            // Move the file fresh checking to loadClassCache method
-            // if ( ! $loader->isFresh($actionArgs['template'], filemtime($cacheFile) ) ) {
-
-            $code = $this->generator->generate($class, $actionArgs['template'], $actionArgs['variables']);
-            if ( false === file_put_contents($cacheFile, $code) ) {
-                throw new UnableToWriteCacheException("Can not write action class cache file: $cacheFile");
-            }
-            require $cacheFile;
-            return true;
-        }
 
         // DEPRECATED: backward compatible code
         if ( isset( $this->crudActions[$class] ) ) {
@@ -241,12 +191,13 @@ class ActionRunner
      * @param string $templateName      source template 
      * @param array $variables          template variables.
      */
-    public function registerAction($targetActionClass, $templateName, $variables = array() )
+    public function registerAction($targetActionClass, $templateName, array $variables = array() )
     {
-        $this->dynamicActions[ $targetActionClass ] = array(
-            'template'  => $templateName,
-            'variables' => $variables,
-        );
+        $this->registerActionWithTemplate('FileActionTemplate', array(
+            'targetClassName' => $targetActionClass,
+            'templateName' => $templateName,
+            'variables' => $variables
+        ));
     }
 
     public function registerActionWithTemplate($actionTemplateName, array $options)
@@ -261,16 +212,6 @@ class ActionRunner
             'actionTemplateName' => $actionTemplateName,
             'actionArgs' => $actionArgs
         );
-    }
-
-    /**
-     * $this->register('App\Action\SortProductType',[ 
-     *    'extends'    => '....',
-     *    'properties' => [ 'recordClass' => .... ]
-     * ]);
-     */
-    public function register($targetActionClass, $options = array() ) {
-        $this->dynamicActionsNew[ $targetActionClass ] = $options;
     }
 
     /**
@@ -290,21 +231,11 @@ class ActionRunner
      */
     public function registerRecordAction( $ns , $modelName , $types )
     {
-
-        foreach ( (array) $types as $type ) {
-            $class = $ns . '\\Action\\' . $type . $modelName;
-            $this->register( $class , [
-                'extends' => "\\ActionKit\\RecordAction\\{$type}RecordAction",
-                'properties' => [
-                    'recordClass' => "$ns\\Model\\$modelName",
-                ],
-            ]);
-            $this->crudActions[$class] = array(
-                'ns'           => $ns,
-                'type'         => $type,
-                'model_name'   => $modelName,
-            );
-        }
+        $this->registerActionWithTemplate('RecordActionTemplate', array(
+            'namespace' => $ns,
+            'model' => $modelName,
+            'types' => $types
+        ));
     }
 
     public function registerCRUD( $ns , $modelName , $types )

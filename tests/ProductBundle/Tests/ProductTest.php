@@ -6,9 +6,12 @@ class ProductBundleTest extends PHPUnit_Framework_TestCase
 
 
     public function testProductSortActions() {
-        $runner = new ActionRunner([
-            'cache_dir' => 'cache',
-        ]);
+        
+        $container = new ActionKit\ServiceContainer;
+        $generator = $container['generator'];
+        $generator->registerTemplate(new ActionKit\ActionTemplate\FileActionTemplate);
+
+        $runner = new ActionRunner($container);
         ok($runner, 'action runner');
 
         $sortActionClasses = [
