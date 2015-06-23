@@ -9,7 +9,7 @@ use Twig_Environment;
  * Depends on Twig template engine
  */
 
-class FileActionTemplate
+class FileActionTemplate implements IActionTemplate
 {
     private $cacheDir;
     private $templateDirs = array();
@@ -19,7 +19,7 @@ class FileActionTemplate
         if ( isset($options['cache_dir']) ) {
             $this->cacheDir = $options['cache_dir'];
         } else {
-            $this->cacheDir = __DIR__ . DIRECTORY_SEPARATOR . 'Cache';
+            $this->cacheDir = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Cache';
             if (! file_exists($this->cacheDir)) {
                 mkdir($this->cacheDir, 0755, true);
             }

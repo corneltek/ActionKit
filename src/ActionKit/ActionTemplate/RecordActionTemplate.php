@@ -4,7 +4,7 @@ use Exception;
 use ActionKit\Exception\UnableToWriteCacheException;
 use ClassTemplate\TemplateClassFile;
 
-class RecordActionTemplate
+class RecordActionTemplate implements IActionTemplate
 {
     public function register($runner, array $options = array())
     {
