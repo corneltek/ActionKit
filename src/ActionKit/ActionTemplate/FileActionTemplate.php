@@ -1,5 +1,6 @@
 <?php
-namespace ActionKit\ActionTemplate;  
+namespace ActionKit\ActionTemplate; 
+use ActionKit\ActionRunner; 
 use Exception;
 use ActionKit\Exception\UnableToWriteCacheException;
 use Twig_Loader_Filesystem;
@@ -26,7 +27,7 @@ class FileActionTemplate implements IActionTemplate
         }
     }
 
-    public function register($runner, array $options = array())
+    public function register(ActionRunner $runner, array $options = array())
     {
         // $targetActionClass, $template, $variables
         if ( isset($options['targetClassName'])) {

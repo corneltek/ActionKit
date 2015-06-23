@@ -39,7 +39,7 @@ use ActionKit\Exception\UnableToCreateActionException;
 class ActionRunner
     implements IteratorAggregate, ArrayAccess
 {
-    protected $dynamicActions = array();
+    public $dynamicActions = array();
 
     /**
      * @var array Result pool

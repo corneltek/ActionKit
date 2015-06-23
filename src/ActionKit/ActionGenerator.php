@@ -1,5 +1,6 @@
 <?php
 namespace ActionKit;
+use ActionKit\ActionTemplate\IActionTemplate;
 use Exception;
 use UniversalCache;
 use Twig_Loader_Filesystem;
@@ -211,7 +212,7 @@ class ActionGenerator
      * register action template
      * @param object $template the action template object
      */
-    public function registerTemplate($template)
+    public function registerTemplate(IActionTemplate $template)
     {
         $this->templates[$template->getTemplateName()] = $template;
     }

@@ -11,20 +11,21 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
         $template = $generator->loadTemplate('RecordActionTemplate'); 
         ok($template);
 
-        $template->register($this, array(
+        $runner = new ActionKit\ActionRunner;
+        $template->register($runner, array(
             'namespace' => 'test',
             'model' => 'testModel',
             'types' => array('Create','Update','Delete','BulkDelete')
         ));
-        is(4, count($this->dynamicActions));
+        is(4, count($runner->dynamicActions));
 
         $className = 'test\Action\UpdatetestModel';
 
-        is(true, isset($this->dynamicActions[$className]));
+        is(true, isset($runner->dynamicActions[$className]));
 
         $cacheFile = $generator->generate('RecordActionTemplate', 
             $className, 
-            $this->dynamicActions[$className]['actionArgs']);
+            $runner->dynamicActions[$className]['actionArgs']);
 
         require $cacheFile;
         ok( class_exists( $className ) );
@@ -37,7 +38,8 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
         $template = $generator->loadTemplate('FileActionTemplate'); 
         ok($template);
 
-        $template->register($this, array(
+        $runner = new ActionKit\ActionRunner;
+        $template->register($runner, array(
             'targetClassName' => 'User\\Action\\BulkUpdateUser',
             'templateName' => '@ActionKit/RecordAction.html.twig',
             'variables' => array(
@@ -45,15 +47,15 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
                 'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction'
             )
         ));
-        is(1, count($this->dynamicActions));
+        is(1, count($runner->dynamicActions));
 
         $className = 'User\Action\BulkUpdateUser';
 
-        is(true, isset($this->dynamicActions[$className]));
+        is(true, isset($runner->dynamicActions[$className]));
 
         $cacheFile = $generator->generate('FileActionTemplate', 
             $className, 
-            $this->dynamicActions[$className]['actionArgs']);
+            $runner->dynamicActions[$className]['actionArgs']);
 
         require $cacheFile;
         ok( class_exists( $className ) );

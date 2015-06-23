@@ -1,12 +1,13 @@
 <?php
 namespace ActionKit\ActionTemplate;
+use ActionKit\ActionRunner;
 use Exception;
 use ActionKit\Exception\UnableToWriteCacheException;
 use ClassTemplate\TemplateClassFile;
 
 class RecordActionTemplate implements IActionTemplate
 {
-    public function register($runner, array $options = array())
+    public function register(ActionRunner $runner, array $options = array())
     {
         //$ns , $modelName , $types
         if ( isset($options['namespace'])) {
