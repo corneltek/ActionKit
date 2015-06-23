@@ -126,9 +126,10 @@ class ActionGenerator
     /**
      * The new generate method to generate action class with action template
      */
-    public function generate3($templateName, $class, $cacheFile, array $actionArgs = array())
+    public function generate3($templateName, $class, array $actionArgs = array())
     {
         $actionTemplate = $this->loadTemplate($templateName);
+        $cacheFile = $this->getClassCacheFile($class, $actionArgs);
         return $actionTemplate->generate($class, $cacheFile, $actionArgs);
     }
 

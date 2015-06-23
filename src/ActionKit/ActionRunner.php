@@ -40,9 +40,6 @@ class ActionRunner
     implements IteratorAggregate, ArrayAccess
 {
 
-    public $cacheDir;
-
-
     /**
      * @var array 
      * @DEPRECATED
@@ -75,17 +72,16 @@ class ActionRunner
 
         if ($options instanceof ServiceContainer) {
             $this->generator = $options['generator'];
-            $this->cacheDir = $options['cache_dir'];
         } else {
             if ( isset($options['cache_dir']) ) {
-                $this->cacheDir = $options['cache_dir'];
+                $cacheDir = $options['cache_dir'];
             } else {
-                $this->cacheDir = __DIR__ . DIRECTORY_SEPARATOR . 'Cache';
-                if ( ! file_exists($this->cacheDir) ) {
-                    mkdir($this->cacheDir, 0755, true);
+                $cacheDir = __DIR__ . DIRECTORY_SEPARATOR . 'Cache';
+                if ( ! file_exists($cacheDir) ) {
+                    mkdir($cacheDir, 0755, true);
                 }
             }
-            $this->generator = new ActionGenerator(array( 'cache' => true , 'cache_dir' => $this->cacheDir ));
+            $this->generator = new ActionGenerator(array( 'cache' => true , 'cache_dir' => $cacheDir ));
         }
     }
 
@@ -164,12 +160,11 @@ class ActionRunner
         if ( isset($this->dynamicActionsWithTemplate[$class]) ) {
             $templateName = $this->dynamicActionsWithTemplate[$class]['templateName'];
             $actionArgs = $this->dynamicActionsWithTemplate[$class]['actionArgs'];
-            if ( $this->loadClassCache($class, $actionArgs) ) {
+            if ( $this->generator->loadClassCache($class, $actionArgs) ) {
                 return true;
             }
 
-            $cacheFile = $this->getClassCacheFile($class, $actionArgs);
-            $this->generator->generate3($templateName, $class, $cacheFile, $actionArgs);
+            $this->generator->generate3($templateName, $class, $actionArgs);
 
             require $cacheFile;
             return true;
@@ -177,13 +172,11 @@ class ActionRunner
         if ( isset($this->dynamicActionsNew[$class]) ) {
             $actionArgs = $this->dynamicActionsNew[ $class ];
 
-            if ( $this->loadClassCache($class, $actionArgs) ) {
+            if ( $this->generator->loadClassCache($class, $actionArgs) ) {
                 return true;
             }
 
             $cacheFile = $this->getClassCacheFile($class, $actionArgs);
-            // TODO: remove unused code
-            //$loader = $this->generator->getTwigLoader();
 
             $template = $this->generator->generate2($class, $actionArgs);
             if ( false === $template->writeTo($cacheFile) ) {
@@ -196,13 +189,11 @@ class ActionRunner
         if ( isset( $this->dynamicActions[ $class ] ) ) {
             $actionArgs = $this->dynamicActions[ $class ];
 
-            if ( $this->loadClassCache($class, $actionArgs) ) {
+            if ( $this->generator->loadClassCache($class, $actionArgs) ) {
                 return true;
             }
 
             $cacheFile = $this->getClassCacheFile($class, $actionArgs);
-            // TODO: remove unused code
-            //$loader = $this->generator->getTwigLoader();
 
             // Move the file fresh checking to loadClassCache method
             // if ( ! $loader->isFresh($actionArgs['template'], filemtime($cacheFile) ) ) {
@@ -336,32 +327,6 @@ class ActionRunner
     {
         return isset($_REQUEST['__ajax_request']);
     }
-
-    /**
-     * Return the cache path of the class name
-     *
-     * @param string $className
-     * @return string path
-     */
-    public function getClassCacheFile($className, $params = null)
-    {
-        $chk = $params ? md5(serialize($params)) : '';
-        return $this->cacheDir . DIRECTORY_SEPARATOR . str_replace('\\','_',$className) . $chk . '.php';
-    }
-
-    /**
-     * Load the class cache file
-     */
-    public function loadClassCache($className, $params = null) {
-        $file = $this->getClassCacheFile($className, $params);
-        if ( file_exists($file) ) {
-            require $file;
-            return true;
-        }
-        return false;
-    }
-
-
 
     /**
      * Create action object

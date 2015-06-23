@@ -1,13 +1,11 @@
 <?php
-namespace ActionKit;
+namespace ActionKit\ActionTemplate;
 use Exception;
 use ActionKit\Exception\UnableToWriteCacheException;
 use ClassTemplate\TemplateClassFile;
 
 class RecordActionTemplate
 {
-    protected $templateName = 'RecordActionTemplate';
-
     public function register($runner, $options)
     {
         //$ns , $modelName , $types
@@ -69,6 +67,6 @@ class RecordActionTemplate
 
     public function getTemplateName()
     {
-        return $this->templateName;
+        return 'RecordActionTemplate';
     }
 }

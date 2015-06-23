@@ -8,7 +8,7 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
     {
         $container = new ActionKit\ServiceContainer;
         $generator = $container['generator'];
-        $generator->registerTemplate(new ActionKit\RecordActionTemplate);
+        $generator->registerTemplate(new ActionKit\ActionTemplate\RecordActionTemplate);
         $template = $generator->loadTemplate('RecordActionTemplate'); 
         ok($template);
 
@@ -23,11 +23,8 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
 
         is(true, isset($this->dynamicActionsWithTemplate[$className]));
 
-        $this->cacheDir = $container['cache_dir'];
-        $cacheFile = $this->getClassCacheFile($className, $this->dynamicActionsWithTemplate[$className]['actionArgs']);
-        $generator->generate3('RecordActionTemplate', 
+        $cacheFile = $generator->generate3('RecordActionTemplate', 
             $className, 
-            $cacheFile,
             $this->dynamicActionsWithTemplate[$className]['actionArgs']);
 
         require $cacheFile;
