@@ -2,7 +2,7 @@
 
 class ActionTemplate extends PHPUnit_Framework_TestCase
 {
-    protected $dynamicActionsWithTemplate = array();
+    protected $dynamicActions = array();
 
     public function testCodeGenBased()
     {
@@ -17,15 +17,15 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
             'model' => 'testModel',
             'types' => array('Create','Update','Delete','BulkDelete')
         ));
-        is(4, count($this->dynamicActionsWithTemplate));
+        is(4, count($this->dynamicActions));
 
         $className = 'test\Action\UpdatetestModel';
 
-        is(true, isset($this->dynamicActionsWithTemplate[$className]));
+        is(true, isset($this->dynamicActions[$className]));
 
-        $cacheFile = $generator->generate3('RecordActionTemplate', 
+        $cacheFile = $generator->generate('RecordActionTemplate', 
             $className, 
-            $this->dynamicActionsWithTemplate[$className]['actionArgs']);
+            $this->dynamicActions[$className]['actionArgs']);
 
         require $cacheFile;
         ok( class_exists( $className ) );
@@ -47,15 +47,15 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
                 'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction'
             )
         ));
-        is(1, count($this->dynamicActionsWithTemplate));
+        is(1, count($this->dynamicActions));
 
         $className = 'User\Action\BulkUpdateUser';
 
-        is(true, isset($this->dynamicActionsWithTemplate[$className]));
+        is(true, isset($this->dynamicActions[$className]));
 
-        $cacheFile = $generator->generate3('FileActionTemplate', 
+        $cacheFile = $generator->generate('FileActionTemplate', 
             $className, 
-            $this->dynamicActionsWithTemplate[$className]['actionArgs']);
+            $this->dynamicActions[$className]['actionArgs']);
 
         require $cacheFile;
         ok( class_exists( $className ) );
@@ -65,7 +65,7 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
     // for action template register method
     public function registerWithTemplate($targetActionClass, $templateName, array $actionArgs = array())
     {
-        $this->dynamicActionsWithTemplate[$targetActionClass] = array(
+        $this->dynamicActions[$targetActionClass] = array(
             'templateName' => $templateName,
             'actionArgs' => $actionArgs
         );

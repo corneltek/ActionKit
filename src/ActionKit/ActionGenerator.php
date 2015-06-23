@@ -1,5 +1,6 @@
 <?php
 namespace ActionKit;
+use Exception;
 use UniversalCache;
 use Twig_Loader_Filesystem;
 use Twig_Environment;
@@ -29,8 +30,6 @@ class ActionGenerator
 
     public $cacheDir;
 
-    public $templateDirs = array();
-
     public $templates = array();
 
     public function __construct(array $options = array() )
@@ -44,31 +43,6 @@ class ActionGenerator
             }
         }
     }
-
-    public function addTemplateDir($path)
-    {
-        $this->templateDirs[] = $path;
-    }
-
-
-    /**
-     * This method generates class code based on the template file from Twig
-     *
-     * XXX: is going to be deprecated.
-     */
-    // $template = $gen->generate($class, $actionArgs['template'], $actionArgs['variables']);
-    // $variables['base_class']
-    // $variables['record_class']
-    public function generate($targetClassName, $template = null, $variables = array())
-    {
-        $parts = explode("\\",$targetClassName);
-        $variables['target'] = array();
-        $variables['target']['classname'] = array_pop($parts);
-        $variables['target']['namespace'] = join("\\", $parts);
-        $twig = $this->getTwig();
-        return $twig->render($template, $variables);
-    }
-
 
     /**
      * The new generate method to generate action class
@@ -126,36 +100,11 @@ class ActionGenerator
     /**
      * The new generate method to generate action class with action template
      */
-    public function generate3($templateName, $class, array $actionArgs = array())
+    public function generate($templateName, $class, array $actionArgs = array())
     {
         $actionTemplate = $this->loadTemplate($templateName);
         $cacheFile = $this->getClassCacheFile($class, $actionArgs);
         return $actionTemplate->generate($class, $cacheFile, $actionArgs);
-    }
-
-    public function getTwigLoader() {
-
-        static $loader;
-        if ( $loader ) {
-            return $loader;
-        }
-        // add ActionKit built-in template path
-        $loader = new Twig_Loader_Filesystem($this->templateDirs);
-        $loader->addPath( __DIR__ . DIRECTORY_SEPARATOR . 'Templates', "ActionKit" );
-        return $loader;
-    }
-
-    public function getTwig()
-    {
-        static $twig;
-        if ( $twig ) {
-            return $twig;
-        }
-        $loader = $this->getTwigLoader();
-        $env = new Twig_Environment($loader, array(
-            'cache' => $this->cacheDir ? $this->cacheDir : false,
-        ));
-        return $env;
     }
 
 

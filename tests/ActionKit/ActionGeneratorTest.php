@@ -30,16 +30,16 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
         ok( class_exists( 'Core\\Action\\GrantAccess' ) );
     }
 
-
-    public function testGenerateMethod()
-    {
-        $g = new ActionKit\ActionGenerator;
-        $code = $g->generate('ProductBundle\\Action\\CreateRecordProduct','@ActionKit/RecordAction.html.twig',array(
-            'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction',
-            'record_class' => 'ProductBundle\\Model\\Product',
-        ));
-        ok( $code );
-    }
+    // deprecated
+    // public function testGenerateMethod()
+    // {
+    //     $g = new ActionKit\ActionGenerator;
+    //     $code = $g->generate('ProductBundle\\Action\\CreateRecordProduct','@ActionKit/RecordAction.html.twig',array(
+    //         'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction',
+    //         'record_class' => 'ProductBundle\\Model\\Product',
+    //     ));
+    //     ok( $code );
+    // }
 
 }
 

@@ -39,13 +39,7 @@ use ActionKit\Exception\UnableToCreateActionException;
 class ActionRunner
     implements IteratorAggregate, ArrayAccess
 {
-    protected $dynamicActionsWithTemplate = array();
-
-    /**
-     * @var array Abstract CRUD action pool
-     * @DEPRECATED
-     */
-    public $crudActions = array();
+    protected $dynamicActions = array();
 
     /**
      * @var array Result pool
@@ -143,35 +137,17 @@ class ActionRunner
 
     public function loadClass($class) 
     {
-        if ( isset($this->dynamicActionsWithTemplate[$class]) ) {
-            $templateName = $this->dynamicActionsWithTemplate[$class]['actionTemplateName'];
-            $actionArgs = $this->dynamicActionsWithTemplate[$class]['actionArgs'];
+        if ( isset($this->dynamicActions[$class]) ) {
+            $templateName = $this->dynamicActions[$class]['actionTemplateName'];
+            $actionArgs = $this->dynamicActions[$class]['actionArgs'];
             if ( $this->generator->loadClassCache($class, $actionArgs) ) {
                 return true;
             }
 
-            $cacheFile = $this->generator->generate3($templateName, $class, $actionArgs);
+            $cacheFile = $this->generator->generate($templateName, $class, $actionArgs);
             require $cacheFile;
 
             return true;
-        }
-
-        // DEPRECATED: backward compatible code
-        if ( isset( $this->crudActions[$class] ) ) {
-            // \FB::info('Generate action class: ' . $class);
-            // Generate the crud action
-            //
-            // @see registerRecordAction method
-            $args = $this->crudActions[$class];
-
-            if ( $this->loadClassCache($className, $args) ) {
-                return true;
-            }
-
-            $template = $this->generator->generateRecordActionNs( $args['ns'] , $args['model_name'], $args['type'] );
-            $cacheFile = $this->getClassCacheFile($className, $args);
-            $template->writeTo($cacheFile);
-            require $cacheFile;
         }
     }
 
@@ -208,7 +184,7 @@ class ActionRunner
 
     public function registerWithTemplate($targetActionClass, $actionTemplateName, array $actionArgs = array())
     {
-        $this->dynamicActionsWithTemplate[$targetActionClass] = array(
+        $this->dynamicActions[$targetActionClass] = array(
             'actionTemplateName' => $actionTemplateName,
             'actionArgs' => $actionArgs
         );
