@@ -86,6 +86,8 @@ class CodeGenActionTemplate implements IActionTemplate
      *           'extends' => "\\ActionKit\\RecordAction\\CreateRecordAction",  
      *           'properties' => [
      *               'recordClass' => "test\\testModel\\$modelName",    // $ns\\Model\\$modelName
+     *           ],
+     *           'getTemplateClass' => true  // return TemplateClassFile directly
      *       ]
      *    );
      */
@@ -110,6 +112,11 @@ class CodeGenActionTemplate implements IActionTemplate
                 $templateClassFile->addConst($name, $value);
             }
         }
+
+        if (isset($options['getTemplateClass']) && $options['getTemplateClass']) {
+            return $templateClassFile;
+        }
+
         if ( false === $templateClassFile->writeTo($cacheFile) ) {
             throw new UnableToWriteCacheException("Can not write action class cache file: $cacheFile");
         }
