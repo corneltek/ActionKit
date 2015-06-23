@@ -34,8 +34,8 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
     public function testTemplateBased()
     {
         $generator = new ActionKit\ActionGenerator(array( 'cache' => true ));
-        $generator->registerTemplate(new ActionKit\ActionTemplate\FileActionTemplate);
-        $template = $generator->loadTemplate('FileActionTemplate'); 
+        $generator->registerTemplate(new ActionKit\ActionTemplate\FileBasedActionTemplate);
+        $template = $generator->loadTemplate('FileBasedActionTemplate'); 
         ok($template);
 
         $runner = new ActionKit\ActionRunner;
@@ -53,7 +53,7 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
 
         is(true, isset($runner->dynamicActions[$className]));
 
-        $cacheFile = $generator->generate('FileActionTemplate', 
+        $cacheFile = $generator->generate('FileBasedActionTemplate', 
             $className, 
             $runner->dynamicActions[$className]['actionArgs']);
 
@@ -64,11 +64,11 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
     public function testWithRegister()
     {
         $generator = new ActionKit\ActionGenerator(array( 'cache' => true ));
-        $generator->registerTemplate(new ActionKit\ActionTemplate\FileActionTemplate);
+        $generator->registerTemplate(new ActionKit\ActionTemplate\FileBasedActionTemplate);
         
         $className = 'User\Action\BulkDeleteUser';
 
-        $cacheFile = $generator->generate('FileActionTemplate', 
+        $cacheFile = $generator->generate('FileBasedActionTemplate', 
             $className, 
             array(
                 'template' => '@ActionKit/RecordAction.html.twig',

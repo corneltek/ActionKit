@@ -19,10 +19,10 @@ use ClassTemplate\TemplateClassFile;
  *          'cache_dir' => 'phifty/cache',
  *          'template_dirs' => array( 'Resource/Templates' )
  *    ));
- *    $generator->registerTemplate(new ActionKit\ActionTemplate\FileActionTemplate);
+ *    $generator->registerTemplate(new ActionKit\ActionTemplate\FileBasedActionTemplate);
  *    $className = 'User\Action\BulkDeleteUser';
  *
- *    $cacheFile = $generator->generate('FileActionTemplate', 
+ *    $cacheFile = $generator->generate('FileBasedActionTemplate', 
  *        $className, 
  *        array(
  *            'template' => '@ActionKit/RecordAction.html.twig',

@@ -169,7 +169,7 @@ class ActionRunner
      */
     public function registerAction($targetActionClass, $templateName, array $variables = array() )
     {
-        $this->registerActionWithTemplate('FileActionTemplate', array(
+        $this->registerActionWithTemplate('FileBasedActionTemplate', array(
             'targetClassName' => $targetActionClass,
             'templateName' => $templateName,
             'variables' => $variables

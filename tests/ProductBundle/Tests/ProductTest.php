@@ -9,7 +9,7 @@ class ProductBundleTest extends PHPUnit_Framework_TestCase
         
         $container = new ActionKit\ServiceContainer;
         $generator = $container['generator'];
-        $generator->registerTemplate(new ActionKit\ActionTemplate\FileActionTemplate);
+        $generator->registerTemplate(new ActionKit\ActionTemplate\FileBasedActionTemplate);
 
         $runner = new ActionRunner($container);
         ok($runner, 'action runner');

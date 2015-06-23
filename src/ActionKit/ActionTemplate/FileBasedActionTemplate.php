@@ -82,7 +82,7 @@ class FileBasedActionTemplate implements IActionTemplate
 
     public function getTemplateName()
     {
-        return 'FileActionTemplate';
+        return 'FileBasedActionTemplate';
     }
 
     public function addTemplateDir($path)
