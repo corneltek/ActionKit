@@ -4,7 +4,7 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
 {
     protected $dynamicActionsWithTemplate = array();
 
-    public function test()
+    public function testCodeGenBased()
     {
         $container = new ActionKit\ServiceContainer;
         $generator = $container['generator'];
@@ -29,6 +29,37 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
 
         require $cacheFile;
         ok( class_exists( $className ) );
+    }
+
+    public function testTemplateBased()
+    {
+        $container = new ActionKit\ServiceContainer;
+        $generator = $container['generator'];
+        $generator->registerTemplate(new ActionKit\ActionTemplate\FileActionTemplate);
+        $template = $generator->loadTemplate('FileActionTemplate'); 
+        ok($template);
+
+        $template->register($this, array(
+            'targetClassName' => 'User\\Action\\BulkUpdateUser',
+            'templateName' => '@ActionKit/RecordAction.html.twig',
+            'variables' => array(
+                'record_class' => 'User\\Model\\User',
+                'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction'
+            )
+        ));
+        is(1, count($this->dynamicActionsWithTemplate));
+
+        $className = 'User\Action\BulkUpdateUser';
+
+        is(true, isset($this->dynamicActionsWithTemplate[$className]));
+
+        $cacheFile = $generator->generate3('FileActionTemplate', 
+            $className, 
+            $this->dynamicActionsWithTemplate[$className]['actionArgs']);
+
+        require $cacheFile;
+        ok( class_exists( $className ) );
+
     }
 
     // for action template register method

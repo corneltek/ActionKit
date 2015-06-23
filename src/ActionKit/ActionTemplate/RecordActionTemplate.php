@@ -6,7 +6,7 @@ use ClassTemplate\TemplateClassFile;
 
 class RecordActionTemplate
 {
-    public function register($runner, $options)
+    public function register($runner, array $options = array())
     {
         //$ns , $modelName , $types
         if ( isset($options['namespace'])) {
@@ -38,7 +38,7 @@ class RecordActionTemplate
         }
     }
     
-    public function generate($targetClassName, $cacheFile, $options)
+    public function generate($targetClassName, $cacheFile, array $options = array())
     {
         $templateClassFile = new TemplateClassFile($targetClassName);
 

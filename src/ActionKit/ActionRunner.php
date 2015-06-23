@@ -158,15 +158,15 @@ class ActionRunner
     public function loadClass($class) 
     {
         if ( isset($this->dynamicActionsWithTemplate[$class]) ) {
-            $templateName = $this->dynamicActionsWithTemplate[$class]['templateName'];
+            $templateName = $this->dynamicActionsWithTemplate[$class]['actionTemplateName'];
             $actionArgs = $this->dynamicActionsWithTemplate[$class]['actionArgs'];
             if ( $this->generator->loadClassCache($class, $actionArgs) ) {
                 return true;
             }
 
-            $this->generator->generate3($templateName, $class, $actionArgs);
-
+            $cacheFile = $this->generator->generate3($templateName, $class, $actionArgs);
             require $cacheFile;
+
             return true;
         }
         if ( isset($this->dynamicActionsNew[$class]) ) {
@@ -249,16 +249,16 @@ class ActionRunner
         );
     }
 
-    public function registerActionWithTemplate($templateName, array $options)
+    public function registerActionWithTemplate($actionTemplateName, array $options)
     {
-        $template = $this->generator->loadTemplate($templateName);
+        $template = $this->generator->loadTemplate($actionTemplateName);
         $template->register($this, $options);
     }
 
-    public function registerWithTemplate($targetActionClass, $templateName, array $actionArgs = array())
+    public function registerWithTemplate($targetActionClass, $actionTemplateName, array $actionArgs = array())
     {
         $this->dynamicActionsWithTemplate[$targetActionClass] = array(
-            'templateName' => $templateName,
+            'actionTemplateName' => $actionTemplateName,
             'actionArgs' => $actionArgs
         );
     }
