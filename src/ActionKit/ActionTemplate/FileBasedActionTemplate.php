@@ -7,6 +7,37 @@ use Twig_Loader_Filesystem;
 use Twig_Environment;
 
 /**
+ *  File-Based Action Template Synopsis
+ *    To generate from template file
+ *
+ *    $generator = new ActionGenerator();
+ *
+ *    // register template to generator
+ *    $generator->registerTemplate(new ActionKit\ActionTemplate\FileBasedActionTemplate(array('cache_dir' => 'cache1')));
+ *
+ *    // load template by name
+ *    $template = $generator->loadTemplate('FileBasedActionTemplate');
+ *
+ *    $runner = new ActionKit\ActionRunner;
+ *    // register action to template
+ *    $template->register($runner, array(
+ *        'targetClassName' => 'User\\Action\\BulkUpdateUser',
+ *        'templateName' => '@ActionKit/RecordAction.html.twig',
+ *        'variables' => array(
+ *             'record_class' => 'User\\Model\\User',
+ *             'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction'
+ *        )
+ *    ));
+ *    $className = 'User\Action\BulkUpdateUser';
+ *
+ *    // generate action from template
+ *    $cacheFile = $generator->generate('FileBasedActionTemplate', 
+ *        $className, 
+ *        $runner->dynamicActions[$className]['actionArgs']);
+ *
+ *    require $cacheFile;
+ *
+ *
  * Depends on Twig template engine
  */
 
@@ -27,6 +58,18 @@ class FileBasedActionTemplate implements IActionTemplate
         }
     }
 
+    /**
+     *  @synopsis
+     *
+     *      $template->register($runner, array(
+     *          'targetClassName' => 'User\\Action\\BulkUpdateUser',
+     *          'templateName' => '@ActionKit/RecordAction.html.twig',
+     *          'variables' => array(
+     *              'record_class' => 'User\\Model\\User',
+     *              'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction'
+     *          )
+     *      ));
+     */
     public function register(ActionRunner $runner, array $options = array())
     {
         // $targetActionClass, $template, $variables
@@ -54,6 +97,18 @@ class FileBasedActionTemplate implements IActionTemplate
         ]);
     }
     
+    /**
+     * @synopsis
+     *     $cacheFile = $generator->generate('FileBasedActionTemplate',
+     *          'User\Action\BulkUpdateUser',
+     *          [
+     *              'template' => '@ActionKit/RecordAction.html.twig',
+     *              'variables' => array(
+     *                  'record_class' => 'User\\Model\\User',
+     *                  'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction'
+     *              )
+     *          ]);
+     */
     public function generate($targetClassName, $cacheFile, array $options = array())
     {
         if ( isset($options['template'])) {

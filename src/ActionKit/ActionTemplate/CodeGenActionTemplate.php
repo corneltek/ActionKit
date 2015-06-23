@@ -5,8 +5,46 @@ use Exception;
 use ActionKit\Exception\UnableToWriteCacheException;
 use ClassTemplate\TemplateClassFile;
 
+/**
+ *  CodeGen-Based Action Template Synopsis
+ *
+ *      $generator = new ActionKit\ActionGenerator();
+ *
+ *      // register template to generator
+ *      $generator->registerTemplate(new ActionKit\ActionTemplate\CodeGenActionTemplate);
+ *
+ *      // load template by name
+ *      $template = $generator->loadTemplate('CodeGenActionTemplate');
+ *
+ *      $runner = new ActionKit\ActionRunner;
+ *      // register action to template
+ *      $template->register($runner, array(
+ *           'namespace' => 'test',
+ *           'model' => 'testModel',
+ *           'types' => array('Create','Update','Delete','BulkDelete')
+ *      ));
+ *
+ *      $className = 'test\Action\UpdatetestModel';
+ *
+ *      // generate action from template
+ *      $cacheFile = $generator->generate('CodeGenActionTemplate',
+ *          $className,
+ *          $runner->dynamicActions[$className]['actionArgs']);
+ *
+ *      require $cacheFile;
+ *
+ */
 class CodeGenActionTemplate implements IActionTemplate
 {
+    /**
+     * @synopsis
+     *
+     *    $template->register($runner, array(
+     *        'namespace' => 'test',
+     *        'model' => 'testModel',   // model's name
+     *        'types' => array('Create','Update','Delete','BulkDelete')
+     *    ));
+     */
     public function register(ActionRunner $runner, array $options = array())
     {
         //$ns , $modelName , $types
@@ -39,6 +77,18 @@ class CodeGenActionTemplate implements IActionTemplate
         }
     }
     
+    /**
+     * @synopsis
+     *
+     *    $cacheFile = $generator->generate('CodeGenActionTemplate',
+     *       'test\Action\UpdatetestModel',
+     *       [
+     *           'extends' => "\\ActionKit\\RecordAction\\CreateRecordAction",  
+     *           'properties' => [
+     *               'recordClass' => "test\\testModel\\$modelName",    // $ns\\Model\\$modelName
+     *       ]
+     *    );
+     */
     public function generate($targetClassName, $cacheFile, array $options = array())
     {
         $templateClassFile = new TemplateClassFile($targetClassName);

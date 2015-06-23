@@ -3,8 +3,6 @@ namespace ActionKit;
 use ActionKit\ActionTemplate\IActionTemplate;
 use Exception;
 use UniversalCache;
-use Twig_Loader_Filesystem;
-use Twig_Environment;
 use ReflectionClass;
 use ClassTemplate\TemplateClassFile;
 
@@ -12,12 +10,8 @@ use ClassTemplate\TemplateClassFile;
  * Action Generator Synopsis
  * 
  *    $generator = new ActionGenerator(array(
- *          'cache' => true,                 // this enables apc cache.
- *
- *
  *          // currently we only use APC
  *          'cache_dir' => 'phifty/cache',
- *          'template_dirs' => array( 'Resource/Templates' )
  *    ));
  *    $generator->registerTemplate(new ActionKit\ActionTemplate\FileBasedActionTemplate);
  *    $className = 'User\Action\BulkDeleteUser';
