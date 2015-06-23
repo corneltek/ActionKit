@@ -37,7 +37,7 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
     {
         $container = new ActionKit\ServiceContainer;
         $generator = $container['generator'];
-        $generator->registerTemplate(new ActionKit\ActionTemplate\RecordActionTemplate);
+        $generator->registerTemplate(new ActionKit\ActionTemplate\CodeGenActionTemplate);
         $runner = new ActionKit\ActionRunner($container);
         ok($runner);
         $runner->registerAutoloader();

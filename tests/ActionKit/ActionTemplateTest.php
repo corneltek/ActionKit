@@ -7,8 +7,8 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
     public function testCodeGenBased()
     {
         $generator = new ActionKit\ActionGenerator(array( 'cache' => true ));
-        $generator->registerTemplate(new ActionKit\ActionTemplate\RecordActionTemplate);
-        $template = $generator->loadTemplate('RecordActionTemplate'); 
+        $generator->registerTemplate(new ActionKit\ActionTemplate\CodeGenActionTemplate);
+        $template = $generator->loadTemplate('CodeGenActionTemplate'); 
         ok($template);
 
         $runner = new ActionKit\ActionRunner;
@@ -23,7 +23,7 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
 
         is(true, isset($runner->dynamicActions[$className]));
 
-        $cacheFile = $generator->generate('RecordActionTemplate', 
+        $cacheFile = $generator->generate('CodeGenActionTemplate', 
             $className, 
             $runner->dynamicActions[$className]['actionArgs']);
 

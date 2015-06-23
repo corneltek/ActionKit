@@ -207,7 +207,7 @@ class ActionRunner
      */
     public function registerRecordAction( $ns , $modelName , $types )
     {
-        $this->registerActionWithTemplate('RecordActionTemplate', array(
+        $this->registerActionWithTemplate('CodeGenActionTemplate', array(
             'namespace' => $ns,
             'model' => $modelName,
             'types' => $types

@@ -5,7 +5,7 @@ use Exception;
 use ActionKit\Exception\UnableToWriteCacheException;
 use ClassTemplate\TemplateClassFile;
 
-class RecordActionTemplate implements IActionTemplate
+class CodeGenActionTemplate implements IActionTemplate
 {
     public function register(ActionRunner $runner, array $options = array())
     {
@@ -68,6 +68,6 @@ class RecordActionTemplate implements IActionTemplate
 
     public function getTemplateName()
     {
-        return 'RecordActionTemplate';
+        return 'CodeGenActionTemplate';
     }
 }
