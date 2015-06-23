@@ -6,8 +6,7 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
 
     public function testCodeGenBased()
     {
-        $container = new ActionKit\ServiceContainer;
-        $generator = $container['generator'];
+        $generator = new ActionKit\ActionGenerator(array( 'cache' => true ));
         $generator->registerTemplate(new ActionKit\ActionTemplate\RecordActionTemplate);
         $template = $generator->loadTemplate('RecordActionTemplate'); 
         ok($template);
@@ -33,8 +32,7 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
 
     public function testTemplateBased()
     {
-        $container = new ActionKit\ServiceContainer;
-        $generator = $container['generator'];
+        $generator = new ActionKit\ActionGenerator(array( 'cache' => true ));
         $generator->registerTemplate(new ActionKit\ActionTemplate\FileActionTemplate);
         $template = $generator->loadTemplate('FileActionTemplate'); 
         ok($template);
@@ -59,7 +57,28 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
 
         require $cacheFile;
         ok( class_exists( $className ) );
+    }
 
+    public function testWithRegister()
+    {
+        $generator = new ActionKit\ActionGenerator(array( 'cache' => true ));
+        $generator->registerTemplate(new ActionKit\ActionTemplate\FileActionTemplate);
+        
+        $className = 'User\Action\BulkDeleteUser';
+
+        $cacheFile = $generator->generate('FileActionTemplate', 
+            $className, 
+            array(
+                'template' => '@ActionKit/RecordAction.html.twig',
+                'variables' => array(
+                    'record_class' => 'User\\Model\\User',
+                    'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction'
+                )
+            )
+        );
+
+        require $cacheFile;
+        ok( class_exists( $className ) );
     }
 
     // for action template register method

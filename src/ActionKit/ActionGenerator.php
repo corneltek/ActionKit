@@ -9,7 +9,7 @@ use ClassTemplate\TemplateClassFile;
 
 /**
  * Action Generator Synopsis
- *
+ * 
  *    $generator = new ActionGenerator(array(
  *          'cache' => true,                 // this enables apc cache.
  *
@@ -18,11 +18,21 @@ use ClassTemplate\TemplateClassFile;
  *          'cache_dir' => 'phifty/cache',
  *          'template_dirs' => array( 'Resource/Templates' )
  *    ));
- *    $classFile = $generator->generate( 'Plugin\Action\TargetClassName', 'CreateRecordAction.template' , array( ));
- *    require $classFile;
+ *    $generator->registerTemplate(new ActionKit\ActionTemplate\FileActionTemplate);
+ *    $className = 'User\Action\BulkDeleteUser';
  *
+ *    $cacheFile = $generator->generate('FileActionTemplate', 
+ *        $className, 
+ *        array(
+ *            'template' => '@ActionKit/RecordAction.html.twig',
+ *            'variables' => array(
+ *                'record_class' => 'User\\Model\\User',
+ *                'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction'
+ *            )
+ *        )
+ *    );
  *
- * Depends on Twig template engine
+ *    require $cacheFile;
  *
  */
 class ActionGenerator
@@ -42,6 +52,16 @@ class ActionGenerator
                 mkdir($this->cacheDir, 0755, true);
             }
         }
+    }
+
+    /**
+     * The new generate method to generate action class with action template
+     */
+    public function generate($templateName, $class, array $actionArgs = array())
+    {
+        $actionTemplate = $this->loadTemplate($templateName);
+        $cacheFile = $this->getClassCacheFile($class, $actionArgs);
+        return $actionTemplate->generate($class, $cacheFile, $actionArgs);
     }
 
     /**
@@ -96,18 +116,6 @@ class ActionGenerator
         }
         return $templateClassFile;
     }
-
-    /**
-     * The new generate method to generate action class with action template
-     */
-    public function generate($templateName, $class, array $actionArgs = array())
-    {
-        $actionTemplate = $this->loadTemplate($templateName);
-        $cacheFile = $this->getClassCacheFile($class, $actionArgs);
-        return $actionTemplate->generate($class, $cacheFile, $actionArgs);
-    }
-
-
 
     /**
      * Given a model class name, split out the namespace and the model name.

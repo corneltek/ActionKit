@@ -5,6 +5,10 @@ use ActionKit\Exception\UnableToWriteCacheException;
 use Twig_Loader_Filesystem;
 use Twig_Environment;
 
+/**
+ * Depends on Twig template engine
+ */
+
 class FileActionTemplate
 {
     private $cacheDir;
