@@ -10,7 +10,7 @@ use Twig_Environment;
  * Depends on Twig template engine
  */
 
-class FileActionTemplate implements IActionTemplate
+class FileBasedActionTemplate implements IActionTemplate
 {
     private $cacheDir;
     private $templateDirs = array();
