@@ -50,7 +50,7 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
         $runner = new ActionKit\ActionRunner;
         $template->register($runner, 'FileBasedActionTemplate', array(
             'targetClassName' => 'User\\Action\\BulkUpdateUser',
-            'templateName' => '@ActionKit/RecordAction.html.twig',
+            'template' => '@ActionKit/RecordAction.html.twig',
             'variables' => array(
                 'record_class' => 'User\\Model\\User',
                 'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction'

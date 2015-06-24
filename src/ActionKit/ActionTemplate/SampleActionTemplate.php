@@ -8,7 +8,7 @@ use ClassTemplate\TemplateClassFile;
  *
  *      $actionTemplate = new SampleActionTemplate('SampleActionTemplate');
  *      $generatedAction = $actionTemplate->generate('', array(
- *          'namespaceName' => 'Core',
+ *          'namespace' => 'Core',
  *          'actionName' => 'GrantAccess'
  *      ));
  *
@@ -18,15 +18,15 @@ class SampleActionTemplate extends CodeGenActionTemplate
 {
     public function generate($targetClassName, array $options = array())
     {
-        if ( isset($options['namespaceName'])) {
-            $namespaceName = $options['namespaceName'];
+        if ( isset($options['namespace'])) {
+            $namespace = $options['namespace'];
         }
 
         if ( isset($options['actionName'])) {
             $actionName = $options['actionName'];
         }
 
-        $targetClassName = "$namespaceName\\Action\\$actionName";
+        $targetClassName = "$namespace\\Action\\$actionName";
         $options = [ 
             'extends' => 'Action',
             'getTemplateClass' => true

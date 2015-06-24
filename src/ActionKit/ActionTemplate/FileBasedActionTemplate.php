@@ -16,7 +16,7 @@ use ReflectionClass;
  *    $runner = new ActionKit\ActionRunner;
  *    $actionTemplate->register($runner, 'FileBasedActionTemplate', array(
  *        'targetClassName' => 'User\\Action\\BulkUpdateUser',
- *        'templateName' => '@ActionKit/RecordAction.html.twig',
+ *        'template' => '@ActionKit/RecordAction.html.twig',
  *        'variables' => array(
  *            'record_class' => 'User\\Model\\User',
  *            'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction'
@@ -68,7 +68,7 @@ class FileBasedActionTemplate implements ActionTemplate
      *          'templateName',
      *          array(
      *              'targetClassName' => 'User\\Action\\BulkUpdateUser',
-     *              'templateName' => '@ActionKit/RecordAction.html.twig',
+     *              'template' => '@ActionKit/RecordAction.html.twig',
      *              'variables' => array(
      *                  'record_class' => 'User\\Model\\User',
      *                  'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction'
@@ -83,10 +83,10 @@ class FileBasedActionTemplate implements ActionTemplate
         }
         $class = $options['targetClassName'];
 
-        if (!isset($options['templateName'])) {
-            throw new RequiredConfigKeyException('templateName');
+        if (!isset($options['template'])) {
+            throw new RequiredConfigKeyException('template');
         }
-        $templateName = $options['templateName'];
+        $template = $options['template'];
 
         if (!isset($options['variables'])) {
             throw new RequiredConfigKeyException('variables');
@@ -94,7 +94,7 @@ class FileBasedActionTemplate implements ActionTemplate
         $variables = $options['variables'];
 
         $runner->register( $class, $asTemplate, [
-            'template' => $templateName,
+            'template' => $template,
             'variables' => $variables
         ]);
     }
