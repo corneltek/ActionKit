@@ -68,7 +68,7 @@ class CodeGenActionTemplate implements IActionTemplate
 
         foreach ( (array) $types as $type ) {
             $class = $ns . '\\Action\\' . $type . $modelName;
-            $runner->registerWithTemplate( $class, $this->getTemplateName(), [
+            $runner->register( $class, $this->getTemplateName(), [
                 'extends' => "\\ActionKit\\RecordAction\\{$type}RecordAction",
                 'properties' => [
                     'recordClass' => "$ns\\Model\\$modelName",

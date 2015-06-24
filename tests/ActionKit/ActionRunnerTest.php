@@ -18,14 +18,14 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
         $generator->registerTemplate(new ActionKit\ActionTemplate\FileBasedActionTemplate);
         $runner = new ActionKit\ActionRunner($container);
         $runner->registerAutoloader();
-        $runner->registerAction(
-            'User\\Action\\BulkCreateUser',
-            '@ActionKit/RecordAction.html.twig',
-            array(
+        $runner->registerAction('FileBasedActionTemplate', array(
+            'targetClassName' => 'User\\Action\\BulkCreateUser',
+            'templateName' => '@ActionKit/RecordAction.html.twig',
+            'variables' => array(
                 'record_class' => 'User\\Model\\User',
                 'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction'
             )
-        );
+        ));
 
         $result = $runner->run('User::Action::BulkCreateUser',array(
             'email' => 'foo@foo'
@@ -41,7 +41,11 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
         $runner = new ActionKit\ActionRunner($container);
         ok($runner);
         $runner->registerAutoloader();
-        $runner->registerRecordAction('User','User',array('Create','Update','Delete'));
+        $runner->registerAction('CodeGenActionTemplate', array(
+            'namespace' => 'User',
+            'model' => 'User',
+            'types' => array('Create','Update','Delete')
+        ));
 
         $result = $runner->run('User::Action::CreateUser',[ 
             'email' => 'foo@foo'

@@ -24,11 +24,14 @@ class ProductBundleTest extends PHPUnit_Framework_TestCase
 
 
         foreach( $sortActionClasses as $actionClass => $recordClass ) {
-            $runner->registerAction($actionClass, 
-                '@ActionKit/RecordAction.html.twig', [
+            $runner->registerAction('FileBasedActionTemplate', array(
+                'targetClassName' => $actionClass, 
+                'templateName' => '@ActionKit/RecordAction.html.twig', 
+                'variables' => [
                     'base_class' => 'ActionKit\\RecordAction\\SortRecordAction',
                     'record_class' => $recordClass,
-                ]);
+                ]
+            ));
         }
         
         foreach( $sortActionClasses as $actionClass => $recordClass ) {

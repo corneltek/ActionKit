@@ -82,19 +82,4 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
         require $cacheFile;
         ok( class_exists( $className ) );
     }
-
-    // for action template register method
-    public function registerWithTemplate($targetActionClass, $templateName, array $actionArgs = array())
-    {
-        $this->dynamicActions[$targetActionClass] = array(
-            'templateName' => $templateName,
-            'actionArgs' => $actionArgs
-        );
-    }
-
-    public function getClassCacheFile($className, $params = null)
-    {
-        $chk = $params ? md5(serialize($params)) : '';
-        return $this->cacheDir . DIRECTORY_SEPARATOR . str_replace('\\','_',$className) . $chk . '.php';
-    }
 }

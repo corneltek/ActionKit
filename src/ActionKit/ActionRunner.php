@@ -157,61 +157,18 @@ class ActionRunner
         spl_autoload_register(array($this,'loadClass'),true, false);
     }
 
-
-    /**
-     * Register dynamic action by template.
-     *
-     * XXX: deprecated
-     *
-     * @param string $targetActionClass target action class name, full-qualified.
-     * @param string $templateName      source template 
-     * @param array $variables          template variables.
-     */
-    public function registerAction($targetActionClass, $templateName, array $variables = array() )
-    {
-        $this->registerActionWithTemplate('FileBasedActionTemplate', array(
-            'targetClassName' => $targetActionClass,
-            'templateName' => $templateName,
-            'variables' => $variables
-        ));
-    }
-
-    public function registerActionWithTemplate($actionTemplateName, array $options)
+    public function registerAction($actionTemplateName, array $options)
     {
         $template = $this->generator->loadTemplate($actionTemplateName);
         $template->register($this, $options);
     }
 
-    public function registerWithTemplate($targetActionClass, $actionTemplateName, array $actionArgs = array())
+    public function register($targetActionClass, $actionTemplateName, array $actionArgs = array())
     {
         $this->dynamicActions[$targetActionClass] = array(
             'actionTemplateName' => $actionTemplateName,
             'actionArgs' => $actionArgs
         );
-    }
-
-    /**
-     * Add CRUD action class to pool, so we can generate these class later
-     * if needed. (lazy)
-     *
-     *   - registerRecordAction( 'News' , 'News' , array('Create','Update') );
-     *
-     * Which generates:
-     *
-     *    News\Action\CreateNews
-     *    News\Action\UpdateNews
-     *
-     * @param string $ns        namespace name
-     * @param string $modelName model name
-     * @param array  $types     action types
-     */
-    public function registerRecordAction( $ns , $modelName , $types )
-    {
-        $this->registerActionWithTemplate('CodeGenActionTemplate', array(
-            'namespace' => $ns,
-            'model' => $modelName,
-            'types' => $types
-        ));
     }
 
     public function registerCRUD( $ns , $modelName , $types )

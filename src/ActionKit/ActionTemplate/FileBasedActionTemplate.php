@@ -91,7 +91,7 @@ class FileBasedActionTemplate implements IActionTemplate
             throw new Exception('variables is not defined.');
         }
 
-        $runner->registerWithTemplate( $class, $this->getTemplateName(), [
+        $runner->register( $class, $this->getTemplateName(), [
             'template' => $templateName,
             'variables' => $variables
         ]);
