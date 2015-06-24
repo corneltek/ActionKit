@@ -1,12 +1,7 @@
 <?php
 namespace ActionKit\Exception;
-use Exception;
+use LogicException;
 
-class InvalidActionNameException extends Exception
+class InvalidActionNameException extends LogicException
 {
-
-    public function __construct( $msg )
-    {
-        parent::__construct($msg);
-    }
 }

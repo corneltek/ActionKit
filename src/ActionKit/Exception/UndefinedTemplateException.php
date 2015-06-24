@@ -1,11 +1,7 @@
 <?php
 namespace ActionKit\Exception;
-use Exception;
+use LogicException;
 
-class UndefinedTemplateException extends Exception
+class UndefinedTemplateException extends LogicException
 {
-    public function __construct( $msg)
-    {
-        parent::__construct($msg);
-    }
 }

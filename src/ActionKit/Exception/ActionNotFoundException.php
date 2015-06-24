@@ -1,12 +1,13 @@
 <?php
 namespace ActionKit\Exception;
-use Exception;
+use LogicException;
 
-class ActionNotFoundException extends Exception
+class ActionNotFoundException extends LogicException
 {
+    public $actionClass;
 
-    public function __construct( $msg )
-    {
-        parent::__construct($msg);
+    public function __construct($actionClass) { 
+        $this->actionClass = $actionClass;
+        parent::__construct("Action class '$actionClass' not found, you might need to setup action autoloader or register the action template");
     }
 }

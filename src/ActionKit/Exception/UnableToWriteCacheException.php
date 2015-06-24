@@ -1,12 +1,7 @@
 <?php
 namespace ActionKit\Exception;
-use Exception;
+use RuntimeException;
 
-class UnableToWriteCacheException extends Exception
+class UnableToWriteCacheException extends RuntimeException
 {
-
-    public function __construct( $msg )
-    {
-        parent::__construct($msg);
-    }
 }

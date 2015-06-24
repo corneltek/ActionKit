@@ -1,12 +1,7 @@
 <?php
 namespace ActionKit\Exception;
-use Exception;
+use RuntimeException;
 
-class UnableToCreateActionException extends Exception
+class UnableToCreateActionException extends RuntimeException
 {
-
-    public function __construct( $msg )
-    {
-        parent::__construct($msg);
-    }
 }
