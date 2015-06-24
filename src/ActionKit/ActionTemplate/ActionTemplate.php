@@ -4,7 +4,6 @@ use ActionKit\ActionRunner;
 
 interface ActionTemplate
 {
-    public function register(ActionRunner $runner, array $options = array());
+    public function register(ActionRunner $runner, $asTemplate, array $options = array());
     public function generate($targetClassName, $cacheFile, array $options = array());
-    public function getTemplateName();
 }

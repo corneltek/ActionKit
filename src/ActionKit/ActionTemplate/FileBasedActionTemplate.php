@@ -13,7 +13,7 @@ use Twig_Environment;
  *    $generator = new ActionGenerator();
  *
  *    // register template to generator
- *    $generator->registerTemplate(new FileBasedActionTemplate('FileBasedActionTemplate', array('cache_dir' => 'cache1')));
+ *    $generator->registerTemplate('FileBasedActionTemplate', new FileBasedActionTemplate(array('cache_dir' => 'cache1')));
  *
  *    // load template by name
  *    $template = $generator->loadTemplate('FileBasedActionTemplate');
@@ -43,13 +43,11 @@ use Twig_Environment;
 
 class FileBasedActionTemplate implements ActionTemplate
 {
-    public $name;
     private $cacheDir;
     private $templateDirs = array();
 
-    public function __construct($templateName, array $options = array() )
+    public function __construct(array $options = array() )
     {
-        $this->name = $templateName;
         if ( isset($options['cache_dir']) ) {
             $this->cacheDir = $options['cache_dir'];
         } else {
@@ -72,7 +70,7 @@ class FileBasedActionTemplate implements ActionTemplate
      *          )
      *      ));
      */
-    public function register(ActionRunner $runner, array $options = array())
+    public function register(ActionRunner $runner, $asTemplate, array $options = array())
     {
         // $targetActionClass, $template, $variables
         if ( isset($options['targetClassName'])) {
@@ -93,7 +91,7 @@ class FileBasedActionTemplate implements ActionTemplate
             throw new Exception('variables is not defined.');
         }
 
-        $runner->register( $class, $this->getTemplateName(), [
+        $runner->register( $class, $asTemplate, [
             'template' => $templateName,
             'variables' => $variables
         ]);
@@ -135,11 +133,6 @@ class FileBasedActionTemplate implements ActionTemplate
             throw new UnableToWriteCacheException("Can not write action class cache file: $cacheFile");
         }
         return $cacheFile;
-    }
-
-    function getTemplateName()
-    {
-        return $this->name;
     }
 
     public function addTemplateDir($path)

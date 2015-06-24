@@ -156,7 +156,7 @@ class ActionRunner
     public function registerAction($actionTemplateName, array $options)
     {
         $template = $this->generator->loadTemplate($actionTemplateName);
-        $template->register($this, $options);
+        $template->register($this, $actionTemplateName, $options);
     }
 
     public function register($targetActionClass, $actionTemplateName, array $actionArgs = array())

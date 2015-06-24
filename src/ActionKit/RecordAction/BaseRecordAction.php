@@ -347,7 +347,7 @@ class BaseRecordAction extends Action
     public static function createCRUDClass( $recordClass , $type )
     {
         $generator = new ActionGenerator(array( 'cache' => true ));
-        $generator->registerTemplate(new CodeGenActionTemplate('CodeGenActionTemplate'));
+        $generator->registerTemplate('CodeGenActionTemplate', new CodeGenActionTemplate());
         list($modelNs, $modelName) = explode('\\Model\\', $recordClass);
         $modelNs = ltrim($modelNs,'\\');
         $actionFullClass = $modelNs . '\\Action\\' . $type . $modelName;

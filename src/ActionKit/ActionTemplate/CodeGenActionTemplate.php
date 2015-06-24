@@ -11,7 +11,7 @@ use ClassTemplate\TemplateClassFile;
  *      $generator = new ActionKit\ActionGenerator();
  *
  *      // register template to generator
- *      $generator->registerTemplate(new ActionKit\ActionTemplate\CodeGenActionTemplate('CodeGenActionTemplate'));
+ *      $generator->registerTemplate('CodeGenActionTemplate', new ActionKit\ActionTemplate\CodeGenActionTemplate());
  *
  *      // load template by name
  *      $template = $generator->loadTemplate('CodeGenActionTemplate');
@@ -36,12 +36,6 @@ use ClassTemplate\TemplateClassFile;
  */
 class CodeGenActionTemplate implements ActionTemplate
 {
-    public $name;
-
-    public function __construct($templateName, array $options = array() )
-    {
-        $this->name = $templateName;
-    }
 
     /**
      * @synopsis
@@ -52,7 +46,7 @@ class CodeGenActionTemplate implements ActionTemplate
      *        'types' => array('Create','Update','Delete','BulkDelete')
      *    ));
      */
-    public function register(ActionRunner $runner, array $options = array())
+    public function register(ActionRunner $runner, $asTemplate, array $options = array())
     {
         //$ns , $modelName , $types
         if ( isset($options['namespace'])) {
@@ -75,7 +69,7 @@ class CodeGenActionTemplate implements ActionTemplate
 
         foreach ( (array) $types as $type ) {
             $class = $ns . '\\Action\\' . $type . $modelName;
-            $runner->register( $class, $this->getTemplateName(), [
+            $runner->register( $class, $asTemplate, [
                 'extends' => "\\ActionKit\\RecordAction\\{$type}RecordAction",
                 'properties' => [
                     'recordClass' => "$ns\\Model\\$modelName",
@@ -128,10 +122,5 @@ class CodeGenActionTemplate implements ActionTemplate
             throw new UnableToWriteCacheException("Can not write action class cache file: $cacheFile");
         }
         return $cacheFile;
-    }
-
-    function getTemplateName()
-    {
-        return $this->name;
     }
 }

@@ -14,7 +14,7 @@ use ClassTemplate\TemplateClassFile;
  *          // currently we only use APC
  *          'cache_dir' => 'phifty/cache',
  *    ));
- *    $generator->registerTemplate(new ActionKit\ActionTemplate\FileBasedActionTemplate('FileBasedActionTemplate'));
+ *    $generator->registerTemplate('FileBasedActionTemplate', new ActionKit\ActionTemplate\FileBasedActionTemplate());
  *    $className = 'User\Action\BulkDeleteUser';
  *
  *    $cacheFile = $generator->generate('FileBasedActionTemplate', 
@@ -90,9 +90,9 @@ class ActionGenerator
      * register action template
      * @param object $template the action template object
      */
-    public function registerTemplate(ActionTemplate\ActionTemplate $template)
+    public function registerTemplate($templateName, ActionTemplate\ActionTemplate $template)
     {
-        $this->templates[$template->getTemplateName()] = $template;
+        $this->templates[$templateName] = $template;
     }
 
     /**
