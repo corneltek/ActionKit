@@ -2,9 +2,10 @@
 namespace ActionKit\ActionTemplate; 
 use ActionKit\ActionRunner;
 use ActionKit\GeneratedAction;
-use Exception;
+use ActionKit\Exception\UndefinedConfigKeyException;
 use Twig_Loader_Filesystem;
 use Twig_Environment;
+use ReflectionClass;
 
 /**
  *  File-Based Action Template Synopsis
@@ -35,19 +36,29 @@ use Twig_Environment;
 
 class FileBasedActionTemplate implements ActionTemplate
 {
-    private $cacheDir;
     private $templateDirs = array();
 
-    public function __construct(array $options = array() )
+    protected $loader;
+
+    protected $env;
+
+    public function __construct(Twig_Loader_Filesystem $loader = null, Twig_Environment $env = null)
     {
-        if ( isset($options['cache_dir']) ) {
-            $this->cacheDir = $options['cache_dir'];
-        } else {
-            $this->cacheDir = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Cache';
-            if (! file_exists($this->cacheDir)) {
-                mkdir($this->cacheDir, 0755, true);
-            }
+        if (!$loader) {
+            $refClass = new ReflectionClass('ActionKit\\ActionGenerator');
+            $templateDirectory = dirname($refClass->getFilename()) . DIRECTORY_SEPARATOR . 'Templates';
+
+            // add ActionKit built-in template path
+            $loader = new Twig_Loader_Filesystem([]);
+            $loader->addPath($templateDirectory, 'ActionKit');
         }
+        $this->loader = $loader;
+        if (!$env) {
+            $env = new Twig_Environment($this->loader, array(
+                'cache' => false,
+            ));
+        }
+        $this->env = $env;
     }
 
     /**
@@ -67,23 +78,20 @@ class FileBasedActionTemplate implements ActionTemplate
     public function register(ActionRunner $runner, $asTemplate, array $options = array())
     {
         // $targetActionClass, $template, $variables
-        if ( isset($options['targetClassName'])) {
-            $class = $options['targetClassName'];
-        } else {
-            throw new Exception('targetClassName is not defined.');
-        } 
-
-        if ( isset($options['templateName'])) {
-            $templateName = $options['templateName'];
-        } else {
-            throw new Exception('templateName is not defined.');
+        if (!isset($options['targetClassName'])) {
+            throw new UndefinedConfigKeyException('targetClassName');
         }
+        $class = $options['targetClassName'];
 
-        if ( isset($options['variables'])) {
-            $variables = $options['variables'];
-        } else {
-            throw new Exception('variables is not defined.');
+        if (!isset($options['templateName'])) {
+            throw new UndefinedConfigKeyException('templateName');
         }
+        $templateName = $options['templateName'];
+
+        if (!isset($options['variables'])) {
+            throw new UndefinedConfigKeyException('variables');
+        }
+        $variables = $options['variables'];
 
         $runner->register( $class, $asTemplate, [
             'template' => $templateName,
@@ -104,54 +112,31 @@ class FileBasedActionTemplate implements ActionTemplate
      */
     public function generate($targetClassName, array $options = array())
     {
-        if ( isset($options['template'])) {
-            $template = $options['template'];
-        } else {
-            throw new Exception('template is not defined.');
+        if (!isset($options['template'])) {
+            throw new UndefinedConfigKeyException('template is not defined.');
         }
-        if ( isset($options['variables'])) {
-            $variables = $options['variables'];
-        } else {
-            throw new Exception('variables is not defined.');
+        $template = $options['template'];
+
+        if (!isset($options['variables'])) {
+            throw new UndefinedConfigKeyException('variables is not defined.');
         }
+        $variables = $options['variables'];
 
         $parts = explode("\\",$targetClassName);
         $variables['target'] = array();
         $variables['target']['classname'] = array_pop($parts);
         $variables['target']['namespace'] = join("\\", $parts);
-        $twig = $this->getTwig();
-        $code = $twig->render($template, $variables);
-
+        $code = $this->env->render($template, $variables);
         return new GeneratedAction($targetClassName, $code);
     }
 
-    public function addTemplateDir($path)
+    public function getTwigEnvironment() 
     {
-        $this->templateDirs[] = $path;
+        return $this->env;
     }
 
-    public function getTwigLoader() {
-
-        static $loader;
-        if ( $loader ) {
-            return $loader;
-        }
-        // add ActionKit built-in template path
-        $loader = new Twig_Loader_Filesystem($this->templateDirs);
-        $loader->addPath( __DIR__ . DIRECTORY_SEPARATOR . '..' .  DIRECTORY_SEPARATOR . 'Templates', "ActionKit" );
-        return $loader;
-    }
-
-    private function getTwig()
+    public function getTwigLoader() 
     {
-        static $twig;
-        if ( $twig ) {
-            return $twig;
-        }
-        $loader = $this->getTwigLoader();
-        $env = new Twig_Environment($loader, array(
-            'cache' => $this->cacheDir ? $this->cacheDir : false,
-        ));
-        return $env;
+        return $this->loader;
     }
 }
