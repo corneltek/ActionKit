@@ -16,7 +16,7 @@ use ClassTemplate\TemplateClassFile;
  */
 class SampleActionTemplate extends CodeGenActionTemplate
 {
-    public function generate($targetClassName, array $options = array())
+    public function generate($actionClass, array $options = array())
     {
         if ( isset($options['namespace'])) {
             $namespace = $options['namespace'];
@@ -26,13 +26,11 @@ class SampleActionTemplate extends CodeGenActionTemplate
             $actionName = $options['actionName'];
         }
 
-        $targetClassName = "$namespace\\Action\\$actionName";
+        $actionClass = "$namespace\\Action\\$actionName";
         $options = [ 
             'extends' => 'Action',
-            'getTemplateClass' => true
         ];
-
-        $templateClassFile = new TemplateClassFile($targetClassName);
+        $templateClassFile = new TemplateClassFile($actionClass);
 
         // General use statement
         $templateClassFile->useClass('\\ActionKit\\Action');
@@ -56,6 +54,6 @@ class SampleActionTemplate extends CodeGenActionTemplate
         $templateClassFile->addMethod('public','run', [] , 'return $this->success("Success!");');
         
         $code = $templateClassFile->render();
-        return new GeneratedAction($targetClassName, $code, $templateClassFile);
+        return new GeneratedAction($actionClass, $code, $templateClassFile);
     }
 }

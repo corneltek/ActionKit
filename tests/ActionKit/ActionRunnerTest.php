@@ -24,7 +24,7 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
         $runner->registerAutoloader();
         $runner->registerAction('FileBasedActionTemplate', array(
             'template' => '@ActionKit/RecordAction.html.twig',
-            'targetClassName' => 'User\\Action\\BulkCreateUser',
+            'action_class' => 'User\\Action\\BulkCreateUser',
             'variables' => array(
                 'record_class' => 'User\\Model\\User',
                 'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction'

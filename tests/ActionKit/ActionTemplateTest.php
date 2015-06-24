@@ -49,7 +49,7 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
 
         $runner = new ActionKit\ActionRunner;
         $actionTemplate->register($runner, 'FileBasedActionTemplate', array(
-            'targetClassName' => 'User\\Action\\BulkUpdateUser',
+            'action_class' => 'User\\Action\\BulkUpdateUser',
             'template' => '@ActionKit/RecordAction.html.twig',
             'variables' => array(
                 'record_class' => 'User\\Model\\User',

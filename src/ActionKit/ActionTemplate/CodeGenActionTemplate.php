@@ -82,9 +82,9 @@ class CodeGenActionTemplate implements ActionTemplate
      *       ]
      *    );
      */
-    public function generate($targetClassName, array $options = array())
+    public function generate($actionClass, array $options = array())
     {
-        $templateClassFile = new TemplateClassFile($targetClassName);
+        $templateClassFile = new TemplateClassFile($actionClass);
 
         // General use statement
         $templateClassFile->useClass('\\ActionKit\\Action');
@@ -105,6 +105,6 @@ class CodeGenActionTemplate implements ActionTemplate
         }
 
         $code = $templateClassFile->render();
-        return new GeneratedAction($targetClassName, $code, $templateClassFile);
+        return new GeneratedAction($actionClass, $code, $templateClassFile);
     }
 }

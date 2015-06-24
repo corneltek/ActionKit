@@ -15,7 +15,7 @@ use ReflectionClass;
  *
  *    $runner = new ActionKit\ActionRunner;
  *    $actionTemplate->register($runner, 'FileBasedActionTemplate', array(
- *        'targetClassName' => 'User\\Action\\BulkUpdateUser',
+ *        'action_class' => 'User\\Action\\BulkUpdateUser',
  *        'template' => '@ActionKit/RecordAction.html.twig',
  *        'variables' => array(
  *            'record_class' => 'User\\Model\\User',
@@ -67,7 +67,7 @@ class FileBasedActionTemplate implements ActionTemplate
      *      $template->register($runner,
      *          'templateName',
      *          array(
-     *              'targetClassName' => 'User\\Action\\BulkUpdateUser',
+     *              'action_class' => 'User\\Action\\BulkUpdateUser',
      *              'template' => '@ActionKit/RecordAction.html.twig',
      *              'variables' => array(
      *                  'record_class' => 'User\\Model\\User',
@@ -78,10 +78,10 @@ class FileBasedActionTemplate implements ActionTemplate
     public function register(ActionRunner $runner, $asTemplate, array $options = array())
     {
         // $targetActionClass, $template, $variables
-        if (!isset($options['targetClassName'])) {
-            throw new RequiredConfigKeyException('targetClassName');
+        if (!isset($options['action_class'])) {
+            throw new RequiredConfigKeyException('action_class');
         }
-        $class = $options['targetClassName'];
+        $class = $options['action_class'];
 
         if (!isset($options['template'])) {
             throw new RequiredConfigKeyException('template');
@@ -110,7 +110,7 @@ class FileBasedActionTemplate implements ActionTemplate
      *              )
      *          ]);
      */
-    public function generate($targetClassName, array $options = array())
+    public function generate($action_class, array $options = array())
     {
         if (!isset($options['template'])) {
             throw new RequiredConfigKeyException('template is not defined.');
@@ -122,12 +122,12 @@ class FileBasedActionTemplate implements ActionTemplate
         }
         $variables = $options['variables'];
 
-        $parts = explode("\\",$targetClassName);
+        $parts = explode("\\",$action_class);
         $variables['target'] = array();
         $variables['target']['classname'] = array_pop($parts);
         $variables['target']['namespace'] = join("\\", $parts);
         $code = $this->env->render($template, $variables);
-        return new GeneratedAction($targetClassName, $code);
+        return new GeneratedAction($action_class, $code);
     }
 
     public function getTwigEnvironment() 
