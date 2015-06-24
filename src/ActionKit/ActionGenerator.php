@@ -1,7 +1,8 @@
 <?php
 namespace ActionKit;
-use ActionKit\ActionTemplate\IActionTemplate;
+use ActionKit\ActionTemplate;
 use Exception;
+use Exception\UndefinedTemplateException;
 use UniversalCache;
 use ReflectionClass;
 use ClassTemplate\TemplateClassFile;
@@ -13,7 +14,7 @@ use ClassTemplate\TemplateClassFile;
  *          // currently we only use APC
  *          'cache_dir' => 'phifty/cache',
  *    ));
- *    $generator->registerTemplate(new ActionKit\ActionTemplate\FileBasedActionTemplate);
+ *    $generator->registerTemplate(new ActionKit\ActionTemplate\FileBasedActionTemplate('FileBasedActionTemplate'));
  *    $className = 'User\Action\BulkDeleteUser';
  *
  *    $cacheFile = $generator->generate('FileBasedActionTemplate', 
@@ -43,9 +44,9 @@ class ActionGenerator
             $this->cacheDir = $options['cache_dir'];
         } else {
             $this->cacheDir = __DIR__ . DIRECTORY_SEPARATOR . 'Cache';
-            if (! file_exists($this->cacheDir)) {
-                mkdir($this->cacheDir, 0755, true);
-            }
+        }
+        if (! file_exists($this->cacheDir)) {
+            mkdir($this->cacheDir, 0755, true);
         }
     }
 
@@ -69,7 +70,7 @@ class ActionGenerator
     public function generateActionClassCode($namespaceName,$actionName)
     {
         if ( !isset($this->templates['CodeGenActionTemplate'])) {
-            $this->registerTemplate(new ActionTemplate\CodeGenActionTemplate);
+            $this->registerTemplate(new ActionTemplate\CodeGenActionTemplate('CodeGenActionTemplate'));
         }
 
         $classTemplate  = $this->generate('CodeGenActionTemplate', "$namespaceName\\Action\\$actionName", [ 
@@ -113,7 +114,7 @@ class ActionGenerator
      * register action template
      * @param object $template the action template object
      */
-    public function registerTemplate(IActionTemplate $template)
+    public function registerTemplate(ActionTemplate\ActionTemplate $template)
     {
         $this->templates[$template->getTemplateName()] = $template;
     }
@@ -128,7 +129,7 @@ class ActionGenerator
         if ( isset($this->templates[$templateName])) {
             return $this->templates[$templateName];
         } else {
-            throw new Exception("load $templateName template failed.");
+            throw new UndefinedTemplateException("load $templateName template failed.");
         }
     }
 }

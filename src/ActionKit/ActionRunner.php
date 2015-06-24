@@ -53,15 +53,11 @@ class ActionRunner
         if ($options instanceof ServiceContainer) {
             $this->generator = $options['generator'];
         } else {
+            $options_generator = array();
             if ( isset($options['cache_dir']) ) {
-                $cacheDir = $options['cache_dir'];
-            } else {
-                $cacheDir = __DIR__ . DIRECTORY_SEPARATOR . 'Cache';
-                if ( ! file_exists($cacheDir) ) {
-                    mkdir($cacheDir, 0755, true);
-                }
-            }
-            $this->generator = new ActionGenerator(array( 'cache' => true , 'cache_dir' => $cacheDir ));
+                $options_generator['cache_dir'] = $options['cache_dir'];
+            } 
+            $this->generator = new ActionGenerator($options_generator);
         }
     }
 
@@ -170,6 +166,7 @@ class ActionRunner
             'actionArgs' => $actionArgs
         );
     }
+
 
     public function registerCRUD( $ns , $modelName , $types )
     {

@@ -8,7 +8,7 @@ class CRUD
     public static function generate($recordClass, $type)
     {
         $generator = new ActionGenerator(array( 'cache' => true ));
-        $generator->registerTemplate(new CodeGenActionTemplate);
+        $generator->registerTemplate(new CodeGenActionTemplate('CodeGenActionTemplate'));
         list($modelNs, $modelName) = explode('\\Model\\', $recordClass);
         $modelNs = ltrim($modelNs,'\\');
         $actionFullClass = $modelNs . '\\Action\\' . $type . $modelName;

@@ -15,7 +15,7 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
     {
         $container = new ActionKit\ServiceContainer;
         $generator = $container['generator'];
-        $generator->registerTemplate(new ActionKit\ActionTemplate\FileBasedActionTemplate);
+        $generator->registerTemplate(new ActionKit\ActionTemplate\FileBasedActionTemplate('FileBasedActionTemplate'));
         $runner = new ActionKit\ActionRunner($container);
         $runner->registerAutoloader();
         $runner->registerAction('FileBasedActionTemplate', array(
@@ -37,7 +37,7 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
     {
         $container = new ActionKit\ServiceContainer;
         $generator = $container['generator'];
-        $generator->registerTemplate(new ActionKit\ActionTemplate\CodeGenActionTemplate);
+        $generator->registerTemplate(new ActionKit\ActionTemplate\CodeGenActionTemplate('CodeGenActionTemplate'));
         $runner = new ActionKit\ActionRunner($container);
         ok($runner);
         $runner->registerAutoloader();

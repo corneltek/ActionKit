@@ -13,7 +13,7 @@ use Twig_Environment;
  *    $generator = new ActionGenerator();
  *
  *    // register template to generator
- *    $generator->registerTemplate(new ActionKit\ActionTemplate\FileBasedActionTemplate(array('cache_dir' => 'cache1')));
+ *    $generator->registerTemplate(new FileBasedActionTemplate('FileBasedActionTemplate', array('cache_dir' => 'cache1')));
  *
  *    // load template by name
  *    $template = $generator->loadTemplate('FileBasedActionTemplate');
@@ -41,13 +41,15 @@ use Twig_Environment;
  * Depends on Twig template engine
  */
 
-class FileBasedActionTemplate implements IActionTemplate
+class FileBasedActionTemplate implements ActionTemplate
 {
+    public $name;
     private $cacheDir;
     private $templateDirs = array();
 
-    public function __construct(array $options = array() )
+    public function __construct($templateName, array $options = array() )
     {
+        $this->name = $templateName;
         if ( isset($options['cache_dir']) ) {
             $this->cacheDir = $options['cache_dir'];
         } else {
@@ -135,9 +137,9 @@ class FileBasedActionTemplate implements IActionTemplate
         return $cacheFile;
     }
 
-    public function getTemplateName()
+    function getTemplateName()
     {
-        return 'FileBasedActionTemplate';
+        return $this->name;
     }
 
     public function addTemplateDir($path)

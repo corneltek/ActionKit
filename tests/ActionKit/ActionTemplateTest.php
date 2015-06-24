@@ -7,7 +7,7 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
     public function testCodeGenBased()
     {
         $generator = new ActionKit\ActionGenerator();
-        $generator->registerTemplate(new ActionKit\ActionTemplate\CodeGenActionTemplate);
+        $generator->registerTemplate(new ActionKit\ActionTemplate\CodeGenActionTemplate('CodeGenActionTemplate'));
         $template = $generator->loadTemplate('CodeGenActionTemplate'); 
         ok($template);
 
@@ -34,7 +34,7 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
     public function testTemplateBased()
     {
         $generator = new ActionKit\ActionGenerator();
-        $generator->registerTemplate(new ActionKit\ActionTemplate\FileBasedActionTemplate);
+        $generator->registerTemplate(new ActionKit\ActionTemplate\FileBasedActionTemplate('FileBasedActionTemplate'));
         $template = $generator->loadTemplate('FileBasedActionTemplate'); 
         ok($template);
 
@@ -64,7 +64,7 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
     public function testWithRegister()
     {
         $generator = new ActionKit\ActionGenerator();
-        $generator->registerTemplate(new ActionKit\ActionTemplate\FileBasedActionTemplate());
+        $generator->registerTemplate(new ActionKit\ActionTemplate\FileBasedActionTemplate('FileBasedActionTemplate'));
         
         $className = 'User\Action\BulkDeleteUser';
 

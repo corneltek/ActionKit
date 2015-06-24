@@ -11,7 +11,7 @@ use ClassTemplate\TemplateClassFile;
  *      $generator = new ActionKit\ActionGenerator();
  *
  *      // register template to generator
- *      $generator->registerTemplate(new ActionKit\ActionTemplate\CodeGenActionTemplate);
+ *      $generator->registerTemplate(new ActionKit\ActionTemplate\CodeGenActionTemplate('CodeGenActionTemplate'));
  *
  *      // load template by name
  *      $template = $generator->loadTemplate('CodeGenActionTemplate');
@@ -34,8 +34,15 @@ use ClassTemplate\TemplateClassFile;
  *      require $cacheFile;
  *
  */
-class CodeGenActionTemplate implements IActionTemplate
+class CodeGenActionTemplate implements ActionTemplate
 {
+    public $name;
+
+    public function __construct($templateName, array $options = array() )
+    {
+        $this->name = $templateName;
+    }
+
     /**
      * @synopsis
      *
@@ -123,8 +130,8 @@ class CodeGenActionTemplate implements IActionTemplate
         return $cacheFile;
     }
 
-    public function getTemplateName()
+    function getTemplateName()
     {
-        return 'CodeGenActionTemplate';
+        return $this->name;
     }
 }
