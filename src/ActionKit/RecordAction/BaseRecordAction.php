@@ -359,12 +359,10 @@ class BaseRecordAction extends Action
             'properties' => [
                 'recordClass' => $recordClass,
             ],
-            'getTemplateClass' => true
         ]);
+        $generatedAction->load();
 
         //$template = new new CodeGenActionTemplate();
-
-
         // if ( class_exists($actionFullClass ,true) ) {
         //     return $actionFullClass;
         // }
@@ -399,7 +397,7 @@ class BaseRecordAction extends Action
             $class = $relation['action'];
 
             // for record-based action, we should pass the record object.
-            if ( is_subclass_of($class,'ActionKit\\RecordAction\\BaseRecordAction',true) ) {
+            if (is_subclass_of($class,'ActionKit\\RecordAction\\BaseRecordAction',true)) {
                 return new $class($args, $record);
             } else {
                 // for simple action class without record.

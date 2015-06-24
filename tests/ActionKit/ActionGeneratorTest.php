@@ -31,11 +31,13 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
 
         is(true, isset($runner->dynamicActions[$className]));
 
-            $generator->generate('CodeGenActionTemplate',
+        $generatedAction = $generator->generate('CodeGenActionTemplate',
             $className,
             $runner->dynamicActions[$className]['actionArgs']);
 
-        ok( class_exists( $className ) );
+        $generatedAction->load();
+
+        ok(class_exists($className));
     }
 
     public function testFildBased()
@@ -60,11 +62,13 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
 
         is(true, isset($runner->dynamicActions[$className]));
 
-        $generator->generate('FileBasedActionTemplate',
+        $generatedAction = $generator->generate('FileBasedActionTemplate',
             $className,
             $runner->dynamicActions[$className]['actionArgs']);
 
-        ok( class_exists( $className ) );
+        $generatedAction->load();
+
+        ok(class_exists($className));
     }
 
     public function testWithoutRegister()
@@ -74,7 +78,7 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
 
         $className = 'User\Action\BulkDeleteUser';
 
-        $generator->generate('FileBasedActionTemplate',
+        $generatedAction = $generator->generate('FileBasedActionTemplate',
             $className,
             array(
                 'template' => '@ActionKit/RecordAction.html.twig',
@@ -84,7 +88,7 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
                 )
             )
         );
-
+        $generatedAction->load();
         ok( class_exists( $className ) );
     }
 

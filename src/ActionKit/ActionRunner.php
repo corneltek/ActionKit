@@ -48,16 +48,24 @@ class ActionRunner
 
     public $generator;
 
+    public $cacheDir;
+
     public function __construct($options = array()) {
 
         if ($options instanceof ServiceContainer) {
+            $this->cacheDir = __DIR__ . DIRECTORY_SEPARATOR . 'Cache';
             $this->generator = $options['generator'];
         } else {
-            $options_generator = array();
-            if ( isset($options['cache_dir']) ) {
-                $options_generator['cache_dir'] = $options['cache_dir'];
-            } 
-            $this->generator = new ActionGenerator($options_generator);
+            if (isset($options['cache_dir'])) {
+                $this->cacheDir = $options['cache_dir'];
+            } else {
+                $this->cacheDir = __DIR__ . DIRECTORY_SEPARATOR . 'Cache';
+            }
+            $this->generator = new ActionGenerator;
+        }
+
+        if (! file_exists($this->cacheDir)) {
+            mkdir($this->cacheDir, 0755, true);
         }
     }
 
@@ -79,7 +87,7 @@ class ActionRunner
         $class = Utils::toActionClass($actionName);
 
         /* register results into hash */
-        if ( $action = $this->createAction($class, $arguments ) ) {
+        if ($action = $this->createAction($class, $arguments )) {
             $action->invoke();
             return $this->results[ $actionName ] = $action->getResult();
         }
@@ -133,17 +141,50 @@ class ActionRunner
 
     public function loadClass($class) 
     {
-        if ( isset($this->dynamicActions[$class]) ) {
-            $templateName = $this->dynamicActions[$class]['actionTemplateName'];
-            $actionArgs = $this->dynamicActions[$class]['actionArgs'];
-            if ( $this->generator->loadClassCache($class, $actionArgs) ) {
-                return true;
-            }
+        if (!isset($this->dynamicActions[$class])) {
+            return false;
+        }
 
-            $this->generator->generate($templateName, $class, $actionArgs);
+        $templateName = $this->dynamicActions[$class]['actionTemplateName'];
+        $actionArgs = $this->dynamicActions[$class]['actionArgs'];
+        if ($this->loadClassCache($class, $actionArgs) ) {
             return true;
         }
+
+        $generatedAction = $this->generator->generate($templateName, $class, $actionArgs);
+
+        $cacheFile = $this->getClassCacheFile($class, $actionArgs);
+        $generatedAction->requireAt($cacheFile);
+        return true;
     }
+
+    /**
+     * Return the cache path of the class name
+     *
+     * @param string $className
+     * @return string path
+     */
+    public function getClassCacheFile($className, array $params = array())
+    {
+        $chk = ! empty($params) ? md5(serialize($params)) : '';
+        return $this->cacheDir . DIRECTORY_SEPARATOR . str_replace('\\','_',$className) . $chk . '.php';
+    }
+
+    /**
+     * Load the class cache file
+     *
+     * @param string $className the action class
+     */
+    public function loadClassCache($className, array $params = array()) {
+        $file = $this->getClassCacheFile($className, $params);
+        if ( file_exists($file) ) {
+            require $file;
+            return true;
+        }
+        return false;
+    }
+
+
 
     public function registerAutoloader()
     {
