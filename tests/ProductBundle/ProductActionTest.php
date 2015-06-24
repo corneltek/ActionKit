@@ -1,7 +1,6 @@
 <?php
 use LazyRecord\Testing\ModelTestCase;
-use ActionKit\CRUD;
-
+use ActionKit\RecordAction\BaseRecordAction;
 /**
  * RecordAction
  */
@@ -27,7 +26,7 @@ class ProductActionTest extends ModelTestCase
      */
     public function testCreateRecordAction($product)
     {
-        $class = CRUD::generate('ProductBundle\\Model\\Product', 'Create');
+        $class = BaseRecordAction::createCRUDClass('ProductBundle\\Model\\Product', 'Create');
         ok($class);
 
         $create = new $class( array( 'name' => 'A' ), $product);
@@ -71,7 +70,7 @@ class ProductActionTest extends ModelTestCase
         ));
         ok($ret->success,'record created.');
 
-        $class = CRUD::generate('ProductBundle\\Model\\Product', 'Update');
+        $class = BaseRecordAction::createCRUDClass('ProductBundle\\Model\\Product', 'Update');
         ok($class);
 
         $update = new $class( array( 'id' => $product->id, 'name' => 'C' ), $product);
@@ -84,7 +83,7 @@ class ProductActionTest extends ModelTestCase
         ok($ret->success);
 
 
-        $class = CRUD::generate('ProductBundle\\Model\\Product', 'Delete');
+        $class = BaseRecordAction::createCRUDClass('ProductBundle\\Model\\Product', 'Delete');
         ok($class);
 
         $delete = new $class(array( 'id' => $product->id ), $product);
@@ -95,7 +94,7 @@ class ProductActionTest extends ModelTestCase
 
     public function testNestedFormRendering()
     {
-        $class = CRUD::generate('ProductBundle\\Model\\Product', 'Create');
+        $class = BaseRecordAction::createCRUDClass('ProductBundle\\Model\\Product', 'Create');
         $create = new $class;
         ok($create);
         $html = $create->asView()->render();

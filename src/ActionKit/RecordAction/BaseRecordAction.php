@@ -4,7 +4,7 @@ use ActionKit\Action;
 use ActionKit\ColumnConvert;
 use ActionKit\ActionGenerator;
 use ActionKit\Exception\ActionException;
-use ActionKit\CRUD;
+use ActionKit\ActionTemplate\CodeGenActionTemplate;
 use LazyRecord\Schema\SchemaDeclare;
 use Exception;
 
@@ -346,7 +346,26 @@ class BaseRecordAction extends Action
      */
     public static function createCRUDClass( $recordClass , $type )
     {
-        return CRUD::generate($recordClass, $type );
+        $generator = new ActionGenerator(array( 'cache' => true ));
+        $generator->registerTemplate(new CodeGenActionTemplate('CodeGenActionTemplate'));
+        list($modelNs, $modelName) = explode('\\Model\\', $recordClass);
+        $modelNs = ltrim($modelNs,'\\');
+        $actionFullClass = $modelNs . '\\Action\\' . $type . $modelName;
+        $recordClass  = $modelNs . '\\Model\\' . $modelName;
+        $baseAction   = $type . 'RecordAction';
+
+        $template = $generator->generate('CodeGenActionTemplate', $actionFullClass, [
+            'extends' => '\\ActionKit\\RecordAction\\' . $baseAction,
+            'properties' => [
+                'recordClass' => $recordClass,
+            ],
+            'getTemplateClass' => true
+        ]);
+       if ( class_exists($actionFullClass ,true) ) {
+            return $actionFullClass;
+        }
+        $template->load();
+        return $actionFullClass;
     }
 
 

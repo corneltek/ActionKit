@@ -5,12 +5,12 @@ $config = new LazyRecord\ConfigLoader;
 $config->load('../.lazy.yml');
 $config->init();
 
-ActionKit\CRUD::generate('Product\\Model\\ProductCategory', 'Create');
-ActionKit\CRUD::generate('Product\\Model\\ProductCategory', 'Update');
-ActionKit\CRUD::generate('Product\\Model\\Category', 'Create');
-ActionKit\CRUD::generate('Product\\Model\\Category', 'Update');
-ActionKit\CRUD::generate('Product\\Model\\ProductType', 'Create');
-ActionKit\CRUD::generate('Product\\Model\\ProductType', 'Update');
+ActionKit\RecordAction\BaseRecordAction::createCRUDClass('Product\\Model\\ProductCategory', 'Create');
+ActionKit\RecordAction\BaseRecordAction::createCRUDClass('Product\\Model\\ProductCategory', 'Update');
+ActionKit\RecordAction\BaseRecordAction::createCRUDClass('Product\\Model\\Category', 'Create');
+ActionKit\RecordAction\BaseRecordAction::createCRUDClass('Product\\Model\\Category', 'Update');
+ActionKit\RecordAction\BaseRecordAction::createCRUDClass('Product\\Model\\ProductType', 'Create');
+ActionKit\RecordAction\BaseRecordAction::createCRUDClass('Product\\Model\\ProductType', 'Update');
 
 // handle actions
 if ( isset($_REQUEST['action']) ) {
@@ -53,6 +53,6 @@ if ( isset($result) ) {
 }
 
 
-$class = ActionKit\CRUD::generate('Product\\Model\\Product', 'Create');
+$class = ActionKit\RecordAction\BaseRecordAction::createCRUDClass('Product\\Model\\Product', 'Create');
 $create = new $class;
 echo $create->asView()->render();
