@@ -1,4 +1,6 @@
 <?php
+use ActionKit\ActionTemplate\SampleActionTemplate;
+
 
 class ActionGeneratorTest extends PHPUnit_Framework_TestCase
 {
@@ -13,8 +15,11 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
 
     public function testActionClassGenerator()
     {
-        $g = new ActionKit\ActionGenerator;
-        $template = $g->generateActionClassCode('Core','GrantAccess');
+        $actionTemplate = new SampleActionTemplate('SampleActionTemplate');
+        $template = $actionTemplate->generate('', '', array(
+            'namespaceName' => 'Core',
+            'actionName' => 'GrantAccess'
+        ));
         ok( $template );
 
         $template->load();

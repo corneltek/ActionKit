@@ -61,30 +61,6 @@ class ActionGenerator
     }
 
     /**
-     * Generate a generic action class code with an empty schema, run methods
-     *
-     * @param string $namespaceName the parent namespace of the 'Action' namespace.
-     * @param string $actionName    the action class name (short class name)
-     * @return ClassTemplate
-     */
-    public function generateActionClassCode($namespaceName,$actionName)
-    {
-        if ( !isset($this->templates['CodeGenActionTemplate'])) {
-            $this->registerTemplate(new ActionTemplate\CodeGenActionTemplate('CodeGenActionTemplate'));
-        }
-
-        $classTemplate  = $this->generate('CodeGenActionTemplate', "$namespaceName\\Action\\$actionName", [ 
-            'extends' => 'Action',
-            'getTemplateClass' => true
-        ]);
-        $classTemplate->addMethod('public','schema', [] , '');
-        $classTemplate->addMethod('public','run', [] , 'return $this->success("Success!");');
-        return $classTemplate;
-    }
-
-
-
-    /**
      * Return the cache path of the class name
      *
      * @param string $className
