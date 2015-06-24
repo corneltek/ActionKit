@@ -57,7 +57,9 @@ class ActionGenerator
     {
         $actionTemplate = $this->loadTemplate($templateName);
         $cacheFile = $this->getClassCacheFile($class, $actionArgs);
-        return $actionTemplate->generate($class, $cacheFile, $actionArgs);
+        $generatedAction = $actionTemplate->generate($class, $actionArgs);
+        $generatedAction->requireAt($cacheFile);
+        return $generatedAction;
     }
 
     /**

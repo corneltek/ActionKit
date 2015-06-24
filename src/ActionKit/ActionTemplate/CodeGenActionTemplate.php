@@ -1,37 +1,30 @@
 <?php
 namespace ActionKit\ActionTemplate;
 use ActionKit\ActionRunner;
+use ActionKit\GeneratedAction;
 use Exception;
-use ActionKit\Exception\UnableToWriteCacheException;
 use ClassTemplate\TemplateClassFile;
 
 /**
  *  CodeGen-Based Action Template Synopsis
  *
- *      $generator = new ActionKit\ActionGenerator();
- *
- *      // register template to generator
- *      $generator->registerTemplate('CodeGenActionTemplate', new ActionKit\ActionTemplate\CodeGenActionTemplate());
- *
- *      // load template by name
- *      $template = $generator->loadTemplate('CodeGenActionTemplate');
- *
+ *      $actionTemplate = new CodeGenActionTemplate();
  *      $runner = new ActionKit\ActionRunner;
- *      // register action to template
- *      $template->register($runner, array(
- *           'namespace' => 'test',
- *           'model' => 'testModel',
- *           'types' => array('Create','Update','Delete','BulkDelete')
+ *      $actionTemplate->register($runner, 'CodeGenActionTemplate', array(
+ *          'namespace' => 'test2',
+ *          'model' => 'test2Model',   // model's name
+ *          'types' => array('Create','Update','Delete','BulkDelete')
  *      ));
  *
- *      $className = 'test\Action\UpdatetestModel';
+ *      $className = 'test2\Action\UpdatetestModel';
+ *      $generatedAction = $actionTemplate->generate($className, [
+ *          'extends' => "\\ActionKit\\RecordAction\\CreateRecordAction",
+ *          'properties' => [
+ *              'recordClass' => "test2\\Model\\testModel",
+ *          ],
+ *      ]);
  *
- *      // generate action from template
- *      $cacheFile = $generator->generate('CodeGenActionTemplate',
- *          $className,
- *          $runner->dynamicActions[$className]['actionArgs']);
- *
- *      require $cacheFile;
+ *      $generatedAction->requireAt($cacheCodePath);
  *
  */
 class CodeGenActionTemplate implements ActionTemplate
@@ -81,8 +74,7 @@ class CodeGenActionTemplate implements ActionTemplate
     /**
      * @synopsis
      *
-     *    $cacheFile = $generator->generate('CodeGenActionTemplate',
-     *       'test\Action\UpdatetestModel',
+     *    $generatedAction = $template->generate('test\Action\UpdatetestModel',
      *       [
      *           'extends' => "\\ActionKit\\RecordAction\\CreateRecordAction",  
      *           'properties' => [
@@ -92,7 +84,7 @@ class CodeGenActionTemplate implements ActionTemplate
      *       ]
      *    );
      */
-    public function generate($targetClassName, $cacheFile, array $options = array())
+    public function generate($targetClassName, array $options = array())
     {
         $templateClassFile = new TemplateClassFile($targetClassName);
 
@@ -114,13 +106,7 @@ class CodeGenActionTemplate implements ActionTemplate
             }
         }
 
-        if (isset($options['getTemplateClass']) && $options['getTemplateClass']) {
-            return $templateClassFile;
-        }
-
-        if ( false === $templateClassFile->writeTo($cacheFile) ) {
-            throw new UnableToWriteCacheException("Can not write action class cache file: $cacheFile");
-        }
-        return $cacheFile;
+        $code = $templateClassFile->render();
+        return new GeneratedAction($targetClassName, $code, $templateClassFile);
     }
 }

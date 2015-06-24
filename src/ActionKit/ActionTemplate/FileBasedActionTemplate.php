@@ -1,8 +1,8 @@
 <?php
 namespace ActionKit\ActionTemplate; 
-use ActionKit\ActionRunner; 
+use ActionKit\ActionRunner;
+use ActionKit\GeneratedAction;
 use Exception;
-use ActionKit\Exception\UnableToWriteCacheException;
 use Twig_Loader_Filesystem;
 use Twig_Environment;
 
@@ -10,32 +10,24 @@ use Twig_Environment;
  *  File-Based Action Template Synopsis
  *    To generate from template file
  *
- *    $generator = new ActionGenerator();
- *
- *    // register template to generator
- *    $generator->registerTemplate('FileBasedActionTemplate', new FileBasedActionTemplate(array('cache_dir' => 'cache1')));
- *
- *    // load template by name
- *    $template = $generator->loadTemplate('FileBasedActionTemplate');
+ *    $actionTemplate = new FileBasedActionTemplate();
  *
  *    $runner = new ActionKit\ActionRunner;
- *    // register action to template
- *    $template->register($runner, array(
+ *    $actionTemplate->register($runner, 'FileBasedActionTemplate', array(
  *        'targetClassName' => 'User\\Action\\BulkUpdateUser',
  *        'templateName' => '@ActionKit/RecordAction.html.twig',
  *        'variables' => array(
- *             'record_class' => 'User\\Model\\User',
- *             'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction'
+ *            'record_class' => 'User\\Model\\User',
+ *            'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction'
  *        )
  *    ));
+ *
  *    $className = 'User\Action\BulkUpdateUser';
  *
- *    // generate action from template
- *    $cacheFile = $generator->generate('FileBasedActionTemplate', 
- *        $className, 
+ *    $generatedAction = $actionTemplate->generate($className,
  *        $runner->dynamicActions[$className]['actionArgs']);
  *
- *    require $cacheFile;
+ *    $generatedAction->requireAt($cacheCodePath);
  *
  *
  * Depends on Twig template engine
@@ -61,13 +53,15 @@ class FileBasedActionTemplate implements ActionTemplate
     /**
      *  @synopsis
      *
-     *      $template->register($runner, array(
-     *          'targetClassName' => 'User\\Action\\BulkUpdateUser',
-     *          'templateName' => '@ActionKit/RecordAction.html.twig',
-     *          'variables' => array(
-     *              'record_class' => 'User\\Model\\User',
-     *              'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction'
-     *          )
+     *      $template->register($runner,
+     *          'templateName',
+     *          array(
+     *              'targetClassName' => 'User\\Action\\BulkUpdateUser',
+     *              'templateName' => '@ActionKit/RecordAction.html.twig',
+     *              'variables' => array(
+     *                  'record_class' => 'User\\Model\\User',
+     *                  'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction'
+     *              )
      *      ));
      */
     public function register(ActionRunner $runner, $asTemplate, array $options = array())
@@ -99,8 +93,7 @@ class FileBasedActionTemplate implements ActionTemplate
     
     /**
      * @synopsis
-     *     $cacheFile = $generator->generate('FileBasedActionTemplate',
-     *          'User\Action\BulkUpdateUser',
+     *     $generatedAction = $template->generate('User\Action\BulkUpdateUser',  // class name
      *          [
      *              'template' => '@ActionKit/RecordAction.html.twig',
      *              'variables' => array(
@@ -109,7 +102,7 @@ class FileBasedActionTemplate implements ActionTemplate
      *              )
      *          ]);
      */
-    public function generate($targetClassName, $cacheFile, array $options = array())
+    public function generate($targetClassName, array $options = array())
     {
         if ( isset($options['template'])) {
             $template = $options['template'];
@@ -129,10 +122,7 @@ class FileBasedActionTemplate implements ActionTemplate
         $twig = $this->getTwig();
         $code = $twig->render($template, $variables);
 
-        if ( false === file_put_contents($cacheFile, $code) ) {
-            throw new UnableToWriteCacheException("Can not write action class cache file: $cacheFile");
-        }
-        return $cacheFile;
+        return new GeneratedAction($targetClassName, $code);
     }
 
     public function addTemplateDir($path)

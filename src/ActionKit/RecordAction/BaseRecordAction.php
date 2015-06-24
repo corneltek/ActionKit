@@ -354,17 +354,23 @@ class BaseRecordAction extends Action
         $recordClass  = $modelNs . '\\Model\\' . $modelName;
         $baseAction   = $type . 'RecordAction';
 
-        $template = $generator->generate('CodeGenActionTemplate', $actionFullClass, [
+        $generatedAction = $generator->generate('CodeGenActionTemplate', $actionFullClass, [
             'extends' => '\\ActionKit\\RecordAction\\' . $baseAction,
             'properties' => [
                 'recordClass' => $recordClass,
             ],
             'getTemplateClass' => true
         ]);
-       if ( class_exists($actionFullClass ,true) ) {
-            return $actionFullClass;
-        }
-        $template->load();
+
+        //$template = new new CodeGenActionTemplate();
+
+
+        // if ( class_exists($actionFullClass ,true) ) {
+        //     return $actionFullClass;
+        // }
+        // //$template->load();
+        // $cacheFile = $generator->getClassCacheFile($generatedAction->className);
+        // $generatedAction->requireAt($cacheFile);
         return $actionFullClass;
     }
 

@@ -1,6 +1,4 @@
 <?php
-use ActionKit\ActionTemplate\SampleActionTemplate;
-
 
 class ActionGeneratorTest extends PHPUnit_Framework_TestCase
 {
@@ -13,19 +11,81 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
         is('App\Action\CreatePost', $class);
     }
 
-    public function testActionClassGenerator()
+    public function testCodeGenBased()
     {
-        $actionTemplate = new SampleActionTemplate('SampleActionTemplate');
-        $template = $actionTemplate->generate('', '', array(
-            'namespaceName' => 'Core',
-            'actionName' => 'GrantAccess'
+        $generator = new ActionKit\ActionGenerator();
+        $generator->registerTemplate('CodeGenActionTemplate', new ActionKit\ActionTemplate\CodeGenActionTemplate());
+        $template = $generator->loadTemplate('CodeGenActionTemplate');
+        ok($template);
+
+        $runner = new ActionKit\ActionRunner;
+        $actionArgs = array(
+            'namespace' => 'test',
+            'model' => 'testModel',
+            'types' => array('Create','Update','Delete','BulkDelete')
+        );
+        $template->register($runner, 'CodeGenActionTemplate', $actionArgs);
+        is(4, count($runner->dynamicActions));
+
+        $className = 'test\Action\UpdatetestModel';
+
+        is(true, isset($runner->dynamicActions[$className]));
+
+            $generator->generate('CodeGenActionTemplate',
+            $className,
+            $runner->dynamicActions[$className]['actionArgs']);
+
+        ok( class_exists( $className ) );
+    }
+
+    public function testFildBased()
+    {
+        $generator = new ActionKit\ActionGenerator();
+        $generator->registerTemplate('FileBasedActionTemplate', new ActionKit\ActionTemplate\FileBasedActionTemplate());
+        $template = $generator->loadTemplate('FileBasedActionTemplate');
+        ok($template);
+
+        $runner = new ActionKit\ActionRunner;
+        $template->register($runner, 'FileBasedActionTemplate', array(
+            'targetClassName' => 'User\\Action\\BulkUpdateUser',
+            'templateName' => '@ActionKit/RecordAction.html.twig',
+            'variables' => array(
+                'record_class' => 'User\\Model\\User',
+                'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction'
+            )
         ));
-        ok( $template );
+        is(1, count($runner->dynamicActions));
 
-        $template->load();
+        $className = 'User\Action\BulkUpdateUser';
 
-        is( 'Core\\Action\\GrantAccess' , $template->class->getFullName() );
-        ok( class_exists( 'Core\\Action\\GrantAccess' ) );
+        is(true, isset($runner->dynamicActions[$className]));
+
+        $generator->generate('FileBasedActionTemplate',
+            $className,
+            $runner->dynamicActions[$className]['actionArgs']);
+
+        ok( class_exists( $className ) );
+    }
+
+    public function testWithoutRegister()
+    {
+        $generator = new ActionKit\ActionGenerator();
+        $generator->registerTemplate('FileBasedActionTemplate', new ActionKit\ActionTemplate\FileBasedActionTemplate());
+
+        $className = 'User\Action\BulkDeleteUser';
+
+        $generator->generate('FileBasedActionTemplate',
+            $className,
+            array(
+                'template' => '@ActionKit/RecordAction.html.twig',
+                'variables' => array(
+                    'record_class' => 'User\\Model\\User',
+                    'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction'
+                )
+            )
+        );
+
+        ok( class_exists( $className ) );
     }
 
 }

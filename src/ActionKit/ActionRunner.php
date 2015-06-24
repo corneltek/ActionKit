@@ -140,9 +140,7 @@ class ActionRunner
                 return true;
             }
 
-            $cacheFile = $this->generator->generate($templateName, $class, $actionArgs);
-            require $cacheFile;
-
+            $this->generator->generate($templateName, $class, $actionArgs);
             return true;
         }
     }

@@ -1,21 +1,22 @@
 <?php
 namespace ActionKit\ActionTemplate;
+use ActionKit\GeneratedAction;
 use ClassTemplate\TemplateClassFile;
 
 /**
  *  Sample Action Template Synopsis
  *
  *      $actionTemplate = new SampleActionTemplate('SampleActionTemplate');
- *      $template = $actionTemplate->generate('', '', array(
+ *      $generatedAction = $actionTemplate->generate('', array(
  *          'namespaceName' => 'Core',
  *          'actionName' => 'GrantAccess'
  *      ));
  *
- *      $template->load();
+ *      $generatedAction->requireAt($cacheFilePath);
  */
 class SampleActionTemplate extends CodeGenActionTemplate
 {
-    public function generate($targetClassName, $cacheFile, array $options = array())
+    public function generate($targetClassName, array $options = array())
     {
         if ( isset($options['namespaceName'])) {
             $namespaceName = $options['namespaceName'];
@@ -54,6 +55,7 @@ class SampleActionTemplate extends CodeGenActionTemplate
         $templateClassFile->addMethod('public','schema', [] , '');
         $templateClassFile->addMethod('public','run', [] , 'return $this->success("Success!");');
         
-        return $templateClassFile;
+        $code = $templateClassFile->render();
+        return new GeneratedAction($targetClassName, $code, $templateClassFile);
     }
 }
