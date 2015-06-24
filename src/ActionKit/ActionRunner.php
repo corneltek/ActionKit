@@ -165,13 +165,6 @@ class ActionRunner
         );
     }
 
-
-    public function registerCRUD( $ns , $modelName , $types )
-    {
-        $this->registerRecordAction( $ns, $modelName, $types );
-    }
-
-
     public function isInvalidActionName( $actionName )
     {
         return preg_match( '/[^A-Za-z0-9:]/i' , $actionName  );
