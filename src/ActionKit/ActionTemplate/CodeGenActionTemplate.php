@@ -2,7 +2,7 @@
 namespace ActionKit\ActionTemplate;
 use ActionKit\ActionRunner;
 use ActionKit\GeneratedAction;
-use ActionKit\Exception\UndefinedConfigKeyException;
+use ActionKit\Exception\RequiredConfigKeyException;
 use Exception;
 use ClassTemplate\TemplateClassFile;
 
@@ -44,17 +44,17 @@ class CodeGenActionTemplate implements ActionTemplate
     {
         //$ns , $modelName , $types
         if (!isset($options['namespace'])) {
-            throw new UndefinedConfigKeyException('namespace is not defined.');
+            throw new RequiredConfigKeyException('namespace is not defined.');
         }
         $ns = $options['namespace'];
 
         if (!isset($options['model'])) {
-            throw new UndefinedConfigKeyException('model name is not defined.');
+            throw new RequiredConfigKeyException('model name is not defined.');
         }
         $modelName = $options['model'];
 
         if (! isset($options['types'])) {
-            throw new UndefinedConfigKeyException('types is not defined.');
+            throw new RequiredConfigKeyException('types is not defined.');
         }
         $types = $options['types'];
 

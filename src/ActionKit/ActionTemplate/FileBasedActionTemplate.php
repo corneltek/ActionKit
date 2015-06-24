@@ -2,7 +2,7 @@
 namespace ActionKit\ActionTemplate; 
 use ActionKit\ActionRunner;
 use ActionKit\GeneratedAction;
-use ActionKit\Exception\UndefinedConfigKeyException;
+use ActionKit\Exception\RequiredConfigKeyException;
 use Twig_Loader_Filesystem;
 use Twig_Environment;
 use ReflectionClass;
@@ -79,17 +79,17 @@ class FileBasedActionTemplate implements ActionTemplate
     {
         // $targetActionClass, $template, $variables
         if (!isset($options['targetClassName'])) {
-            throw new UndefinedConfigKeyException('targetClassName');
+            throw new RequiredConfigKeyException('targetClassName');
         }
         $class = $options['targetClassName'];
 
         if (!isset($options['templateName'])) {
-            throw new UndefinedConfigKeyException('templateName');
+            throw new RequiredConfigKeyException('templateName');
         }
         $templateName = $options['templateName'];
 
         if (!isset($options['variables'])) {
-            throw new UndefinedConfigKeyException('variables');
+            throw new RequiredConfigKeyException('variables');
         }
         $variables = $options['variables'];
 
@@ -113,12 +113,12 @@ class FileBasedActionTemplate implements ActionTemplate
     public function generate($targetClassName, array $options = array())
     {
         if (!isset($options['template'])) {
-            throw new UndefinedConfigKeyException('template is not defined.');
+            throw new RequiredConfigKeyException('template is not defined.');
         }
         $template = $options['template'];
 
         if (!isset($options['variables'])) {
-            throw new UndefinedConfigKeyException('variables is not defined.');
+            throw new RequiredConfigKeyException('variables is not defined.');
         }
         $variables = $options['variables'];
 
