@@ -1,6 +1,6 @@
 <?php
 namespace ActionKit;
-use ActionKit\ActionTemplate;
+use ActionKit\ActionTemplate\ActionTemplate;
 use Exception;
 use Exception\UndefinedTemplateException;
 use UniversalCache;
@@ -30,7 +30,6 @@ use ClassTemplate\TemplateClassFile;
  */
 class ActionGenerator
 {
-
     public $templates = array();
 
     /**
@@ -47,7 +46,7 @@ class ActionGenerator
      * register action template
      * @param object $template the action template object
      */
-    public function registerTemplate($templateName, ActionTemplate\ActionTemplate $template)
+    public function registerTemplate($templateName, ActionTemplate $template)
     {
         $this->templates[$templateName] = $template;
     }
