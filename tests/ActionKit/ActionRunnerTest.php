@@ -1,4 +1,8 @@
 <?php
+use ActionKit\ActionTemplate\CodeGenActionTemplate;
+use ActionKit\ActionTemplate\FileBasedActionTemplate;
+use ActionKit\ServiceContainer;
+use ActionKit\ActionRunner;
 
 class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
 {
@@ -13,10 +17,10 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
 
     public function testRegisterAction()
     {
-        $container = new ActionKit\ServiceContainer;
+        $container = new ServiceContainer;
         $generator = $container['generator'];
-        $generator->registerTemplate('FileBasedActionTemplate', new ActionKit\ActionTemplate\FileBasedActionTemplate);
-        $runner = new ActionKit\ActionRunner($container);
+        $generator->registerTemplate('FileBasedActionTemplate', new FileBasedActionTemplate);
+        $runner = new ActionRunner($container);
         $runner->registerAutoloader();
         $runner->registerAction('FileBasedActionTemplate', array(
             'targetClassName' => 'User\\Action\\BulkCreateUser',
@@ -33,12 +37,12 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
         ok($result);
     }
 
-    public function test()
+    public function testRunAndJsonOutput()
     {
-        $container = new ActionKit\ServiceContainer;
+        $container = new ServiceContainer;
         $generator = $container['generator'];
-        $generator->registerTemplate('CodeGenActionTemplate', new ActionKit\ActionTemplate\CodeGenActionTemplate());
-        $runner = new ActionKit\ActionRunner($container);
+        $generator->registerTemplate('CodeGenActionTemplate', new CodeGenActionTemplate());
+        $runner = new ActionRunner($container);
         ok($runner);
         $runner->registerAutoloader();
         $runner->registerAction('CodeGenActionTemplate', array(
@@ -63,8 +67,8 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
 
     public function testHandleWith()
     {
-        $container = new ActionKit\ServiceContainer;
-        $runner = new ActionKit\ActionRunner($container);
+        $container = new ServiceContainer;
+        $runner = new ActionRunner($container);
 
         $stream = fopen('php://memory', 'rw');
         $result = $runner->handleWith($stream, array(
@@ -85,8 +89,8 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
     */
     public function testHandleWithInvalidActionNameException()
     {
-        $container = new ActionKit\ServiceContainer;
-        $runner = new ActionKit\ActionRunner($container);
+        $container = new ServiceContainer;
+        $runner = new ActionRunner($container);
         $result = $runner->handleWith(STDOUT, array(
             'action' => "_invalid"
         ));
@@ -97,8 +101,8 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
     */
     public function testHandleWithInvalidActionNameExceptionWithEmptyActionName()
     {
-        $container = new ActionKit\ServiceContainer;
-        $runner = new ActionKit\ActionRunner($container);
+        $container = new ServiceContainer;
+        $runner = new ActionRunner($container);
         $result = $runner->handleWith(STDOUT, array());  
         
     }
@@ -108,8 +112,8 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
     */
     public function testHandleWithActionNotFoundException()
     {
-        $container = new ActionKit\ServiceContainer;
-        $runner = new ActionKit\ActionRunner($container);
+        $container = new ServiceContainer;
+        $runner = new ActionRunner($container);
         $result = $runner->handleWith(STDOUT, array(
             'action' => "User::Action::NotFoundAction",
         )); 
