@@ -14,8 +14,8 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
     public function testCodeGenBased()
     {
         $generator = new ActionKit\ActionGenerator();
-        $generator->registerTemplate('CodeGenActionTemplate', new ActionKit\ActionTemplate\CodeGenActionTemplate());
-        $template = $generator->loadTemplate('CodeGenActionTemplate');
+        $generator->registerTemplate('RecordActionTemplate', new ActionKit\ActionTemplate\RecordActionTemplate());
+        $template = $generator->loadTemplate('RecordActionTemplate');
         ok($template);
 
         $runner = new ActionKit\ActionRunner;
@@ -24,14 +24,14 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
             'model' => 'testModel',
             'types' => array('Create','Update','Delete','BulkDelete')
         );
-        $template->register($runner, 'CodeGenActionTemplate', $actionArgs);
+        $template->register($runner, 'RecordActionTemplate', $actionArgs);
         is(4, count($runner->dynamicActions));
 
         $className = 'test\Action\UpdatetestModel';
 
         is(true, isset($runner->dynamicActions[$className]));
 
-        $generatedAction = $generator->generate('CodeGenActionTemplate',
+        $generatedAction = $generator->generate('RecordActionTemplate',
             $className,
             $runner->dynamicActions[$className]['actionArgs']);
 

@@ -34,33 +34,17 @@ class CodeGenActionTemplate implements ActionTemplate
     /**
      * @synopsis
      *
-     *    $template->register($runner, array(
-     *        'namespace' => 'test',
-     *        'model' => 'testModel',   // model's name
-     *        'types' => array('Create','Update','Delete','BulkDelete')
-     *    ));
+     *    $template->register($runner, [
+     *       'action_class' => 'FooAction',
+     *       'extends' => "\\ActionKit\\RecordAction\\{$type}RecordAction",
+     *       'properties' => [
+     *           'recordClass' => $options['namespace'] . "\\Model\\" . $options['model'],
+     *       ],
+     *    ]);
      */
     public function register(ActionRunner $runner, $asTemplate, array $options = array())
     {
-        if (!isset($options['namespace'])) {
-            throw new RequiredConfigKeyException('namespace', 'namespace');
-        }
-        if (!isset($options['model'])) {
-            throw new RequiredConfigKeyException('model', 'required for creating record actions');
-        }
-        if (! isset($options['types'])) {
-            throw new RequiredConfigKeyException('types', 'types is an array of operation names for CRUD');
-        }
-
-        foreach ( (array) $options['types'] as $type ) {
-            $class = $options['namespace'] . '\\Action\\' . $type . $options['model'];
-            $runner->register( $class, $asTemplate, [
-                'extends' => "\\ActionKit\\RecordAction\\{$type}RecordAction",
-                'properties' => [
-                    'recordClass' => $options['namespace'] . "\\Model\\" . $options['model'],
-                ],
-            ]);
-        }
+        $runner->register($options['action_class'], $asTemplate, $options);
     }
 
     public function initGenericClassWithOptions(TemplateClassFile $templateClassFile, array $options = array()) 

@@ -1,6 +1,7 @@
 <?php
 use ActionKit\ActionTemplate\CodeGenActionTemplate;
 use ActionKit\ActionTemplate\FileBasedActionTemplate;
+use ActionKit\ActionTemplate\RecordActionTemplate;
 use ActionKit\ServiceContainer;
 use ActionKit\ActionRunner;
 
@@ -41,11 +42,11 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
     {
         $container = new ServiceContainer;
         $generator = $container['generator'];
-        $generator->registerTemplate('CodeGenActionTemplate', new CodeGenActionTemplate());
+        $generator->registerTemplate('RecordActionTemplate', new RecordActionTemplate);
         $runner = new ActionRunner($container);
         ok($runner);
         $runner->registerAutoloader();
-        $runner->registerAction('CodeGenActionTemplate', array(
+        $runner->registerAction('RecordActionTemplate', array(
             'namespace' => 'User',
             'model' => 'User',
             'types' => array('Create','Update','Delete')

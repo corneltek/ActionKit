@@ -1,6 +1,7 @@
 <?php
 use ActionKit\ActionTemplate\SampleActionTemplate;
 use ActionKit\ActionTemplate\CodeGenActionTemplate;
+use ActionKit\ActionTemplate\RecordActionTemplate;
 use ActionKit\ActionTemplate\FileBasedActionTemplate;
 
 class ActionTemplate extends PHPUnit_Framework_TestCase
@@ -24,9 +25,9 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
 
     public function testCodeGenBased()
     {
-        $actionTemplate = new CodeGenActionTemplate();
+        $actionTemplate = new RecordActionTemplate();
         $runner = new ActionKit\ActionRunner;
-        $actionTemplate->register($runner, 'CodeGenActionTemplate', array(
+        $actionTemplate->register($runner, 'RecordActionTemplate', array(
             'namespace' => 'test2',
             'model' => 'test2Model',   // model's name
             'types' => array('Create','Update','Delete','BulkDelete')
