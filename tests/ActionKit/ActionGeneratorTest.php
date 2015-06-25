@@ -1,4 +1,5 @@
 <?php
+use ActionKit\ActionTemplate\FileBasedActionTemplate;
 
 class ActionGeneratorTest extends PHPUnit_Framework_TestCase
 {
@@ -48,7 +49,7 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
     public function testFildBased()
     {
         $generator = new ActionKit\ActionGenerator();
-        $generator->registerTemplate('FileBasedActionTemplate', new ActionKit\ActionTemplate\FileBasedActionTemplate());
+        $generator->registerTemplate('FileBasedActionTemplate', new FileBasedActionTemplate());
         $template = $generator->loadTemplate('FileBasedActionTemplate');
         ok($template);
 

@@ -28,9 +28,9 @@ class ActionWithUser extends \LazyRecord\Testing\ModelTestCase
     {
         $container = new ServiceContainer;
         $generator = $container['generator'];
-        $generator->registerTemplate('RecordActionTemplate', new RecordActionTemplate());
+        $generator->registerTemplate('RecordActionTemplate', new RecordActionTemplate);
         $runner = new ActionRunner($container);
-        ok($runner);
+
         $runner->registerAutoloader();
         $runner->registerAction('RecordActionTemplate', array(
             'namespace' => 'User',

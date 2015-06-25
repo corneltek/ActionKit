@@ -5,6 +5,7 @@ use ActionKit\ActionTemplate\FileBasedActionTemplate;
 
 class ActionTemplate extends PHPUnit_Framework_TestCase
 {
+
     public function testSampleActionTemplate()
     {
         $actionTemplate = new SampleActionTemplate();
@@ -20,7 +21,7 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
         ok( class_exists( 'Core\\Action\\GrantAccess' ) );
     }
 
-    public function testCodeGenBased()
+    public function testCodeGenBasedTemplate()
     {
         $actionTemplate = new RecordActionTemplate();
         $runner = new ActionKit\ActionRunner;
@@ -44,13 +45,16 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
         ok( class_exists( $className ) );
     }
 
-    public function testFildBased()
+    public function testFildBasedTemplate()
     {
         $actionTemplate = new FileBasedActionTemplate();
 
         $runner = new ActionKit\ActionRunner;
+
+        $className = 'User\\Action\\BulkUpdateUser2';
+
         $actionTemplate->register($runner, 'FileBasedActionTemplate', array(
-            'action_class' => 'User\\Action\\BulkUpdateUser',
+            'action_class' => $className,
             'template' => '@ActionKit/RecordAction.html.twig',
             'variables' => array(
                 'record_class' => 'User\\Model\\User',
@@ -59,7 +63,6 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
         ));
         is(1, count($runner->dynamicActions));
 
-        $className = 'User\Action\BulkUpdateUser';
 
         is(true, isset($runner->dynamicActions[$className]));
 
