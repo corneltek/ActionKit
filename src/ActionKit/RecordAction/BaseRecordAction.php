@@ -360,11 +360,12 @@ class BaseRecordAction extends Action
                 'recordClass' => $recordClass,
             ],
         ]);
-        $generatedAction->load();
+        if (!class_exists($actionFullClass ,true)) {
+            $generatedAction->load();
+        }
 
         return $actionFullClass;
     }
-
 
 
     /**
