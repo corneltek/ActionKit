@@ -78,6 +78,11 @@ class CodeGenActionTemplate implements ActionTemplate
                 $templateClassFile->addConst($name, $value);
             }
         }
+        if (isset($options['traits'])) {
+            foreach( $options['traits'] as $traitClass ) {
+                $templateClassFile->useTrait($traitClass);
+            }
+        }
     }
     
     /**
