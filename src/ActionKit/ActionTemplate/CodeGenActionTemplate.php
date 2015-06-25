@@ -30,7 +30,6 @@ use ClassTemplate\TemplateClassFile;
  */
 class CodeGenActionTemplate implements ActionTemplate
 {
-
     /**
      * @synopsis
      *
@@ -59,13 +58,17 @@ class CodeGenActionTemplate implements ActionTemplate
         $types = $options['types'];
 
         foreach ( (array) $types as $type ) {
-            $class = $ns . '\\Action\\' . $type . $modelName;
-            $runner->register( $class, $asTemplate, [
-                'extends' => "\\ActionKit\\RecordAction\\{$type}RecordAction",
+            $class = $ns . '\\Action\\' . $type['name'] . $modelName;
+            $configs = [
+                'extends' => "\\ActionKit\\RecordAction\\{$type['name']}RecordAction",
                 'properties' => [
                     'recordClass' => "$ns\\Model\\$modelName",
                 ],
-            ]);
+            ];
+            if (isset($type['allowedRoles'])) {
+                $configs['allowedRoles'] = $type['allowedRoles'];
+            }
+            $runner->register( $class, $asTemplate, $configs);
         }
     }
     
@@ -102,6 +105,25 @@ class CodeGenActionTemplate implements ActionTemplate
             foreach( $options['constants'] as $name => $value ) {
                 $templateClassFile->addConst($name, $value);
             }
+        }
+
+        // check current role == expected role
+        // 這個 expecting role 可以是一個 ActionTemplate 的參數
+        // 如果有 "expecting_role" 的參數的時候，才去產生 currentUserCan 這個 method 做 override
+        if ( isset($options['allowedRoles'])) {
+            $templateClassFile->addProperty('allowedRoles', $options['allowedRoles']);
+            $body = <<<EOF
+                if(is_string(\$user)) {
+                    return in_array(\$user, \$this->allowedRoles);
+                } else if(\$user instanceof MultiRoleInterface  || method_exists(\$user,'getRoles')) {
+                    foreach( \$user->getRoles() as \$role ) {
+                        if( in_array(\$role, \$this->allowedRoles) )
+                            return true;
+                    }
+                    return false;
+                }
+EOF;
+            $templateClassFile->addMethod('public','currentUserCan', ['$user'] , $body);
         }
 
         $code = $templateClassFile->render();
