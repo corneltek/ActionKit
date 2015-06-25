@@ -7,6 +7,7 @@ use ActionKit\ActionRunner;
 class TestUser //implements \Kendo\Acl\MultiRoleInterface
 {
     public $roles;
+
     public function getRoles()
     {
         return $this->roles;
@@ -35,9 +36,9 @@ class ActionWithUser extends \LazyRecord\Testing\ModelTestCase
             'namespace' => 'User',
             'model' => 'User',
             'types' => array(
-                ['name'=>'Create', 'allowedRoles'=>['user', 'admin']],
-                ['name'=>'Update'],
-                ['name'=>'Delete']
+                ['name' => 'Create', 'allowedRoles' => ['user', 'admin'] ],
+                ['name' => 'Update'],
+                ['name' => 'Delete']
             )
         ));
 
@@ -70,6 +71,5 @@ class ActionWithUser extends \LazyRecord\Testing\ModelTestCase
         ]);
         ok($result);
         is("User Record is created.", $result->message);
-
     }
 }
