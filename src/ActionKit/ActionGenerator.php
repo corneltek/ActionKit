@@ -30,7 +30,7 @@ use ClassTemplate\TemplateClassFile;
  */
 class ActionGenerator
 {
-    public $templates = array();
+    protected $templates = array();
 
     /**
      * The new generate method to generate action class with action template
