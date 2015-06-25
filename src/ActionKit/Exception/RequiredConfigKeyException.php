@@ -4,9 +4,9 @@ use LogicException;
 
 class RequiredConfigKeyException extends LogicException {
 
-    protected $key;
+    protected $configKey;
 
-    protected $desc;
+    protected $configDesc;
 
     /**
      *
@@ -14,9 +14,17 @@ class RequiredConfigKeyException extends LogicException {
      * @param string $desc key description
      */
     public function __construct($key, $desc = null) {
-        $this->key = $key;
-        $this->desc = $desc;
-        parent::__construct("Config '$key' is required.");
+        $this->configKey = $key;
+        $this->configDesc = $desc;
+        parent::__construct("Config '$key' is required. [$desc]");
+    }
+
+    public function getConfigKey() {
+        return $this->configKey;
+    }
+
+    public function getConfigDesc() {
+        return $this->configDesc;
     }
     
 }

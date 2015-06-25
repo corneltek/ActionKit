@@ -43,13 +43,13 @@ class CodeGenActionTemplate implements ActionTemplate
     public function register(ActionRunner $runner, $asTemplate, array $options = array())
     {
         if (!isset($options['namespace'])) {
-            throw new RequiredConfigKeyException('namespace is not defined.');
+            throw new RequiredConfigKeyException('namespace', 'namespace');
         }
         if (!isset($options['model'])) {
-            throw new RequiredConfigKeyException('model name is not defined.');
+            throw new RequiredConfigKeyException('model', 'required for creating record actions');
         }
         if (! isset($options['types'])) {
-            throw new RequiredConfigKeyException('types is not defined.');
+            throw new RequiredConfigKeyException('types', 'types is an array of operation names for CRUD');
         }
 
         foreach ( (array) $options['types'] as $type ) {
