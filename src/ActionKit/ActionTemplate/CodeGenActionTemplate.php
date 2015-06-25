@@ -62,6 +62,23 @@ class CodeGenActionTemplate implements ActionTemplate
             ]);
         }
     }
+
+    public function initGenericClassWithOptions(TemplateClassFile $templateClassFile, array $options = array()) 
+    {
+        if (isset($options['extends'])) {
+            $templateClassFile->extendClass($options['extends']);
+        }
+        if (isset($options['properties'])) {
+            foreach( $options['properties'] as $name => $value ) {
+                $templateClassFile->addProperty($name, $value);
+            }
+        }
+        if (isset($options['constants'])) {
+            foreach( $options['constants'] as $name => $value ) {
+                $templateClassFile->addConst($name, $value);
+            }
+        }
+    }
     
     /**
      * @synopsis
@@ -84,19 +101,7 @@ class CodeGenActionTemplate implements ActionTemplate
         $templateClassFile->useClass('\\ActionKit\\Action');
         $templateClassFile->useClass('\\ActionKit\\RecordAction\\BaseRecordAction');
 
-        if ( isset($options['extends']) ) {
-            $templateClassFile->extendClass($options['extends']);
-        }
-        if ( isset($options['properties']) ) {
-            foreach( $options['properties'] as $name => $value ) {
-                $templateClassFile->addProperty($name, $value);
-            }
-        }
-        if ( isset($options['constants']) ) {
-            foreach( $options['constants'] as $name => $value ) {
-                $templateClassFile->addConst($name, $value);
-            }
-        }
+        $this->initGenericClassWithOptions($templateClassFile, $options);
 
         $code = $templateClassFile->render();
         return new GeneratedAction($actionClass, $code, $templateClassFile);
