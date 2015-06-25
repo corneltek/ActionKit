@@ -7,7 +7,6 @@ use ActionKit\ActionRunner;
 class TestUser //implements \Kendo\Acl\MultiRoleInterface
 {
     public $roles;
-
     public function getRoles()
     {
         return $this->roles;
@@ -21,6 +20,7 @@ class ActionWithUser extends \LazyRecord\Testing\ModelTestCase
         return array( 
             'User\Model\UserSchema',
             'Product\Model\ProductSchema',
+            'Order\Model\OrderSchema'
         );
     }
     
@@ -30,11 +30,11 @@ class ActionWithUser extends \LazyRecord\Testing\ModelTestCase
         $generator = $container['generator'];
         $generator->registerTemplate('RecordActionTemplate', new RecordActionTemplate);
         $runner = new ActionRunner($container);
-
+        ok($runner);
         $runner->registerAutoloader();
         $runner->registerAction('RecordActionTemplate', array(
-            'namespace' => 'User',
-            'model' => 'User',
+            'namespace' => 'Order',
+            'model' => 'Order',
             'types' => array(
                 ['name' => 'Create', 'allowedRoles' => ['user', 'admin'] ],
                 ['name' => 'Update'],
@@ -43,33 +43,34 @@ class ActionWithUser extends \LazyRecord\Testing\ModelTestCase
         ));
 
         $runner->setCurrentUser('member');
-        $result = $runner->run('User::Action::CreateUser',[
-            'email' => 'foo@foo'
+        $result = $runner->run('Order::Action::CreateOrder',[
+            'qty' => '1'
         ]);
         ok($result);
         is('Permission Denied.', $result->message);
 
         $runner->setCurrentUser('admin');
-        $result = $runner->run('User::Action::CreateUser',[
-            'email' => 'foo@foo'
+        $result = $runner->run('Order::Action::CreateOrder',[
+            'qty' => '1'
         ]);
-        is("User Record is created.", $result->message);
+        is("Order Record is created.", $result->message);
 
         $user = new TestUser;
         $user->roles = ['member', 'manager'];
         $runner->setCurrentUser($user);
-        $result = $runner->run('User::Action::CreateUser',[
-            'email' => 'foo@foo'
+        $result = $runner->run('Order::Action::CreateOrder',[
+            'qty' => '1'
         ]);
         ok($result);
         is('Permission Denied.', $result->message);
 
         $user->roles = ['member', 'user'];
         $runner->setCurrentUser($user);
-        $result = $runner->run('User::Action::CreateUser',[
-            'email' => 'foo@foo'
+        $result = $runner->run('Order::Action::CreateOrder',[
+            'qty' => '1'
         ]);
         ok($result);
-        is("User Record is created.", $result->message);
+        is("Order Record is created.", $result->message);
+
     }
 }

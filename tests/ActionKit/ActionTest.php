@@ -48,11 +48,11 @@ class LoginTestAction extends Action
 
     public function run() {
         // test filterOut
-        if( $this->arg('token') ) {
+        if ( $this->arg('token') ) {
             return $this->error('token should be filter out.');
         }
 
-        if( $this->arg('username') == 'admin' &&
+        if ( $this->arg('username') == 'admin' &&
             $this->arg('password') == 's3cr3t' ) {
                 return $this->success('Login');
         }
