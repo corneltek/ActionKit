@@ -540,9 +540,7 @@ class Action implements IteratorAggregate
      */
     public function getCurrentUser()
     {
-        if ( $this->currentUser )
-
-            return $this->currentUser;
+        return $this->currentUser;
     }
 
 
