@@ -233,14 +233,6 @@ class ActionRunner
     {
         $args = array_merge( $_REQUEST , $args );
 
-        if ( isset($args['__ajax_request']) ) {
-            unset( $args['__ajax_request'] );
-        }
-
-        if ( isset($args['action']) ) {
-            unset( $args['action'] );
-        }
-
         if ( !class_exists($class, true) ) {
             $this->loadClass($class);
 

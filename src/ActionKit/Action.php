@@ -393,7 +393,7 @@ class Action implements IteratorAggregate
     {
         $user = $this->getCurrentUser();
         if ($user) {
-            $result =  $this->currentUserCan($user);
+            $result =  $this->currentUserCan($user, 'run', $this->args);
             if ( !$result['accept']) {
                 $this->result->error( _($result['message']));
                 return false;
@@ -568,9 +568,9 @@ class Action implements IteratorAggregate
      *
      * @return bool
      */
-    public function currentUserCan($user)
+    public function currentUserCan($user, $right, $args = array())
     {
-        return $this->record->currentUserCan( $this->type , $this->args , $user );
+        return $this->record->currentUserCan( $this->type , $args , $user );
     }
 
 

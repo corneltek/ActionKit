@@ -232,7 +232,7 @@ class BaseRecordAction extends Action
      *
      * @see Phifty\Model
      */
-    public function currentUserCan( $user )
+    public function currentUserCan( $user, $right, $args = array() )
     {
         return true;
     }

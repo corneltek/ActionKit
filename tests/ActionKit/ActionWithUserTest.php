@@ -47,13 +47,13 @@ class ActionWithUser extends \LazyRecord\Testing\ModelTestCase
             'qty' => '1'
         ]);
         ok($result);
-        is('Permission Denied.', $result->message);
+        is('error', $result->type);
 
         $runner->setCurrentUser('admin');
         $result = $runner->run('Order::Action::CreateOrder',[
             'qty' => '1'
         ]);
-        is("Order Record is created.", $result->message);
+        is("success", $result->type);
 
         $user = new TestUser;
         $user->roles = ['member', 'manager'];
@@ -62,7 +62,7 @@ class ActionWithUser extends \LazyRecord\Testing\ModelTestCase
             'qty' => '1'
         ]);
         ok($result);
-        is('Permission Denied.', $result->message);
+        is('error', $result->type);
 
         $user->roles = ['member', 'user'];
         $runner->setCurrentUser($user);
@@ -70,7 +70,7 @@ class ActionWithUser extends \LazyRecord\Testing\ModelTestCase
             'qty' => '1'
         ]);
         ok($result);
-        is("Order Record is created.", $result->message);
+        is('success', $result->type);
 
     }
 }
