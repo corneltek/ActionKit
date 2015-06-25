@@ -391,6 +391,11 @@ class Action implements IteratorAggregate
      */
     public function invoke()
     {
+        $user = $this->getCurrentUser();
+        if ($user && !$this->currentUserCan($user)) {
+            $this->result->error( _("Permission Denied.") );
+            return false;
+        }
         /* run column methods */
         // XXX: merge them all...
         $this->beforeRun();

@@ -31,13 +31,14 @@ class RecordActionTemplate extends CodeGenActionTemplate
         }
 
         foreach ( (array) $options['types'] as $type ) {
-            $actionClass = $options['namespace'] . '\\Action\\' . $type . $options['model'];
+            $actionClass = $options['namespace'] . '\\Action\\' . $type['name'] . $options['model'];
             $configs = [
-                'extends' => "\\ActionKit\\RecordAction\\{$type}RecordAction",
+                'extends' => "\\ActionKit\\RecordAction\\{$type['name']}RecordAction",
                 'properties' => [
                     'recordClass' => $options['namespace'] . "\\Model\\" . $options['model'],
                 ],
             ];
+            
             if (isset($type['allowedRoles'])) {
                 $configs['allowedRoles'] = $type['allowedRoles'];
             }
@@ -74,18 +75,7 @@ class RecordActionTemplate extends CodeGenActionTemplate
         // 如果有 "expecting_role" 的參數的時候，才去產生 currentUserCan 這個 method 做 override
         if ( isset($options['allowedRoles'])) {
             $templateClassFile->addProperty('allowedRoles', $options['allowedRoles']);
-            $body = <<<EOF
-                if (is_string(\$user)) {
-                    return in_array(\$user, \$this->allowedRoles);
-                } else if (\$user instanceof Kendo\Acl\MultiRoleInterface  || method_exists(\$user,'getRoles')) {
-                    foreach (\$user->getRoles() as \$role ) {
-                        if (in_array(\$role, \$this->allowedRoles) )
-                            return true;
-                    }
-                    return false;
-                }
-EOF;
-            $templateClassFile->addMethod('public','currentUserCan', ['$user'] , $body);
+            $templateClassFile->useTrait('ActionKit\ActionTrait\RoleChecker');
         }
 
         $code = $templateClassFile->render();

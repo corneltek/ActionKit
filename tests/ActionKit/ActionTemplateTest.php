@@ -1,6 +1,5 @@
 <?php
 use ActionKit\ActionTemplate\SampleActionTemplate;
-use ActionKit\ActionTemplate\CodeGenActionTemplate;
 use ActionKit\ActionTemplate\RecordActionTemplate;
 use ActionKit\ActionTemplate\FileBasedActionTemplate;
 
@@ -15,9 +14,7 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
         ));
         ok( $generatedAction );
 
-        $temp = str_replace('\\', DIRECTORY_SEPARATOR, ltrim($generatedAction->className,'\\'));
-        $tmpname = tempnam('/tmp', $temp);
-        $generatedAction->requireAt($tmpname);
+        $generatedAction->load();
 
         is( 'Core\\Action\\GrantAccess' , $generatedAction->className );
         ok( class_exists( 'Core\\Action\\GrantAccess' ) );
@@ -30,7 +27,12 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
         $actionTemplate->register($runner, 'RecordActionTemplate', array(
             'namespace' => 'test2',
             'model' => 'test2Model',   // model's name
-            'types' => array('Create','Update','Delete','BulkDelete')
+            'types' => array(
+                [ 'name' => 'Create'],
+                [ 'name' => 'Update'],
+                [ 'name' => 'Delete'],
+                [ 'name' => 'BulkDelete']
+            )
         ));
         is(4, count($runner->dynamicActions));
 
@@ -38,9 +40,7 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
         $generatedAction = $actionTemplate->generate($className, $runner->dynamicActions[$className]);
         ok( $generatedAction );
 
-        $temp = str_replace('\\', DIRECTORY_SEPARATOR, ltrim($generatedAction->className,'\\'));
-        $tmpname = tempnam('/tmp', $temp);
-        $generatedAction->requireAt($tmpname);
+        $generatedAction->load();
         ok( class_exists( $className ) );
     }
 
@@ -67,9 +67,7 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
             $runner->dynamicActions[$className]['actionArgs']);
         ok($generatedAction);
 
-        $temp = str_replace('\\', DIRECTORY_SEPARATOR, ltrim($generatedAction->className,'\\'));
-        $tmpname = tempnam('/tmp', $temp);
-        $generatedAction->requireAt($tmpname);
+        $generatedAction->load();
         ok( class_exists( $className ) );
     }
 }

@@ -1,5 +1,4 @@
 <?php
-use ActionKit\ActionTemplate\CodeGenActionTemplate;
 use ActionKit\ActionTemplate\FileBasedActionTemplate;
 use ActionKit\ActionTemplate\RecordActionTemplate;
 use ActionKit\ServiceContainer;
@@ -49,7 +48,11 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
         $runner->registerAction('RecordActionTemplate', array(
             'namespace' => 'User',
             'model' => 'User',
-            'types' => array('Create','Update','Delete')
+            'types' => array(
+                [ 'name' => 'Create'],
+                [ 'name' => 'Update'],
+                [ 'name' => 'Delete'],
+            )
         ));
 
         $result = $runner->run('User::Action::CreateUser',[ 

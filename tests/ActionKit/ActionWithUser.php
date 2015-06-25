@@ -1,8 +1,17 @@
 <?php
 use ActionKit\ServiceContainer;
-use ActionKit\ActionTemplate\CodeGenActionTemplate;
+
 use ActionKit\ActionTemplate\RecordActionTemplate;
 use ActionKit\ActionRunner;
+
+class TestUser //implements \Kendo\Acl\MultiRoleInterface
+{
+    public $roles;
+    public function getRoles()
+    {
+        return $this->roles;
+    }
+}
 
 class ActionWithUser extends \LazyRecord\Testing\ModelTestCase
 {
@@ -14,7 +23,7 @@ class ActionWithUser extends \LazyRecord\Testing\ModelTestCase
         );
     }
     
-    public function testRunAndJsonOutput()
+    public function testRunnerWithUser()
     {
         $container = new ServiceContainer;
         $generator = $container['generator'];
@@ -32,9 +41,35 @@ class ActionWithUser extends \LazyRecord\Testing\ModelTestCase
             )
         ));
 
-        $result = $runner->run('User::Action::CreateUser',[ 
+        $runner->setCurrentUser('member');
+        $result = $runner->run('User::Action::CreateUser',[
             'email' => 'foo@foo'
         ]);
         ok($result);
+        is('Permission Denied.', $result->message);
+
+        $runner->setCurrentUser('admin');
+        $result = $runner->run('User::Action::CreateUser',[
+            'email' => 'foo@foo'
+        ]);
+        is("User Record is created.", $result->message);
+
+        $user = new TestUser;
+        $user->roles = ['member', 'manager'];
+        $runner->setCurrentUser($user);
+        $result = $runner->run('User::Action::CreateUser',[
+            'email' => 'foo@foo'
+        ]);
+        ok($result);
+        is('Permission Denied.', $result->message);
+
+        $user->roles = ['member', 'user'];
+        $runner->setCurrentUser($user);
+        $result = $runner->run('User::Action::CreateUser',[
+            'email' => 'foo@foo'
+        ]);
+        ok($result);
+        is("User Record is created.", $result->message);
+
     }
 }

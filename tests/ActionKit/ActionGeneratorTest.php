@@ -22,7 +22,12 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
         $actionArgs = array(
             'namespace' => 'test',
             'model' => 'testModel',
-            'types' => array('Create','Update','Delete','BulkDelete')
+            'types' => array(
+                [ 'name' => 'Create'],
+                [ 'name' => 'Update'],
+                [ 'name' => 'Delete'],
+                [ 'name' => 'BulkDelete']
+            )
         );
         $template->register($runner, 'RecordActionTemplate', $actionArgs);
         is(4, count($runner->dynamicActions));
