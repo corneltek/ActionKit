@@ -30,7 +30,6 @@ use ClassTemplate\TemplateClassFile;
  */
 class CodeGenActionTemplate implements ActionTemplate
 {
-
     /**
      * @synopsis
      *
@@ -68,31 +67,18 @@ class CodeGenActionTemplate implements ActionTemplate
             }
         }
     }
-    
-    /**
-     * @synopsis
-     *
-     *    $generatedAction = $template->generate('test\Action\UpdatetestModel',
-     *       [
-     *           'extends' => "\\ActionKit\\RecordAction\\CreateRecordAction",  
-     *           'properties' => [
-     *               'recordClass' => "test\\testModel\\$modelName",    // $ns\\Model\\$modelName
-     *           ],
-     *           'getTemplateClass' => true  // return TemplateClassFile directly
-     *       ]
-     *    );
-     */
+
     public function generate($actionClass, array $options = array())
     {
         $templateClassFile = new TemplateClassFile($actionClass);
 
         // General use statement
         $templateClassFile->useClass('\\ActionKit\\Action');
-        $templateClassFile->useClass('\\ActionKit\\RecordAction\\BaseRecordAction');
 
         $this->initGenericClassWithOptions($templateClassFile, $options);
 
         $code = $templateClassFile->render();
         return new GeneratedAction($actionClass, $code, $templateClassFile);
     }
+    
 }
