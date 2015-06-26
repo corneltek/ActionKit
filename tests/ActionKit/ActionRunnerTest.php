@@ -1,5 +1,4 @@
 <?php
-use ActionKit\ActionTemplate\CodeGenActionTemplate;
 use ActionKit\ActionTemplate\FileBasedActionTemplate;
 use ActionKit\ActionTemplate\RecordActionTemplate;
 use ActionKit\ServiceContainer;
@@ -11,8 +10,7 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
     public function getModels()
     {
         return array( 
-            'User\Model\UserSchema',
-            'Product\Model\ProductSchema',
+            'User\Model\UserSchema'
         );
     }
 
@@ -21,6 +19,28 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
         $container = new ServiceContainer;
         $generator = $container['generator'];
         $generator->registerTemplate('FileBasedActionTemplate', new FileBasedActionTemplate);
+        $runner = new ActionRunner($container);
+        $runner->registerAutoloader();
+        $runner->registerAction('FileBasedActionTemplate', array(
+            'template' => '@ActionKit/RecordAction.html.twig',
+            'action_class' => 'User\\Action\\BulkCreateUser',
+            'variables' => array(
+                'record_class' => 'User\\Model\\User',
+                'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction'
+            )
+        ));
+
+        $result = $runner->run('User::Action::BulkCreateUser',array(
+            'email' => 'foo@foo'
+        ));
+        ok($result);
+    }
+
+    public function testRegisterActionWithTwig()
+    {
+        $container = new ServiceContainer;
+        $generator = $container['generator'];
+        $generator->registerTemplate('FileBasedActionTemplate', new FileBasedActionTemplate($container['twig_loader']));
         $runner = new ActionRunner($container);
         $runner->registerAutoloader();
         $runner->registerAction('FileBasedActionTemplate', array(
@@ -49,14 +69,17 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
         $runner->registerAction('RecordActionTemplate', array(
             'namespace' => 'User',
             'model' => 'User',
-            'types' => array('Create','Update','Delete')
+            'types' => array(
+                [ 'name' => 'Create'],
+                [ 'name' => 'Update'],
+                [ 'name' => 'Delete'],
+            )
         ));
 
         $result = $runner->run('User::Action::CreateUser',[ 
             'email' => 'foo@foo'
         ]);
         ok($result);
-
 
         $json = $result->__toString();
         ok($json,'json output');

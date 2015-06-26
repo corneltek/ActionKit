@@ -50,6 +50,8 @@ class ActionRunner
 
     public $cacheDir;
 
+    protected $currentUser;
+
     public function __construct($options = array()) {
 
         if ($options instanceof ServiceContainer) {
@@ -230,26 +232,23 @@ class ActionRunner
     {
         $args = array_merge( $_REQUEST , $args );
 
-        if ( isset($args['__ajax_request']) ) {
-            unset( $args['__ajax_request'] );
+        if ( !class_exists($class, true) ) {
+            $this->loadClass($class);
+
+            // call spl to autoload the class
+            if ( ! class_exists($class,true) ) {
+                throw new ActionNotFoundException( "Action class not found: $class, you might need to setup action autoloader" );
+            }
         }
 
-        if ( isset($args['action']) ) {
-            unset( $args['action'] );
-        }
+        $action = new $class( $args );
+        $action->setCurrentUser($this->currentUser);
+        return $action;
+    }
 
-        if ( class_exists($class, true) ) {
-            return new $class( $args );
-        }
-
-        $this->loadClass($class);
-
-        // call spl to autoload the class
-        if ( ! class_exists($class,true) ) {
-            throw new ActionNotFoundException( "Action class not found: $class, you might need to setup action autoloader" );
-        }
-
-        return new $class( $args );
+    public function setCurrentUser($user)
+    {
+        $this->currentUser = $user;
     }
 
     /**

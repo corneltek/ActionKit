@@ -28,7 +28,7 @@ class ServiceContainer extends Container
         // The default twig loader
         $this['twig_loader'] = function($c) {
             $refClass = new ReflectionClass('ActionKit\\ActionGenerator');
-            $templateDirectory = dirname($ref->getFilename()) . DIRECTORY_SEPARATOR . 'Templates';
+            $templateDirectory = dirname($refClass->getFilename()) . DIRECTORY_SEPARATOR . 'Templates';
 
             // add ActionKit built-in template path
             $loader = new Twig_Loader_Filesystem([]);

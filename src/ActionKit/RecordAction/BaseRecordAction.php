@@ -2,9 +2,8 @@
 namespace ActionKit\RecordAction;
 use ActionKit\Action;
 use ActionKit\ColumnConvert;
-use ActionKit\ActionGenerator;
 use ActionKit\Exception\ActionException;
-use ActionKit\ActionTemplate\CodeGenActionTemplate;
+use ActionKit\ActionTemplate\RecordActionTemplate;
 use LazyRecord\Schema\SchemaDeclare;
 use Exception;
 
@@ -232,7 +231,7 @@ class BaseRecordAction extends Action
      *
      * @see Phifty\Model
      */
-    public function currentUserCan( $user )
+    public function currentUserCan( $user, $right, $args = array() )
     {
         return true;
     }
@@ -346,32 +345,25 @@ class BaseRecordAction extends Action
      */
     public static function createCRUDClass( $recordClass , $type )
     {
-        $generator = new ActionGenerator(array( 'cache' => true ));
-        $generator->registerTemplate('CodeGenActionTemplate', new CodeGenActionTemplate());
+        $template = new RecordActionTemplate;
         list($modelNs, $modelName) = explode('\\Model\\', $recordClass);
         $modelNs = ltrim($modelNs,'\\');
         $actionFullClass = $modelNs . '\\Action\\' . $type . $modelName;
         $recordClass  = $modelNs . '\\Model\\' . $modelName;
         $baseAction   = $type . 'RecordAction';
 
-        $generatedAction = $generator->generate('CodeGenActionTemplate', $actionFullClass, [
+        $generatedAction = $template->generate($actionFullClass, [
             'extends' => '\\ActionKit\\RecordAction\\' . $baseAction,
             'properties' => [
                 'recordClass' => $recordClass,
             ],
         ]);
-        $generatedAction->load();
+        if (!class_exists($actionFullClass ,true)) {
+            $generatedAction->load();
+        }
 
-        //$template = new new CodeGenActionTemplate();
-        // if ( class_exists($actionFullClass ,true) ) {
-        //     return $actionFullClass;
-        // }
-        // //$template->load();
-        // $cacheFile = $generator->getClassCacheFile($generatedAction->className);
-        // $generatedAction->requireAt($cacheFile);
         return $actionFullClass;
     }
-
 
 
     /**

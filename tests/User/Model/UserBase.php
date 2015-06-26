@@ -18,51 +18,51 @@ class UserBase  extends BaseModel {
     const primary_key = 'id';
 
 
-public static $column_names = array (
-  0 => 'name',
-  1 => 'email',
-  2 => 'password',
-  3 => 'id',
-);
-public static $column_hash = array (
-  'name' => 1,
-  'email' => 1,
-  'password' => 1,
-  'id' => 1,
-);
-public static $mixin_classes = array (
-);
+    public static $column_names = array (
+      0 => 'name',
+      1 => 'email',
+      2 => 'password',
+      3 => 'id',
+    );
+    public static $column_hash = array (
+      'name' => 1,
+      'email' => 1,
+      'password' => 1,
+      'id' => 1,
+    );
+    public static $mixin_classes = array (
+    );
 
-    public function getSchema() {
-    if ($this->_schema) {
-       return $this->_schema;
+        public function getSchema() {
+        if ($this->_schema) {
+           return $this->_schema;
+        }
+        return $this->_schema = \LazyRecord\Schema\SchemaLoader::load('User\\Model\\UserSchemaProxy');
     }
-    return $this->_schema = \LazyRecord\Schema\SchemaLoader::load('User\\Model\\UserSchemaProxy');
-}
 
-    public function getName() {
-    if (isset($this->_data['name'])) {
-        return $this->_data['name'];
+        public function getName() {
+        if (isset($this->_data['name'])) {
+            return $this->_data['name'];
+        }
     }
-}
 
-    public function getEmail() {
-    if (isset($this->_data['email'])) {
-        return $this->_data['email'];
+        public function getEmail() {
+        if (isset($this->_data['email'])) {
+            return $this->_data['email'];
+        }
     }
-}
 
-    public function getPassword() {
-    if (isset($this->_data['password'])) {
-        return $this->_data['password'];
+        public function getPassword() {
+        if (isset($this->_data['password'])) {
+            return $this->_data['password'];
+        }
     }
-}
 
-    public function getId() {
-    if (isset($this->_data['id'])) {
-        return $this->_data['id'];
+        public function getId() {
+        if (isset($this->_data['id'])) {
+            return $this->_data['id'];
+        }
     }
-}
 
 }
 

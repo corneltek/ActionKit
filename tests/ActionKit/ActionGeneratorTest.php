@@ -1,4 +1,5 @@
 <?php
+use ActionKit\ActionTemplate\FileBasedActionTemplate;
 
 class ActionGeneratorTest extends PHPUnit_Framework_TestCase
 {
@@ -22,7 +23,12 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
         $actionArgs = array(
             'namespace' => 'test',
             'model' => 'testModel',
-            'types' => array('Create','Update','Delete','BulkDelete')
+            'types' => array(
+                [ 'name' => 'Create'],
+                [ 'name' => 'Update'],
+                [ 'name' => 'Delete'],
+                [ 'name' => 'BulkDelete']
+            )
         );
         $template->register($runner, 'RecordActionTemplate', $actionArgs);
         is(4, count($runner->dynamicActions));
@@ -43,7 +49,7 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
     public function testFildBased()
     {
         $generator = new ActionKit\ActionGenerator();
-        $generator->registerTemplate('FileBasedActionTemplate', new ActionKit\ActionTemplate\FileBasedActionTemplate());
+        $generator->registerTemplate('FileBasedActionTemplate', new FileBasedActionTemplate());
         $template = $generator->loadTemplate('FileBasedActionTemplate');
         ok($template);
 

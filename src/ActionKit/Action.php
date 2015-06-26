@@ -377,8 +377,6 @@ class Action implements IteratorAggregate
         return true;
     }
 
-
-
     public function isAjax()
     {
         return isset( $_REQUEST['__ajax_request'] );
@@ -391,6 +389,17 @@ class Action implements IteratorAggregate
      */
     public function invoke()
     {
+        $user = $this->getCurrentUser();
+        $result =  $this->currentUserCan($user, 'run', $this->args);
+        if ( is_array($result)) {
+            if (!$result[0]) {
+                $this->result->error( $result[1] );
+                return false;
+            }
+        } else if (!$result) {
+            return false;
+        }
+
         /* run column methods */
         // XXX: merge them all...
         $this->beforeRun();
@@ -560,9 +569,9 @@ class Action implements IteratorAggregate
      *
      * @return bool
      */
-    public function currentUserCan($user)
+    public function currentUserCan($user, $right, $args = array())
     {
-        return $this->record->currentUserCan( $this->type , $this->args , $user );
+        return $this->record ? $this->record->currentUserCan( $this->type , $args , $user ) : true;
     }
 
 

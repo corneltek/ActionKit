@@ -2,6 +2,8 @@
 namespace ActionKit\ActionTemplate;
 use ActionKit\ActionRunner;
 use ActionKit\ActionTemplate\CodeGenActionTemplate;
+use ActionKit\GeneratedAction;
+use ClassTemplate\TemplateClassFile;
 
 
 class RecordActionTemplate extends CodeGenActionTemplate
@@ -18,8 +20,14 @@ class RecordActionTemplate extends CodeGenActionTemplate
      */
     public function register(ActionRunner $runner, $asTemplate, array $options = array())
     {
+        if (isset($options['use'])) {
+            array_unshift($options['use'], '\\ActionKit\\Action', '\\ActionKit\\RecordAction\\BaseRecordAction');
+        } else {
+            $options['use'] = ['\\ActionKit\\Action', '\\ActionKit\\RecordAction\\BaseRecordAction'];
+        }
+
         if (!isset($options['namespace'])) {
-            throw new RequiredConfigKeyException('namespace', 'namespace');
+            throw new RequiredConfigKeyException('namespace', 'namespace of the generated action');
         }
         if (!isset($options['model'])) {
             throw new RequiredConfigKeyException('model', 'required for creating record actions');
@@ -29,16 +37,23 @@ class RecordActionTemplate extends CodeGenActionTemplate
         }
 
         foreach ( (array) $options['types'] as $type ) {
-            $actionClass = $options['namespace'] . '\\Action\\' . $type . $options['model'];
-            $runner->register($actionClass, $asTemplate, [
-                'extends' => "\\ActionKit\\RecordAction\\{$type}RecordAction",
-                'properties' => [
-                    'recordClass' => $options['namespace'] . "\\Model\\" . $options['model'],
-                ],
-            ]);
+            $actionClass = $options['namespace'] . '\\Action\\' . $type['name'] . $options['model'];
+            $properties = ['recordClass' => $options['namespace'] . "\\Model\\" . $options['model']];
+            $traits = array();
+            if (isset($type['allowedRoles'])) {
+                $properties['allowedRoles'] = $type['allowedRoles'];
+                $traits = ['ActionKit\ActionTrait\RoleChecker'];
+            }
+            $configs = [
+                'extends' => "\\ActionKit\\RecordAction\\{$type['name']}RecordAction",
+                'properties' => $properties,
+                'traits' => $traits,
+                'use' => $options['use']
+            ];
+            
+            $runner->register($actionClass, $asTemplate, $configs);
         }
     }
-
 }
 
 

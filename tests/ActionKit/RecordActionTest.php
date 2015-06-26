@@ -46,6 +46,9 @@ class RecordActionTest extends ModelTestCase
         ok($record->id);
         is('Foo', $record->name);
 
+        $result = $update->loadRecord(['id' => $product->id]);
+        is(true, $result);
+
         $record->delete();
     }
 
@@ -76,5 +79,4 @@ class RecordActionTest extends ModelTestCase
         $bulkDelete = new $class(array( 'items' => $idList ));
         ok( $bulkDelete->run(), 'items deleted' );
     }
-
 }

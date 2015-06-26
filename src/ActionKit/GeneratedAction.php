@@ -17,10 +17,8 @@ class GeneratedAction
 
     public function requireAt($cacheFile)
     {
-        if (!class_exists($this->className ,true)) {
-            $this->writeTo($cacheFile);
-            require $cacheFile;
-        }
+        $this->writeTo($cacheFile);
+        require $cacheFile;
     }
 
     public function writeTo($cacheFile)

@@ -48,11 +48,11 @@ class LoginTestAction extends Action
 
     public function run() {
         // test filterOut
-        if( $this->arg('token') ) {
+        if ( $this->arg('token') ) {
             return $this->error('token should be filter out.');
         }
 
-        if( $this->arg('username') == 'admin' &&
+        if ( $this->arg('username') == 'admin' &&
             $this->arg('password') == 's3cr3t' ) {
                 return $this->success('Login');
         }
@@ -76,6 +76,29 @@ class ActionTest extends PHPUnit_Framework_TestCase
         ok( ! isset($params['extra1']) );
         ok( ! isset($params['extra2']) );
         ok( ! isset($params['extra3']) );
+    }
+
+    public function testRender()
+    {
+        $login = new LoginTestAction;
+
+        $result = $login->renderField('username');
+        ok($result);
+
+        $result = $login->renderLabel('password');
+        ok($result);
+
+        $result = $login->renderWidgets(['username', 'password']);
+        ok($result);
+
+        $result = $login->renderSubmitWidget();
+        ok($result);
+
+        $result = $login->renderButtonWidget();
+        ok($result);
+
+        $result = $login->renderSignatureWidget();
+        ok($result);
     }
 
     public function testGetParamsWithFilterOut() 

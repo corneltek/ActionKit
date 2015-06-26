@@ -1,11 +1,11 @@
 <?php
 use ActionKit\ActionTemplate\SampleActionTemplate;
-use ActionKit\ActionTemplate\CodeGenActionTemplate;
 use ActionKit\ActionTemplate\RecordActionTemplate;
 use ActionKit\ActionTemplate\FileBasedActionTemplate;
 
 class ActionTemplate extends PHPUnit_Framework_TestCase
 {
+
     public function testSampleActionTemplate()
     {
         $actionTemplate = new SampleActionTemplate();
@@ -15,22 +15,25 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
         ));
         ok( $generatedAction );
 
-        $temp = str_replace('\\', DIRECTORY_SEPARATOR, ltrim($generatedAction->className,'\\'));
-        $tmpname = tempnam('/tmp', $temp);
-        $generatedAction->requireAt($tmpname);
+        $generatedAction->load();
 
         is( 'Core\\Action\\GrantAccess' , $generatedAction->className );
         ok( class_exists( 'Core\\Action\\GrantAccess' ) );
     }
 
-    public function testCodeGenBased()
+    public function testCodeGenBasedTemplate()
     {
         $actionTemplate = new RecordActionTemplate();
         $runner = new ActionKit\ActionRunner;
         $actionTemplate->register($runner, 'RecordActionTemplate', array(
             'namespace' => 'test2',
             'model' => 'test2Model',   // model's name
-            'types' => array('Create','Update','Delete','BulkDelete')
+            'types' => array(
+                [ 'name' => 'Create'],
+                [ 'name' => 'Update'],
+                [ 'name' => 'Delete'],
+                [ 'name' => 'BulkDelete']
+            )
         ));
         is(4, count($runner->dynamicActions));
 
@@ -38,19 +41,20 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
         $generatedAction = $actionTemplate->generate($className, $runner->dynamicActions[$className]);
         ok( $generatedAction );
 
-        $temp = str_replace('\\', DIRECTORY_SEPARATOR, ltrim($generatedAction->className,'\\'));
-        $tmpname = tempnam('/tmp', $temp);
-        $generatedAction->requireAt($tmpname);
+        $generatedAction->load();
         ok( class_exists( $className ) );
     }
 
-    public function testFildBased()
+    public function testFildBasedTemplate()
     {
         $actionTemplate = new FileBasedActionTemplate();
 
         $runner = new ActionKit\ActionRunner;
+
+        $className = 'User\\Action\\BulkUpdateUser2';
+
         $actionTemplate->register($runner, 'FileBasedActionTemplate', array(
-            'action_class' => 'User\\Action\\BulkUpdateUser',
+            'action_class' => $className,
             'template' => '@ActionKit/RecordAction.html.twig',
             'variables' => array(
                 'record_class' => 'User\\Model\\User',
@@ -59,7 +63,6 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
         ));
         is(1, count($runner->dynamicActions));
 
-        $className = 'User\Action\BulkUpdateUser';
 
         is(true, isset($runner->dynamicActions[$className]));
 
@@ -67,9 +70,7 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
             $runner->dynamicActions[$className]['actionArgs']);
         ok($generatedAction);
 
-        $temp = str_replace('\\', DIRECTORY_SEPARATOR, ltrim($generatedAction->className,'\\'));
-        $tmpname = tempnam('/tmp', $temp);
-        $generatedAction->requireAt($tmpname);
+        $generatedAction->load();
         ok( class_exists( $className ) );
     }
 }
