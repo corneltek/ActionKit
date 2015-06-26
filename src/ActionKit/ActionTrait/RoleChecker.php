@@ -6,11 +6,15 @@ trait RoleChecker
 {
     public function currentUserCan($user, $right, $args = array())
     {
+        if (!isset($user)) {
+            return $this->deny();
+        }
+
         if (is_string($user)) {
             if (in_array($user, $this->allowedRoles)) {
                 return $this->allow();
             } else {
-                $this->deny();
+                return $this->deny();
             }
         } else if ($user instanceof MultiRoleInterface  || method_exists($user,'getRoles')) {
             foreach ($user->getRoles() as $role ) {

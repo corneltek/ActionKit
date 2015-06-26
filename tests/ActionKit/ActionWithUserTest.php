@@ -25,15 +25,16 @@ class ActionWithUserTest extends \LazyRecord\Testing\ModelTestCase
     public function userProvider()
     {
         return array(
-          array('memeber', 'error'),
-          array('admin', 'success'),
+            array('memeber', 'error', true),
+            array('admin', 'success', true),
+            array('admin', 'error', false),
         );
     }
     
     /**
      * @dataProvider userProvider
      */
-    public function testRunnerWithSimpleUser($roles, $resultType)
+    public function testRunnerWithSimpleUser($roles, $resultType, $setUser)
     {
         $container = new ServiceContainer;
         $generator = $container['generator'];
@@ -50,7 +51,9 @@ class ActionWithUserTest extends \LazyRecord\Testing\ModelTestCase
             )
         ));
 
-        $runner->setCurrentUser($roles);
+        if($setUser) {
+            $runner->setCurrentUser($roles);
+        }
         $result = $runner->run('Order::Action::CreateOrder',[
             'qty' => '1'
         ]);

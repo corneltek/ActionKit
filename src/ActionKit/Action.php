@@ -390,13 +390,16 @@ class Action implements IteratorAggregate
     public function invoke()
     {
         $user = $this->getCurrentUser();
-        if ($user) {
-            $result =  $this->currentUserCan($user, 'run', $this->args);
-            if ( !$result[0]) {
+        $result =  $this->currentUserCan($user, 'run', $this->args);
+        if ( is_array($result)) {
+            if (!$result[0]) {
                 $this->result->error( $result[1] );
                 return false;
             }
+        } else if (!$result) {
+            return false;
         }
+
         /* run column methods */
         // XXX: merge them all...
         $this->beforeRun();
@@ -568,7 +571,7 @@ class Action implements IteratorAggregate
      */
     public function currentUserCan($user, $right, $args = array())
     {
-        return $this->record->currentUserCan( $this->type , $args , $user );
+        return $this->record ? $this->record->currentUserCan( $this->type , $args , $user ) : true;
     }
 
 

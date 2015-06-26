@@ -59,7 +59,6 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
         ]);
         ok($result);
 
-
         $json = $result->__toString();
         ok($json,'json output');
         $data = json_decode($json);
