@@ -2,7 +2,6 @@
 namespace ActionKit\RecordAction;
 use ActionKit\Action;
 use ActionKit\ColumnConvert;
-use ActionKit\ActionGenerator;
 use ActionKit\Exception\ActionException;
 use ActionKit\ActionTemplate\RecordActionTemplate;
 use LazyRecord\Schema\SchemaDeclare;
@@ -346,15 +345,14 @@ class BaseRecordAction extends Action
      */
     public static function createCRUDClass( $recordClass , $type )
     {
-        $generator = new ActionGenerator(array( 'cache' => true ));
-        $generator->registerTemplate('RecordActionTemplate', new RecordActionTemplate());
+        $template = new RecordActionTemplate;
         list($modelNs, $modelName) = explode('\\Model\\', $recordClass);
         $modelNs = ltrim($modelNs,'\\');
         $actionFullClass = $modelNs . '\\Action\\' . $type . $modelName;
         $recordClass  = $modelNs . '\\Model\\' . $modelName;
         $baseAction   = $type . 'RecordAction';
 
-        $generatedAction = $generator->generate('RecordActionTemplate', $actionFullClass, [
+        $generatedAction = $template->generate($actionFullClass, [
             'extends' => '\\ActionKit\\RecordAction\\' . $baseAction,
             'properties' => [
                 'recordClass' => $recordClass,

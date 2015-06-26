@@ -76,5 +76,4 @@ class RecordActionTest extends ModelTestCase
         $bulkDelete = new $class(array( 'items' => $idList ));
         ok( $bulkDelete->run(), 'items deleted' );
     }
-
 }
