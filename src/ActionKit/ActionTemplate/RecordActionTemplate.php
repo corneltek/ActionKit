@@ -32,16 +32,16 @@ class RecordActionTemplate extends CodeGenActionTemplate
 
         foreach ( (array) $options['types'] as $type ) {
             $actionClass = $options['namespace'] . '\\Action\\' . $type['name'] . $options['model'];
+            $properties = ['recordClass' => $options['namespace'] . "\\Model\\" . $options['model']];
+            if (isset($type['allowedRoles'])) {
+                $properties['allowedRoles'] = $type['allowedRoles'];
+            }
             $configs = [
                 'extends' => "\\ActionKit\\RecordAction\\{$type['name']}RecordAction",
-                'properties' => [
-                    'recordClass' => $options['namespace'] . "\\Model\\" . $options['model'],
-                ],
+                'properties' => $properties,
+                'traits' => ['ActionKit\ActionTrait\RoleChecker']
             ];
             
-            if (isset($type['allowedRoles'])) {
-                $configs['allowedRoles'] = $type['allowedRoles'];
-            }
             $runner->register($actionClass, $asTemplate, $configs);
         }
     }
@@ -69,22 +69,9 @@ class RecordActionTemplate extends CodeGenActionTemplate
         $templateClassFile->useClass('\\ActionKit\\RecordAction\\BaseRecordAction');
 
         $this->initGenericClassWithOptions($templateClassFile, $options);
-
-        // check current role == expected role
-        // 這個 expecting role 可以是一個 ActionTemplate 的參數
-        // 如果有 "expecting_role" 的參數的時候，才去產生 currentUserCan 這個 method 做 override
-        if ( isset($options['allowedRoles'])) {
-            $templateClassFile->addProperty('allowedRoles', $options['allowedRoles']);
-            $templateClassFile->useTrait('ActionKit\ActionTrait\RoleChecker');
-        }
-
         $code = $templateClassFile->render();
         return new GeneratedAction($actionClass, $code, $templateClassFile);
     }
-
-
-
-
 }
 
 
