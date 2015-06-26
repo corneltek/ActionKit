@@ -377,8 +377,6 @@ class Action implements IteratorAggregate
         return true;
     }
 
-
-
     public function isAjax()
     {
         return isset( $_REQUEST['__ajax_request'] );
@@ -394,8 +392,8 @@ class Action implements IteratorAggregate
         $user = $this->getCurrentUser();
         if ($user) {
             $result =  $this->currentUserCan($user, 'run', $this->args);
-            if ( !$result['accept']) {
-                $this->result->error( _($result['message']));
+            if ( !$result[0]) {
+                $this->result->error( $result[1] );
                 return false;
             }
         }
