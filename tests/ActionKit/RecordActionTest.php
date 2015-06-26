@@ -46,6 +46,9 @@ class RecordActionTest extends ModelTestCase
         ok($record->id);
         is('Foo', $record->name);
 
+        $result = $update->loadRecord(['id' => $product->id]);
+        is(true, $result);
+
         $record->delete();
     }
 

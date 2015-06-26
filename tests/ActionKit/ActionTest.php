@@ -78,6 +78,29 @@ class ActionTest extends PHPUnit_Framework_TestCase
         ok( ! isset($params['extra3']) );
     }
 
+    public function testRender()
+    {
+        $login = new LoginTestAction;
+
+        $result = $login->renderField('username');
+        ok($result);
+
+        $result = $login->renderLabel('password');
+        ok($result);
+
+        $result = $login->renderWidgets(['username', 'password']);
+        ok($result);
+
+        $result = $login->renderSubmitWidget();
+        ok($result);
+
+        $result = $login->renderButtonWidget();
+        ok($result);
+
+        $result = $login->renderSignatureWidget();
+        ok($result);
+    }
+
     public function testGetParamsWithFilterOut() 
     {
         $login = new LoginTestAction;

@@ -36,6 +36,28 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
         ok($result);
     }
 
+    public function testRegisterActionWithTwig()
+    {
+        $container = new ServiceContainer;
+        $generator = $container['generator'];
+        $generator->registerTemplate('FileBasedActionTemplate', new FileBasedActionTemplate($container['twig_loader']));
+        $runner = new ActionRunner($container);
+        $runner->registerAutoloader();
+        $runner->registerAction('FileBasedActionTemplate', array(
+            'template' => '@ActionKit/RecordAction.html.twig',
+            'action_class' => 'User\\Action\\BulkCreateUser',
+            'variables' => array(
+                'record_class' => 'User\\Model\\User',
+                'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction'
+            )
+        ));
+
+        $result = $runner->run('User::Action::BulkCreateUser',array(
+            'email' => 'foo@foo'
+        ));
+        ok($result);
+    }
+
     public function testRunAndJsonOutput()
     {
         $container = new ServiceContainer;
