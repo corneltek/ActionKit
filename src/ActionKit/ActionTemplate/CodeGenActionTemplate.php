@@ -43,11 +43,22 @@ class CodeGenActionTemplate implements ActionTemplate
      */
     public function register(ActionRunner $runner, $asTemplate, array $options = array())
     {
+        // General use statement
+        if (isset($options['use'])) {
+            array_unshift($options['use'], '\\ActionKit\\Action');
+        } else {
+            $options['use'] = ['\\ActionKit\\Action'];
+        }
         $runner->register($options['action_class'], $asTemplate, $options);
     }
 
     public function initGenericClassWithOptions(TemplateClassFile $templateClassFile, array $options = array()) 
     {
+        if (isset($options['use'])) {
+            foreach( $options['use'] as $use ) {
+                $templateClassFile->useClass($use);
+            }
+        }
         if (isset($options['extends'])) {
             $templateClassFile->extendClass($options['extends']);
         }
@@ -71,12 +82,7 @@ class CodeGenActionTemplate implements ActionTemplate
     public function generate($actionClass, array $options = array())
     {
         $templateClassFile = new TemplateClassFile($actionClass);
-
-        // General use statement
-        $templateClassFile->useClass('\\ActionKit\\Action');
-
         $this->initGenericClassWithOptions($templateClassFile, $options);
-
         $code = $templateClassFile->render();
         return new GeneratedAction($actionClass, $code, $templateClassFile);
     }
