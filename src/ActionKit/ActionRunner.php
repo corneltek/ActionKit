@@ -149,10 +149,9 @@ class ActionRunner
 
         $templateName = $this->dynamicActions[$class]['actionTemplateName'];
         $actionArgs = $this->dynamicActions[$class]['actionArgs'];
-        // TODO: 為了測試，暫時註解
-        // if ($this->loadClassCache($class, $actionArgs) ) {
-        //     return true;
-        // }
+        if ($this->loadClassCache($class, $actionArgs) ) {
+            return true;
+        }
 
         $generatedAction = $this->generator->generate($templateName, $class, $actionArgs);
 

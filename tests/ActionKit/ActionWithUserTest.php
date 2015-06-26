@@ -50,7 +50,7 @@ class ActionWithUserTest extends \LazyRecord\Testing\ModelTestCase
             )
         ));
 
-        $runner->setCurrentUser($roles); // 
+        $runner->setCurrentUser($roles);
         $result = $runner->run('Order::Action::CreateOrder',[
             'qty' => '1'
         ]);
