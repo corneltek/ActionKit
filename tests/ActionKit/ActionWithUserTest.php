@@ -4,7 +4,7 @@ use ActionKit\ServiceContainer;
 use ActionKit\ActionTemplate\RecordActionTemplate;
 use ActionKit\ActionRunner;
 
-class TestUser //implements \Kendo\Acl\MultiRoleInterface
+class TestUser implements \Kendo\Acl\MultiRoleInterface
 {
     public $roles;
     public function getRoles()
@@ -13,24 +13,32 @@ class TestUser //implements \Kendo\Acl\MultiRoleInterface
     }
 }
 
-class ActionWithUser extends \LazyRecord\Testing\ModelTestCase
+class ActionWithUserTest extends \LazyRecord\Testing\ModelTestCase
 {
     public function getModels()
     {
         return array( 
-            'User\Model\UserSchema',
-            'Product\Model\ProductSchema',
             'Order\Model\OrderSchema'
         );
     }
+
+    public function userProvider()
+    {
+        return array(
+          array('memeber', 'error'),
+          array('admin', 'success'),
+        );
+    }
     
-    public function testRunnerWithUser()
+    /**
+     * @dataProvider userProvider
+     */
+    public function testRunnerWithSimpleUser($roles, $resultType)
     {
         $container = new ServiceContainer;
         $generator = $container['generator'];
         $generator->registerTemplate('RecordActionTemplate', new RecordActionTemplate);
         $runner = new ActionRunner($container);
-        ok($runner);
         $runner->registerAutoloader();
         $runner->registerAction('RecordActionTemplate', array(
             'namespace' => 'Order',
@@ -42,35 +50,49 @@ class ActionWithUser extends \LazyRecord\Testing\ModelTestCase
             )
         ));
 
-        $runner->setCurrentUser('member');
+        $runner->setCurrentUser($roles); // 
         $result = $runner->run('Order::Action::CreateOrder',[
             'qty' => '1'
         ]);
         ok($result);
-        is('error', $result->type);
+        is($resultType, $result->type);
+    }
 
-        $runner->setCurrentUser('admin');
-        $result = $runner->run('Order::Action::CreateOrder',[
-            'qty' => '1'
-        ]);
-        is("success", $result->type);
+
+    public function roleProvider()
+    {
+        return array(
+          array(['member', 'manager'], 'error'),
+          array(['member', 'user'], 'success'),
+        );
+    }
+    /**
+     * @dataProvider roleProvider
+     */
+    public function testRunnerWithMultiRoleInterface($roles, $resultType)
+    {
+        $container = new ServiceContainer;
+        $generator = $container['generator'];
+        $generator->registerTemplate('RecordActionTemplate', new RecordActionTemplate);
+        $runner = new ActionRunner($container);
+        $runner->registerAutoloader();
+        $runner->registerAction('RecordActionTemplate', array(
+            'namespace' => 'Order',
+            'model' => 'Order',
+            'types' => array(
+                ['name' => 'Create', 'allowedRoles' => ['user', 'admin'] ],
+                ['name' => 'Update'],
+                ['name' => 'Delete']
+            )
+        ));
 
         $user = new TestUser;
-        $user->roles = ['member', 'manager'];
+        $user->roles = $roles;
         $runner->setCurrentUser($user);
         $result = $runner->run('Order::Action::CreateOrder',[
             'qty' => '1'
         ]);
         ok($result);
-        is('error', $result->type);
-
-        $user->roles = ['member', 'user'];
-        $runner->setCurrentUser($user);
-        $result = $runner->run('Order::Action::CreateOrder',[
-            'qty' => '1'
-        ]);
-        ok($result);
-        is('success', $result->type);
-
+        is($resultType, $result->type);
     }
 }

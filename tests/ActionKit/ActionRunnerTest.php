@@ -10,8 +10,7 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
     public function getModels()
     {
         return array( 
-            'User\Model\UserSchema',
-            'Product\Model\ProductSchema',
+            'User\Model\UserSchema'
         );
     }
 
