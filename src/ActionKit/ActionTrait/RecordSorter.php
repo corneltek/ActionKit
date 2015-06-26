@@ -20,6 +20,8 @@ trait RecordSorter
                     throw new Exception($ret->message);
                 }
             }
+        } else {
+            throw new Exception("Unsupported sort mode");
         }
     }
 
