@@ -5,7 +5,7 @@ class ColumnConvertTest extends PHPUnit_Framework_TestCase
 {
     public function testColumnConvert()
     {
-        $order = new Order\Model\Order;
+        $order = new OrderBundle\Model\Order;
         $schema = $order->getSchema();
         $this->assertNotNull($schema);
         $action = ColumnConvert::convertSchemaToAction($schema, $order);

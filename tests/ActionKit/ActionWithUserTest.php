@@ -18,7 +18,7 @@ class ActionWithUserTest extends \LazyRecord\Testing\ModelTestCase
     public function getModels()
     {
         return array( 
-            'Order\Model\OrderSchema'
+            'OrderBundle\\Model\OrderSchema'
         );
     }
 
@@ -42,7 +42,7 @@ class ActionWithUserTest extends \LazyRecord\Testing\ModelTestCase
         $runner = new ActionRunner($container);
         $runner->registerAutoloader();
         $runner->registerAction('RecordActionTemplate', array(
-            'namespace' => 'Order',
+            'namespace' => 'OrderBundle',
             'model' => 'Order',
             'types' => array(
                 ['name' => 'Create', 'allowedRoles' => ['user', 'admin'] ],
@@ -54,7 +54,7 @@ class ActionWithUserTest extends \LazyRecord\Testing\ModelTestCase
         if($setUser) {
             $runner->setCurrentUser($roles);
         }
-        $result = $runner->run('Order::Action::CreateOrder',[
+        $result = $runner->run('OrderBundle::Action::CreateOrder',[
             'qty' => '1'
         ]);
         ok($result);
@@ -80,7 +80,7 @@ class ActionWithUserTest extends \LazyRecord\Testing\ModelTestCase
         $runner = new ActionRunner($container);
         $runner->registerAutoloader();
         $runner->registerAction('RecordActionTemplate', array(
-            'namespace' => 'Order',
+            'namespace' => 'OrderBundle',
             'model' => 'Order',
             'types' => array(
                 ['name' => 'Create', 'allowedRoles' => ['user', 'admin'] ],
@@ -92,7 +92,7 @@ class ActionWithUserTest extends \LazyRecord\Testing\ModelTestCase
         $user = new TestUser;
         $user->roles = $roles;
         $runner->setCurrentUser($user);
-        $result = $runner->run('Order::Action::CreateOrder',[
+        $result = $runner->run('OrderBundle::Action::CreateOrder',[
             'qty' => '1'
         ]);
         ok($result);
