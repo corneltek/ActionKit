@@ -1,5 +1,5 @@
 <?php
-namespace Product\Action;
+namespace ProductBundle\Action;
 
 class ProductBaseMixin
 {

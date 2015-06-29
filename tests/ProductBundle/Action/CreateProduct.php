@@ -1,16 +1,15 @@
 <?php
-namespace Product\Action;
+namespace ProductBundle\Action;
 use ActionKit;
-use Phifty\FileUtils;
-use Product\Model\ProductImage;
-use Product\Model\Feature;
-use Product\Model\Resource;
-use Product\Model\FeatureRel;
+use ProductBundle\Model\ProductImage;
+use ProductBundle\Model\Feature;
+use ProductBundle\Model\Resource;
+use ProductBundle\Model\FeatureRel;
 use ActionKit\RecordAction\CreateRecordAction;
 
 class CreateProduct extends CreateRecordAction
 {
-    public $recordClass = 'Product\\Model\\Product';
+    public $recordClass = 'ProductBundle\\Model\\Product';
 
     public $mixin;
 

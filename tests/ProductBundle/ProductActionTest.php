@@ -1,6 +1,13 @@
 <?php
-use LazyRecord\Testing\ModelTestCase;
 use ActionKit\RecordAction\BaseRecordAction;
+use ActionKit\ActionTemplate\UpdateOrderingRecordActionTemplate;
+use ActionKit\ActionRunner;
+use ActionKit\ActionGenerator;
+use LazyRecord\Testing\ModelTestCase;
+use ProductBundle\Model\Product;
+use ProductBundle\Model\ProductCollection;
+use ProductBundle\Model\ProductSchema;
+
 /**
  * RecordAction
  */
@@ -10,7 +17,41 @@ class ProductActionTest extends ModelTestCase
 
     public function getModels()
     {
-        return array( 'ProductBundle\\Model\\ProductSchema' );
+        return array( new ProductSchema );
+    }
+
+    public function setUp()
+    {
+        $products = new ProductCollection;
+        foreach ($products as $product) {
+            $product->delete();
+        }
+        parent::setUp();
+    }
+
+    public function tearDown()
+    {
+        $products = new ProductCollection;
+        foreach ($products as $product) {
+            $product->delete();
+        }
+        parent::tearDown();
+    }
+
+    public function createProductActionClass($type)
+    {
+        return BaseRecordAction::createCRUDClass('ProductBundle\\Model\\Product',$type);
+    }
+
+    public function createProduct( $name )
+    {
+        $p = new Product;
+        $ret = $p->create(array( 
+            'name' => $name
+        ));
+        $this->assertTrue($ret->success);
+        ok($p->id,'got created id');
+        return $p;
     }
 
 
@@ -41,7 +82,7 @@ class ProductActionTest extends ModelTestCase
 
 
     public function testAsCreateAction() {
-        $product = new ProductBundle\Model\Product;
+        $product = new Product;
         ok($product, 'object created');
         $create = $product->asCreateAction([ 'name' => 'TestProduct' ]);
         ok( $create->run() , 'action run' );
@@ -54,16 +95,13 @@ class ProductActionTest extends ModelTestCase
         $delete = $product->asDeleteAction();
         ok($delete->run());
 
-        $product = new ProductBundle\Model\Product( $id );
+        $product = new Product( $id );
         ok( ! $product->id, 'product should be deleted.');
     }
 
-
-
-
     public function testUpdateRecordAction()
     {
-        $product = new ProductBundle\Model\Product;
+        $product = new Product;
         ok($product);
         $ret = $product->create(array( 
             'name' => 'B',
@@ -105,6 +143,97 @@ class ProductActionTest extends ModelTestCase
         ok($dom);
     }
 
+
+    public function testUpdateOrdering()
+    {
+        $idList = array();
+        foreach (range(1,20) as $num) {
+            $product = $this->createProduct("Book $num");
+            ok($product);
+            $idList[] = ['record' => $product->id, 'ordering' => 21 - $num];
+        }
+        $products = new ProductCollection;
+        $this->assertEquals(20, $products->count());
+
+
+        $actionTemplate = new UpdateOrderingRecordActionTemplate;
+        $runner = new ActionKit\ActionRunner;
+        $actionTemplate->register($runner, 'UpdateOrderingRecordActionTemplate', array(
+            'namespace' => 'ProductBundle',
+            'model'     => 'Product'   // model's name
+        ));
+
+        $className = 'ProductBundle\Action\UpdateProductOrdering';
+        $actionArgs = $runner->dynamicActions[$className]['actionArgs'];
+        $generatedAction = $actionTemplate->generate($className, $actionArgs);
+        $generatedAction->load();
+
+        $updateOrdering = new $className(array( 'list' => json_encode($idList) ));
+        is($updateOrdering->getName(), 'UpdateProductOrdering');
+        ok($updateOrdering->run());
+
+        $result = $updateOrdering->loadRecord(9);
+        is($result->ordering, 21-9);
+
+        $updateOrdering->mode = 99;
+        is(false, $updateOrdering->run());
+    }
+
+    public function testRecordUpdateWithExistingRecordObject()
+    {
+        $product = $this->createProduct('Book A');
+        ok($product);
+
+        $class = $this->createProductActionClass('Update');
+        $update = new $class(array('name' => 'Bar'), $product);
+        ok( $update->run() );
+        $record = $update->getRecord();
+        ok($record->id);
+        is('Bar', $record->name);
+    }
+
+    public function testBulkRecordDelete()
+    {
+        $idList = array();
+        foreach( range(1,20) as $num ) {
+            $product = $this->createProduct("Book $num");
+            ok($product);
+            $idList[] = $product->id;
+        }
+
+        $class = $this->createProductActionClass('BulkDelete');
+
+        $bulkDelete = new $class(array( 'items' => $idList ));
+        ok( $bulkDelete->run(), 'items deleted' );
+    }
+
+    public function testRecordUpdate()
+    {
+        $product = $this->createProduct('Book A');
+        $class = $this->createProductActionClass('Update');
+        $update = new $class(array('id' => $product->id , 'name' => 'Foo'));
+        ok( $update->run() );
+        $record = $update->getRecord();
+        ok($record->id);
+        is('Foo', $record->name);
+
+        $result = $update->loadRecord(['id' => $product->id]);
+        is(true, $result);
+
+        $update->args = array('id' => $product->id , 'name' => 'Bar');
+        $result = $update->invoke();
+        is(true, $result);
+        $record->delete();
+    }
+
+
+    public function testRecordCreate()
+    {
+        $class = $this->createProductActionClass('Create');
+        $create = new $class(array('name' => 'Foo'));
+        ok( $create->run(), 'create action returns success.' );
+        ok( $create->getRecord()->delete()->success );
+    }
 }
 
 

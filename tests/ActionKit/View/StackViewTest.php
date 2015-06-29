@@ -29,9 +29,11 @@ class StackViewTest extends PHPUnit_Framework_TestCase
 
     public function testNestedView()
     {
-        $c = new \Product\Model\Category;
+        $c = new \ProductBundle\Model\Category;
         $c->create(array( 'name' => 'Foo' ));
-        $action = new \Product\Action\CreateProduct;
+
+
+        $action = new \ProductBundle\Action\CreateProduct;
         $view = $action->asView('ActionKit\View\StackView',array(
             'no_form' => true,
             'no_layout' => true,

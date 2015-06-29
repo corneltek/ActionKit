@@ -84,6 +84,11 @@ class ProductSchema extends SchemaDeclare
             ->desc( _('使用者必須透過這組秘密編號的網址才能看到這個產品。') )
             ;
 
+        $this->column('ordering')
+            ->integer()
+            ->default(0)
+            ->label('排序編號');
+
         $this->column('hide')
             ->boolean()
             ->default(false)
@@ -120,17 +125,6 @@ class ProductSchema extends SchemaDeclare
             ->filter(function($collection) {
                 return $collection;
             });
-    }
-
-    public function bootstrap($product) 
-    {
-        foreach( range(1,30) as $i ) {
-            $ret = $product->create(array("name" => "Product $i" ));
-            if ( !$ret->success) {
-                echo $ret;
-                die();
-            }
-        }
     }
 }
 
