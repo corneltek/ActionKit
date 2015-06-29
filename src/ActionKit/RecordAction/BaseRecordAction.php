@@ -125,10 +125,11 @@ class BaseRecordAction extends Action
      *
      * @return boolean
      */
-    public function loadRecordFromArguments($args)
+    public function loadRecordFromArguments(array $args)
     {
-        if ( isset( $args['id'] )) {
-            return $this->record->load( $args['id'] )->success;
+        $primaryKey = $this->record->getSchema()->primaryKey;
+        if (isset( $args[$primaryKey])) {
+            return $this->record->load( $args[$primaryKey] )->success;
         }
         return false;
     }
