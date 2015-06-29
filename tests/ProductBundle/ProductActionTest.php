@@ -207,6 +207,21 @@ class ProductActionTest extends ModelTestCase
         ok( $bulkDelete->run(), 'items deleted' );
     }
 
+    public function testBulkRecordCopy()
+    {
+        $idList = array();
+        foreach( range(1,20) as $num ) {
+            $product = $this->createProduct("Book $num");
+            ok($product);
+            $idList[] = $product->id;
+        }
+
+        $class = $this->createProductActionClass('BulkCopy');
+
+        $bulkCopy = new $class(array( 'items' => $idList ));
+        ok( $bulkCopy->run(), 'items copy' );
+    }
+
     public function testRecordUpdate()
     {
         $product = $this->createProduct('Book A');
@@ -251,10 +266,12 @@ class ProductActionTest extends ModelTestCase
         $class = $this->createProductActionClass('Create');
         $create = new $class(array('name' => 'Foo'));
 
+        /*
         $subaction = $create->createSubAction('product_categories', [ 
             'id' => 10, // an inexisting-record
         ]);
         $this->assertNotNull($subaction);
+        */
     }
 
     /**
