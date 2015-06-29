@@ -1,6 +1,6 @@
 <?php
 
-class CsrfTokenProvider extends PHPUnit_Framework_TestCase 
+class CsrfTokenProviderTest extends PHPUnit_Framework_TestCase 
 {
     protected $token;
     protected $tokenWithKey;

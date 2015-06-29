@@ -129,6 +129,7 @@ class ActionTest extends PHPUnit_Framework_TestCase
         $success = $action->invoke();
         ok($success, $action->result->message);
 
+
         $result = $action->result;
         ok($result,'Got Result');
 
@@ -136,7 +137,7 @@ class ActionTest extends PHPUnit_Framework_TestCase
         ok( $result->isSuccess() );
     }
 
-    public function testMethods()
+    public function testParams()
     {
         $login = new LoginTestAction;
         is($login->getName(), 'LoginTestAction');
@@ -155,7 +156,6 @@ class ActionTest extends PHPUnit_Framework_TestCase
         ok($login->removeParam('username'));
         is(false, $login->hasParam('username'));
         is(false, $login->define('username'));
-
     }
 
     /**
