@@ -82,23 +82,15 @@ class ActionTest extends PHPUnit_Framework_TestCase
     {
         $login = new LoginTestAction;
 
-        $result = $login->renderField('username');
-        ok($result);
-
-        $result = $login->renderLabel('password');
-        ok($result);
-
-        $result = $login->renderWidgets(['username', 'password']);
-        ok($result);
-
-        $result = $login->renderSubmitWidget();
-        ok($result);
-
-        $result = $login->renderButtonWidget();
-        ok($result);
-
-        $result = $login->renderSignatureWidget();
-        ok($result);
+        ok($login->render());
+        ok($login->render('username'));
+        ok($login->renderWidget('username'));
+        ok($login->renderField('username'));
+        ok($login->renderLabel('password'));
+        ok($login->renderWidgets(['username', 'password']));
+        ok($login->renderSubmitWidget());
+        ok($login->renderButtonWidget());
+        ok($login->renderSignatureWidget());
     }
 
     public function testGetParamsWithFilterOut() 
@@ -148,6 +140,31 @@ class ActionTest extends PHPUnit_Framework_TestCase
     {
         $login = new LoginTestAction;
         is($login->getName(), 'LoginTestAction');
+
+        $result = $login->getWidgetsByNames(['username', 'password']);
+        is(2, count($result));
+
+        is('Foo', $login->arg('username', 'Foo'));
+
+        ok($login->params());
+
+        ok($login->params(true));
+
+        is(true, $login->hasParam('username'));
+
+        ok($login->removeParam('username'));
+        is(false, $login->hasParam('username'));
+        is(false, $login->define('username'));
+
+    }
+
+    /**
+    *   @expectedException  Exception
+    */
+    public function testWrongType()
+    {
+        $login = new LoginTestAction;
+        $login->param('username', 'TestType');
     }
 }
 
