@@ -6,6 +6,7 @@ use ActionKit\Exception\ActionException;
 use ActionKit\ActionTemplate\RecordActionTemplate;
 use ActionKit\RecordAction\CreateRecordAction;
 use LazyRecord\Schema\SchemaDeclare;
+use LazyRecord\Schema\Relationship;
 use LazyRecord\BaseModel;
 use LazyRecord\Result;
 use Exception;
@@ -211,8 +212,8 @@ class BaseRecordAction extends Action
 
         // build relationship config from model schema
         $relations = $this->record->getSchema()->relations;
-        foreach ( $relations as $rId => $r ) {
-            $this->addRelation($rId, $r);
+        foreach ( $relations as $rId => $relation ) {
+            $this->addRelation($rId, $relation);
         }
     }
 
@@ -262,6 +263,10 @@ class BaseRecordAction extends Action
     }
 
 
+
+    /**
+     * @return LazyRecord\Schema\Relationship relationship object
+     */
     public function getRelation($relationId)
     {
         if ( isset($this->relationships[$relationId]) ) {
@@ -284,7 +289,7 @@ class BaseRecordAction extends Action
      * @param string $relationId
      * @param array $config relationship config
      */
-    public function addRelation($relationId, $config) 
+    public function addRelation($relationId, Relationship $config)
     {
         $this->relationships[ $relationId ] = $config;
     }
