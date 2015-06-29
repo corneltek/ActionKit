@@ -26,9 +26,15 @@
   </filter>
 
   <testsuites>
-        <testsuite name="Tests">
-            <directory suffix="Test.php">tests/ActionKit</directory>
-        </testsuite>
+    <testsuite name="ActionKit">
+      <directory suffix="Test.php">tests/ActionKit</directory>
+    </testsuite>
+    <testsuite name="ProductBundle">
+      <directory suffix="Test.php">tests/ProductBundle</directory>
+    </testsuite>
+    <testsuite name="OrderBundle">
+      <directory suffix="Test.php">tests/OrderBundle</directory>
+    </testsuite>
   </testsuites>
 
   <logging>

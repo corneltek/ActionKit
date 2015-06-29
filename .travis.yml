@@ -16,7 +16,7 @@ before_script:
 - php vendor/bin/lazy build-conf db/config/database.testing.yml
 - php vendor/bin/lazy schema build -f
 - php vendor/bin/lazy sql --rebuild
-script: phpunit -c phpunit-ci.xml
+script: phpunit -c phpunit.xml.dist
 after_script:
 - php vendor/bin/coveralls -v
 cache:
