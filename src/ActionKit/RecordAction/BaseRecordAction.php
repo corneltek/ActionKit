@@ -15,7 +15,6 @@ class BaseRecordAction extends Action
 {
     const TYPE = 'base';
 
-
     /**
      *
      * @var Phifty\Model
@@ -150,7 +149,7 @@ class BaseRecordAction extends Action
         $this->params = array();
     }
 
-    public function initParamsFromColumns($columns, $record = null) {
+    public function initParamsFromColumns(array $columns, BaseModel $record = null) {
         foreach ( $columns as $column ) {
             if ( ! isset($this->params[$column->name] ) ) {
                 // do not render this field if renderable === false

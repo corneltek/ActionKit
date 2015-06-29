@@ -47,7 +47,7 @@ class ColumnConvert
         // if we got record, load the value from it.
         if ($record) {
             $val = $record->{$name};
-            $val = $val instanceof \LazyRecord\BaseModel ? $val->dataKeyValue() : $val;
+            $val = $val instanceof BaseModel ? $val->dataKeyValue() : $val;
             // echo $name . " : " . var_export($val, true), "<br/>\n";
             // var_dump( $name, $val, $val->results[0] );
             $param->value   = $val;
