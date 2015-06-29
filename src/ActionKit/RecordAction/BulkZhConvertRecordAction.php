@@ -2,6 +2,10 @@
 namespace ActionKit\RecordAction;
 use ActionKit\RecordAction\BulkRecordAction;
 
+
+/**
+ * @codeCoverageIgnore
+ */
 class BulkZhConvertRecordAction extends BulkRecordAction
 {
     public $convertionKeys = array();

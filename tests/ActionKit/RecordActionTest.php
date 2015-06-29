@@ -36,8 +36,6 @@ class RecordActionTest extends ModelTestCase
         $create->removeRelation('product_categories');
         is(false, $create->hasRelation('product_categories'));
 
-        $create->createSubAction();
-
         ok( $create->getRecord()->delete()->success );
     }
 

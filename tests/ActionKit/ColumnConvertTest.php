@@ -1,11 +1,20 @@
 <?php
+use ActionKit\ColumnConvert;
 
 class ColumnConvertTest extends PHPUnit_Framework_TestCase
 {
-    function testColumnConvert()
+    public function testColumnConvert()
     {
-        // TODO: Create a LazyRecord Schema Column object,
-        // and convert it into Action Column object.
+        $order = new Order\Model\Order;
+        $schema = $order->getSchema();
+        $this->assertNotNull($schema);
+        $action = ColumnConvert::convertSchemaToAction($schema, $order);
+        $this->assertNotNull($action);
+        $this->assertInstanceOf('ActionKit\Action', $action);
+        $this->assertInstanceOf('ActionKit\RecordAction\BaseRecordAction', $action);
+        $view = $action->asView('ActionKit\View\StackView');
+        $this->assertNotNull($view);
+        $this->assertInstanceOf('ActionKit\View\StackView', $view);
     }
 }
 

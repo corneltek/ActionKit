@@ -58,7 +58,7 @@ class BaseRecordAction extends Action
      * @param array                $args
      * @param LazyRecord\BaseModel $record
      */
-    public function __construct($args = array(), BaseModel $record = null, $options = array() )
+    public function __construct($args = array(), BaseModel $record = null, $options = array())
     {
         // record name is in Camel case
         if ( ! $this->recordClass && $record ) {
@@ -66,7 +66,7 @@ class BaseRecordAction extends Action
         }
 
         if ( ! $this->recordClass ) {
-            throw new ActionException( sprintf('recordClass is not defined.' , $this ));
+            throw new ActionException(sprintf('recordClass is not defined.' , $this));
         }
 
         if ($record === null) {
@@ -293,45 +293,6 @@ class BaseRecordAction extends Action
     {
         $this->relationships[ $relationId ] = $config;
     }
-
-
-    /**
-     *
-     * array(
-     *    'many_to_many'    => true,
-     *
-     *    // required from editor
-     *    'collection'      => 'Product\\Model\\CategoryCollection',
-     *
-     *    // for inter relationship processing
-     *    'from'            => 'product_categories',
-     *    'inter_foreign_key' => 'category_id',
-     *    'filter' => function($collection, $record) {
-     *        return $collection;
-     *    }
-     * )
-     */
-    /*
-    public function addManyToManyRelation($relationId,$config)
-    {
-        $this->relationships[ $relationId ] = array_merge(array( 
-            'many_to_many' => true,
-        ), $config);
-    }
-
-    public function addHasManyRelation($relationId,$config)
-    {
-        $requiredKeys = array('self_key','record','foreign_key');
-        foreach( $requiredKeys as $k) {
-            if ( ! isset($config[$k]) ) {
-                throw new Exception("key $k is required for has-many relationship");
-            }
-        }
-        $this->relationships[ $relationId ] = array_merge(array( 
-            'has_many' => true,
-        ), $config);
-    }
-    */
 
     public function removeRelation($id)
     {

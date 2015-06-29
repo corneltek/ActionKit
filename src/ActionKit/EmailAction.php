@@ -5,7 +5,7 @@ use Phifty\Email;
 use ActionKit\Action;
 
 /**
-    @codeCoverageIgnore
+ * @codeCoverageIgnore
 
     class ConfirmEmailAction
     {
@@ -30,7 +30,6 @@ use ActionKit\Action;
 
     }
 */
-
 class EmailAction extends Action
 {
     /* email object */
@@ -44,7 +43,7 @@ class EmailAction extends Action
     public $message;
     public $contentType = 'html';  #default content type
 
-    public function __construct( $args = null )
+    public function __construct($args = null, $options = array())
     {
         $this->email = new Email;
         if ($this->template) {
@@ -52,8 +51,7 @@ class EmailAction extends Action
             $this->email->template( $this->template );
 
         }
-
-        return parent::__construct( $args );
+        return parent::__construct($args, $options);
     }
 
     public function getContent()
