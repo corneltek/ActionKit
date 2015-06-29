@@ -5,7 +5,7 @@
  * 
  * Last Modified: June 25th at 10:49pm
  */
-namespace Order\Model;
+namespace OrderBundle\Model;
 
 
 use LazyRecord;
@@ -33,11 +33,11 @@ class OrderSchemaProxy extends RuntimeSchema
   2 => 'id',
 );
 
-    const schema_class = 'Order\\Model\\OrderSchema';
-    const collection_class = 'Order\\Model\\OrderCollection';
-    const model_class = 'Order\\Model\\Order';
+    const schema_class = 'OrderBundle\\Model\\OrderSchema';
+    const collection_class = 'OrderBundle\\Model\\OrderCollection';
+    const model_class = 'OrderBundle\\Model\\Order';
     const model_name = 'Order';
-    const model_namespace = 'Order\\Model';
+    const model_namespace = 'OrderBundle\\Model';
     const primary_key = 'id';
     const table = 'orders';
     const label = 'Order';
@@ -79,8 +79,8 @@ class OrderSchemaProxy extends RuntimeSchema
 );
         $this->primaryKey      = 'id';
         $this->table           = 'orders';
-        $this->modelClass      = 'Order\\Model\\Order';
-        $this->collectionClass = 'Order\\Model\\OrderCollection';
+        $this->modelClass      = 'OrderBundle\\Model\\Order';
+        $this->collectionClass = 'OrderBundle\\Model\\OrderCollection';
         $this->label           = 'Order';
         $this->relations       = array( 
 );

@@ -1,12 +1,12 @@
 <?php
-namespace Order\Model;
+namespace OrderBundle\Model;
 use LazyRecord\BaseModel;
 class OrderBase
     extends BaseModel
 {
-    const schema_proxy_class = 'Order\\Model\\OrderSchemaProxy';
-    const collection_class = 'Order\\Model\\OrderCollection';
-    const model_class = 'Order\\Model\\Order';
+    const schema_proxy_class = 'OrderBundle\\Model\\OrderSchemaProxy';
+    const collection_class = 'OrderBundle\\Model\\OrderCollection';
+    const model_class = 'OrderBundle\\Model\\Order';
     const table = 'orders';
     const read_source_id = 'default';
     const write_source_id = 'default';
@@ -28,7 +28,7 @@ class OrderBase
         if ($this->_schema) {
            return $this->_schema;
         }
-        return $this->_schema = \LazyRecord\Schema\SchemaLoader::load('Order\\Model\\OrderSchemaProxy');
+        return $this->_schema = \LazyRecord\Schema\SchemaLoader::load('OrderBundle\\Model\\OrderSchemaProxy');
     }
     public function getSum()
     {

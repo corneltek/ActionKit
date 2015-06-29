@@ -1,5 +1,5 @@
 <?php
-namespace Order\Model;
+namespace OrderBundle\Model;
 
 class OrderSchema extends \LazyRecord\Schema\SchemaDeclare
 {
