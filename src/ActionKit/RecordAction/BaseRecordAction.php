@@ -5,6 +5,7 @@ use ActionKit\ColumnConvert;
 use ActionKit\Exception\ActionException;
 use ActionKit\ActionTemplate\RecordActionTemplate;
 use LazyRecord\Schema\SchemaDeclare;
+use LazyRecord\BaseModel;
 use Exception;
 
 class BaseRecordAction extends Action
@@ -55,7 +56,7 @@ class BaseRecordAction extends Action
      * @param array                $args
      * @param LazyRecord\BaseModel $record
      */
-    public function __construct( $args = array(), $record = null, $options = array() )
+    public function __construct($args = array(), BaseModel $record = null, $options = array() )
     {
         // record name is in Camel case
         if ( ! $this->recordClass && $record ) {
@@ -66,11 +67,7 @@ class BaseRecordAction extends Action
             throw new ActionException( sprintf('recordClass is not defined.' , $this ));
         }
 
-        if ( $record && ! is_subclass_of($record,'LazyRecord\\BaseModel',true) ) {
-            throw new ActionException( 'The record object you specified is not a BaseModel object.' , $this );
-        }
-
-        if ( ! $record ) {
+        if ($record === null) {
             $record = new $this->recordClass;
         }
 
@@ -198,13 +195,13 @@ class BaseRecordAction extends Action
      *
      * @param Phifty\Model $record
      */
-    public function setRecord($record)
+    public function setRecord(BaseModel $record)
     {
         $this->record = $record;
 
         // Convert id column object from record schema to
         // Action param object.
-        if ( $column = $this->record->getColumn('id') ) {
+        if ($column = $this->record->getColumn('id')) {
             if ( ! isset($this->params[$column->name] ) ) {
                 $this->params[ $column->name ] = ColumnConvert::toParam( $column , $record );
             }
