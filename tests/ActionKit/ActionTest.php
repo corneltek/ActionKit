@@ -143,5 +143,11 @@ class ActionTest extends PHPUnit_Framework_TestCase
         is('Login', $result->message);
         ok( $result->isSuccess() );
     }
+
+    public function testMethods()
+    {
+        $login = new LoginTestAction;
+        is($login->getName(), 'LoginTestAction');
+    }
 }
 

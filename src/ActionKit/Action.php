@@ -455,8 +455,7 @@ class Action implements IteratorAggregate
     {
         $sig = $this->getSignature();
         $pos = strpos( $sig, '::Action::' );
-
-        return substr( $sig , $pos + strlen('::Action::') );
+        return $pos ? substr( $sig , $pos + strlen('::Action::') ) : $sig;
     }
 
     public function params($all = false)

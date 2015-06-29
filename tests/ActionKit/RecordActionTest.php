@@ -107,6 +107,7 @@ class RecordActionTest extends ModelTestCase
         $generatedAction->load();
 
         $updateOrdering = new $className(array( 'list' => json_encode($idList) ));
+        is($updateOrdering->getName(), 'UpdateProductOrdering');
         ok($updateOrdering->run());
 
         $result = $updateOrdering->loadRecord(9);
