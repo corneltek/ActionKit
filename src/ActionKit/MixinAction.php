@@ -2,6 +2,9 @@
 namespace ActionKit;
 use RuntimeException;
 
+/**
+ * @codeCoverageIgnore
+ */
 class MixinAction
 {
     protected $_action;
