@@ -13,5 +13,17 @@ class ParamTest extends PHPUnit_Framework_TestCase
         $column->default('John');
         is('John',$column->default);
     }
+
+    function testImage()
+    {
+        $image = new ActionKit\Param\Image('photo');
+        ok($image);
+
+        ok($image->size(['width' => 100, 'height' => 200]));
+
+        ok($image->autoResize(false));
+        ok($image->autoResize(true));
+
+    }
 }
 
