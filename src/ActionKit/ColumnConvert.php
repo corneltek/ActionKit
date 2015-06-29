@@ -5,6 +5,7 @@ use ActionKit\Action;
 use ActionKit\RecordAction\BaseRecordAction;
 use LazyRecord\BaseModel;
 use LazyRecord\Schema\DeclareSchema;
+use LazyRecord\Schema\SchemaInterface;
 use LazyRecord\Schema\RuntimeColumn;
 use Exception;
 
@@ -19,7 +20,7 @@ class ColumnConvert
     /**
      * Convert a LazyRecord schema to action
      */
-    public static function convertSchemaToAction(DeclareSchema $schema, BaseModel $record = null)
+    public static function convertSchemaToAction(SchemaInterface $schema, BaseModel $record = null)
     {
         $columns = $schema->getColumns(true);
         $action = new BaseRecordAction(array(), $record);
