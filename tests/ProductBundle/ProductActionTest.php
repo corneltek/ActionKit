@@ -233,7 +233,23 @@ class ProductActionTest extends ModelTestCase
         $create = new $class(array('name' => 'Foo'));
         ok( $create->run(), 'create action returns success.' );
         ok( $create->getRecord()->delete()->success );
+
+        is(true, $create->hasRelation('product_categories'));
+        $create->removeRelation('product_categories');
+        is(false, $create->hasRelation('product_categories'));
+
+        $create->createSubAction();
     }
+
+    /**
+     * @expectedException  ActionKit\Exception\ActionException
+     */
+    public function testRecordActionWithActionException()
+    {
+        $class = $this->createProductActionClass('Update');
+        $update = new $class(array());
+    }
+
 }
 
 
