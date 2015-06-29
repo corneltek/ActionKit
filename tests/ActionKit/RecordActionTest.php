@@ -50,6 +50,10 @@ class RecordActionTest extends ModelTestCase
         $result = $update->loadRecord(['id' => $product->id]);
         is(true, $result);
 
+        $update->args = array('id' => $product->id , 'name' => 'Bar');
+        $result = $update->invoke();
+        is(true, $result);
+
         $record->delete();
     }
 
@@ -107,5 +111,8 @@ class RecordActionTest extends ModelTestCase
 
         $result = $updateOrdering->loadRecord(9);
         is($result->ordering, 21-9);
+
+        $updateOrdering->mode = 99;
+        is(false, $updateOrdering->run());
     }
 }
