@@ -17,13 +17,6 @@ abstract class CreateRecordAction
         /* error checking */
         if (false === $ret->success) {
             $this->convertRecordValidation( $ret );
-            if (function_exists('fb')) {
-                fb($ret->message);
-                fb($ret->exception);
-                fb($ret->sql);
-                fb($ret->vars);
-            }
-
             return $this->createError( $ret );
         }
         $this->result->data( $this->record->getStashedData() );
