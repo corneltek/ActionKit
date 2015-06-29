@@ -87,6 +87,14 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
         ok($data->success);
         ok($data->data);
         ok($data->data->id);
+
+        $results = $runner->getResults();
+        ok($results);
+        ok($runner->getResult('User::Action::CreateUser'));
+        $runner->setResult('test', 'test message');
+        is(true, $runner->hasResult('test'));
+        $runner->removeResult('test');
+        is(false, $runner->hasResult('test'));
     }
 
     public function testHandleWith()
@@ -142,4 +150,25 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
             'action' => "User::Action::NotFoundAction",
         )); 
     }
+
+    /**
+    *   @expectedException  ActionKit\Exception\InvalidActionNameException
+    */
+    public function testRunnerWithInvalidActionNameException()
+    {
+        $container = new ServiceContainer;
+        $runner = new ActionRunner($container);
+        $result = $runner->run('!afers');
+    }
+
+    /**
+    *   @expectedException  ActionKit\Exception\ActionNotFoundException
+    */
+    public function testRunnerWithActionNotFoundException()
+    {
+        $container = new ServiceContainer;
+        $runner = new ActionRunner($container);
+        $result = $runner->run('Product::Action::Product');
+    }
+
 }

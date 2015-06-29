@@ -3,9 +3,9 @@ namespace ActionKit\ActionTemplate;
 use ActionKit\ActionRunner;
 
 /**
- *  Sort Record Action Template Synopsis
+ *  Update Ordering Record Action Template Synopsis
  *
- *      $actionTemplate = new SortRecordActionTemplate; 
+ *      $actionTemplate = new UpdateOrderingRecordActionTemplate; 
  *      $runner = new ActionKit\ActionRunner;
  *      $actionTemplate->register($runner, 'SortRecordActionTemplate', array(
  *          'namespace' => 'test2',
@@ -19,9 +19,8 @@ use ActionKit\ActionRunner;
  *       $generatedAction->load();
  *
  */
-class SortRecordActionTemplate extends RecordActionTemplate
+class UpdateOrderingRecordActionTemplate extends RecordActionTemplate
 {
-    const MODE_INCREMENTALLY = 1;
     public function register(ActionRunner $runner, $asTemplate, array $options = array())
     {
         if (isset($options['use'])) {
@@ -37,20 +36,11 @@ class SortRecordActionTemplate extends RecordActionTemplate
             throw new RequiredConfigKeyException('model', 'required for creating record actions');
         }
 
-        $actionClass = $options['namespace'] . '\\Action\\Sort' . $options['model'];
+        $actionClass = $options['namespace'] . '\\Action\\Update' . $options['model'] . 'Ordering';
         $runner->register($actionClass, $asTemplate, [
-            'extends' => "\\ActionKit\\RecordAction\\SortRecordAction",
+            'extends' => "\\ActionKit\\RecordAction\\UpdateOrderingRecordAction",
             'properties' => [
                 'recordClass' => $options['namespace'] . "\\Model\\" . $options['model'],
-                'mode' => self::MODE_INCREMENTALLY,
-                'targetColumn' => 'ordering'
-            ],
-            'constants' => [
-                'MODE_INCREMENTALLY' => 1,
-                'MODE_BYDATE' => 2
-            ],
-            'traits' => [
-                'ActionKit\ActionTrait\RecordSorter'
             ]
         ]);
     }

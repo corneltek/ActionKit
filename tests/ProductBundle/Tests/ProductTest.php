@@ -4,8 +4,8 @@ use ActionKit\ActionRunner;
 class ProductBundleTest extends PHPUnit_Framework_TestCase
 {
 
-
-    public function testProductSortActions() {
+    // TODO: 改成用 UpdateOrderingRecordActionTemplate 來建立 UpdateOrderingRecordAction
+    public function testProductUpdateOrderingActions() {
         
         $container = new ActionKit\ServiceContainer;
         $generator = $container['generator'];
@@ -15,11 +15,11 @@ class ProductBundleTest extends PHPUnit_Framework_TestCase
         ok($runner, 'action runner');
 
         $sortActionClasses = [
-            'ProductBundle\\Action\\SortProductImage' => 'ProductBundle\\Model\\ProductImage',
-            'ProductBundle\\Action\\SortProductProperty' =>  'ProductBundle\\Model\\ProductProperty',
-            'ProductBundle\\Action\\SortProductLink' => 'ProductBundle\\Model\\ProductLink',
-            'ProductBundle\\Action\\SortProductProduct' => 'ProductBundle\\Model\\ProductProduct',
-            'ProductBundle\\Action\\SortProductSubsection' => 'ProductBundle\\Model\\ProductSubsection',
+            'ProductBundle\\Action\\UpdateProductImageOrdering' => 'ProductBundle\\Model\\ProductImage',
+            'ProductBundle\\Action\\UpdateProductPropertyOrdering' =>  'ProductBundle\\Model\\ProductProperty',
+            'ProductBundle\\Action\\UpdateProductLinkOrdering' => 'ProductBundle\\Model\\ProductLink',
+            'ProductBundle\\Action\\UpdateProductProductOrdering' => 'ProductBundle\\Model\\ProductProduct',
+            'ProductBundle\\Action\\UpdateProductSubsectionOrdering' => 'ProductBundle\\Model\\ProductSubsection',
         ];
 
 
@@ -28,7 +28,7 @@ class ProductBundleTest extends PHPUnit_Framework_TestCase
                 'action_class' => $actionClass, 
                 'template' => '@ActionKit/RecordAction.html.twig', 
                 'variables' => [
-                    'base_class' => 'ActionKit\\RecordAction\\SortRecordAction',
+                    'base_class' => 'ActionKit\\RecordAction\\UpdateOrderingRecordAction',
                     'record_class' => $recordClass,
                 ]
             ));

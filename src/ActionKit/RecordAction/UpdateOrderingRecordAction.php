@@ -3,7 +3,7 @@ namespace ActionKit\RecordAction;
 use ActionKit\Action;
 use Exception;
 
-abstract class SortRecordAction extends Action
+abstract class UpdateOrderingRecordAction extends Action
 {
     const MODE_INCREMENTALLY = 1;
     const MODE_BYDATE = 2;
@@ -38,6 +38,8 @@ abstract class SortRecordAction extends Action
                     throw new Exception($ret->message);
                 }
             }
+        } else {
+            throw new Exception("Unsupported sort mode");
         }
     }
 
