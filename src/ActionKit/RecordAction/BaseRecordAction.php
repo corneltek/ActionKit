@@ -58,7 +58,7 @@ class BaseRecordAction extends Action
      * @param array                $args
      * @param LazyRecord\BaseModel $record
      */
-    public function __construct($args = array(), BaseModel $record = null, $options = array() )
+    public function __construct($args = array(), BaseModel $record = null, $options = array())
     {
         // record name is in Camel case
         if ( ! $this->recordClass && $record ) {

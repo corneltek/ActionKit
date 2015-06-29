@@ -78,6 +78,17 @@ class ActionTest extends PHPUnit_Framework_TestCase
         ok( ! isset($params['extra3']) );
     }
 
+    public function testActionArrayOptions() {
+        $action = new LoginTestAction([],[
+            'current_user' => null,
+        ]);
+    }
+
+    public function testActionContainerOptions() {
+        $container = new \Pimple\Container;
+        $action = new LoginTestAction([], $container);
+    }
+
     public function testRender()
     {
         $login = new LoginTestAction;

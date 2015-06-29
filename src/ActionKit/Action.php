@@ -8,6 +8,7 @@ use ActionKit\CsrfTokenProvider;
 use Universal\Http\HttpRequest;
 use Universal\Http\FilesParameter;
 use InvalidArgumentException;
+use ArrayAccess;
 use IteratorAggregate;
 
 class Action implements IteratorAggregate
@@ -78,9 +79,9 @@ class Action implements IteratorAggregate
      * Constructing Action objects
      *
      * @param array $args        The request arguments
-     * @param mixed $options
+     * @param mixed $options     Can be ArrayAccess or array
      */
-    public function __construct(array $args = array(), array $options = array())
+    public function __construct(array $args = array(), $options = array())
     {
 
         if ( isset($args['_FILES']) ) {
