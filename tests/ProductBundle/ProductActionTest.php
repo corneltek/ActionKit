@@ -234,11 +234,27 @@ class ProductActionTest extends ModelTestCase
         ok( $create->run(), 'create action returns success.' );
         ok( $create->getRecord()->delete()->success );
 
+    }
+
+    public function testActionRelationship() 
+    {
+        $class = $this->createProductActionClass('Create');
+        $create = new $class(array('name' => 'Foo'));
+
         is(true, $create->hasRelation('product_categories'));
         $create->removeRelation('product_categories');
         is(false, $create->hasRelation('product_categories'));
+    }
 
-        $create->createSubAction();
+    public function testCreateSubAction()
+    {
+        $class = $this->createProductActionClass('Create');
+        $create = new $class(array('name' => 'Foo'));
+
+        $subaction = $create->createSubAction('product_categories', [ 
+            'id' => 10, // an inexisting-record
+        ]);
+        $this->assertNotNull($subaction);
     }
 
     /**

@@ -3,6 +3,7 @@ namespace ActionKit\RecordAction;
 use ActionKit\Action;
 use ActionKit\ColumnConvert;
 use ActionKit\Exception\ActionException;
+use ActionKit\Exception\RequiredConfigKeyException;
 use ActionKit\ActionTemplate\RecordActionTemplate;
 use ActionKit\RecordAction\CreateRecordAction;
 use LazyRecord\Schema\SchemaDeclare;
@@ -338,7 +339,7 @@ class BaseRecordAction extends Action
     public function createSubAction($relation, array $args)
     {
         $record = null;
-        if ( isset($relation['foreign_schema']) ) {
+        if (isset($relation['foreign_schema']) ) {
             $schema = new $relation['foreign_schema'];
             $recordClass = $schema->getModelClass();
             // create record object, and load it with primary id
@@ -362,6 +363,7 @@ class BaseRecordAction extends Action
             }
 
         } else {
+
             // If the record is loaded
             if ($record->id) {
 
