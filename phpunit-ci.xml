@@ -17,7 +17,11 @@
     <whitelist>
         <directory suffix=".php">src/</directory>
     </whitelist>
+    <blacklist>
+      <directory>src/ActionKit/Cache</directory>
+    </blacklist>
   </filter>
+
   <testsuites>
         <testsuite name="Tests">
             <directory suffix="Test.php">tests/ActionKit</directory>
