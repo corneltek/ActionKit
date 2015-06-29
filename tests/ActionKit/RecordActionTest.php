@@ -1,6 +1,7 @@
 <?php
 use ActionKit\RecordAction\BaseRecordAction;
 use LazyRecord\Testing\ModelTestCase;
+use ActionKit\ActionTemplate\UpdateOrderingRecordActionTemplate;
 
 class RecordActionTest extends ModelTestCase
 {
@@ -78,5 +79,33 @@ class RecordActionTest extends ModelTestCase
 
         $bulkDelete = new $class(array( 'items' => $idList ));
         ok( $bulkDelete->run(), 'items deleted' );
+    }
+
+    public function testUpdateOrdering()
+    {
+        $idList = array();
+        foreach( range(1,20) as $num ) {
+            $product = $this->createProduct("Book $num");
+            ok($product);
+            $idList[] = ['record' => $product->id, 'ordering' => 21 - $num];
+        }
+
+        $actionTemplate = new UpdateOrderingRecordActionTemplate;
+        $runner = new ActionKit\ActionRunner;
+        $actionTemplate->register($runner, 'UpdateOrderingRecordActionTemplate', array(
+            'namespace' => 'Product',
+            'model' => 'Product'   // model's name
+        ));
+
+        $className = 'Product\Action\UpdateProductOrdering';
+        $actionArgs = $runner->dynamicActions[$className]['actionArgs'];
+        $generatedAction = $actionTemplate->generate($className, $actionArgs);
+        $generatedAction->load();
+
+        $updateOrdering = new $className(array( 'list' => json_encode($idList) ));
+        ok($updateOrdering->run());
+
+        $result = $updateOrdering->loadRecord(9);
+        is($result->ordering, 21-9);
     }
 }

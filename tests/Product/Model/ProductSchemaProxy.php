@@ -19,12 +19,14 @@ class ProductSchemaProxy extends RuntimeSchema
   0 => 'name',
   1 => 'category_id',
   2 => 'cover_image',
-  3 => 'id',
+  3 => 'ordering',
+  4 => 'id',
 );
     public static $column_hash = array (
   'name' => 1,
   'category_id' => 1,
   'cover_image' => 1,
+  'ordering' => 1,
   'id' => 1,
 );
     public static $mixin_classes = array (
@@ -33,7 +35,8 @@ class ProductSchemaProxy extends RuntimeSchema
   0 => 'name',
   1 => 'category_id',
   2 => 'cover_image',
-  3 => 'id',
+  3 => 'ordering',
+  4 => 'id',
 );
 
         const schema_class = 'Product\\Model\\ProductSchema';
@@ -90,6 +93,18 @@ class ProductSchemaProxy extends RuntimeSchema
             ),
         ),
     ),
+  'ordering' => array( 
+      'name' => 'ordering',
+      'attributes' => array( 
+          'type' => 'integer',
+          'isa' => 'int',
+          'default' => 0,
+          'renderAs' => 'HiddenInput',
+          'widgetAttributes' => array( 
+            ),
+          'label' => '排序編號',
+        ),
+    ),
   'id' => array( 
       'name' => 'id',
       'attributes' => array( 
@@ -102,6 +117,7 @@ class ProductSchemaProxy extends RuntimeSchema
 );
         $this->columnNames     = array( 
   'id',
+  'ordering',
   'name',
   'category_id',
   'cover_image',

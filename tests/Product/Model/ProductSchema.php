@@ -28,6 +28,11 @@ class ProductSchema extends SchemaDeclare
             ->renderAs('ThumbImageFileInput')
             ;
 
+        $this->column('ordering')
+            ->integer()
+            ->default(0)
+            ->label('排序編號');
+
         $this->many('types',              'Product\Model\ProductTypeSchema' , 'product_id' , 'id' );  # to product id => image product_id
         $this->many('product_categories', 'Product\Model\ProductCategorySchema', 'product_id', 'id' );
         $this->manyToMany('categories',  'product_categories' , 'category');
