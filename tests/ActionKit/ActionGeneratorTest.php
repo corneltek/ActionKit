@@ -16,8 +16,8 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
     {
         $generator = new ActionKit\ActionGenerator();
         $generator->registerTemplate('RecordActionTemplate', new ActionKit\ActionTemplate\RecordActionTemplate());
-        $template = $generator->loadTemplate('RecordActionTemplate');
-        ok($template);
+        $template = $generator->getTemplate('RecordActionTemplate');
+        $this->assertInstanceOf('ActionKit\ActionTemplate\ActionTemplate', $template);
 
         $runner = new ActionKit\ActionRunner;
         $actionArgs = array(
@@ -50,8 +50,8 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
     {
         $generator = new ActionKit\ActionGenerator();
         $generator->registerTemplate('FileBasedActionTemplate', new FileBasedActionTemplate());
-        $template = $generator->loadTemplate('FileBasedActionTemplate');
-        ok($template);
+        $template = $generator->getTemplate('FileBasedActionTemplate');
+        $this->assertInstanceOf('ActionKit\ActionTemplate\ActionTemplate', $template);
 
         $runner = new ActionKit\ActionRunner;
         $template->register($runner, 'FileBasedActionTemplate', array(

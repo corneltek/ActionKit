@@ -12,7 +12,8 @@ class ActionRequest {
 
     protected $actionName;
 
-    public function __construct(array $request) {
+    public function __construct(array $request) 
+    {
         $this->request = $request;
 
         $this->arguments = array_merge($this->request, array());

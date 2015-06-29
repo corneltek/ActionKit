@@ -37,7 +37,7 @@ class ActionGenerator
      */
     public function generate($templateName, $class, array $actionArgs = array())
     {
-        $actionTemplate = $this->loadTemplate($templateName);
+        $actionTemplate = $this->getTemplate($templateName);
         $generatedAction = $actionTemplate->generate($class, $actionArgs);
         return $generatedAction;
     }
@@ -56,7 +56,7 @@ class ActionGenerator
      * @param string $templateName the action template name
      * @return object action template object
      */
-    public function loadTemplate($templateName)
+    public function getTemplate($templateName)
     {
         if ( isset($this->templates[$templateName])) {
             return $this->templates[$templateName];
