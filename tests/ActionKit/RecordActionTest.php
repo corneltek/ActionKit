@@ -32,6 +32,12 @@ class RecordActionTest extends ModelTestCase
         $create = new $class(array('name' => 'Foo'));
         ok( $create->run(), 'create action returns success.' );
 
+        is(true, $create->hasRelation('product_categories'));
+        $create->removeRelation('product_categories');
+        is(false, $create->hasRelation('product_categories'));
+
+        $create->createSubAction();
+
         ok( $create->getRecord()->delete()->success );
     }
 
@@ -55,6 +61,15 @@ class RecordActionTest extends ModelTestCase
         is(true, $result);
 
         $record->delete();
+    }
+
+    /**
+    *   @expectedException  ActionKit\Exception\ActionException
+    */
+    public function testRecordActionWithActionException()
+    {
+        $class = $this->createProductActionClass('Update');
+        $update = new $class(array());
     }
 
     public function testRecordUpdateWithExistingRecordObject()
