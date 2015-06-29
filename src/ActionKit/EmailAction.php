@@ -3,7 +3,9 @@ namespace ActionKit;
 
 use Phifty\Email;
 use ActionKit\Action;
-/*
+
+/**
+    @codeCoverageIgnore
 
     class ConfirmEmailAction
     {

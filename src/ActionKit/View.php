@@ -19,7 +19,9 @@ define('NL',"\n");
 class View
 {
     public $actionName;
+
     public $actionClass;
+
     public $action;
 
     public function __construct( $actionClass )
