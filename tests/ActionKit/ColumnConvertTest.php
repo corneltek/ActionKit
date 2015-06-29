@@ -12,6 +12,9 @@ class ColumnConvertTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($action);
         $this->assertInstanceOf('ActionKit\Action', $action);
         $this->assertInstanceOf('ActionKit\RecordAction\BaseRecordAction', $action);
+        $view = $action->asView('ActionKit\View\StackView');
+        $this->assertNotNull($view);
+        $this->assertInstanceOf('ActionKit\View\StackView', $view);
     }
 }
 

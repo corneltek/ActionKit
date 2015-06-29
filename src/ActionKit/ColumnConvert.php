@@ -18,7 +18,9 @@ use Exception;
 class ColumnConvert
 {
     /**
-     * Convert a LazyRecord schema to action
+     * Convert a LazyRecord schema to action.
+     *
+     * This is used for generating an Action View without CRUD type.
      */
     public static function convertSchemaToAction(SchemaInterface $schema, BaseModel $record = null)
     {
