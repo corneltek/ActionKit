@@ -4,8 +4,10 @@ use ActionKit\Action;
 use ActionKit\ColumnConvert;
 use ActionKit\Exception\ActionException;
 use ActionKit\ActionTemplate\RecordActionTemplate;
+use ActionKit\RecordAction\CreateRecordAction;
 use LazyRecord\Schema\SchemaDeclare;
 use LazyRecord\BaseModel;
+use LazyRecord\Result;
 use Exception;
 
 class BaseRecordAction extends Action
@@ -73,7 +75,7 @@ class BaseRecordAction extends Action
 
         $this->setRecord($record);
 
-        if ( ! $record->id && $this->getType() !== 'create' && $this->enableLoadRecord ) {
+        if ( ! $record->id && ! $this instanceof CreateRecordAction && $this->enableLoadRecord ) {
             // for create action, we don't need to create record
             if ( ! $this->loadRecordFromArguments( $args ) ) {
                 throw new ActionException( get_class($this) . " Record action can not load record from {$this->recordClass}", $this );
@@ -237,9 +239,9 @@ class BaseRecordAction extends Action
      * Convert record validation object to action validation
      * result.
      *
-     * @param LazyRecord\OperationResult $ret
+     * @param LazyRecord\Result $ret
      */
-    public function convertRecordValidation( $ret )
+    public function convertRecordValidation(Result $ret)
     {
         if ($ret->validations) {
             foreach ($ret->validations as $vld) {
@@ -272,7 +274,7 @@ class BaseRecordAction extends Action
     /**
      * Add relationship config
      *
-     *  $this->addRelation('images',array(
+     *  $this->addRelation('images', array(
      *      'has_many' => true,
      *      'record' => 'Product\\Model\\ProductImage',
      *      'self_key' => 'product_id',
@@ -282,7 +284,7 @@ class BaseRecordAction extends Action
      * @param string $relationId
      * @param array $config relationship config
      */
-    public function addRelation($relationId,$config) 
+    public function addRelation($relationId, $config) 
     {
         $this->relationships[ $relationId ] = $config;
     }
@@ -367,7 +369,7 @@ class BaseRecordAction extends Action
      * Base on the relationship definition, we should
      * create the action object to process the nested data.
      */
-    public function createSubAction($relation,$args)
+    public function createSubAction($relation, array $args)
     {
         $record = null;
         if ( isset($relation['foreign_schema']) ) {
