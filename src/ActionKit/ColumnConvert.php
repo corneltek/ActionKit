@@ -3,6 +3,9 @@ namespace ActionKit;
 use ActionKit\Param;
 use ActionKit\Action;
 use ActionKit\RecordAction\BaseRecordAction;
+use LazyRecord\BaseModel;
+use LazyRecord\Schema\DeclareSchema;
+use LazyRecord\Schema\RuntimeColumn;
 use Exception;
 
 /**
@@ -13,8 +16,11 @@ use Exception;
  */
 class ColumnConvert
 {
-    // Convert a LazyRecord schema to action
-    public static function convertSchemaToAction($schema, $record = null) {
+    /**
+     * Convert a LazyRecord schema to action
+     */
+    public static function convertSchemaToAction(DeclareSchema $schema, BaseModel $record = null)
+    {
         $columns = $schema->getColumns(true);
         $action = new BaseRecordAction(array(), $record);
         // no actual record is null
@@ -23,7 +29,10 @@ class ColumnConvert
         return $action;
     }
 
-    public static function toParam( $column , $record = null )
+
+    /**
+     */
+    public static function toParam(RuntimeColumn $column , BaseModel $record = null )
     {
         $name = $column->name;
         $param = new Param( $name );
