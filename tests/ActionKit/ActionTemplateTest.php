@@ -2,7 +2,7 @@
 use ActionKit\ActionTemplate\SampleActionTemplate;
 use ActionKit\ActionTemplate\RecordActionTemplate;
 use ActionKit\ActionTemplate\FileBasedActionTemplate;
-use ActionKit\ActionTemplate\SortRecordActionTemplate;
+use ActionKit\ActionTemplate\UpdateOrderingRecordActionTemplate;
 
 class ActionTemplate extends PHPUnit_Framework_TestCase
 {
@@ -22,18 +22,17 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
         ok( class_exists( 'Core\\Action\\GrantAccess' ) );
     }
 
-    public function testSortRecordActionTemplate()
+    public function testUpdateOrderingRecordActionTemplate()
     {
-        $actionTemplate = new SortRecordActionTemplate;
+        $actionTemplate = new UpdateOrderingRecordActionTemplate;
         $runner = new ActionKit\ActionRunner;
-        $actionTemplate->register($runner, 'SortRecordActionTemplate', array(
+        $actionTemplate->register($runner, 'UpdateOrderingRecordActionTemplate', array(
             'namespace' => 'test2',
-            'model' => 'Test2Model',   // model's name
-            'types' => array('Sort')
+            'model' => 'Test2Model'   // model's name
         ));
         is(1, count($runner->dynamicActions));
 
-        $className = 'test2\Action\SortTest2Model';
+        $className = 'test2\Action\UpdateTest2ModelOrdering';
         $actionArgs = $runner->dynamicActions[$className]['actionArgs'];
         $generatedAction = $actionTemplate->generate($className, $actionArgs);
         ok( $generatedAction );
