@@ -64,6 +64,24 @@ class ActionGenerator
         return $generatedAction;
     }
 
+
+    /**
+     * generateUnderDirectory generates the action code under a directory path
+     *
+     * @param string $directory The directory for placing generated class
+     * @param string $class
+     * @param string $templateName
+     * @param array $actionArgs template arguments
+     * @return ActionKit\GeneratedAction
+     */
+    public function generateUnderDirectory($directory, $templateName, $class, array $actionArgs = array())
+    {
+        $generatedAction = $this->generate($templateName, $class, $actionArgs);
+        $classPath = $generatedAction->getPsrClassPath();
+        $generatedAction->writeTo($directory . DIRECTORY_SEPARATOR . $classPath);
+        return $generatedAction;
+    }
+
     /**
      * register action template
      * @param object $template the action template object
