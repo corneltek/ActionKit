@@ -27,14 +27,20 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
         $template = $generator->getTemplate('UndefinedTemplate');
     }
 
+    public function testTemplateGetter()
+    {
+        $generator = new ActionGenerator();
+        $generator->registerTemplate('RecordActionTemplate', new RecordActionTemplate());
+        $template = $generator->getTemplate('RecordActionTemplate');
+        $this->assertInstanceOf('ActionKit\ActionTemplate\ActionTemplate', $template);
+    }
+
     public function testRecordActionTemplate()
     {
         $generator = new ActionGenerator();
-        $generator->registerTemplate('RecordActionTemplate', new ActionKit\ActionTemplate\RecordActionTemplate());
-        $template = $generator->getTemplate('RecordActionTemplate');
-        $this->assertInstanceOf('ActionKit\ActionTemplate\ActionTemplate', $template);
+        $generator->registerTemplate('RecordActionTemplate', new RecordActionTemplate());
 
-        $runner = new ActionKit\ActionRunner;
+        $runner = new ActionRunner($generator);
         $actionArgs = array(
             'namespace' => 'test',
             'model' => 'testModel',
@@ -45,8 +51,14 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
                 [ 'name' => 'BulkDelete']
             )
         );
+        $runner->registerAction('RecordActionTemplate', $actionArgs);
+
+        /*
+        $template = $generator->getTemplate('RecordActionTemplate');
         $template->register($runner, 'RecordActionTemplate', $actionArgs);
-        is(4, count($runner->dynamicActions));
+         */
+
+        $this->assertCount( 4, $runner->dynamicActions);
 
         $className = 'test\Action\UpdatetestModel';
 

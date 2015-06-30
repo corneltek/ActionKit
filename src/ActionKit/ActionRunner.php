@@ -74,7 +74,7 @@ class ActionRunner
             $this->generator = new ActionGenerator;
         }
 
-        if (! file_exists($this->cacheDir)) {
+        if ($this->cacheDir && ! file_exists($this->cacheDir)) {
             mkdir($this->cacheDir, 0755, true);
         }
     }
@@ -199,8 +199,6 @@ class ActionRunner
         return false;
     }
 
-
-
     public function registerAutoloader()
     {
         // use throw and not to prepend
@@ -237,11 +235,11 @@ class ActionRunner
     }
 
     /**
-     * Create action object
+     * Create action object from REQUEST
      *
      * @param string $class
      */
-    public function createAction( $class , $args = array() )
+    public function createAction($class , array $args = array() )
     {
         $args = array_merge( $_REQUEST , $args );
 
@@ -308,9 +306,9 @@ class ActionRunner
     public static function getInstance()
     {
         static $self;
-        if ( $self )
-
+        if ( $self ) {
             return $self;
+        }
         return $self = new static;
     }
 
