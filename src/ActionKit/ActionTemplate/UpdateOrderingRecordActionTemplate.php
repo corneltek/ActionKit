@@ -28,11 +28,24 @@ class UpdateOrderingRecordActionTemplate extends RecordActionTemplate
             $options['use'] = ['\\ActionKit\\Action', '\\ActionKit\\RecordAction\\BaseRecordAction'];
         }
 
+
+        if (!isset($options['model'])) {
+            if (isset($options['record_class'])) {
+
+                $nslist = explode("\\Model\\",$options['record_class']);
+                $options['model'] = $nslist[1];
+
+                if (!isset($options['namespace'])) {
+                    $options['namespace'] = $nslist[0];
+                }
+
+            } else {
+                throw new RequiredConfigKeyException('model', 'required for creating record actions');
+            }
+        }
+
         if (!isset($options['namespace'])) {
             throw new RequiredConfigKeyException('namespace', 'namespace');
-        }
-        if (!isset($options['model'])) {
-            throw new RequiredConfigKeyException('model', 'required for creating record actions');
         }
 
         $actionClass = $options['namespace'] . '\\Action\\Update' . $options['model'] . 'Ordering';

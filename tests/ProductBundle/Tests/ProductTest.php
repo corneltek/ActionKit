@@ -32,16 +32,11 @@ class ProductBundleTest extends PHPUnit_Framework_TestCase
 
         $runner = new ActionRunner($container);
 
-        $runner->registerAction('FileBasedActionTemplate', array(
-            'action_class' => $actionClass, 
-            'template' => '@ActionKit/RecordAction.html.twig', 
-            'variables' => [
-                'base_class' => 'ActionKit\\RecordAction\\UpdateOrderingRecordAction',
-                'record_class' => $recordClass,
-            ]
+        $runner->registerAction('UpdateOrderingRecordActionTemplate', array(
+            'namespace' => 'ProductBundle',
+            'record_class'     => $recordClass,   // model's name
         ));
         $action = $runner->createAction($actionClass);
-
         $this->assertNotNull($action);
     }
 
