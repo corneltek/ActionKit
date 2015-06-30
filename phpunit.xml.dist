@@ -14,18 +14,27 @@
   </php>
 
   <filter>
+    <blacklist>
+      <directory suffix=".php">src/ActionKit/Cache</directory>
+    </blacklist>
     <whitelist>
         <directory suffix=".php">src/</directory>
+        <exclude>
+            <directory suffix=".php">src/ActionKit/Cache</directory>
+        </exclude>
     </whitelist>
-    <blacklist>
-      <directory>src/ActionKit/Cache</directory>
-    </blacklist>
   </filter>
 
   <testsuites>
-        <testsuite name="Tests">
-            <directory suffix="Test.php">tests/ActionKit</directory>
-        </testsuite>
+    <testsuite name="ActionKit">
+      <directory suffix="Test.php">tests/ActionKit</directory>
+    </testsuite>
+    <testsuite name="ProductBundle">
+      <directory suffix="Test.php">tests/ProductBundle</directory>
+    </testsuite>
+    <testsuite name="OrderBundle">
+      <directory suffix="Test.php">tests/OrderBundle</directory>
+    </testsuite>
   </testsuites>
 
   <logging>

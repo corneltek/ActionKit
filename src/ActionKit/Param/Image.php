@@ -4,15 +4,17 @@ use ActionKit\Param;
 use Phifty\UploadFile;
 use Exception;
 use RuntimeException;
-use SimpleImage;
+use ActionKit\ImageProcess;
 use Phifty\FileUtils;
 use ActionKit\RecordAction\UpdateRecordAction;
 use ActionKit\RecordAction\CreateRecordAction;
 
 function filename_increase($path)
 {
-    if ( ! file_exists($path) )
+    if (! file_exists($path)) {
         return $path;
+    }
+
     $pos = strrpos( $path , '.' );
     if ($pos !== false) {
         $filepath = substr($path, 0 , $pos);
@@ -191,11 +193,8 @@ class Image extends Param
 
     public function getImager()
     {
-        // XXX: move this phifty-core dependency out.
-        kernel()->library->load('simpleimage');
-        return new SimpleImage;
+        return new ImageProcess;
     }
-
 
     public function validate($value)
     {
@@ -264,22 +263,18 @@ class Image extends Param
         $file = null;
 
         // get file info from $_FILES, we have the accessor from the action class.
-        if ( isset($this->action->files[ $this->name ]) && $this->action->files[$this->name]['name'] )
-        {
+        if ( isset($this->action->files[ $this->name ]) && $this->action->files[$this->name]['name'] ) {
             $file = $this->action->getFile($this->name);
             $hasUpload = true;
         }
-        elseif ( isset($this->action->args[$this->name]) ) 
-        {
+        elseif ( isset($this->action->args[$this->name]) ) {
             // If this input is a remote input file, which is a string sent from POST or GET method.
             $file = FileUtils::fileobject_from_path( $this->action->args[$this->name]);
             $replace = true;
         }
-        elseif ($this->sourceField) 
-        {
+        elseif ($this->sourceField) {
             // if there is no file found in $_FILES, we copy the file from another field's upload ($_FILES)
-            if ( $this->action->hasFile($this->sourceField) ) 
-            {
+            if ( $this->action->hasFile($this->sourceField) ) {
                 $file = $this->action->getFile($this->sourceField);
             }
             elseif ( isset( $this->action->args[$this->sourceField] ) ) 
