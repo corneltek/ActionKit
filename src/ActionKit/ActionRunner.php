@@ -71,6 +71,11 @@ class ActionRunner
         }
     }
 
+    public function getGenerator()
+    {
+        return $this->generator;
+    }
+
     /**
      * Check if action request, then dispatch the action class.
      *
