@@ -1,6 +1,7 @@
 <?php
 use ActionKit\ActionRunner;
 use ActionKit\ServiceContainer;
+use ActionKit\ActionTemplate\FileBasedActionTemplate;
 
 class ProductBundleTest extends PHPUnit_Framework_TestCase
 {
@@ -23,9 +24,9 @@ class ProductBundleTest extends PHPUnit_Framework_TestCase
      */
     public function testProductUpdateOrderingActions($actionClass, $recordClass) 
     {
-        $container = new ActionKit\ServiceContainer;
+        $container = new ServiceContainer;
         $generator = $container['generator'];
-        $generator->registerTemplate('FileBasedActionTemplate', new ActionKit\ActionTemplate\FileBasedActionTemplate());
+        $generator->registerTemplate('FileBasedActionTemplate', new FileBasedActionTemplate());
 
         $runner = new ActionRunner($container);
 
