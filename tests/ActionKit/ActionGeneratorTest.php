@@ -4,6 +4,7 @@ use ActionKit\ActionGenerator;
 use ActionKit\RecordAction\BaseRecordAction;
 use ActionKit\ActionTemplate\RecordActionTemplate;
 use ActionKit\ActionTemplate\FileBasedActionTemplate;
+use ActionKit\ActionTemplate\SampleActionTemplate;
 
 class ActionGeneratorTest extends PHPUnit_Framework_TestCase
 {
@@ -17,6 +18,17 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
         is('App\Action\CreatePost', $class);
     }
 
+    public function testSampleActionTemplate()
+    {
+        $generator = new ActionGenerator();
+        $generator->registerTemplate('SampleActionTemplate', new SampleActionTemplate());
+        $runner = new ActionRunner($generator);
+        // $runner->registerAction('SampleActionTemplate', array('action_class' => 'SampleAction'));
+        $runner->getGenerator()->generate('SampleActionTemplate', 'SampleAction', [ 
+            'namespace' => 'FooBar',
+            'action_name' => 'CreateSample'
+        ]);
+    }
 
     /**
      * @expectedException ActionKit\Exception\RequiredConfigKeyException

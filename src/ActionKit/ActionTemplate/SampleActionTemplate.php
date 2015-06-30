@@ -23,8 +23,8 @@ class SampleActionTemplate extends CodeGenActionTemplate
             $namespace = $options['namespace'];
         }
 
-        if ( isset($options['actionName'])) {
-            $actionName = $options['actionName'];
+        if ( isset($options['action_name'])) {
+            $actionName = $options['action_name'];
         }
 
         $actionClass = "$namespace\\Action\\$actionName";

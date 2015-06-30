@@ -12,7 +12,7 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
         $actionTemplate = new SampleActionTemplate();
         $generatedAction = $actionTemplate->generate('', array(
             'namespace' => 'Core',
-            'actionName' => 'GrantAccess'
+            'action_name' => 'GrantAccess'
         ));
         ok( $generatedAction );
 
