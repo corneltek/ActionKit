@@ -34,11 +34,33 @@ class ActionGenerator
 
     /**
      * The new generate method to generate action class with action template
+     *
+     * @param string $templateName
+     * @param string $class
+     * @param array $actionArgs template arguments
+     * @return ActionKit\GeneratedAction
      */
     public function generate($templateName, $class, array $actionArgs = array())
     {
         $actionTemplate = $this->getTemplate($templateName);
         $generatedAction = $actionTemplate->generate($class, $actionArgs);
+        return $generatedAction;
+    }
+
+
+    /**
+     * generateAt generates the action code at $classFilePath
+     *
+     * @param string $classFilePath
+     * @param string $class
+     * @param string $templateName
+     * @param array $actionArgs template arguments
+     * @return ActionKit\GeneratedAction
+     */
+    public function generateAt($classFilePath, $templateName, $class, array $actionArgs = array())
+    {
+        $generatedAction = $this->generate($templateName, $class, $actionArgs);
+        $generatedAction->writeTo($classFilePath);
         return $generatedAction;
     }
 
