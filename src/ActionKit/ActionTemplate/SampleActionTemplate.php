@@ -2,6 +2,7 @@
 namespace ActionKit\ActionTemplate;
 use ActionKit\GeneratedAction;
 use ClassTemplate\TemplateClassFile;
+use ActionKit\Exception\RequiredConfigKeyException;
 
 /**
  *  Sample Action Template Synopsis

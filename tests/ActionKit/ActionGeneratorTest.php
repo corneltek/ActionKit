@@ -19,6 +19,17 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
 
 
     /**
+     * @expectedException ActionKit\Exception\RequiredConfigKeyException
+     */
+    public function testRequiredConfigKeyException()
+    {
+        $generator = new ActionGenerator();
+        $generator->registerTemplate('RecordActionTemplate', new RecordActionTemplate());
+        $runner = new ActionRunner($generator);
+        $runner->registerAction('RecordActionTemplate', array());
+    }
+
+    /**
      * @expectedException ActionKit\Exception\UndefinedTemplateException
      */
     public function testUndefinedTemplate()
