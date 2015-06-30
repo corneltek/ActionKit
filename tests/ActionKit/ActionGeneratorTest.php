@@ -4,6 +4,7 @@ use ActionKit\ActionRunner;
 use ActionKit\ActionGenerator;
 use ActionKit\RecordAction\BaseRecordAction;
 use ActionKit\ActionTemplate\RecordActionTemplate;
+use ActionKit\ActionTemplate\FileBasedActionTemplate;
 
 class ActionGeneratorTest extends PHPUnit_Framework_TestCase
 {
@@ -75,12 +76,12 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
 
     public function testFildBased()
     {
-        $generator = new ActionKit\ActionGenerator();
+        $generator = new ActionGenerator();
         $generator->registerTemplate('FileBasedActionTemplate', new FileBasedActionTemplate());
         $template = $generator->getTemplate('FileBasedActionTemplate');
         $this->assertInstanceOf('ActionKit\ActionTemplate\ActionTemplate', $template);
 
-        $runner = new ActionKit\ActionRunner;
+        $runner = new ActionRunner($generator);
         $template->register($runner, 'FileBasedActionTemplate', array(
             'action_class' => 'User\\Action\\BulkUpdateUser',
             'template' => '@ActionKit/RecordAction.html.twig',
@@ -106,8 +107,8 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
 
     public function testWithoutRegister()
     {
-        $generator = new ActionKit\ActionGenerator();
-        $generator->registerTemplate('FileBasedActionTemplate', new ActionKit\ActionTemplate\FileBasedActionTemplate());
+        $generator = new ActionGenerator();
+        $generator->registerTemplate('FileBasedActionTemplate', new FileBasedActionTemplate());
 
         $className = 'User\Action\BulkDeleteUser';
 
