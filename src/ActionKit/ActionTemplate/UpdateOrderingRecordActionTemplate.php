@@ -5,19 +5,18 @@ use ActionKit\ActionRunner;
 /**
  *  Update Ordering Record Action Template Synopsis
  *
- *      $actionTemplate = new UpdateOrderingRecordActionTemplate; 
- *      $runner = new ActionKit\ActionRunner;
- *      $actionTemplate->register($runner, 'SortRecordActionTemplate', array(
- *          'namespace' => 'test2',
- *          'model' => 'Test2Model',   // model's name
- *      ));
+ *    $actionTemplate = new UpdateOrderingRecordActionTemplate; 
+ *    $runner = new ActionKit\ActionRunner;
+ *    $actionTemplate->register($runner, 'UpdateOrderingRecordActionTemplate', array(
+ *        'namespace' => 'test2',
+ *        'model' => 'Test2Model',   // model's name
+ *    ));
  *
- *       $className = 'test2\Action\SortTest2Model';
- *       $actionArgs = $runner->dynamicActions[$className]['actionArgs'];
- *       $generatedAction = $actionTemplate->generate($className, $actionArgs);
+ *    $className = 'test2\Action\SortTest2Model';
+ *    $actionArgs = $runner->dynamicActions[$className]['actionArgs'];
+ *    $generatedAction = $actionTemplate->generate($className, $actionArgs);
  *
- *       $generatedAction->load();
- *
+ *    $generatedAction->load();
  */
 class UpdateOrderingRecordActionTemplate extends RecordActionTemplate
 {
