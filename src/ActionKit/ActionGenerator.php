@@ -1,8 +1,8 @@
 <?php
 namespace ActionKit;
 use ActionKit\ActionTemplate\ActionTemplate;
+use ActionKit\Exception\UndefinedTemplateException;
 use Exception;
-use Exception\UndefinedTemplateException;
 use UniversalCache;
 use ReflectionClass;
 use ClassTemplate\TemplateClassFile;

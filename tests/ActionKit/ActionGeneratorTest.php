@@ -1,20 +1,35 @@
 <?php
 use ActionKit\ActionTemplate\FileBasedActionTemplate;
+use ActionKit\ActionRunner;
+use ActionKit\ActionGenerator;
+use ActionKit\RecordAction\BaseRecordAction;
+use ActionKit\ActionTemplate\RecordActionTemplate;
 
 class ActionGeneratorTest extends PHPUnit_Framework_TestCase
 {
 
 
+    // TODO: should be moved to BaseRecordActionTest
     public function testCRUDClassFromBaseRecordAction()
     {
-        $class = ActionKit\RecordAction\BaseRecordAction::createCRUDClass( 'App\Model\Post' , 'Create' );
+        $class = BaseRecordAction::createCRUDClass( 'App\Model\Post' , 'Create' );
         ok($class);
         is('App\Action\CreatePost', $class);
     }
 
-    public function testCodeGenBased()
+
+    /**
+     * @expectedException ActionKit\Exception\UndefinedTemplateException
+     */
+    public function testUndefinedTemplate()
     {
-        $generator = new ActionKit\ActionGenerator();
+        $generator = new ActionGenerator();
+        $template = $generator->getTemplate('UndefinedTemplate');
+    }
+
+    public function testRecordActionTemplate()
+    {
+        $generator = new ActionGenerator();
         $generator->registerTemplate('RecordActionTemplate', new ActionKit\ActionTemplate\RecordActionTemplate());
         $template = $generator->getTemplate('RecordActionTemplate');
         $this->assertInstanceOf('ActionKit\ActionTemplate\ActionTemplate', $template);
