@@ -15,15 +15,15 @@ class GeneratedAction
         $this->object = $object;
     }
 
-    public function requireAt($cacheFile)
+    public function requireAt($path)
     {
-        $this->writeTo($cacheFile);
-        require $cacheFile;
+        $this->writeTo($path);
+        require $path;
     }
 
-    public function writeTo($cacheFile)
+    public function writeTo($path)
     {
-        if (false === file_put_contents($cacheFile, $this->code)) {
+        if (false === file_put_contents($path, $this->code)) {
             throw new UnableToWriteCacheException("Can not write action class cache file: $cacheFile");
         }
     }
