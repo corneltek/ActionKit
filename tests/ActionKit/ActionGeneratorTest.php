@@ -1,5 +1,4 @@
 <?php
-use ActionKit\ActionTemplate\FileBasedActionTemplate;
 use ActionKit\ActionRunner;
 use ActionKit\ActionGenerator;
 use ActionKit\RecordAction\BaseRecordAction;
@@ -36,11 +35,61 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('ActionKit\ActionTemplate\ActionTemplate', $template);
     }
 
+    public function testGeneratedUnderDirectory()
+    {
+        $generator = new ActionGenerator();
+        $generator->registerTemplate('RecordActionTemplate', new RecordActionTemplate());
+        $runner = new ActionRunner($generator);
+        $actionArgs = array(
+            'namespace' => 'test',
+            'model' => 'testModel',
+            'types' => array(
+                [ 'name' => 'Create'],
+                [ 'name' => 'Update'],
+                [ 'name' => 'Delete'],
+                [ 'name' => 'BulkDelete']
+            )
+        );
+        $runner->registerAction('RecordActionTemplate', $actionArgs);
+
+        $className = 'test\Action\UpdatetestModel';
+
+        $generatedAction = $generator->generateUnderDirectory('/tmp', 'RecordActionTemplate', $className, $actionArgs);
+        $this->assertNotNull($generatedAction);
+
+        $filePath = '/tmp' . DIRECTORY_SEPARATOR . $generatedAction->getPsrClassPath();
+        $this->assertFileExists($filePath, $filePath);
+        unlink($filePath);
+    }
+
+    public function testGeneratedAt()
+    {
+        $generator = new ActionGenerator();
+        $generator->registerTemplate('RecordActionTemplate', new RecordActionTemplate());
+        $runner = new ActionRunner($generator);
+        $actionArgs = array(
+            'namespace' => 'test',
+            'model' => 'testModel',
+            'types' => array(
+                [ 'name' => 'Create'],
+                [ 'name' => 'Update'],
+                [ 'name' => 'Delete'],
+                [ 'name' => 'BulkDelete']
+            )
+        );
+        $runner->registerAction('RecordActionTemplate', $actionArgs);
+        $className = 'test\Action\UpdatetestModel';
+        $filePath = tempnam('/tmp', md5($className));
+        $generatedAction = $generator->generateAt($filePath, 'RecordActionTemplate', $className, $actionArgs);
+        $this->assertNotNull($generatedAction);
+        $this->assertFileExists($filePath);
+        unlink($filePath);
+    }
+
     public function testRecordActionTemplate()
     {
         $generator = new ActionGenerator();
         $generator->registerTemplate('RecordActionTemplate', new RecordActionTemplate());
-
         $runner = new ActionRunner($generator);
         $actionArgs = array(
             'namespace' => 'test',

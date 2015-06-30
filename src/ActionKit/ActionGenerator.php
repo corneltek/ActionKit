@@ -78,7 +78,15 @@ class ActionGenerator
     {
         $generatedAction = $this->generate($templateName, $class, $actionArgs);
         $classPath = $generatedAction->getPsrClassPath();
-        $generatedAction->writeTo($directory . DIRECTORY_SEPARATOR . $classPath);
+        $path = $directory . DIRECTORY_SEPARATOR . $classPath;
+
+        if ($dir = dirname($path)) {
+            if (!file_exists($dir)) {
+                mkdir($dir, 0755, true);
+            }
+        }
+
+        $generatedAction->writeTo($path);
         return $generatedAction;
     }
 
