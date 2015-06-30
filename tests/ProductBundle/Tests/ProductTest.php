@@ -18,8 +18,6 @@ class ProductBundleTest extends PHPUnit_Framework_TestCase
     }
 
 
-
-    // TODO: 改成用 UpdateOrderingRecordActionTemplate 來建立 UpdateOrderingRecordAction
     /**
      * @dataProvider orderingActionMapProvider
      */
