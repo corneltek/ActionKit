@@ -20,7 +20,7 @@ class Action implements IteratorAggregate
 
     public $relationships = array();
 
-    public $actionFieldName = 'action';
+    public $actionFieldName = '__action';
 
     /**
      * @var array
