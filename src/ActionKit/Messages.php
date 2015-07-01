@@ -31,6 +31,11 @@ class Messages
     }
 }
 
+/**
+ * This is used for gettext message parser
+ *
+ * @codeCoverageIgnore
+ */
 function ___messages() {  
     _('file.required');
     _('param.required');
