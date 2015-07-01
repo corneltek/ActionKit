@@ -33,6 +33,11 @@ class ActionRequest {
         }
     }
 
+    /**
+     * isInvalidActionName returns int
+     *
+     * @return integer matched count.
+     */
     public function isInvalidActionName()
     {
         return preg_match( '/[^A-Za-z0-9:]/i' , $this->actionName);

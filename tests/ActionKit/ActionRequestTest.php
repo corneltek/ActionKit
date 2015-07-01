@@ -40,6 +40,17 @@ class ActionRequestTest extends PHPUnit_Framework_TestCase
         ));
         $this->assertFalse($request->isFullQualifiedName());
     }
+
+    public function testInvalidActionName()
+    {
+        $request = new ActionRequest(array( 
+            '__action' => 'bb_fjeijfe',
+            '__ajax_request' => true,
+            'account' => 'user@gmail.com',
+            'password' => md5('qwer1234'),
+        ));
+        $this->assertEquals(1, $request->isInvalidActionName());
+    }
 }
 
 
