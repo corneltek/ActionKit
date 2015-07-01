@@ -11,10 +11,10 @@ use ClassTemplate\TemplateClassFile;
  * Action Generator Synopsis
  * 
  *    $generator = new ActionGenerator;
- *    $generator->registerTemplate('FileBasedActionTemplate', new ActionKit\ActionTemplate\FileBasedActionTemplate());
+ *    $generator->registerTemplate('TwigActionTemplate', new ActionKit\ActionTemplate\TwigActionTemplate());
  *
  *    $className = 'User\Action\BulkDeleteUser';
- *    $generatedAction = $generator->generate('FileBasedActionTemplate', 
+ *    $generatedAction = $generator->generate('TwigActionTemplate', 
  *        $className, 
  *        array(
  *            'template' => '@ActionKit/RecordAction.html.twig',

@@ -1,7 +1,7 @@
 <?php
 use ActionKit\ActionTemplate\SampleActionTemplate;
 use ActionKit\ActionTemplate\RecordActionTemplate;
-use ActionKit\ActionTemplate\FileBasedActionTemplate;
+use ActionKit\ActionTemplate\TwigActionTemplate;
 use ActionKit\ActionTemplate\UpdateOrderingRecordActionTemplate;
 use ActionKit\Testing\ActionTestCase;
 use ActionKit\ActionRunner;

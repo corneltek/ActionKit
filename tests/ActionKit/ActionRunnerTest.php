@@ -1,5 +1,5 @@
 <?php
-use ActionKit\ActionTemplate\FileBasedActionTemplate;
+use ActionKit\ActionTemplate\TwigActionTemplate;
 use ActionKit\ActionTemplate\RecordActionTemplate;
 use ActionKit\ServiceContainer;
 use ActionKit\ActionRunner;
@@ -18,10 +18,10 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
     {
         $container = new ServiceContainer;
         $generator = $container['generator'];
-        $generator->registerTemplate('FileBasedActionTemplate', new FileBasedActionTemplate);
+        $generator->registerTemplate('TwigActionTemplate', new TwigActionTemplate);
         $runner = new ActionRunner($container);
         $runner->registerAutoloader();
-        $runner->registerAction('FileBasedActionTemplate', array(
+        $runner->registerAction('TwigActionTemplate', array(
             'template' => '@ActionKit/RecordAction.html.twig',
             'action_class' => 'User\\Action\\BulkCreateUser',
             'variables' => array(
@@ -40,10 +40,10 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
     {
         $container = new ServiceContainer;
         $generator = $container['generator'];
-        $generator->registerTemplate('FileBasedActionTemplate', new FileBasedActionTemplate($container['twig_loader']));
+        $generator->registerTemplate('TwigActionTemplate', new TwigActionTemplate($container['twig_loader']));
         $runner = new ActionRunner($container);
         $runner->registerAutoloader();
-        $runner->registerAction('FileBasedActionTemplate', array(
+        $runner->registerAction('TwigActionTemplate', array(
             'template' => '@ActionKit/RecordAction.html.twig',
             'action_class' => 'User\\Action\\BulkCreateUser',
             'variables' => array(

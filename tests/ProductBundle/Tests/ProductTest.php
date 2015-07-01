@@ -1,7 +1,7 @@
 <?php
 use ActionKit\ActionRunner;
 use ActionKit\ServiceContainer;
-use ActionKit\ActionTemplate\FileBasedActionTemplate;
+use ActionKit\ActionTemplate\TwigActionTemplate;
 use ActionKit\ActionTemplate\UpdateOrderingRecordActionTemplate;
 
 class ProductBundleTest extends PHPUnit_Framework_TestCase
@@ -25,7 +25,7 @@ class ProductBundleTest extends PHPUnit_Framework_TestCase
     {
         $container = new ServiceContainer;
         $generator = $container['generator'];
-        $generator->registerTemplate('FileBasedActionTemplate', new FileBasedActionTemplate());
+        $generator->registerTemplate('TwigActionTemplate', new TwigActionTemplate());
         $generator->registerTemplate('UpdateOrderingRecordActionTemplate', new UpdateOrderingRecordActionTemplate());
 
         $runner = new ActionRunner($container);

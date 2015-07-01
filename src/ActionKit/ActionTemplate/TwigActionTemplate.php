@@ -11,10 +11,10 @@ use ReflectionClass;
  *  File-Based Action Template Synopsis
  *    To generate from template file
  *
- *    $actionTemplate = new FileBasedActionTemplate();
+ *    $actionTemplate = new TwigActionTemplate();
  *
  *    $runner = new ActionKit\ActionRunner;
- *    $actionTemplate->register($runner, 'FileBasedActionTemplate', array(
+ *    $actionTemplate->register($runner, 'TwigActionTemplate', array(
  *        'action_class' => 'User\\Action\\BulkUpdateUser',
  *        'template' => '@ActionKit/RecordAction.html.twig',
  *        'variables' => array(
@@ -34,7 +34,7 @@ use ReflectionClass;
  * Depends on Twig template engine
  */
 
-class FileBasedActionTemplate implements ActionTemplate
+class TwigActionTemplate implements ActionTemplate
 {
     private $templateDirs = array();
 

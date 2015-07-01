@@ -3,7 +3,7 @@ use ActionKit\ActionRunner;
 use ActionKit\ActionGenerator;
 use ActionKit\RecordAction\BaseRecordAction;
 use ActionKit\ActionTemplate\RecordActionTemplate;
-use ActionKit\ActionTemplate\FileBasedActionTemplate;
+use ActionKit\ActionTemplate\TwigActionTemplate;
 use ActionKit\ActionTemplate\SampleActionTemplate;
 
 class SampleActionTemplateTest extends PHPUnit_Framework_TestCase

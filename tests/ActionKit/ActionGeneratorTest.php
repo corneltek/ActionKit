@@ -3,7 +3,7 @@ use ActionKit\ActionRunner;
 use ActionKit\ActionGenerator;
 use ActionKit\RecordAction\BaseRecordAction;
 use ActionKit\ActionTemplate\RecordActionTemplate;
-use ActionKit\ActionTemplate\FileBasedActionTemplate;
+use ActionKit\ActionTemplate\TwigActionTemplate;
 use ActionKit\ActionTemplate\SampleActionTemplate;
 
 class ActionGeneratorTest extends PHPUnit_Framework_TestCase
@@ -138,12 +138,12 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
     public function testFildBased()
     {
         $generator = new ActionGenerator();
-        $generator->registerTemplate('FileBasedActionTemplate', new FileBasedActionTemplate());
-        $template = $generator->getTemplate('FileBasedActionTemplate');
+        $generator->registerTemplate('TwigActionTemplate', new TwigActionTemplate());
+        $template = $generator->getTemplate('TwigActionTemplate');
         $this->assertInstanceOf('ActionKit\ActionTemplate\ActionTemplate', $template);
 
         $runner = new ActionRunner($generator);
-        $template->register($runner, 'FileBasedActionTemplate', array(
+        $template->register($runner, 'TwigActionTemplate', array(
             'action_class' => 'User\\Action\\BulkUpdateUser',
             'template' => '@ActionKit/RecordAction.html.twig',
             'variables' => array(
@@ -158,7 +158,7 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
         $this->assertCount(1, $runner->getPretreatments());
         $this->assertNotNull($pretreatment = $runner->getActionPretreatment($className));
 
-        $generatedAction = $generator->generate('FileBasedActionTemplate',
+        $generatedAction = $generator->generate('TwigActionTemplate',
             $className,
             $pretreatment['arguments']);
 
@@ -170,11 +170,11 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
     public function testWithoutRegister()
     {
         $generator = new ActionGenerator();
-        $generator->registerTemplate('FileBasedActionTemplate', new FileBasedActionTemplate());
+        $generator->registerTemplate('TwigActionTemplate', new TwigActionTemplate());
 
         $className = 'User\Action\BulkDeleteUser';
 
-        $generatedAction = $generator->generate('FileBasedActionTemplate',
+        $generatedAction = $generator->generate('TwigActionTemplate',
             $className,
             array(
                 'template' => '@ActionKit/RecordAction.html.twig',

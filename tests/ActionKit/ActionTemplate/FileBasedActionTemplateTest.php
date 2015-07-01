@@ -3,11 +3,11 @@ use ActionKit\ActionRunner;
 use ActionKit\ActionGenerator;
 use ActionKit\RecordAction\BaseRecordAction;
 use ActionKit\ActionTemplate\RecordActionTemplate;
-use ActionKit\ActionTemplate\FileBasedActionTemplate;
+use ActionKit\ActionTemplate\TwigActionTemplate;
 use ActionKit\ActionTemplate\SampleActionTemplate;
 use ActionKit\Testing\ActionTestCase;
 
-class FileBasedActionTemplateTest extends ActionTestCase
+class TwigActionTemplateTest extends ActionTestCase
 {
     public function failingArgumentProvider()
     {
@@ -25,20 +25,20 @@ class FileBasedActionTemplateTest extends ActionTestCase
      * @dataProvider failingArgumentProvider
      * @expectedException ActionKit\Exception\RequiredConfigKeyException
      */
-    public function testFileBasedActionTemplateWithException($arguments)
+    public function testTwigActionTemplateWithException($arguments)
     {
-        $actionTemplate = new FileBasedActionTemplate;
+        $actionTemplate = new TwigActionTemplate;
         $generator = new ActionGenerator();
-        $generator->registerTemplate('FileBasedActionTemplate', $actionTemplate);
+        $generator->registerTemplate('TwigActionTemplate', $actionTemplate);
 
         $runner = new ActionRunner;
-        $actionTemplate->register($runner, 'FileBasedActionTemplate', $arguments);
+        $actionTemplate->register($runner, 'TwigActionTemplate', $arguments);
 
-        $generator->generate('FileBasedActionTemplate', 'FileApp\Action\FooAction', $arguments);
+        $generator->generate('TwigActionTemplate', 'FileApp\Action\FooAction', $arguments);
     }
 
 
-    public function testFileBasedActionTemplateWithTwigEnvironmentAndLoader()
+    public function testTwigActionTemplateWithTwigEnvironmentAndLoader()
     {
         $loader = new Twig_Loader_Filesystem([]);
         $loader->addPath('src/ActionKit/Templates', 'ActionKit');
@@ -47,14 +47,14 @@ class FileBasedActionTemplateTest extends ActionTestCase
             'cache' => false,
         ));
 
-        $actionTemplate = new FileBasedActionTemplate($loader, $env);
+        $actionTemplate = new TwigActionTemplate($loader, $env);
 
         $this->assertNotNull($actionTemplate->getTwigEnvironment());
         $this->assertNotNull($actionTemplate->getTwigLoader());
 
         $runner = new ActionRunner;
         $className = 'User\\Action\\BulkUpdateUser4';
-        $actionTemplate->register($runner, 'FileBasedActionTemplate', array(
+        $actionTemplate->register($runner, 'TwigActionTemplate', array(
             'action_class' => $className,
             'template' => '@ActionKit/RecordAction.html.twig',
             'variables' => array(
@@ -71,15 +71,15 @@ class FileBasedActionTemplateTest extends ActionTestCase
 
 
 
-    public function testFileBasedActionTemplateWithTwigLoader()
+    public function testTwigActionTemplateWithTwigLoader()
     {
         $loader = new Twig_Loader_Filesystem([]);
         $loader->addPath('src/ActionKit/Templates', 'ActionKit');
-        $actionTemplate = new FileBasedActionTemplate($loader);
+        $actionTemplate = new TwigActionTemplate($loader);
 
         $runner = new ActionRunner;
         $className = 'User\\Action\\BulkUpdateUser3';
-        $actionTemplate->register($runner, 'FileBasedActionTemplate', array(
+        $actionTemplate->register($runner, 'TwigActionTemplate', array(
             'action_class' => $className,
             'template' => '@ActionKit/RecordAction.html.twig',
             'variables' => array(
@@ -94,12 +94,12 @@ class FileBasedActionTemplateTest extends ActionTestCase
         $this->assertRequireGeneratedAction($className, $generatedAction);
     }
 
-    public function testFileBasedActionTemplate()
+    public function testTwigActionTemplate()
     {
-        $actionTemplate = new FileBasedActionTemplate();
+        $actionTemplate = new TwigActionTemplate();
         $runner = new ActionRunner;
         $className = 'User\\Action\\BulkUpdateUser2';
-        $actionTemplate->register($runner, 'FileBasedActionTemplate', array(
+        $actionTemplate->register($runner, 'TwigActionTemplate', array(
             'action_class' => $className,
             'template' => '@ActionKit/RecordAction.html.twig',
             'variables' => array(
