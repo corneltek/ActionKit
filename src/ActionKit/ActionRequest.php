@@ -16,7 +16,7 @@ class ActionRequest {
 
     protected $actionName;
 
-    public function __construct(array $request, array $files = null)
+    public function __construct(array $request = array(), array $files = null)
     {
         $this->request = $request;
 

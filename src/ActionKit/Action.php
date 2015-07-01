@@ -37,6 +37,9 @@ class Action implements IteratorAggregate
      */
     public $params = array();
 
+
+    public $actionRequest;
+
     /**
      * @var Universal\Http\HttpRequest request object
      */
