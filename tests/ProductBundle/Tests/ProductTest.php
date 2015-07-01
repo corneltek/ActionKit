@@ -48,7 +48,9 @@ class ProductBundleTest extends PHPUnit_Framework_TestCase
 
     public function testCreateProductFile()
     {
-        $create = new CreateProductFile;
+        $create = new CreateProductFile([ 
+       
+        ]);
         $create->run();
     }
 }

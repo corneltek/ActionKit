@@ -41,9 +41,25 @@ class ActionRequest {
         }
     }
 
+    public function arg($field)
+    {
+        if (isset($this->arguments[$field])) {
+            return $this->arguments[$field];
+        }
+        return null;
+    }
+
     public function getFiles() 
     {
         return $this->files;
+    }
+
+    public function file($field)
+    {
+        if (isset($this->files[$field])) {
+            return $this->files[$field];
+        }
+        return null;
     }
 
     /**

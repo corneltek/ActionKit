@@ -41,6 +41,54 @@ class ActionRequestTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($request->isFullQualifiedName());
     }
 
+    public function testArg()
+    {
+        $request = new ActionRequest([
+            '__action' => 'MyApp::Action::CreateProduct',
+            '__ajax_request' => true,
+            'account' => 'user@gmail.com',
+            'password' => md5('qwer1234'),
+        ]);
+        $this->assertEquals('user@gmail.com',$request->arg('account'));
+    }
+
+    public function testFiles()
+    {
+        $files = [
+            'download' => [
+                'name' => array(
+                        'file1' => 'MyFile.txt',
+                        'file2' => 'MyFile.jpg',
+                ),
+                'type' => array(
+                        'file1' => 'text/plain',
+                        'file2' => 'image/jpeg',
+                    ),
+                'tmp_name' => array (
+                        'file1' => '/tmp/php/php1h4j1o',
+                        'file2' => '/tmp/php/php6hst32',
+                ),
+                'error' => array(
+                        'file1' => UPLOAD_ERR_OK,
+                        'file2' => UPLOAD_ERR_OK,
+                ),
+                'size' => array(
+                        'file1' => 123,
+                        'file2' => 98174
+                ),
+            ],
+        ];
+        $request = new ActionRequest([
+            '__action' => 'MyApp::Action::CreateProduct',
+            '__ajax_request' => true,
+            'account' => 'user@gmail.com',
+            'password' => md5('qwer1234'),
+        ], $files);
+        $fileStash = $request->file('download');
+        $this->assertNotNull($fileStash);
+        $this->assertCount(2, $fileStash);
+    }
+
     public function testInvalidActionName()
     {
         $request = new ActionRequest(array( 
