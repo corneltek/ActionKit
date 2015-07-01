@@ -54,9 +54,7 @@ class ActionTemplate extends ActionTestCase
         $this->assertNotNull($pretreatment = $runner->getActionPretreatment($className));
 
         $generatedAction = $actionTemplate->generate($className, $pretreatment);
-        $this->assertNotNull($generatedAction);
-        $generatedAction->load();
-        ok( class_exists( $className ) );
+        $this->assertRequireGeneratedAction($className, $generatedAction);
     }
 
 }
