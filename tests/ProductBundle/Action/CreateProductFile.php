@@ -16,8 +16,8 @@ class CreateProductFile  extends CreateRecordAction
             ->sizeLimit($sizeLimit)
             ->required()
             ->hint('product file hint')
-            ->hintFromSizeInfo()
             ->label('product file label')
+            ->putIn('tests/upload')
             ;
 
     }

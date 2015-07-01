@@ -91,7 +91,6 @@ class ProductActionTest extends ModelTestCase
         $product = $create->getRecord();
         ok($id = $product->id, 'product created');
 
-
         $delete = $product->asDeleteAction();
         ok($delete->run());
 
