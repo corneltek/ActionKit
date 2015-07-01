@@ -8,6 +8,27 @@ use ActionKit\ActionTemplate\SampleActionTemplate;
 
 class SampleActionTemplateTest extends PHPUnit_Framework_TestCase
 {
+
+    public function failingArgumentProvider()
+    {
+        return [ 
+            [ ['namespace' => 'FooBar'] ],
+            [ ['action_name' => 'CreateSample'] ],
+            [ [] ]
+        ];
+    }
+
+    /**
+     * @dataProvider failingArgumentProvider
+     * @expectedException ActionKit\Exception\RequiredConfigKeyException
+     */
+    public function testSampleActionTemplateWithException($arguments)
+    {
+        $generator = new ActionGenerator();
+        $generator->registerTemplate('SampleActionTemplate', new SampleActionTemplate());
+        $generator->generate('SampleActionTemplate', 'SampleAction', $arguments);
+    }
+
     public function testSampleActionTemplate()
     {
         $generator = new ActionGenerator();
