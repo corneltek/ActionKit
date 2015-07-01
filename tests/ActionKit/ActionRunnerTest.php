@@ -55,7 +55,7 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
         $result = $runner->run('User::Action::BulkCreateUser',array(
             'email' => 'foo@foo'
         ));
-        ok($result);
+        $this->assertNotNull($result);
     }
 
     public function testRunAndJsonOutput()
@@ -64,7 +64,6 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
         $generator = $container['generator'];
         $generator->registerTemplate('RecordActionTemplate', new RecordActionTemplate);
         $runner = new ActionRunner($container);
-        ok($runner);
         $runner->registerAutoloader();
         $runner->registerAction('RecordActionTemplate', array(
             'namespace' => 'User',
@@ -79,7 +78,7 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
         $result = $runner->run('User::Action::CreateUser',[ 
             'email' => 'foo@foo'
         ]);
-        ok($result);
+        $this->assertNotNull($result);
 
         $json = $result->__toString();
         ok($json,'json output');
@@ -89,8 +88,11 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
         ok($data->data->id);
 
         $results = $runner->getResults();
-        ok($results);
-        ok($runner->getResult('User::Action::CreateUser'));
+        $this->assertNotEmpty($results);
+
+        $this->assertNotNull($runner->getResult('User::Action::CreateUser'));
+
+
         $runner->setResult('test', 'test message');
         is(true, $runner->hasResult('test'));
         $runner->removeResult('test');
@@ -115,6 +117,19 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
         $expected_output = '{"args":{"email":"foo@foo"},"success":true,"message":"User Record is created.","data":{"email":"foo@foo","id":1}}';
         is($expected_output, $output);
     }
+
+
+    public function testRunnerArrayAccess()
+    {
+        $container = new ServiceContainer;
+        $runner = new ActionRunner($container);
+
+        $runner['User::Action::CreateUser'] = new \ActionKit\Result;
+
+        // Test Result getter
+        $this->assertNotNull($runner['User::Action::CreateUser']);
+    }
+
 
     /**
     *   @expectedException  ActionKit\Exception\InvalidActionNameException
