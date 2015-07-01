@@ -30,10 +30,10 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
             'namespace' => 'test2',
             'model' => 'Test2Model'   // model's name
         ));
-        is(1, count($runner->dynamicActions));
+        is(1, count($runner->pretreatments));
 
         $className = 'test2\Action\UpdateTest2ModelOrdering';
-        $actionArgs = $runner->dynamicActions[$className]['actionArgs'];
+        $actionArgs = $runner->pretreatments[$className]['arguments'];
         $generatedAction = $actionTemplate->generate($className, $actionArgs);
         ok( $generatedAction );
 
@@ -55,10 +55,10 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
                 [ 'name' => 'BulkDelete']
             )
         ));
-        is(4, count($runner->dynamicActions));
+        is(4, count($runner->pretreatments));
 
         $className = 'test2\Action\Updatetest2Model';
-        $generatedAction = $actionTemplate->generate($className, $runner->dynamicActions[$className]);
+        $generatedAction = $actionTemplate->generate($className, $runner->pretreatments[$className]);
         ok( $generatedAction );
 
         $generatedAction->load();
@@ -81,12 +81,12 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
                 'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction'
             )
         ));
-        is(1, count($runner->dynamicActions));
+        is(1, count($runner->pretreatments));
 
-        is(true, isset($runner->dynamicActions[$className]));
+        is(true, isset($runner->pretreatments[$className]));
 
         $generatedAction = $actionTemplate->generate($className, 
-            $runner->dynamicActions[$className]['actionArgs']);
+            $runner->pretreatments[$className]['arguments']);
         ok($generatedAction);
 
         $generatedAction->load();

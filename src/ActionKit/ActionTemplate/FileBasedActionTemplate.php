@@ -26,7 +26,7 @@ use ReflectionClass;
  *    $className = 'User\Action\BulkUpdateUser';
  *
  *    $generatedAction = $actionTemplate->generate($className,
- *        $runner->dynamicActions[$className]['actionArgs']);
+ *        $runner->pretreatments[$className]['actionArgs']);
  *
  *    $generatedAction->requireAt($cacheCodePath);
  *

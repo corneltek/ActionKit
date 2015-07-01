@@ -131,15 +131,15 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
         $template->register($runner, 'RecordActionTemplate', $actionArgs);
          */
 
-        $this->assertCount( 4, $runner->dynamicActions);
+        $this->assertCount( 4, $runner->pretreatments);
 
         $className = 'test\Action\UpdatetestModel';
 
-        is(true, isset($runner->dynamicActions[$className]));
+        is(true, isset($runner->pretreatments[$className]));
 
         $generatedAction = $generator->generate('RecordActionTemplate',
             $className,
-            $runner->dynamicActions[$className]['actionArgs']);
+            $runner->pretreatments[$className]['arguments']);
 
         $generatedAction->load();
 
@@ -162,15 +162,15 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
                 'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction'
             )
         ));
-        is(1, count($runner->dynamicActions));
+        $this->assertCount(1, $runner->getPretreatments());
 
         $className = 'User\Action\BulkUpdateUser';
 
-        is(true, isset($runner->dynamicActions[$className]));
+        $this->assertNotNull($actionStash = $runner->getDynamicActionArguments($className) );
 
         $generatedAction = $generator->generate('FileBasedActionTemplate',
             $className,
-            $runner->dynamicActions[$className]['actionArgs']);
+            $actionStash['arguments']);
 
         $generatedAction->load();
 

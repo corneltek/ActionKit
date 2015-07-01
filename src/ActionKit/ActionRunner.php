@@ -39,7 +39,7 @@ use ActionKit\Exception\UnableToCreateActionException;
 class ActionRunner
     implements IteratorAggregate, ArrayAccess
 {
-    public $dynamicActions = array();
+    public $pretreatments = array();
 
     /**
      * @var array Result pool
@@ -156,12 +156,12 @@ class ActionRunner
 
     public function loadClass($class) 
     {
-        if (!isset($this->dynamicActions[$class])) {
+        if (!isset($this->pretreatments[$class])) {
             return false;
         }
 
-        $templateName = $this->dynamicActions[$class]['actionTemplateName'];
-        $actionArgs = $this->dynamicActions[$class]['actionArgs'];
+        $templateName = $this->pretreatments[$class]['template'];
+        $actionArgs = $this->pretreatments[$class]['arguments'];
         if ($this->loadClassCache($class, $actionArgs) ) {
             return true;
         }
@@ -205,18 +205,47 @@ class ActionRunner
         spl_autoload_register(array($this,'loadClass'),true, false);
     }
 
-    public function registerAction($actionTemplateName, array $options)
+
+    /**
+     * registerAction register actions by passing action config to ActionTemplate.
+     *
+     * @param string $actionTemplateName
+     * @param array $templateArguments
+     */
+    public function registerAction($actionTemplateName, array $templateArguments)
     {
         $template = $this->generator->getTemplate($actionTemplateName);
-        $template->register($this, $actionTemplateName, $options);
+        $template->register($this, $actionTemplateName, $templateArguments);
     }
 
-    public function register($targetActionClass, $actionTemplateName, array $actionArgs = array())
+
+    /**
+     * register method registers the action class with specified action template name and its arguments
+     *
+     */
+    public function register($targetActionClass, $actionTemplateName, array $templateArguments = array())
     {
-        $this->dynamicActions[$targetActionClass] = array(
-            'actionTemplateName' => $actionTemplateName,
-            'actionArgs' => $actionArgs
+        $this->pretreatments[$targetActionClass] = array(
+            'template' => $actionTemplateName,
+            'arguments' => $templateArguments,
         );
+    }
+
+    public function countOfPretreatments()
+    {
+        return count($this->pretreatments);
+    }
+
+    public function getPretreatments()
+    {
+        return $this->pretreatments;
+    }
+
+    public function getDynamicActionArguments($actionClass)
+    {
+        if (isset($this->pretreatments[$actionClass])) {
+            return $this->pretreatments[$actionClass];
+        }
     }
 
     public function isInvalidActionName( $actionName )

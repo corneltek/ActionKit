@@ -14,7 +14,7 @@ use ActionKit\ActionRunner;
  *    ));
  *
  *    $className = 'test2\Action\SortTest2Model';
- *    $actionArgs = $runner->dynamicActions[$className]['actionArgs'];
+ *    $actionArgs = $runner->pretreatments[$className]['actionArgs'];
  *    $generatedAction = $actionTemplate->generate($className, $actionArgs);
  *
  *    $generatedAction->load();

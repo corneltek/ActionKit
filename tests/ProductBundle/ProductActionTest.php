@@ -164,7 +164,7 @@ class ProductActionTest extends ModelTestCase
         ));
 
         $className = 'ProductBundle\Action\UpdateProductOrdering';
-        $actionArgs = $runner->dynamicActions[$className]['actionArgs'];
+        $actionArgs = $runner->pretreatments[$className]['arguments'];
         $generatedAction = $actionTemplate->generate($className, $actionArgs);
         $generatedAction->load();
 
