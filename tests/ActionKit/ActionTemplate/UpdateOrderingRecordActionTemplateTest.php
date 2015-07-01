@@ -6,6 +6,36 @@ use ActionKit\GeneratedAction;
 
 class UpdateOrderingRecordActionTemplateTest extends ActionTestCase
 {
+    public function failingArgumentProvider()
+    {
+        return [ 
+            [ [
+                'use' => ['OrderingTest\SomeProvider']
+            ] ],
+            [ [
+                'namespace' => 'OrderingTest',
+            ] ],
+            [ [
+                'model' => 'Bar',   // model's name
+            ] ],
+        ];
+    }
+
+
+    /**
+     * @dataProvider failingArgumentProvider
+     * @expectedException ActionKit\Exception\RequiredConfigKeyException
+     */
+    public function testUpdateOrderingRecordActionTemplateWithFailingArguments($arguments)
+    {
+        $recordClass = 'OrderingTest\Model\Foo';
+        $className = 'OrderingTest\Action\UpdateFooOrdering';
+
+        $actionTemplate = new UpdateOrderingRecordActionTemplate;
+        $runner = new ActionRunner;
+        $actionTemplate->register($runner, 'UpdateOrderingRecordActionTemplate', $arguments);
+    }
+
 
     public function testGenerationWithRecordClassOption()
     {
