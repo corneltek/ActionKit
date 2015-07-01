@@ -991,15 +991,20 @@ class Action implements IteratorAggregate
     }
 
     /**
-     * Shortcut method for creating csrf token widget
+     * Get CSRF token
+     *
+     * @return string CSRF token string
      */
-    public function createCSRFTokenWidget()
+    public function getCSRFToken()
     {
-        $token = CsrfTokenProvider::loadTokenWithSessionKey('_csrf_token', true);
-        if ( $token == null || !$token->checkExpiry($_SERVER['REQUEST_TIME']) ) {
-            $token = CsrfTokenProvider::generateToken();
+        if ( $this->enableCSRFToken && !isset($this->args['_csrf_token']) ) {
+            $token = CsrfTokenProvider::loadTokenWithSessionKey('_csrf_token', true);
+            if ( $token == null || !$token->checkExpiry($_SERVER['REQUEST_TIME']) ) {
+                $token = CsrfTokenProvider::generateToken();
+            }
+            return $token->hash;
         }
-        return new \FormKit\Widget\HiddenInput('_csrf_token', array( 'value' => $token->hash ));
+        return null;
     }
 
     /**
@@ -1011,11 +1016,13 @@ class Action implements IteratorAggregate
      */
     public function renderCSRFTokenWidget(array $attrs = array())
     {
-        if ( $this->enableCSRFToken && !isset($this->args['_csrf_token']) ) {
-            $hidden = $this->createCSRFTokenWidget();
+        $hash = $this->getCSRFToken();
+        if ($hash) {
+            $hidden = new \FormKit\Widget\HiddenInput('_csrf_token', array( 'value' => $hash ));
             return $hidden->render($attrs);
+        } else {
+            return null;
         }
-        return null;
     }
 
     /**
