@@ -4,6 +4,7 @@ use Exception;
 use IteratorAggregate;
 use ArrayAccess;
 use ActionKit\Utils;
+use ActionKit\ActionRequest;
 use ActionKit\Exception\InvalidActionNameException;
 use ActionKit\Exception\ActionNotFoundException;
 use ActionKit\Exception\UnableToWriteCacheException;
@@ -92,7 +93,7 @@ class ActionRunner
      * @param array   $arguments
      * @return ActionKit\Result result array if there is such an action.
      * */
-    public function run($actionName, array $arguments = array() )
+    public function run($actionName, array $arguments = array(), ActionRequest $request = null )
     {
         if ( ! Utils::validateActionName( $actionName ) ) {
             throw new InvalidActionNameException( "Invalid action name: $actionName." );
@@ -102,12 +103,12 @@ class ActionRunner
         $class = Utils::toActionClass($actionName);
 
         /* register results into hash */
-        $action = $this->createAction($class, $arguments);
+        $action = $this->createAction($class, $arguments, $request);
         $action->invoke();
         return $this->results[ $actionName ] = $action->getResult();
     }
 
-    public function runWithRequest(ActionRequest $request) 
+    public function runWithRequest(ActionRequest $request)
     {
         if (!$request->getActionName()) {
             throw new InvalidActionNameException("");
@@ -115,8 +116,7 @@ class ActionRunner
         if ( ! Utils::validateActionName( $request->getActionName() ) ) {
             throw new InvalidActionNameException( "Invalid action name: " . $request->getActionName() . ".");
         }
-
-        return $this->run($request->getActionName(), $request->getArguments());
+        return $this->run($request->getActionName(), $request->getArguments(), $request);
     }
 
 
@@ -268,7 +268,7 @@ class ActionRunner
      *
      * @param string $class
      */
-    public function createAction($class , array $args = array() )
+    public function createAction($class , array $args = array(), ActionRequest $request = null)
     {
         // Try to load the user-defined action
         if (!class_exists($class, true) ) {
@@ -281,8 +281,9 @@ class ActionRunner
                 throw new ActionNotFoundException( "Action class not found: $class, you might need to setup action autoloader" );
             }
         }
-
-        $action = new $class( $args );
+        $action = new $class($args, array(
+            'request' => $request,
+        ));
         $action->setCurrentUser($this->currentUser);
         return $action;
     }

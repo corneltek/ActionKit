@@ -59,15 +59,25 @@ class BaseRecordAction extends Action
      * @param array                $args
      * @param LazyRecord\BaseModel $record
      */
-    public function __construct($args = array(), BaseModel $record = null, $options = array())
+    public function __construct(array $args = array(), $options = array())
     {
-        // record name is in Camel case
-        if ( ! $this->recordClass && $record ) {
+        $record = null;
+
+        if (isset($options['record'])) {
+            $record = $options['record'];
+        } else if ($options instanceof BaseModel) {
+            $record = $options;
+            $options = array(); // reassign $options as array
+        }
+
+        if (isset($options['record_class'])) {
+            $this->recordClass = $options['record_class'];
+        } else if (! $this->recordClass && $record) {
             $this->recordClass = get_class($record);
         }
 
-        if ( ! $this->recordClass ) {
-            throw new ActionException(sprintf('recordClass is not defined.' , $this));
+        if (! $this->recordClass ) {
+            throw new ActionException(sprintf('recordClass is not defined.'), $this);
         }
 
         if ($record === null) {
@@ -84,7 +94,7 @@ class BaseRecordAction extends Action
         }
 
         // initialize schema , init base action stuff
-        parent::__construct( $args , $options );
+        parent::__construct($args , $options);
 
         if ( $this->record->id ) {
             // load record values to params
