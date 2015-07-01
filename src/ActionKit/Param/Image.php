@@ -4,7 +4,7 @@ use ActionKit\Param;
 use Phifty\UploadFile;
 use Exception;
 use RuntimeException;
-use ActionKit\ImageProcess;
+use ActionKit\ImageProcessor;
 use Phifty\FileUtils;
 use ActionKit\RecordAction\UpdateRecordAction;
 use ActionKit\RecordAction\CreateRecordAction;
@@ -193,7 +193,7 @@ class Image extends Param
 
     public function getImager()
     {
-        return new ImageProcess;
+        return new ImageProcessor;
     }
 
     public function validate($value)
