@@ -149,47 +149,6 @@ the `invoke` method trigger `runPreinit`, `runInit`,
 Action Schema
 -------------
 
-### Synopsis
-
-```php
-class Action 
-{
-    function schema()
-    {
-        $this->param('id')->type('integer');
-        $this->param('title')->type('string');
-        $this->param('content')->type('string')->filter( 'html' );  # load html filter
-        $this->param('image','Image')   # Image File Column Class  Action\ImageColumn
-            ->type('file')              # Image and File column class will auto set type = 'file'
-            ->validExtension(array('jpg','png'))
-            ->resize( 100 , 100 )
-            ->putIn( kernel()->getAppWebDir() . DS . 'public' );
-    }
-}
-```
-
-### Action schema methods
-
-
-* param(string $columnName):
-
-    create a new action parameter, you can define types,
-    widget type, validations, canonicalier ... etc.
-
-* filterOut( array $fieldNames):
-
-    field black list.
-
-    when taking an action to invoke, filter out these
-    arguments by array keys.
-
-    when rendering an action with an action view,
-    also ignore these params.
-    
-* takes( array $fieldNames ):
-
-    field white list.
-
 ### run method
 
 #### methods
