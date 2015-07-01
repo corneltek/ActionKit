@@ -10,6 +10,8 @@ class ActionRequest {
 
     protected $requestParameters = array();
 
+    protected $request;
+
     protected $arguments = array();
 
     protected $files = array();
@@ -19,6 +21,7 @@ class ActionRequest {
     public function __construct(array $requestParameters = array(), array $files = null)
     {
         $this->requestParameters = $requestParameters;
+        $this->request = new HttpRequest($requestParameters, $files);
 
         $this->arguments = array_merge($this->requestParameters, array());
 
