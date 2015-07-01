@@ -164,9 +164,13 @@ class ProductActionTest extends ModelTestCase
         ));
 
         $className = 'ProductBundle\Action\UpdateProductOrdering';
-        $actionArgs = $runner->pretreatments[$className]['arguments'];
-        $generatedAction = $actionTemplate->generate($className, $actionArgs);
-        $generatedAction->load();
+
+        $this->assertNotNull($pretreatment = $runner->getActionPretreatment($className));
+
+        $generatedAction = $actionTemplate->generate($className, $pretreatment['arguments']);
+        $this->assertNotNull($generatedAction);
+
+        $tmp = $generatedAction->load();
 
         $updateOrdering = new $className(array( 'list' => json_encode($idList) ));
         is($updateOrdering->getName(), 'UpdateProductOrdering');

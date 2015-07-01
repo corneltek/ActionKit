@@ -32,6 +32,7 @@ class GeneratedAction
     {
         $tmpname = tempnam('/tmp', md5($this->className));
         $this->requireAt($tmpname);
+        return $tmpname;
     }
 
     public function getPsrClassPath()

@@ -39,7 +39,7 @@ use ActionKit\Exception\UnableToCreateActionException;
 class ActionRunner
     implements IteratorAggregate, ArrayAccess
 {
-    public $pretreatments = array();
+    protected $pretreatments = array();
 
     /**
      * @var array Result pool
@@ -161,14 +161,14 @@ class ActionRunner
         }
 
         $templateName = $this->pretreatments[$class]['template'];
-        $actionArgs = $this->pretreatments[$class]['arguments'];
-        if ($this->loadClassCache($class, $actionArgs) ) {
+        $arguments = $this->pretreatments[$class]['arguments'];
+        if ($this->loadClassCache($class, $arguments) ) {
             return true;
         }
 
-        $generatedAction = $this->generator->generate($templateName, $class, $actionArgs);
+        $generatedAction = $this->generator->generate($templateName, $class, $arguments);
 
-        $cacheFile = $this->getClassCacheFile($class, $actionArgs);
+        $cacheFile = $this->getClassCacheFile($class, $arguments);
         $generatedAction->requireAt($cacheFile);
         return true;
     }
@@ -241,7 +241,7 @@ class ActionRunner
         return $this->pretreatments;
     }
 
-    public function getDynamicActionArguments($actionClass)
+    public function getActionPretreatment($actionClass)
     {
         if (isset($this->pretreatments[$actionClass])) {
             return $this->pretreatments[$actionClass];

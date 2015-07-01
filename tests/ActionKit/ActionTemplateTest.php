@@ -30,12 +30,15 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
             'namespace' => 'test2',
             'model' => 'Test2Model'   // model's name
         ));
-        is(1, count($runner->pretreatments));
 
         $className = 'test2\Action\UpdateTest2ModelOrdering';
-        $actionArgs = $runner->pretreatments[$className]['arguments'];
-        $generatedAction = $actionTemplate->generate($className, $actionArgs);
-        ok( $generatedAction );
+
+        $this->assertCount(1, $runner->getPretreatments());
+        $this->assertNotNull($pretreatment = $runner->getActionPretreatment($className));
+
+        $generatedAction = $actionTemplate->generate($className, $pretreatment);
+
+        $this->assertNotNull($generatedAction);
 
         $generatedAction->load();
         ok( class_exists( $className ) );
@@ -55,12 +58,13 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
                 [ 'name' => 'BulkDelete']
             )
         ));
-        is(4, count($runner->pretreatments));
 
         $className = 'test2\Action\Updatetest2Model';
-        $generatedAction = $actionTemplate->generate($className, $runner->pretreatments[$className]);
-        ok( $generatedAction );
+        $this->assertCount(4, $runner->getPretreatments());
+        $this->assertNotNull($pretreatment = $runner->getActionPretreatment($className));
 
+        $generatedAction = $actionTemplate->generate($className, $pretreatment);
+        $this->assertNotNull($generatedAction);
         $generatedAction->load();
         ok( class_exists( $className ) );
     }
@@ -81,14 +85,11 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
                 'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction'
             )
         ));
-        is(1, count($runner->pretreatments));
+        $this->assertCount(1, $runner->getPretreatments());
+        $this->assertNotNull($pretreatment = $runner->getActionPretreatment($className));
 
-        is(true, isset($runner->pretreatments[$className]));
-
-        $generatedAction = $actionTemplate->generate($className, 
-            $runner->pretreatments[$className]['arguments']);
-        ok($generatedAction);
-
+        $generatedAction = $actionTemplate->generate($className, $pretreatment['arguments']);
+        $this->assertNotNull($generatedAction);
         $generatedAction->load();
         ok( class_exists( $className ) );
     }
