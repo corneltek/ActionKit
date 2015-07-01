@@ -126,6 +126,8 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
 
         $runner['User::Action::CreateUser'] = new \ActionKit\Result;
 
+        $this->assertTrue( isset($runner['User::Action::CreateUser']) );
+
         // Test Result getter
         $this->assertNotNull($runner['User::Action::CreateUser']);
     }
