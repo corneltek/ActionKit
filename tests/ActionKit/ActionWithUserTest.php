@@ -45,9 +45,9 @@ class ActionWithUserTest extends \LazyRecord\Testing\ModelTestCase
             'namespace' => 'OrderBundle',
             'model' => 'Order',
             'types' => array(
-                ['name' => 'Create', 'allowedRoles' => ['user', 'admin'] ],
-                ['name' => 'Update'],
-                ['name' => 'Delete']
+                ['prefix' => 'Create', 'allowedRoles' => ['user', 'admin'] ],
+                ['prefix' => 'Update'],
+                ['prefix' => 'Delete']
             )
         ));
 
@@ -83,9 +83,9 @@ class ActionWithUserTest extends \LazyRecord\Testing\ModelTestCase
             'namespace' => 'OrderBundle',
             'model' => 'Order',
             'types' => array(
-                ['name' => 'Create', 'allowedRoles' => ['user', 'admin'] ],
-                ['name' => 'Update'],
-                ['name' => 'Delete']
+                ['prefix' => 'Create', 'allowedRoles' => ['user', 'admin'] ],
+                ['prefix' => 'Update'],
+                ['prefix' => 'Delete']
             )
         ));
 

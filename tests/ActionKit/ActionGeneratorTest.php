@@ -56,10 +56,10 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
             'namespace' => 'test',
             'model' => 'testModel',
             'types' => array(
-                [ 'name' => 'Create'],
-                [ 'name' => 'Update'],
-                [ 'name' => 'Delete'],
-                [ 'name' => 'BulkDelete']
+                [ 'prefix' => 'Create'],
+                [ 'prefix' => 'Update'],
+                [ 'prefix' => 'Delete'],
+                [ 'prefix' => 'BulkDelete']
             )
         );
         $runner->registerAction('RecordActionTemplate', $actionArgs);
@@ -83,10 +83,10 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
             'namespace' => 'test',
             'model' => 'testModel',
             'types' => array(
-                [ 'name' => 'Create'],
-                [ 'name' => 'Update'],
-                [ 'name' => 'Delete'],
-                [ 'name' => 'BulkDelete']
+                [ 'prefix' => 'Create'],
+                [ 'prefix' => 'Update'],
+                [ 'prefix' => 'Delete'],
+                [ 'prefix' => 'BulkDelete']
             )
         );
         $runner->registerAction('RecordActionTemplate', $actionArgs);
@@ -107,10 +107,10 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
             'namespace' => 'test',
             'model' => 'testModel',
             'types' => array(
-                [ 'name' => 'Create'],
-                [ 'name' => 'Update'],
-                [ 'name' => 'Delete'],
-                [ 'name' => 'BulkDelete']
+                [ 'prefix' => 'Create'],
+                [ 'prefix' => 'Update'],
+                [ 'prefix' => 'Delete'],
+                [ 'prefix' => 'BulkDelete']
             )
         );
         $runner->registerAction('RecordActionTemplate', $actionArgs);

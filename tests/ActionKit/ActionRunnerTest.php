@@ -70,9 +70,9 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
             'namespace' => 'User',
             'model' => 'User',
             'types' => array(
-                [ 'name' => 'Create'],
-                [ 'name' => 'Update'],
-                [ 'name' => 'Delete'],
+                [ 'prefix' => 'Create'],
+                [ 'prefix' => 'Update'],
+                [ 'prefix' => 'Delete'],
             )
         ));
 

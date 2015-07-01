@@ -42,10 +42,10 @@ class ActionTemplate extends ActionTestCase
             'namespace' => 'test2',
             'model' => 'test2Model',   // model's name
             'types' => array(
-                [ 'name' => 'Create'],
-                [ 'name' => 'Update'],
-                [ 'name' => 'Delete'],
-                [ 'name' => 'BulkDelete']
+                [ 'prefix' => 'Create'],
+                [ 'prefix' => 'Update'],
+                [ 'prefix' => 'Delete'],
+                [ 'prefix' => 'BulkDelete']
             )
         ));
 

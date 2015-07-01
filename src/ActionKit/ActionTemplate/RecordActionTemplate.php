@@ -16,7 +16,12 @@ class RecordActionTemplate extends CodeGenActionTemplate
      *    $template->register($runner, array(
      *        'namespace' => 'test',
      *        'model' => 'testModel',   // model's name
-     *        'types' => array('Create','Update','Delete','BulkDelete')
+     *        'allowedRoles' => array('admin', 'manager'), 
+     *        'types' => array(
+     *            ['prefix' => 'Create', 'allowedRoles' => ['user', 'admin'] ],
+     *            ['prefix' => 'Update'],
+     *            ['prefix' => 'Delete']
+     *        )
      *    ));
      */
     public function register(ActionRunner $runner, $asTemplate, array $options = array())
