@@ -107,7 +107,7 @@ class ActionRunner
         return $this->results[ $actionName ] = $action->getResult();
     }
 
-    public function runWith(ActionRequest $request) 
+    public function runWithRequest(ActionRequest $request) 
     {
         if (!$request->getActionName()) {
             throw new InvalidActionNameException("");
@@ -119,12 +119,19 @@ class ActionRunner
         return $this->run($request->getActionName(), $request->getArguments());
     }
 
-    public function handleWith($stream, array $arguments = array())
+
+    /**
+     *
+     * @param resource $stream STDIN, STDOUT, STDERR, or any resource
+     * @param array $arguments Usually $_REQUEST array
+     * @param array $files  Usually $_FILES array
+     */
+    public function handleWith($stream, array $arguments = array(), array $files = null)
     {
         try {
-            $request = new ActionRequest($arguments);
-            $result = $this->runWith($request);
-            if ( $result && $request->isAjax()) {
+            $request = new ActionRequest($arguments, $files);
+            $result = $this->runWithRequest($request);
+            if ($result && $request->isAjax()) {
                 // Deprecated:
                 // The text/plain seems work for IE8 (IE8 wraps the 
                 // content with a '<pre>' tag.
