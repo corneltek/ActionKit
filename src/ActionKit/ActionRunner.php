@@ -102,7 +102,7 @@ class ActionRunner
         $class = Utils::toActionClass($actionName);
 
         /* register results into hash */
-        $action = $this->createAction($class, $arguments );
+        $action = $this->createAction($class, $arguments);
         $action->invoke();
         return $this->results[ $actionName ] = $action->getResult();
     }
@@ -263,8 +263,6 @@ class ActionRunner
      */
     public function createAction($class , array $args = array() )
     {
-        $args = array_merge( $_REQUEST , $args );
-
         // Try to load the user-defined action
         if (!class_exists($class, true) ) {
 
