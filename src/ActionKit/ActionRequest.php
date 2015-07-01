@@ -33,6 +33,17 @@ class ActionRequest {
         }
     }
 
+    public function isInvalidActionName()
+    {
+        return preg_match( '/[^A-Za-z0-9:]/i' , $this->actionName);
+    }
+
+    public function isFullQualifiedName()
+    {
+        return strpos($this->actionName, '::' ) != -1;
+    }
+
+
     public function isAjax()
     {
         return $this->ajax;

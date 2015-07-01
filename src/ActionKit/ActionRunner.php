@@ -259,16 +259,6 @@ class ActionRunner
         return preg_match( '/[^A-Za-z0-9:]/i' , $actionName  );
     }
 
-    public function isFullQualifiedName( $actionName )
-    {
-        return strpos( $actionName, '::' ) != -1;
-    }
-
-    public function isAjax()
-    {
-        return isset($_REQUEST['__ajax_request']);
-    }
-
     /**
      * Create action object from REQUEST
      *

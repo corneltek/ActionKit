@@ -33,7 +33,7 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
         $result = $runner->run('User::Action::BulkCreateUser',array(
             'email' => 'foo@foo'
         ));
-        ok($result);
+        $this->assertNotNull($result);
     }
 
     public function testRegisterActionWithTwig()
