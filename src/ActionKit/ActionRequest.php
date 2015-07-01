@@ -8,7 +8,7 @@ class ActionRequest {
 
     protected $ajax = false;
 
-    protected $request = array();
+    protected $requestParameters = array();
 
     protected $arguments = array();
 
@@ -16,11 +16,11 @@ class ActionRequest {
 
     protected $actionName;
 
-    public function __construct(array $request = array(), array $files = null)
+    public function __construct(array $requestParameters = array(), array $files = null)
     {
-        $this->request = $request;
+        $this->requestParameters = $requestParameters;
 
-        $this->arguments = array_merge($this->request, array());
+        $this->arguments = array_merge($this->requestParameters, array());
 
         if (isset($this->arguments['__ajax_request'])) {
             unset($this->arguments['__ajax_request']);
@@ -35,9 +35,9 @@ class ActionRequest {
         unset($this->arguments['action']);
 
         // handle actionName
-        $actionKey = isset($request['__action']) ? '__action' : 'action';
-        if (isset($request[$actionKey])) {
-            $this->actionName = $request[$actionKey];
+        $actionKey = isset($requestParameters['__action']) ? '__action' : 'action';
+        if (isset($requestParameters[$actionKey])) {
+            $this->actionName = $requestParameters[$actionKey];
         }
     }
 
