@@ -10,23 +10,12 @@
 .DS_Store
 .gitmodules
 .hg
-.onion/
 .svn
 cache/
-config/*.php
+db/config/*.php
 coverage/
-docs/_build/
-utils/Selenium/
 .lazy.php
-config/application.yml
-config/database.yml
-config/framework.yml
-config/testing.yml
 vendor/
-vendor/pear
-webroot/assets
-webroot/ph/
-webroot/static/upload/
 route
 .lazy.php
 cache/
@@ -38,5 +27,4 @@ cache.properties
 # *SchemaProxy.php
 # *CollectionBase.php
 *.swp
-locale/*.mo
-manifest.php
+composer.lock
