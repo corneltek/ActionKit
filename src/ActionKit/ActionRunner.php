@@ -102,12 +102,9 @@ class ActionRunner
         $class = Utils::toActionClass($actionName);
 
         /* register results into hash */
-        if ($action = $this->createAction($class, $arguments )) {
-            $action->invoke();
-            return $this->results[ $actionName ] = $action->getResult();
-        }
-
-        throw new UnableToCreateActionException( "Can not create action class $class" );
+        $action = $this->createAction($class, $arguments );
+        $action->invoke();
+        return $this->results[ $actionName ] = $action->getResult();
     }
 
     public function runWith(ActionRequest $request) 
@@ -268,10 +265,13 @@ class ActionRunner
     {
         $args = array_merge( $_REQUEST , $args );
 
-        if ( !class_exists($class, true) ) {
+        // Try to load the user-defined action
+        if (!class_exists($class, true) ) {
+
+            // load the generated action
             $this->loadActionClass($class);
 
-            // call spl to autoload the class
+            // Check the action class existence
             if ( ! class_exists($class,true) ) {
                 throw new ActionNotFoundException( "Action class not found: $class, you might need to setup action autoloader" );
             }
