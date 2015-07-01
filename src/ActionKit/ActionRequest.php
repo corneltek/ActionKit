@@ -4,26 +4,21 @@ use ActionKit\Utils;
 use Universal\Http\HttpRequest;
 use Universal\Http\FilesParameter;
 
-class ActionRequest {
+class ActionRequest extends HttpRequest
+{
 
     protected $ajax = false;
 
-    protected $requestParameters = array();
-
-    protected $request;
-
     protected $arguments = array();
-
-    protected $files = array();
 
     protected $actionName;
 
     public function __construct(array $requestParameters = array(), array $files = null)
     {
-        $this->requestParameters = $requestParameters;
-        $this->request = new HttpRequest($requestParameters, $files);
+        parent::__construct($requestParameters, $files);
 
-        $this->arguments = array_merge($this->requestParameters, array());
+        // Copy the request parameters to arguments, we are going to remove some fields.
+        $this->arguments = array_merge($this->parameters, array());
 
         if (isset($this->arguments['__ajax_request'])) {
             unset($this->arguments['__ajax_request']);
@@ -55,14 +50,6 @@ class ActionRequest {
     public function getFiles() 
     {
         return $this->files;
-    }
-
-    public function file($field)
-    {
-        if (isset($this->files[$field])) {
-            return $this->files[$field];
-        }
-        return null;
     }
 
     /**
