@@ -12,21 +12,19 @@ use LazyRecord;
 use LazyRecord\Schema\RuntimeSchema;
 use LazyRecord\Schema\Relationship;
 
-class ProductImageSchemaProxy extends RuntimeSchema
+class ProductFileSchemaProxy extends RuntimeSchema
 {
 
     public static $column_names = array (
   0 => 'product_id',
   1 => 'title',
-  2 => 'image',
-  3 => 'large',
-  4 => 'id',
+  2 => 'file',
+  3 => 'id',
 );
     public static $column_hash = array (
   'product_id' => 1,
   'title' => 1,
-  'image' => 1,
-  'large' => 1,
+  'file' => 1,
   'id' => 1,
 );
     public static $mixin_classes = array (
@@ -34,19 +32,18 @@ class ProductImageSchemaProxy extends RuntimeSchema
     public static $column_names_include_virtual = array (
   0 => 'product_id',
   1 => 'title',
-  2 => 'image',
-  3 => 'large',
-  4 => 'id',
+  2 => 'file',
+  3 => 'id',
 );
 
-    const schema_class = 'ProductBundle\\Model\\ProductImageSchema';
-    const collection_class = 'ProductBundle\\Model\\ProductImageCollection';
-    const model_class = 'ProductBundle\\Model\\ProductImage';
-    const model_name = 'ProductImage';
+    const schema_class = 'ProductBundle\\Model\\ProductFileSchema';
+    const collection_class = 'ProductBundle\\Model\\ProductFileCollection';
+    const model_class = 'ProductBundle\\Model\\ProductFile';
+    const model_name = 'ProductFile';
     const model_namespace = 'ProductBundle\\Model';
     const primary_key = 'id';
-    const table = 'product_images';
-    const label = '產品圖';
+    const table = 'product_files';
+    const label = '產品檔案';
 
     public function __construct()
     {
@@ -72,27 +69,17 @@ class ProductImageSchemaProxy extends RuntimeSchema
           'type' => 'varchar',
           'primary' => NULL,
           'length' => 130,
-          'label' => '圖片標題',
+          'label' => '檔案標題',
         ),
     ),
-  'image' => array( 
-      'name' => 'image',
+  'file' => array( 
+      'name' => 'file',
       'attributes' => array( 
           'isa' => 'str',
           'type' => 'varchar',
           'primary' => NULL,
           'length' => 130,
-          'label' => '圖',
-        ),
-    ),
-  'large' => array( 
-      'name' => 'large',
-      'attributes' => array( 
-          'isa' => 'str',
-          'type' => 'varchar',
-          'primary' => NULL,
-          'length' => 130,
-          'label' => '最大圖',
+          'label' => '檔案',
         ),
     ),
   'id' => array( 
@@ -109,19 +96,18 @@ class ProductImageSchemaProxy extends RuntimeSchema
   'id',
   'product_id',
   'title',
-  'image',
-  'large',
+  'file',
 );
         $this->primaryKey      = 'id';
-        $this->table           = 'product_images';
-        $this->modelClass      = 'ProductBundle\\Model\\ProductImage';
-        $this->collectionClass = 'ProductBundle\\Model\\ProductImageCollection';
-        $this->label           = '產品圖';
+        $this->table           = 'product_files';
+        $this->modelClass      = 'ProductBundle\\Model\\ProductFile';
+        $this->collectionClass = 'ProductBundle\\Model\\ProductFileCollection';
+        $this->label           = '產品檔案';
         $this->relations       = array( 
   'product' => \LazyRecord\Schema\Relationship::__set_state(array( 
   'data' => array( 
       'type' => 3,
-      'self_schema' => 'ProductBundle\\Model\\ProductImageSchema',
+      'self_schema' => 'ProductBundle\\Model\\ProductFileSchema',
       'self_column' => 'product_id',
       'foreign_schema' => 'ProductBundle\\Model\\ProductSchema',
       'foreign_column' => 'id',
@@ -142,11 +128,10 @@ class ProductImageSchemaProxy extends RuntimeSchema
      * Code block for message id parser.
      */
     private function __() {
-        _('產品圖');
+        _('產品檔案');
         _('產品');
-        _('圖片標題');
-        _('圖');
-        _('最大圖');
+        _('檔案標題');
+        _('檔案');
     }
 
 }

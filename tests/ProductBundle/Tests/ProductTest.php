@@ -3,6 +3,8 @@ use ActionKit\ActionRunner;
 use ActionKit\ServiceContainer;
 use ActionKit\ActionTemplate\TwigActionTemplate;
 use ActionKit\ActionTemplate\UpdateOrderingRecordActionTemplate;
+use ProductBundle\Action\CreateProductFile;
+use ProductBundle\Action\CreateProductImage;
 
 class ProductBundleTest extends PHPUnit_Framework_TestCase
 {
@@ -38,6 +40,17 @@ class ProductBundleTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($action);
     }
 
+    public function testCreateProductImage()
+    {
+        $create = new CreateProductImage;
+        $create->run();
+    }
+
+    public function testCreateProductFile()
+    {
+        $create = new CreateProductFile;
+        $create->run();
+    }
 }
 
 

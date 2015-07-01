@@ -1,0 +1,30 @@
+<?php
+namespace ProductBundle\Action;
+use ActionKit\RecordAction\CreateRecordAction;
+
+class CreateProductFile  extends CreateRecordAction
+{
+    public $recordClass = 'ProductBundle\Model\ProductFile';
+
+    public function schema()
+    {
+        $this->useRecordSchema();
+
+        $sizeLimit = 1024; // 1024kb
+
+        $this->param('file','File')
+            ->sizeLimit($sizeLimit)
+            ->required()
+            ->hint('product file hint')
+            ->hintFromSizeInfo()
+            ->label('product file label')
+            ;
+
+    }
+
+
+}
+
+
+
+

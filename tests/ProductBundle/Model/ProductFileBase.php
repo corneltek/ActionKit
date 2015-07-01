@@ -1,28 +1,26 @@
 <?php
 namespace ProductBundle\Model;
 use LazyRecord\BaseModel;
-class ProductImageBase
+class ProductFileBase
     extends BaseModel
 {
-    const schema_proxy_class = 'ProductBundle\\Model\\ProductImageSchemaProxy';
-    const collection_class = 'ProductBundle\\Model\\ProductImageCollection';
-    const model_class = 'ProductBundle\\Model\\ProductImage';
-    const table = 'product_images';
+    const schema_proxy_class = 'ProductBundle\\Model\\ProductFileSchemaProxy';
+    const collection_class = 'ProductBundle\\Model\\ProductFileCollection';
+    const model_class = 'ProductBundle\\Model\\ProductFile';
+    const table = 'product_files';
     const read_source_id = 'default';
     const write_source_id = 'default';
     const primary_key = 'id';
     public static $column_names = array (
       0 => 'product_id',
       1 => 'title',
-      2 => 'image',
-      3 => 'large',
-      4 => 'id',
+      2 => 'file',
+      3 => 'id',
     );
     public static $column_hash = array (
       'product_id' => 1,
       'title' => 1,
-      'image' => 1,
-      'large' => 1,
+      'file' => 1,
       'id' => 1,
     );
     public static $mixin_classes = array (
@@ -32,7 +30,7 @@ class ProductImageBase
         if ($this->_schema) {
            return $this->_schema;
         }
-        return $this->_schema = \LazyRecord\Schema\SchemaLoader::load('ProductBundle\\Model\\ProductImageSchemaProxy');
+        return $this->_schema = \LazyRecord\Schema\SchemaLoader::load('ProductBundle\\Model\\ProductFileSchemaProxy');
     }
     public function getProductId()
     {
@@ -46,16 +44,10 @@ class ProductImageBase
             return $this->_data['title'];
         }
     }
-    public function getImage()
+    public function getFile()
     {
-        if (isset($this->_data['image'])) {
-            return $this->_data['image'];
-        }
-    }
-    public function getLarge()
-    {
-        if (isset($this->_data['large'])) {
-            return $this->_data['large'];
+        if (isset($this->_data['file'])) {
+            return $this->_data['file'];
         }
     }
     public function getId()
