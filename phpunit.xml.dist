@@ -11,6 +11,10 @@
   <php>
     <env name="DB_SQLITE_DSN" value="sqlite:tests.db"/>
     <server name="REMOTE_ADDR" value="0.0.0.0" />
+
+    <const name="WEB_SERVER_HOST" value="localhost" />
+    <const name="WEB_SERVER_PORT" value="3323" />
+    <const name="WEB_SERVER_DOCROOT" value="./examples" />
   </php>
 
   <filter>
