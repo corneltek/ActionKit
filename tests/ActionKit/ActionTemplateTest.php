@@ -32,28 +32,4 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
         ok( class_exists( $className ) );
     }
 
-    public function testFildBasedTemplate()
-    {
-        $actionTemplate = new FileBasedActionTemplate();
-
-        $runner = new ActionKit\ActionRunner;
-
-        $className = 'User\\Action\\BulkUpdateUser2';
-
-        $actionTemplate->register($runner, 'FileBasedActionTemplate', array(
-            'action_class' => $className,
-            'template' => '@ActionKit/RecordAction.html.twig',
-            'variables' => array(
-                'record_class' => 'User\\Model\\User',
-                'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction'
-            )
-        ));
-        $this->assertCount(1, $runner->getPretreatments());
-        $this->assertNotNull($pretreatment = $runner->getActionPretreatment($className));
-
-        $generatedAction = $actionTemplate->generate($className, $pretreatment['arguments']);
-        $this->assertNotNull($generatedAction);
-        $generatedAction->load();
-        ok( class_exists( $className ) );
-    }
 }
