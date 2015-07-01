@@ -1,6 +1,8 @@
 <?php
 namespace ActionKit;
 use ActionKit\Utils;
+use Universal\Http\HttpRequest;
+use Universal\Http\FilesParameter;
 
 class ActionRequest {
 
@@ -10,9 +12,11 @@ class ActionRequest {
 
     protected $arguments = array();
 
+    protected $files = array();
+
     protected $actionName;
 
-    public function __construct(array $request) 
+    public function __construct(array $request, array $files = null)
     {
         $this->request = $request;
 
@@ -23,6 +27,10 @@ class ActionRequest {
             $this->ajax = true;
         }
 
+        if ($files) {
+            $this->files = FilesParameter::fix_files_array($files);
+        }
+
         unset($this->arguments['__action']);
         unset($this->arguments['action']);
 
@@ -31,6 +39,11 @@ class ActionRequest {
         if (isset($request[$actionKey])) {
             $this->actionName = $request[$actionKey];
         }
+    }
+
+    public function getFiles() 
+    {
+        return $this->files;
     }
 
     /**
