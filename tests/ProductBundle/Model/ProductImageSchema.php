@@ -21,7 +21,11 @@ class ProductImageSchema extends SchemaDeclare
             ->varchar(130)
             ->label('圖片標題');
 
-        $this->column( 'large' )
+        $this->column('image')
+            ->varchar(130)
+            ->label('圖');
+
+        $this->column('large')
             ->varchar(130)
             ->label('最大圖');
 

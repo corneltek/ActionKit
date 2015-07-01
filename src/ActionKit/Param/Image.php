@@ -118,9 +118,10 @@ class Image extends Param
 
     public $argumentPostFilter;
 
-    public function preinit( & $args )
+    public function preinit(& $args)
     {
-        futil_mkdir_if_not_exists(PH_APP_ROOT . DIRECTORY_SEPARATOR . 'webroot' . DIRECTORY_SEPARATOR . $this->putIn, 0777, true);
+        // TODO: should let user create the directory by themself
+        // futil_mkdir_if_not_exists(PH_APP_ROOT . DIRECTORY_SEPARATOR . 'webroot' . DIRECTORY_SEPARATOR . $this->putIn, 0777, true);
     }
 
     public function build()
@@ -214,7 +215,7 @@ class Image extends Param
 
             if ( $this->sizeLimit ) {
                 if ( ! $file->validateSize( $this->sizeLimit ) ) {
-                    return array( false, _("The uploaded file exceeds the size limitation. ") . FileUtils::pretty_size($this->sizeLimit * 1024) );
+                    return array( false, _("The uploaded file exceeds the size limitation. ") . futil_prettysize($this->sizeLimit * 1024) );
                 }
             }
         }
@@ -230,7 +231,7 @@ class Image extends Param
             } else {
                 $this->hint = '';
             }
-            $this->hint .= '檔案大小限制: ' . FileUtils::pretty_size( $this->sizeLimit * 1024);
+            $this->hint .= '檔案大小限制: ' . futil_prettysize( $this->sizeLimit * 1024);
         }
         return $this;
     }
@@ -241,7 +242,7 @@ class Image extends Param
             $this->size = $size;
         }
         if ($this->sizeLimit) {
-            $this->hint .= '<br/> 檔案大小限制: ' . FileUtils::pretty_size($this->sizeLimit*1024);
+            $this->hint .= '<br/> 檔案大小限制: ' . futil_prettysize($this->sizeLimit*1024);
         }
         if ( $this->size && isset($this->size['width']) && isset($this->size['height']) ) {
             $this->hint .= '<br/> 圖片大小: ' . $this->size['width'] . 'x' . $this->size['height'];

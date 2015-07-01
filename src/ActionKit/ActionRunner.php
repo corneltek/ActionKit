@@ -139,7 +139,7 @@ class ActionRunner
                 fwrite($stream, $result->__toString());
                 return true;
             }
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             @header('HTTP/1.0 403');
             if ( $request->isAjax() ) {
                 fwrite($stream, json_encode(array(
