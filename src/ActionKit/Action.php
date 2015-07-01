@@ -115,16 +115,6 @@ class Action implements IteratorAggregate
 
         // use the schema definitions to filter arguments
         $this->args = $this->_filterArguments($args);
-        
-        if ( $this->enableCSRFToken && !isset($this->args['_csrf_token']) ) {
-            $token = CsrfTokenProvider::loadTokenWithSessionKey('_csrf_token', true);
-            if ( $token == null || !$token->checkExpiry($_SERVER['REQUEST_TIME']) ) {
-                $token = CsrfTokenProvider::generateToken();
-            }
-            $this->param('_csrf_token')
-                 ->renderAs('HiddenInput')
-                 ->default($token->hash);
-        }
 
         if ( $relationId = $this->arg('__nested') ) {
             $this->setParamNamesWithIndex($relationId);
@@ -411,6 +401,7 @@ class Action implements IteratorAggregate
         if ( session_id() && $this->enableCSRFToken) {
             $token = CsrfTokenProvider::loadTokenWithSessionKey(); 
             if ( !CsrfTokenProvider::verifyToken($token, $this->arg('_csrf_token'))) {
+                $this->result->error('CSRF invalid.');
                 return false;
             }
         }
@@ -972,7 +963,6 @@ class Action implements IteratorAggregate
         return new \FormKit\Widget\HiddenInput($this->actionFieldName, array( 'value' => $this->getSignature() ));
     }
 
-
     /**
      * Render action hidden field for signature
      *
@@ -986,8 +976,33 @@ class Action implements IteratorAggregate
         return $hidden->render( $attrs );
     }
 
+    /**
+     * Shortcut method for creating csrf token widget
+     */
+    public function createCSRFTokenWidget()
+    {
+        $token = CsrfTokenProvider::loadTokenWithSessionKey('_csrf_token', true);
+        if ( $token == null || !$token->checkExpiry($_SERVER['REQUEST_TIME']) ) {
+            $token = CsrfTokenProvider::generateToken();
+        }
+        return new \FormKit\Widget\HiddenInput('_csrf_token', array( 'value' => $token->hash ));
+    }
 
-
+    /**
+     * Render action hidden field for csrf token
+     *
+     *      <input type="hidden" name="_csrf_token" value="NGE1YWQ4N2I5MTRjMjYzZTkxZGY3MmJhYjVkODE0ZmIyMmNiYzk1MA=="/>
+     *
+     * @return string Hidden input HTML
+     */
+    public function renderCSRFTokenWidget(array $attrs = array())
+    {
+        if ( $this->enableCSRFToken && !isset($this->args['_csrf_token']) ) {
+            $hidden = $this->createCSRFTokenWidget();
+            return $hidden->render($attrs);
+        }
+        return null;
+    }
 
     /**
      * Render a field or render all fields,

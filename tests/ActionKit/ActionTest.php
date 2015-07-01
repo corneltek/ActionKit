@@ -112,7 +112,7 @@ class ActionTest extends PHPUnit_Framework_TestCase
         $params = $login->getParams(); // get params with param filter
         ok( $params );
 
-        count_ok(3, array_keys($params));
+        count_ok(2, array_keys($params));
         ok( !isset($params['token']) , 'Should not include token param.' );
         ok( isset($params['username']) , 'Should have username param' );
         ok( isset($params['password']) , 'Should have password param' );
