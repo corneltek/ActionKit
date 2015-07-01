@@ -38,8 +38,6 @@ class Action implements IteratorAggregate
     public $params = array();
 
 
-    public $actionRequest;
-
     /**
      * @var Universal\Http\HttpRequest request object
      */
@@ -99,18 +97,11 @@ class Action implements IteratorAggregate
             $this->currentUser = $options['current_user'];
         }
 
-        // The new ActionRequest object, used for handling fixed $_FILES array
-        if (isset($options['action_request'])) {
-            $this->actionRequest = $options['action_request'];
-        } else {
-            $this->actionRequest = new ActionRequest;
-        }
-
         // backward compatible request object
         if (isset($options['request'])) {
             $this->request = $options['request'];
         } else {
-            $this->request = new HttpRequest;
+            $this->request = new ActionRequest;
         }
 
         $this->result  = new Result;
