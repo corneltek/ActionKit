@@ -1,5 +1,6 @@
 <?php
 namespace ActionKit\Param\Image;
+use ActionKit\ImageProcessor;
 
 class ScaleResize
 {
@@ -23,7 +24,7 @@ class ScaleResize
             $h = $this->param->size['height'];
             $w = $this->param->size['width'];
 
-            $image = $this->param->getImager();
+            $image = new ImageProcessor;
             $image->load( $targetPath );
             $image->resize($w, $h);
 

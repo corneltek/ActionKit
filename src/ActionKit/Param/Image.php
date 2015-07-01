@@ -192,11 +192,6 @@ class Image extends Param
         return $this;
     }
 
-    public function getImager()
-    {
-        return new ImageProcessor;
-    }
-
     public function validate($value)
     {
         $ret = (array) parent::validate($value);

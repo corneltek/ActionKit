@@ -1,5 +1,6 @@
 <?php
 namespace ActionKit\Param\Image;
+use ActionKit\ImageProcessor;
 
 class CropAndScaleResize
 {
@@ -22,7 +23,7 @@ class CropAndScaleResize
         {
             $h = intval($this->param->size['height']);
             $w = intval($this->param->size['width']);
-            $image = $this->param->getImager();
+            $image = new ImageProcessor;
             $image->load( $targetPath );
 
             $size = getimagesize($targetPath);

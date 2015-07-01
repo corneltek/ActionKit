@@ -1,5 +1,6 @@
 <?php
 namespace ActionKit\Param\Image;
+use ActionKit\ImageProcessor;
 
 class MaxHeightResize
 {
@@ -25,7 +26,7 @@ class MaxHeightResize
 
 
         if ($maxHeight) {
-            $image = $this->param->getImager();
+            $image = new ImageProcessor;
             $image->load( $targetPath );
 
             // we should only resize image file only when size is changed.
