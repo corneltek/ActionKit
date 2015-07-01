@@ -16,6 +16,12 @@ function __()
 }
 
 
+/**
+ * Clean up cache files
+ */
+futil_rmtree('src/ActionKit/Cache');
+mkdir('src/ActionKit/Cache', 0755, true);
+
 use WebServerRunner\WebServerRunner;
 if (defined('WEB_SERVER_HOST') && defined('WEB_SERVER_PORT')) {
     $runner = new WebServerRunner(WEB_SERVER_HOST, WEB_SERVER_PORT, WEB_SERVER_DOCROOT);
