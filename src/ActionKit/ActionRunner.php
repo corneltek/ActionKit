@@ -154,21 +154,27 @@ class ActionRunner
         }
     }
 
-    public function loadClass($class) 
+    /**
+     * loadActionClass trigger the action class generation if the class doesn't
+     * exist and loads the action class.
+     *
+     * @param string $class action class
+     */
+    public function loadActionClass($class) 
     {
         if (!isset($this->pretreatments[$class])) {
             return false;
         }
 
-        $templateName = $this->pretreatments[$class]['template'];
-        $arguments = $this->pretreatments[$class]['arguments'];
-        if ($this->loadClassCache($class, $arguments) ) {
+        $pretreatment = $this->pretreatments[$class];
+
+        if ($this->loadClassCache($class, $pretreatment['arguments']) ) {
             return true;
         }
 
-        $generatedAction = $this->generator->generate($templateName, $class, $arguments);
+        $generatedAction = $this->generator->generate($pretreatment['template'], $class, $pretreatment['arguments']);
 
-        $cacheFile = $this->getClassCacheFile($class, $arguments);
+        $cacheFile = $this->getClassCacheFile($class, $pretreatment['arguments']);
         $generatedAction->requireAt($cacheFile);
         return true;
     }
@@ -202,7 +208,7 @@ class ActionRunner
     public function registerAutoloader()
     {
         // use throw and not to prepend
-        spl_autoload_register(array($this,'loadClass'),true, false);
+        spl_autoload_register(array($this,'loadActionClass'),true, false);
     }
 
 
@@ -273,7 +279,7 @@ class ActionRunner
         $args = array_merge( $_REQUEST , $args );
 
         if ( !class_exists($class, true) ) {
-            $this->loadClass($class);
+            $this->loadActionClass($class);
 
             // call spl to autoload the class
             if ( ! class_exists($class,true) ) {
