@@ -5,6 +5,7 @@ use FormKit;
 use ActionKit\Param;
 use ActionKit\Result;
 use ActionKit\CsrfTokenProvider;
+use ActionKit\ActionRequest;
 use Universal\Http\HttpRequest;
 use Universal\Http\FilesParameter;
 use InvalidArgumentException;
@@ -95,7 +96,20 @@ class Action implements IteratorAggregate
             $this->currentUser = $options['current_user'];
         }
 
-        $this->request = new HttpRequest;
+        // The new ActionRequest object, used for handling fixed $_FILES array
+        if (isset($options['action_request'])) {
+            $this->actionRequest = $options['action_request'];
+        } else {
+            $this->actionRequest = new ActionRequest;
+        }
+
+        // backward compatible request object
+        if (isset($options['request'])) {
+            $this->request = $options['request'];
+        } else {
+            $this->request = new HttpRequest;
+        }
+
         $this->result  = new Result;
         $this->mixins = $this->mixins();
 
