@@ -19,8 +19,11 @@ function __()
 /**
  * Clean up cache files
  */
-futil_rmtree('src/ActionKit/Cache');
-mkdir('src/ActionKit/Cache', 0755, true);
+const CACHE_DIR = 'src/ActionKit/Cache';
+if (file_exists(CACHE_DIR)) {
+    futil_rmtree(CACHE_DIR);
+    mkdir(CACHE_DIR, 0755, true);
+}
 
 use WebServerRunner\WebServerRunner;
 if (defined('WEB_SERVER_HOST') && defined('WEB_SERVER_PORT')) {
