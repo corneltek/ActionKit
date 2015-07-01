@@ -153,17 +153,17 @@ Action Schema
 
 #### methods
 
-methods that you will need in Action `run` method:
+methods that you will use in `run`:
 
-* arg(string $key):
+* `$this->arg(string $key)`:
     get argument from action by key.
 
-* setArgs(array $arguments)
+* `$this->setArgs(array $arguments)`
     set action arguments.
 
-* success(string $message, $data = array)
+* `$this->success(string $message, $data = array())`
 
-    report success message. 
+    Report success message. 
     
     You can also pass data to the action result object.
 
@@ -186,8 +186,9 @@ methods that you will need in Action `run` method:
 
       @see bundles/CoreBundle/Templates/phifty/action_result.html
 
-* error(string $message)
-    report error message.
+* `$this->error(string $message)`
+
+    Report error message.
 
 #### properties
 
@@ -203,9 +204,7 @@ properties that you will need in Action `run` method:
         $this->request->server->HTTP_HOST
         // is equal to isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : null
 
-
 ### Action param methods
-
 
 ## Action Result
 
