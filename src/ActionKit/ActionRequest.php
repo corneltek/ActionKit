@@ -40,7 +40,7 @@ class ActionRequest {
 
     public function isFullQualifiedName()
     {
-        return strpos($this->actionName, '::' ) != -1;
+        return strpos($this->actionName, '::' ) !== false;
     }
 
 
