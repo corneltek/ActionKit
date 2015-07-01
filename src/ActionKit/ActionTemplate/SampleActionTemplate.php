@@ -10,7 +10,7 @@ use ActionKit\Exception\RequiredConfigKeyException;
  *      $actionTemplate = new SampleActionTemplate('SampleActionTemplate');
  *      $generatedAction = $actionTemplate->generate('', array(
  *          'namespace' => 'Core',
- *          'actionName' => 'GrantAccess'
+ *          'action_name' => 'GrantAccess'
  *      ));
  *
  *      $generatedAction->requireAt($cacheFilePath);
@@ -19,13 +19,16 @@ class SampleActionTemplate extends CodeGenActionTemplate
 {
     public function generate($actionClass, array $options = array())
     {
-        if ( isset($options['namespace'])) {
-            $namespace = $options['namespace'];
+        if (! isset($options['namespace'])) {
+            throw new RequiredConfigKeyException('action_name');
         }
 
-        if ( isset($options['action_name'])) {
-            $actionName = $options['action_name'];
+        if (!isset($options['action_name'])) {
+            throw new RequiredConfigKeyException('action_name');
         }
+
+        $namespace = $options['namespace'];
+        $actionName = $options['action_name'];
 
         $actionClass = "$namespace\\Action\\$actionName";
         $options = [ 
