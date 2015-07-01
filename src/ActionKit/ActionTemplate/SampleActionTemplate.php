@@ -40,19 +40,7 @@ class SampleActionTemplate extends CodeGenActionTemplate
         $templateClassFile->useClass('\\ActionKit\\Action');
         $templateClassFile->useClass('\\ActionKit\\RecordAction\\BaseRecordAction');
 
-        if ( isset($options['extends']) ) {
-            $templateClassFile->extendClass($options['extends']);
-        }
-        if ( isset($options['properties']) ) {
-            foreach( $options['properties'] as $name => $value ) {
-                $templateClassFile->addProperty($name, $value);
-            }
-        }
-        if ( isset($options['constants']) ) {
-            foreach( $options['constants'] as $name => $value ) {
-                $templateClassFile->addConst($name, $value);
-            }
-        }
+        $this->initGenericClassWithOptions($templateClassFile, $options);
 
         $templateClassFile->addMethod('public','schema', [] , '');
         $templateClassFile->addMethod('public','run', [] , 'return $this->success("Success!");');
