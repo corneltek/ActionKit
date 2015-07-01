@@ -43,7 +43,6 @@ class CodeGenActionTemplate implements ActionTemplate
      */
     public function register(ActionRunner $runner, $asTemplate, array $options = array())
     {
-        // General use statement
         if (isset($options['use'])) {
             array_unshift($options['use'], '\\ActionKit\\Action');
         } else {

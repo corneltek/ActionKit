@@ -44,7 +44,7 @@ class ActionTemplate extends PHPUnit_Framework_TestCase
         ok( class_exists( $className ) );
     }
 
-    public function testCodeGenBased()
+    public function testRecordActionTemplate()
     {
         $actionTemplate = new RecordActionTemplate();
         $runner = new ActionKit\ActionRunner;
