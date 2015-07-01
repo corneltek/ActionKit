@@ -2,6 +2,9 @@
 namespace ActionKit;
 use Exception;
 
+/**
+ * @codeCoverageIgnore
+ */
 class Messages
 {
     static $messages = array(
