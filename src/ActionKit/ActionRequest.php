@@ -83,4 +83,9 @@ class ActionRequest extends HttpRequest
         return $this->arguments;
     }
 
+    public static function hasAction(array $requestParameters = array())
+    {
+        return isset($requestParameters['__action']);
+    }
+
 }
