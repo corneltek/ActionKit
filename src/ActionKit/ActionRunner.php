@@ -141,7 +141,7 @@ class ActionRunner
                 // we should output the correct json mime type.
                 // header('Content-Type: application/json; Charset=utf-8');
                 fwrite($stream, $result->__toString());
-                return true;
+                exit(0);
             }
         } catch (Exception $e) {
             @header('HTTP/1.0 403');
