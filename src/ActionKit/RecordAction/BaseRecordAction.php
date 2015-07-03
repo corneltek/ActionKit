@@ -369,7 +369,7 @@ class BaseRecordAction extends Action
                 return new $class($args, $record);
             } else {
                 // for simple action class without record.
-                return $class($args);
+                return new $class($args);
             }
 
         } else {
