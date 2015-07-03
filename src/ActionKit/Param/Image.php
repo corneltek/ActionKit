@@ -1,13 +1,14 @@
 <?php
 namespace ActionKit\Param;
 use ActionKit\Param;
-use Phifty\UploadFile;
 use Exception;
+use LogicException;
 use RuntimeException;
-use ActionKit\ImageProcessor;
-use Phifty\FileUtils;
+use ImageKit\ImageProcessor;
 use ActionKit\RecordAction\UpdateRecordAction;
 use ActionKit\RecordAction\CreateRecordAction;
+use Phifty\UploadFile;
+use Phifty\FileUtils;
 
 function filename_increase($path)
 {
@@ -59,15 +60,14 @@ class ImageResizeProcess
         'crop_and_scale' => 'ActionKit\\Param\\Image\\CropAndScaleResize',
     );
 
-    static public function create($t, $param)
+    static public function create($type, Param $param)
     {
-        if ( isset(self::$classes[$t]) ) {
-            $c = self::$classes[$t];
-            return new $c($param);
+        if (!isset(self::$classes[$type]) ) {
+            throw new Exception("Image Resize Type '$type' is undefined.");
         }
-        return null;
+        $c = self::$classes[$type];
+        return new $c($param);
     }
-
 
 }
 
