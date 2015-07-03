@@ -141,11 +141,11 @@ class ActionRunner
                 // we should output the correct json mime type.
                 // header('Content-Type: application/json; Charset=utf-8');
                 fwrite($stream, $result->__toString());
-                exit(0);
+                return true;
             }
         } catch (Exception $e) {
             @header('HTTP/1.0 403');
-            if ( $request->isAjax() ) {
+            if ($request->isAjax() ) {
                 fwrite($stream, json_encode(array(
                         'error' => 1,
                         'message' => $e->getMessage(),
