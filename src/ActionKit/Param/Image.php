@@ -31,45 +31,6 @@ function filename_increase($path)
     return $path;
 }
 
-/**
- * Preprocess image data fields
- *
- * This preprocessor takes image file columns,
- * copy these uploaded file to destination directory and
- * update the original file hash, So in the run method of
- * action class, user can simply take the hash arguments,
- * and no need to move files or validate size by themselfs.
- *
- * To define a Image Param column in Action schema:
- *
- *
- *  public function schema()
- *  {
- *     $this->param('image','Image')
- *          ->validExtensions('jpg','png');
- *  }
- *
- */
-
-class ImageResizeProcess 
-{
-    static public $classes = array(
-        'max_width'      => 'ActionKit\\Param\\Image\\MaxWidthResize',
-        'max_height'     => 'ActionKit\\Param\\Image\\MaxHeightResize',
-        'scale'          => 'ActionKit\\Param\\Image\\ScaleResize',
-        'crop_and_scale' => 'ActionKit\\Param\\Image\\CropAndScaleResize',
-    );
-
-    static public function create($type, Param $param)
-    {
-        if (!isset(self::$classes[$type]) ) {
-            throw new Exception("Image Resize Type '$type' is undefined.");
-        }
-        $c = self::$classes[$type];
-        return new $c($param);
-    }
-
-}
 
 
 class Image extends Param
@@ -362,21 +323,19 @@ class Image extends Param
 
         // if the auto-resize is specified from front-end
         if ( isset($args[$this->name . '_autoresize']) && $this->size ) {
+
             $t = @$args[$this->name . '_autoresize_type' ] ?: 'crop_and_scale';
-            if ( $process = ImageResizeProcess::create($t, $this) ) {
-                $process->resize( $targetPath );
-            } else {
-                throw new RuntimeException("Unsupported autoresize_type $t");
-            }
+            $process = ImageResizer::create($t, $this);
+            $process->resize( $targetPath );
+
         } else {
-            if ( $rWidth = $this->resizeWidth ) {
-                if ( $process = ImageResizeProcess::create('max_width', $this) ) {
-                    $process->resize($targetPath);
-                }
+
+            if ($rWidth = $this->resizeWidth) {
+                $process = ImageResizer::create('max_width', $this);
+                $process->resize($targetPath);
             } else if ( $rHeight = $this->resizeHeight ) {
-                if ( $process = ImageResizeProcess::create('max_height', $this) ) {
-                    $process->resize($targetPath);
-                }
+                $process = ImageResizer::create('max_height', $this);
+                $process->resize($targetPath);
             }
         }
     }
