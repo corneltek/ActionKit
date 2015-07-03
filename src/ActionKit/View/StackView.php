@@ -273,10 +273,18 @@ SCRIPT;
 
         $subview->triggerBuild();
         $container = $subview->getContainer();
-        $signature = new HiddenInput(  "{$relationId}[{$formIndex}][action]",array(
+        $signature = new HiddenInput(  "{$relationId}[{$formIndex}][__action]",array(
             'value' => $action->getSignature()
         ));
         $container->append( $signature );
+
+        $token = $action->getCSRFToken();
+        if ($token) {
+            $csrfToken = new HiddenInput(  "{$relationId}[{$formIndex}][_csrf_token]",array(
+                'value' => $token
+            ));
+            $container->append( $csrfToken );
+        }
         return $subview;
     }
 }
