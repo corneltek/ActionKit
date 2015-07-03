@@ -6,6 +6,20 @@ use ActionKit\ActionTemplate\UpdateOrderingRecordActionTemplate;
 use ProductBundle\Action\CreateProductFile;
 use ProductBundle\Action\CreateProductImage;
 
+
+function CreateFilesStash($field, $filename, $type, $tmpname) {
+    return [
+        $field => [
+            'name' => $filename,
+            'type' => $type,
+            'tmp_name' => $tmpname,
+            'error' => UPLOAD_ERR_OK,
+            'size' => filesize($tmpname),
+        ],
+    ];
+}
+
+
 class ProductBundleTest extends PHPUnit_Framework_TestCase
 {
 
@@ -42,7 +56,10 @@ class ProductBundleTest extends PHPUnit_Framework_TestCase
 
     public function testCreateProductImage()
     {
-        $create = new CreateProductImage;
+        $tmpfile = tempnam('/tmp', 'test_image_');
+        copy('tests/data/404.png', $tmpfile);
+        $files = CreateFilesStash('image', '404.png', 'image/png', $tmpfile);
+        $create = new CreateProductImage(['title' => 'Test Image'], $files);
         $create->run();
     }
 

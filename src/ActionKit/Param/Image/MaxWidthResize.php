@@ -1,6 +1,6 @@
 <?php
 namespace ActionKit\Param\Image;
-use ActionKit\ImageProcessor;
+use ImageKit\ImageProcessor;
 
 class MaxWidthResize
 {
