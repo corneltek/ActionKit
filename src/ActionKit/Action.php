@@ -80,17 +80,26 @@ class Action implements IteratorAggregate
     /**
      * Constructing Action objects
      *
+     * When 'request' object is provided, 'files' will be ignored.
+     *
      * @param array $args        The request arguments
      * @param mixed $options     Can be ArrayAccess or array
      */
     public function __construct(array $args = array(), $options = array())
     {
+        if (isset($args['_FILES'])) {
 
-        if ( isset($args['_FILES']) ) {
-            $this->files = $args['_FILES'];
-        } elseif ( isset($_FILES) && ! empty($_FILES) ) {
+            $this->files = FilesParameter::fix_files_array($args['_FILES']);
+
+        } else if (isset($options['files'])) {
+
+            $this->files = FilesParameter::fix_files_array($options['files']);
+
+        } else if (isset($_FILES) && ! empty($_FILES) ) {
+
             // if not, always fix $_FILES
-            $this->files = \Universal\Http\FilesParameter::fix_files_array($_FILES);
+            $this->files = FilesParameter::fix_files_array($_FILES);
+
         }
 
         if (isset($options['current_user'])) {
@@ -101,7 +110,7 @@ class Action implements IteratorAggregate
         if (isset($options['request'])) {
             $this->request = $options['request'];
         } else {
-            $this->request = new ActionRequest;
+            $this->request = new ActionRequest($args, $this->files);
         }
 
         $this->result  = new Result;
