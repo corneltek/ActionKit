@@ -10,7 +10,7 @@
         "corneltek/cascading-attribute": "~1.2",
         "corneltek/universal-cache": "~1",
         "corneltek/fileutil": "~1",
-        "corneltek/universal": "~1",
+        "corneltek/universal": "2.0.x-dev",
         "corneltek/imagekit": "^1.0",
         "corneltek/class-template": "~2",
         "corneltek/formkit": "~1",
