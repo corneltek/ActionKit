@@ -24,7 +24,8 @@ function CreateFilesStash($field, $filename, $type, $tmpname) {
 class ProductBundleTest extends PHPUnit_Framework_TestCase
 {
 
-    public function orderingActionMapProvider() {
+    public function orderingActionMapProvider() 
+    {
         return [
             ['ProductBundle\\Action\\UpdateProductImageOrdering'      , 'ProductBundle\\Model\\ProductImage']      , 
             ['ProductBundle\\Action\\UpdateProductPropertyOrdering'   , 'ProductBundle\\Model\\ProductProperty']   , 
@@ -55,11 +56,24 @@ class ProductBundleTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($action);
     }
 
+    public function testCreateProductImageWithActionRequest()
+    {
+        $tmpfile = tempnam('/tmp', 'test_image_');
+        copy('tests/data/404.png', $tmpfile);
+        $files = CreateFilesStash('image', '404.png', 'image/png', $tmpfile);
+        $files['saved_path'] = $tmpfile;
+
+        $request = new ActionRequest(['title' => 'Test Image'], $files);
+        $create = new CreateProductImage(['title' => 'Test Image'], [ 'request' => $request ]);
+        $create->invoke();
+    }
+
     public function testCreateProductImage()
     {
         $tmpfile = tempnam('/tmp', 'test_image_');
         copy('tests/data/404.png', $tmpfile);
         $files = CreateFilesStash('image', '404.png', 'image/png', $tmpfile);
+        $files['saved_path'] = $tmpfile;
 
         // new ActionRequest(['title' => 'Test Image'], $files);
         $create = new CreateProductImage(['title' => 'Test Image'], [ 'files' => $files ]);

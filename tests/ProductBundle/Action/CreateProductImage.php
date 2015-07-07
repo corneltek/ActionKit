@@ -26,6 +26,7 @@ class CreateProductImage  extends CreateRecordAction
             ->hint('product image hint')
             ->hintFromSizeInfo()
             ->label('product image label')
+            ->putIn('tests/upload')
             ;
 
         $this->param('large','Image')
@@ -36,6 +37,7 @@ class CreateProductImage  extends CreateRecordAction
             ->hint('product large image hint')
             ->hintFromSizeInfo()
             ->label('product large image label')
+            ->putIn('tests/upload')
             ;
 
     }

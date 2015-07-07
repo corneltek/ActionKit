@@ -7,8 +7,8 @@ use RuntimeException;
 use ImageKit\ImageProcessor;
 use ActionKit\RecordAction\UpdateRecordAction;
 use ActionKit\RecordAction\CreateRecordAction;
-use Phifty\UploadFile;
-use Phifty\FileUtils;
+use ActionKit\Utils;
+use Universal\Http\UploadedFile;
 
 function filename_increase($path)
 {
@@ -155,13 +155,16 @@ class Image extends Param
 
     public function validate($value)
     {
+
         $ret = (array) parent::validate($value);
-        if ( false === $ret[0] ) {
+        if (false === $ret[0]) {
             return $ret;
         }
 
+        $file = $this->action->request->file($this->name);
+
         // XXX: Consider required and optional situations.
-        if ( isset($_FILES[ $this->name ]['tmp_name']) && $_FILES[ $this->name ]['tmp_name'] )  {
+        if (isset($_FILES[ $this->name ]['tmp_name']) && $_FILES[ $this->name ]['tmp_name'] )  {
             $file = new UploadFile( $this->name );
             if ( $this->validExtensions ) {
                 if ( ! $file->validateExtension( $this->validExtensions ) ) {
@@ -214,92 +217,93 @@ class Image extends Param
      */
     public function init( & $args )
     {
-        // constructing file
-        $replace = false;
-        $hasUpload = false;
-        $file = null;
 
-        // get file info from $_FILES, we have the accessor from the action class.
-        if ( isset($this->action->files[ $this->name ]) && $this->action->files[$this->name]['name'] ) {
-            $file = $this->action->getFile($this->name);
-            $hasUpload = true;
-        }
-        elseif ( isset($this->action->args[$this->name]) ) {
-            // If this input is a remote input file, which is a string sent from POST or GET method.
-            $file = FileUtils::fileobject_from_path( $this->action->args[$this->name]);
-            $replace = true;
-        }
-        elseif ($this->sourceField) {
-            // if there is no file found in $_FILES, we copy the file from another field's upload ($_FILES)
-            if ( $this->action->hasFile($this->sourceField) ) {
-                $file = $this->action->getFile($this->sourceField);
-            }
-            elseif ( isset( $this->action->args[$this->sourceField] ) ) 
-            {
+        // Upload from HTTP
+        $upload = false;
+
+        $file = $this->action->request->file($this->name);
+        
+        if ($file) {
+
+            $upload = true;
+
+        } else if ($this->action->arg($this->name)) {
+
+            // If there is a file path specified in the form field instead of $_FILES
+            // We will create a FILE array from the file system.
+            $file = Utils::createFileArrayFromPath($this->action->arg($this->name));
+
+        } else if ($this->sourceField) {
+            // if there is no file found in $_FILES and $_REQUEST
+            // we copy the file from another field's upload ($_FILES)
+
+            $sourceFile = $this->action->request->file($this->sourceField);
+
+            if ($sourceFile) {
+
+                $file = $sourceFile;
+
+            } else if ($arg = $this->action->arg($this->sourceField) ) {
+
                 // If not, check another field's upload (either from POST or GET method)
                 // Rebuild $_FILES arguments from file path (string) .
-                $file = FileUtils::fileobject_from_path( $this->action->args[$this->sourceField] );
+                $file = Utils::createFileArrayFromPath($arg);
+
             }
         }
 
-
-        // Still not found any file.
-        if ( !$file || empty($file) || ! isset($file['name']) || !$file['name'] ) {
-            // XXX: unset( $args[ $this->name ] );
+        if ($file == null) {
             return;
         }
 
-        // the default save path
-        $targetPath = trim($this->putIn, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . trim($file['name'], DIRECTORY_SEPARATOR);
+        $uploadedFile = UploadedFile::createFromArray($file);
+
+        $targetPath = trim($this->putIn, DIRECTORY_SEPARATOR) 
+            . DIRECTORY_SEPARATOR 
+            . $uploadedFile->getOriginalFileName();
+
         if ($this->renameFile) {
             $targetPath = call_user_func($this->renameFile, $targetPath, $file);
         }
 
-        while (file_exists( $targetPath )) {
+        while (file_exists($targetPath)) {
             $targetPath = filename_increase( $targetPath );
         }
 
-        if ($hasUpload) {
-            if ( isset($file['saved_path']) && file_exists($file['saved_path']) ) {
-                copy( $file['saved_path'], $targetPath);
+        // If there is a file uploaded from HTTP
+        if ($upload) {
+
+            // The file array might be created from file system 
+            if ($savedPath = $uploadedFile->getSavedPath()) {
+
+                copy($savedPath, $targetPath);
+
+            } else if ($uploadedFile->isUploadedFile()) {
+
+                // move calls move_uploaded_file, which is only available for files uploaded from HTTP
+                $uploadedFile->move($targetPath);
+
             } else {
-                if ( move_uploaded_file($file['tmp_name'], $targetPath) === false ) {
-                    throw new RuntimeException('File upload failed, Can not move uploaded file.');
-                }
-                $file['saved_path'] = $targetPath;
+
+                $uploadedFile->copy($targetPath);
+
             }
-        } elseif ( $this->sourceField ) {
-            // Skip updating from source field if it's a update action
+
+        } else if ($this->sourceField) { // If there is no http upload, copy the file from source field
+
+            // source field only works for update record action
+            // skip updating from source field if it's a update action
             if ($this->action instanceof UpdateRecordAction) {
                 return;
             }
 
+            if ($savedPath = $uploadedFile->getSavedPath()) {
+                copy($savedPath, $targetPath);
+            } else {
+                $uploadedFile->copy($targetPath);
+            }
 
-            // Upload not found, so we decide to copy one from our source field file.
-            if ( isset($file['saved_path']) && file_exists($file['saved_path']) )
-            {
-                copy($file['saved_path'], $targetPath);
-            }
-            elseif ( isset($file['tmp_name']) && file_exists($file['tmp_name']) ) 
-            {
-                copy( $file['tmp_name'], $targetPath);
-            }
-            else 
-            {
-                // Upload not found and source field is also empty.
-                echo "Action: " , get_class($this->action) , "\n";
-                echo "Current Field: " , $this->name , "\n";
-                echo "File:\n";
-                print_r($file);
-                echo "Files:\n";
-                print_r($this->action->files);
-                echo "Args:\n";
-                print_r($this->action->args);
-                throw new RuntimeException('Can not copy image from source field, unknown error: ' 
-                    . join(', ', array( get_class($this->action), $this->name))
-                );
-            }
-        } elseif ( isset($file['saved_path']) && file_exists($file['saved_path']) ) {
+        } else if (isset($file['saved_path']) && file_exists($file['saved_path']) ) {
             copy( $file['saved_path'], $targetPath);
         }
 
@@ -315,9 +319,8 @@ class Image extends Param
             $args[$this->name]                 = $targetPath;
             $this->action->args[ $this->name ] = $targetPath; // for source field
         }
-        $this->action->files[ $this->name ]['saved_path'] = $targetPath;
 
-        $this->action->addData( $this->name , $targetPath );
+        $this->action->addData($this->name , $targetPath);
 
         // if the auto-resize is specified from front-end
         if ( isset($args[$this->name . '_autoresize']) && $this->size ) {
@@ -335,6 +338,7 @@ class Image extends Param
                 $process = ImageResizer::create('max_height', $this);
                 $process->resize($targetPath);
             }
+
         }
     }
 }

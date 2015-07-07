@@ -25,6 +25,7 @@ if (file_exists(CACHE_DIR)) {
     mkdir(CACHE_DIR, 0755, true);
 }
 
+/*
 use WebServerRunner\WebServerRunner;
 if (defined('WEB_SERVER_HOST') && defined('WEB_SERVER_PORT')) {
     $runner = new WebServerRunner(WEB_SERVER_HOST, WEB_SERVER_PORT, WEB_SERVER_DOCROOT);
@@ -32,4 +33,4 @@ if (defined('WEB_SERVER_HOST') && defined('WEB_SERVER_PORT')) {
     $runner->execute();
     $runner->stopOnShutdown();
 }
-
+ */
