@@ -1,5 +1,6 @@
 <?php
 use ActionKit\ActionRunner;
+use ActionKit\ActionRequest;
 use ActionKit\ServiceContainer;
 use ActionKit\ActionTemplate\TwigActionTemplate;
 use ActionKit\ActionTemplate\UpdateOrderingRecordActionTemplate;
@@ -59,8 +60,10 @@ class ProductBundleTest extends PHPUnit_Framework_TestCase
         $tmpfile = tempnam('/tmp', 'test_image_');
         copy('tests/data/404.png', $tmpfile);
         $files = CreateFilesStash('image', '404.png', 'image/png', $tmpfile);
-        $create = new CreateProductImage(['title' => 'Test Image'], $files);
-        $create->run();
+
+        // new ActionRequest(['title' => 'Test Image'], $files);
+        $create = new CreateProductImage(['title' => 'Test Image'], [ 'files' => $files ]);
+        $create->invoke();
     }
 
     public function testCreateProductFile()
