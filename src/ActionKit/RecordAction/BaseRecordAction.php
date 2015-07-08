@@ -29,10 +29,20 @@ class BaseRecordAction extends Action
 
     public $enableLoadRecord = false;
 
+    /**
+     * This method provides the default error message of a record action.
+     *
+     * @codeCoverageIgnore
+     */
     public function successMessage($ret) { 
         return $ret->message;
     }
 
+    /**
+     * This method provides the default error message of a record action.
+     *
+     * @codeCoverageIgnore
+     */
     public function errorMessage($ret) {
         return $ret->message;
     }
