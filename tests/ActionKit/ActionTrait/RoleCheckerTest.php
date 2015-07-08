@@ -77,5 +77,15 @@ class RoleCheckerTest extends PHPUnit_Framework_TestCase
         $this->assertSame(['admin'],$checker->getAllowedRoles());
     }
 
+
+    /**
+     * @expectedException Exception
+     */
+    public function testUnsupportedCurrentUser()
+    {
+        $checker = new MyRoleChecker(['admin']);
+        $checker->currentUserCan(false, 'run', []);
+    }
+
 }
 
