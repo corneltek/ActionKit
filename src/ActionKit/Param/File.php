@@ -103,10 +103,10 @@ class File extends Param
          *
          * if POST,GET file column key is set. remove it from ->args
          */
-        if (! $this->putIn)
+        if (! $this->putIn) {
             throw new Exception( "putIn attribute is not defined." );
+        }
 
-        $req = new \Universal\Http\HttpRequest;
         $file = null;
 
         /* if the column is defined, then use the column
