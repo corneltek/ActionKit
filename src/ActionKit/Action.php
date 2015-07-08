@@ -101,12 +101,15 @@ class Action implements IteratorAggregate
 
             $this->request = $options['request'];
 
+            if (isset($options['files'])) {
+                trigger_error('"files" is ignored because you passed action request object');
+            }
+
         } else {
 
             $files = array();
 
             if (isset($options['files'])) {
-
                 $files = FilesParameter::fix_files_array($options['files']);
 
             } else if (isset($args['_FILES'])) {
@@ -119,6 +122,9 @@ class Action implements IteratorAggregate
                 $files = FilesParameter::fix_files_array($_FILES);
 
             }
+
+
+
             $this->request = new ActionRequest($args, $files);
         }
 
@@ -602,13 +608,13 @@ class Action implements IteratorAggregate
      *
      * @return mixed Argument value
      */
-    public function arg( $name )
+    public function arg($name)
     {
         $args = func_get_args();
         if ( 1 === count($args) ) {
             return isset($this->args[ $name ]) ?
                          $this->args[ $name ]  : null;
-        } elseif ( 2 === count($args) ) {
+        } else if ( 2 === count($args) ) {
             // set value
             return $this->args[ $name ] = $args[1];
         } else { die('arg error.'); }
