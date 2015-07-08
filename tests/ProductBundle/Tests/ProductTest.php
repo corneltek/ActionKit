@@ -1,14 +1,37 @@
 <?php
 use ActionKit\ActionRunner;
 use ActionKit\ActionRequest;
+use ActionKit\Testing\ActionTestCase;
 use ActionKit\ServiceContainer;
 use ActionKit\ActionTemplate\TwigActionTemplate;
 use ActionKit\ActionTemplate\UpdateOrderingRecordActionTemplate;
+use ActionKit\Testing\ActionTestAssertions;
 use ProductBundle\Model\Product;
+use ProductBundle\Model\ProductCollection;
+use ProductBundle\Model\ProductSchema;
 use ProductBundle\Action\CreateProduct;
 use ProductBundle\Action\CreateProductFile;
 use ProductBundle\Action\CreateProductImage;
+use LazyRecord\Testing\ModelTestCase;
 
+function CreateFilesArrayWithAssociateKey(array $files) {
+    $array = [ 
+        'name' => [],
+        'type' => [],
+        'tmp_name' => [],
+        'saved_path' => [],
+        'error' => [],
+        'size' => [],
+    ];
+    foreach ($files as $key => $file) {
+        foreach ($array as $field => & $subfields) {
+            foreach ($file as $fileField => $fileValue) {
+                $array[$field][$key][$fileField] = $fileValue[ $field ];
+            }
+        }
+    }
+    return $array;
+}
 
 function CreateFileArray($filename, $type, $tmpname) {
     return [
@@ -22,8 +45,10 @@ function CreateFileArray($filename, $type, $tmpname) {
 }
 
 
-class ProductBundleTest extends PHPUnit_Framework_TestCase
+class ProductBundleTest extends ModelTestCase
 {
+    use ActionTestAssertions;
+
     public function orderingActionMapProvider() 
     {
         return [
@@ -43,6 +68,13 @@ class ProductBundleTest extends PHPUnit_Framework_TestCase
             ['scale'],
             ['crop_and_scale'],
         ];
+    }
+
+    public $driver = 'sqlite';
+
+    public function getModels()
+    {
+        return array( new ProductSchema );
     }
 
 
@@ -66,6 +98,46 @@ class ProductBundleTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($action);
     }
 
+    public function testProductCreateWithProductImageSubAction()
+    {
+        $tmpfile = tempnam('/tmp', 'test_image_');
+        copy('tests/data/404.png', $tmpfile);
+        $files = [
+            'images' => CreateFilesArrayWithAssociateKey([
+                'a' => [ 'image' => CreateFileArray('404.png', 'image/png', $tmpfile) ], 
+                'b' => [ 'image' => CreateFileArray('404.png', 'image/png', $tmpfile) ], 
+            ]),
+        ];
+        $args = ['name' => 'Test Product', 'images' => [ 
+            // files are in another array
+            'a' => [ ],
+            'b' => [ ],
+        ]];
+        $request = new ActionRequest($args, $files);
+        $create = new CreateProduct($args, [ 'request' => $request ]);
+        $result = $this->assertActionInvokeSuccess($create);
+
+        $product = $create->getRecord();
+        $this->assertNotNull($product);
+        $this->assertNotNull($product->id, 'product created');
+
+        $images = $product->images;
+        $this->assertCount(2, $images);
+    }
+
+    public function testProductCreateSubActionWithCreateProductImage()
+    {
+        $files = [ ];
+        $request = new ActionRequest(['name' => 'Test Product'], $files);
+        $product = new Product;
+        $product->create([
+            'name' => 'Testing Product',
+        ]);
+        $this->assertNotNull($product->id);
+        $create = new CreateProduct(['name' => 'Test Product'], [ 'request' => $request, 'record' => $product, ]);
+        $createImage = $create->createSubAction('images', [ ]);
+        $this->assertNotNull($createImage);
+    }
 
     public function testProductSubActionWithCreateProductImage()
     {
@@ -76,10 +148,10 @@ class ProductBundleTest extends PHPUnit_Framework_TestCase
             'name' => 'Testing Product',
         ]);
         $this->assertNotNull($product->id);
-
         $create = new CreateProduct(['name' => 'Test Product'], [ 'request' => $request, 'record' => $product, ]);
         $create->createSubAction('images', [ ]);
     }
+
 
 
 

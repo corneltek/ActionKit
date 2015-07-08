@@ -1,4 +1,7 @@
 <?php
+use LazyRecord\Schema\SchemaGenerator;
+use LazyRecord\ConfigLoader;
+
 define('ROOT' , dirname(__DIR__) );
 $loader = require ROOT . '/vendor/autoload.php';
 $loader->add(null, ROOT . '/tests');
@@ -14,6 +17,51 @@ function __()
     }
     return $msg;
 }
+
+/*
+$config = ConfigLoader::getInstance();
+$config->loadFromArray(array( 
+    'bootstrap' => array ('tests/bootstrap.php'),
+    'schema' => array(
+        'auto_id' => 1,
+        'paths' => array('tests'),
+    ),
+    'data_sources' =>
+    array (
+        'default' =>
+            array (
+                'dsn' => 'sqlite::memory:',
+                // 'dsn' => 'sqlite:testing.sqlite3',
+                'user' => NULL,
+                'pass' => NULL,
+            ),
+        'pgsql' =>
+            array (
+                'dsn' => 'pgsql:host=localhost;dbname=testing',
+                'user' => 'postgres',
+            ),
+    ),
+));
+
+$logger = new Logger;
+$logger->info("Building schema class files...");
+$schemas = array(
+    new \TestApp\Model\UserSchema,
+    new \TestApp\Model\IDNumberSchema,
+    new \TestApp\Model\NameSchema,
+    new \AuthorBooks\Model\AddressSchema,
+    new \AuthorBooks\Model\BookSchema,
+    new \AuthorBooks\Model\AuthorSchema,
+    new \AuthorBooks\Model\AuthorBookSchema,
+    new \AuthorBooks\Model\PublisherSchema,
+    new \MetricApp\Model\MetricValueSchema,
+    new \PageApp\Model\PageSchema,
+);
+$g = new \LazyRecord\Schema\SchemaGenerator($config, $logger);
+$g->setForceUpdate(true);
+$g->generate($schemas);
+ */
+
 
 
 /**
