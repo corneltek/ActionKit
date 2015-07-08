@@ -16,9 +16,9 @@ class RecordActionTemplate extends CodeGenActionTemplate
      *    $template->register($runner, array(
      *        'namespace' => 'test',
      *        'model' => 'testModel',   // model's name
-     *        'allowedRoles' => array('admin', 'manager'), 
+     *        'allowed_roles' => array('admin', 'manager'), 
      *        'types' => array(
-     *            ['prefix' => 'Create', 'allowedRoles' => ['user', 'admin'] ],
+     *            ['prefix' => 'Create', 'allowed_roles' => ['user', 'admin'] ],
      *            ['prefix' => 'Update'],
      *            ['prefix' => 'Delete']
      *        )
@@ -46,8 +46,8 @@ class RecordActionTemplate extends CodeGenActionTemplate
             $actionClass = $options['namespace'] . '\\Action\\' . $type['prefix'] . $options['model'];
             $properties = ['recordClass' => $options['namespace'] . "\\Model\\" . $options['model']];
             $traits = array();
-            if (isset($options['allowedRoles']) || isset($type['allowedRoles'])) {
-                $properties['allowedRoles'] = isset($type['allowedRoles']) ? $type['allowedRoles'] : $options['allowedRoles'];
+            if (isset($options['allowed_roles']) || isset($type['allowed_roles'])) {
+                $properties['allowedRoles'] = isset($type['allowed_roles']) ? $type['allowed_roles'] : $options['allowed_roles'];
                 $traits = ['ActionKit\ActionTrait\RoleChecker'];
             }
             $configs = [
