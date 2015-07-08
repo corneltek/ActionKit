@@ -370,15 +370,9 @@ class BaseRecordAction extends Action
         // for relationships that has defined a custom action class,
         // we should just use it.
         if (isset($relation['action'])) {
-            $class = $relation['action'];
 
-            // for record-based action, we should pass the record object.
-            if (is_subclass_of($class,'ActionKit\\RecordAction\\BaseRecordAction',true)) {
-                return new $class($args,$actionOptions);
-            } else {
-                // for simple action class without record.
-                return new $class($args,$actionOptions);
-            }
+            $class = $relation['action'];
+            return new $class($args, $actionOptions);
 
         } else if ($subrecord->id) {
 

@@ -201,6 +201,13 @@ class ProductBundleTest extends ModelTestCase
         foreach($images as $image) { $image->delete(); }
     }
 
+    public function testFetchOneToManyRelationCollectionOnInexistingRelationIdShouldReturnNull()
+    {
+        $create = new CreateProduct;
+        $null = $create->fetchOneToManyRelationCollection('foo');
+        $this->assertNull($null);
+    }
+
     public function testFetchManyToManyRelationCollection()
     {
         $args = [];
@@ -255,17 +262,63 @@ class ProductBundleTest extends ModelTestCase
         $this->assertNotNull($createImage);
     }
 
-    public function testProductSubActionWithCreateProductImage()
+    public function testCreateSubActionWithRelationshipForSubRecordCreate()
     {
-        $files = [ ];
-        $request = new ActionRequest(['name' => 'Test Product'], $files);
+        $tmpfile = tempnam('/tmp', 'test_image_');
+        copy('tests/data/404.png', $tmpfile);
+        $files = [
+            'images' => CreateFilesArrayWithAssociateKey([
+                'a' => [ 'image' => CreateFileArray('404.png', 'image/png', $tmpfile) ], 
+                'b' => [ 'image' => CreateFileArray('404.png', 'image/png', $tmpfile) ], 
+            ]),
+        ];
+        $args = ['name' => 'Test Product', 'images' => [ 
+            // files are in another array
+            'a' => [ ],
+            'b' => [ ],
+        ]];
+
+        $request = new ActionRequest($args, $files);
+        $createProduct = new CreateProduct($args, [ 'request' => $request ]);
+
+        $relation = clone $createProduct->getRelation('images');
+        $relation['create_action'] = 'ProductBundle\Action\CreateProductImage';
+        $createProduct->addRelation('images',$relation);
+        $this->assertActionInvokeSuccess($createProduct);
+    }
+
+    public function testCreateSubActionWithRelationshipAndReloadExistingSubRecord()
+    {
+        $tmpfile = tempnam('/tmp', 'test_image_') . '.png';
+        copy('tests/data/404.png', $tmpfile);
+        $files = [
+            'image' => CreateFileArray('404.png', 'image/png', $tmpfile),
+        ];
+
+        // new ActionRequest(['title' => 'Test Image'], $files);
+        $createImage = new CreateProductImage(['title' => 'Test Image'], [ 'files' => $files ]);
+        $this->assertActionInvokeSuccess($createImage);
+        $image = $createImage->getRecord();
+        $this->assertNotNull($image);
+        $this->assertNotNull($image->id);
+
+
         $product = new Product;
-        $product->create([
-            'name' => 'Testing Product',
-        ]);
-        $this->assertNotNull($product->id);
-        $create = new CreateProduct(['name' => 'Test Product'], [ 'request' => $request, 'record' => $product, ]);
-        $create->createSubAction('images', [ ]);
+        $product->create([ 'name' => 'Test Product' ]);
+
+        $updateProduct = new UpdateProduct(['name' => 'Updated Product'], [ 'record' => $product ]);
+
+        $relation = clone $updateProduct->getRelation('images');
+
+        $updateImage = $updateProduct->createSubActionWithRelationship($relation, [ 'id' => $image->id ], $files);
+        $this->assertInstanceOf('ActionKit\RecordAction\UpdateRecordAction', $updateImage);
+        $this->assertActionInvokeSuccess($updateImage);
+
+        $relation = clone $updateProduct->getRelation('images');
+        $relation['update_action'] = 'ProductBundle\Action\UpdateProductImage';
+        $updateImage = $updateProduct->createSubActionWithRelationship($relation, [ 'id' => $image->id ], $files);
+        $this->assertInstanceOf('ActionKit\RecordAction\UpdateRecordAction', $updateImage);
+        $this->assertActionInvokeSuccess($updateImage);
     }
 
 
@@ -320,33 +373,6 @@ class ProductBundleTest extends ModelTestCase
         $this->assertActionInvokeSuccess($create);
     }
 
-    public function testCreateSubActionWithRelationshipAndReloadExistingSubRecord()
-    {
-        $tmpfile = tempnam('/tmp', 'test_image_') . '.png';
-        copy('tests/data/404.png', $tmpfile);
-        $files = [
-            'image' => CreateFileArray('404.png', 'image/png', $tmpfile),
-        ];
-
-        // new ActionRequest(['title' => 'Test Image'], $files);
-        $createImage = new CreateProductImage(['title' => 'Test Image'], [ 'files' => $files ]);
-        $this->assertActionInvokeSuccess($createImage);
-        $image = $createImage->getRecord();
-        $this->assertNotNull($image);
-        $this->assertNotNull($image->id);
-
-
-        $product = new Product;
-        $product->create([ 'name' => 'Test Product' ]);
-
-        $updateProduct = new UpdateProduct(['name' => 'Updated Product'], [ 'record' => $product ]);
-
-        $relation = clone $updateProduct->getRelation('images');
-        $updateImage = $updateProduct->createSubActionWithRelationship($relation, [ 'id' => $image->id ], $files);
-
-        $this->assertInstanceOf('ActionKit\RecordAction\UpdateRecordAction', $updateImage);
-        $this->assertActionInvokeSuccess($updateImage);
-    }
 
 
     /**
