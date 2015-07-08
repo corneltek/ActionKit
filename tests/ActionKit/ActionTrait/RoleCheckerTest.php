@@ -71,5 +71,11 @@ class RoleCheckerTest extends PHPUnit_Framework_TestCase
     }
 
 
+    public function testGetAllowedRoles()
+    {
+        $checker = new MyRoleChecker(['admin']);
+        $this->assertSame(['admin'],$checker->getAllowedRoles());
+    }
+
 }
 
