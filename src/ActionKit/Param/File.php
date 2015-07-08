@@ -42,17 +42,6 @@ class File extends Param
          */
     }
 
-    public function preinit( & $args )
-    {
-
-        /* For safety , remove the POST, GET field !! should only keep $_FILES ! */
-        if ( isset( $args[ $this->name ] ) ) {
-            // unset( $_GET[ $this->name ]  );
-            // unset( $_POST[ $this->name ] );
-            // unset( $args[ $this->name ]  );
-        }
-    }
-
     public function validate($value)
     {
         $ret = (array) parent::validate($value);
