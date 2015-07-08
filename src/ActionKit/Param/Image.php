@@ -10,29 +10,6 @@ use ActionKit\RecordAction\CreateRecordAction;
 use ActionKit\Utils;
 use Universal\Http\UploadedFile;
 
-function filename_increase($path)
-{
-    if (! file_exists($path)) {
-        return $path;
-    }
-
-    $pos = strrpos( $path , '.' );
-    if ($pos !== false) {
-        $filepath = substr($path, 0 , $pos);
-        $extension = substr($path, $pos);
-        $newfilepath = $filepath . $extension;
-        $i = 1;
-        while ( file_exists($newfilepath) ) {
-            $newfilepath = $filepath . "_" . ($i++)  . $extension;
-        }
-        return $newfilepath;
-    }
-
-    return $path;
-}
-
-
-
 class Image extends Param
 {
 
@@ -95,7 +72,7 @@ class Image extends Param
         $this->supportedAttributes[ 'compression' ] = self::ATTR_ANY;
         $this->supportedAttributes[ 'argumentPostFilter' ] = self::ATTR_ANY;
         $this->renameFile = function($filename) {
-            return filename_increase($filename);
+            return Utils::filename_increase($filename);
         };
         $this->renderAs('ThumbImageFileInput',array(
             /* prefix path for widget rendering */
@@ -263,7 +240,7 @@ class Image extends Param
         }
 
         while (file_exists($targetPath)) {
-            $targetPath = filename_increase( $targetPath );
+            $targetPath = Utils::filename_increase( $targetPath );
         }
 
         // If there is a file uploaded from HTTP

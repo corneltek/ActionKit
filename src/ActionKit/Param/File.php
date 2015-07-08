@@ -1,8 +1,8 @@
 <?php
 namespace ActionKit\Param;
 use ActionKit\Param;
+use ActionKit\Utils;
 use Universal\Http\UploadedFile;
-use Phifty\FileUtils;
 use Exception;
 
 /**
@@ -34,7 +34,7 @@ class File extends Param
 
         /*
         $this->renameFile = function($filename) {
-            return FileUtils::filename_increase( $filename );
+            return Utils::filename_increase( $filename );
         };
          */
         /*
