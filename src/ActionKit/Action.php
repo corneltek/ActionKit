@@ -14,7 +14,7 @@ use IteratorAggregate;
 
 class Action implements IteratorAggregate
 {
-    public $currentUser;
+    protected $currentUser;
 
     public $nested = true;
 

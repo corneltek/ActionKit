@@ -76,7 +76,8 @@ class ProductBundleTest extends PHPUnit_Framework_TestCase
 
         // new ActionRequest(['title' => 'Test Image'], $files);
         $create = new CreateProductImage(['title' => 'Test Image'], [ 'files' => $files ]);
-        $create->invoke();
+        $ret = $create->invoke();
+        var_dump( $ret ); 
     }
 
     public function testCreateProductFile()
@@ -85,7 +86,7 @@ class ProductBundleTest extends PHPUnit_Framework_TestCase
         copy('tests/data/404.png', $tmpfile);
         $files = CreateFilesStash('image', '404.png', 'image/png', $tmpfile);
         $create = new CreateProductFile([ ], [ 'files' => $files ]);
-        $create->invoke();
+        $ret = $create->invoke();
     }
 }
 
