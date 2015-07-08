@@ -20,9 +20,14 @@ function __()
  * Clean up cache files
  */
 const CACHE_DIR = 'src/ActionKit/Cache';
+const UPLOAD_DIR = 'tests/upload';
 if (file_exists(CACHE_DIR)) {
     futil_rmtree(CACHE_DIR);
     mkdir(CACHE_DIR, 0755, true);
+}
+if (file_exists(UPLOAD_DIR)) {
+    futil_rmtree(UPLOAD_DIR);
+    mkdir(UPLOAD_DIR, 0755, true);
 }
 
 /*
