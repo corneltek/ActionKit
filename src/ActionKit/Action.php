@@ -432,7 +432,7 @@ class Action implements IteratorAggregate
         }
 
         foreach( $this->mixins as $mixin ) {
-            if ( false === $mixin->run() ) {
+            if (false === $mixin->run()) {
                 return false;
             }
         }
