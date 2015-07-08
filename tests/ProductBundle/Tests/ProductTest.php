@@ -14,6 +14,10 @@ use ProductBundle\Action\CreateProductFile;
 use ProductBundle\Action\CreateProductImage;
 use LazyRecord\Testing\ModelTestCase;
 
+class CustomCreateProductImageAction extends CreateProductImage {
+
+}
+
 function CreateFilesArrayWithAssociateKey(array $files) {
     $array = [ 
         'name' => [],
@@ -98,6 +102,71 @@ class ProductBundleTest extends ModelTestCase
         $this->assertNotNull($action);
     }
 
+
+
+
+    /**
+     * @expectedException Exception
+     */
+    public function testMissingSubActionForeignSchem()
+    {
+        $tmpfile = tempnam('/tmp', 'test_image_');
+        copy('tests/data/404.png', $tmpfile);
+        $files = [
+            'images' => CreateFilesArrayWithAssociateKey([
+                'a' => [ 'image' => CreateFileArray('404.png', 'image/png', $tmpfile) ], 
+                'b' => [ 'image' => CreateFileArray('404.png', 'image/png', $tmpfile) ], 
+            ]),
+        ];
+        $args = ['name' => 'Test Product', 'images' => [ 
+            // files are in another array
+            'a' => [ ],
+            'b' => [ ],
+        ]];
+
+        $request = new ActionRequest($args, $files);
+        $create = new CreateProduct($args, [ 'request' => $request ]);
+
+        $relation = clone $create->getRelation('images');
+        unset($relation['foreign_schema']);
+        $create->addRelation('images', $relation);
+        $create->invoke();
+    }
+
+    public function testProductCreateWithCustomProductImageSubAction()
+    {
+        $tmpfile = tempnam('/tmp', 'test_image_');
+        copy('tests/data/404.png', $tmpfile);
+        $files = [
+            'images' => CreateFilesArrayWithAssociateKey([
+                'a' => [ 'image' => CreateFileArray('404.png', 'image/png', $tmpfile) ], 
+                'b' => [ 'image' => CreateFileArray('404.png', 'image/png', $tmpfile) ], 
+            ]),
+        ];
+        $args = ['name' => 'Test Product', 'images' => [ 
+            // files are in another array
+            'a' => [ ],
+            'b' => [ ],
+        ]];
+
+        $request = new ActionRequest($args, $files);
+        $create = new CreateProduct($args, [ 'request' => $request ]);
+
+
+        $relation = $create->getRelation('images');
+        $relation['action'] = 'CustomCreateProductImageAction';
+
+        $result = $this->assertActionInvokeSuccess($create);
+
+        $product = $create->getRecord();
+        $this->assertNotNull($product);
+        $this->assertNotNull($product->id, 'product created');
+
+        $images = $product->images;
+        $this->assertCount(2, $images);
+        foreach($images as $image) { $image->delete(); }
+    }
+
     public function testProductCreateWithProductImageSubAction()
     {
         $tmpfile = tempnam('/tmp', 'test_image_');
@@ -123,6 +192,7 @@ class ProductBundleTest extends ModelTestCase
 
         $images = $product->images;
         $this->assertCount(2, $images);
+        foreach($images as $image) { $image->delete(); }
     }
 
     public function testProductCreateSubActionWithCreateProductImage()

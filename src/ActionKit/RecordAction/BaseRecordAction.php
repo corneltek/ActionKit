@@ -349,7 +349,7 @@ class BaseRecordAction extends Action
     {
         $subrecord = null;
         if (!isset($relation['foreign_schema']) ) {
-            throw new Exception("Missing foreign_schema on relationship {$relation}");
+            throw new Exception("Missing relationship foreign_schema");
         }
 
         $schema = new $relation['foreign_schema'];
@@ -367,7 +367,7 @@ class BaseRecordAction extends Action
             'files' => $files,
         ];
 
-        // for relationships that has defined an action class,
+        // for relationships that has defined a custom action class,
         // we should just use it.
         if (isset($relation['action'])) {
             $class = $relation['action'];
@@ -395,7 +395,7 @@ class BaseRecordAction extends Action
             // we are going to create related records with subactions
             // just ensure that we've unset the record identity.
             unset($args[$primaryKey]);
-            if ( isset($relation['create_action']) ) {
+            if (isset($relation['create_action'])) {
                 $class = $relation['create_action'];
                 return new $class($args,$actionOptions);
             }
@@ -403,14 +403,16 @@ class BaseRecordAction extends Action
         }
     }
 
-    public function fetchOneToManyRelationCollection($relationId) {
+    public function fetchOneToManyRelationCollection($relationId) 
+    {
         $record = $this->record;
         if ( $record->id && isset($record->{ $relationId }) ) {
             return $record->{$relationId};
         }
     }
 
-    public function fetchManyToManyRelationCollection($relationId) {
+    public function fetchManyToManyRelationCollection($relationId) 
+    {
         $relation = $this->getRelation($relationId);
         return $relation->newForeignForeignCollection(
             $this->record->getSchema()->getRelation($relation['relation_junction'])
