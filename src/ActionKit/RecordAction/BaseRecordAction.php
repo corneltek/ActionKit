@@ -361,6 +361,12 @@ class BaseRecordAction extends Action
             $subrecord->load( $args[$primaryKey] );
         }
 
+        $actionOptions = [
+            'parent' => $this,
+            'record' => $subrecord,
+            'files' => $files,
+        ];
+
         // for relationships that has defined an action class,
         // we should just use it.
         if (isset($relation['action'])) {
@@ -368,17 +374,10 @@ class BaseRecordAction extends Action
 
             // for record-based action, we should pass the record object.
             if (is_subclass_of($class,'ActionKit\\RecordAction\\BaseRecordAction',true)) {
-                return new $class($args, [
-                    'parent' => $this,
-                    'record' => $subrecord,
-                    'files' => $files,
-                ]);
+                return new $class($args,$actionOptions);
             } else {
                 // for simple action class without record.
-                return new $class($args,[ 
-                    'parent' => $this,
-                    'files' => $files,
-                ]);
+                return new $class($args,$actionOptions);
             }
 
         } else if ($subrecord->id) {
@@ -387,16 +386,9 @@ class BaseRecordAction extends Action
             // then we should use the customized class to process our data.
             if (isset($relation['update_action']) ) {
                 $class = $relation['update_action'];
-                return new $class($args,[
-                    'parent' => $this,
-                    'record' => $subrecord,
-                    'files' => $files,
-                ]);
+                return new $class($args,$actionOptions);
             }
-            return $subrecord->asUpdateAction($args, [ 
-                'parent' => $this,
-                'files' => $files,
-            ]);
+            return $subrecord->asUpdateAction($args, $actionOptions);
 
         } else {
 
@@ -405,16 +397,9 @@ class BaseRecordAction extends Action
             unset($args[$primaryKey]);
             if ( isset($relation['create_action']) ) {
                 $class = $relation['create_action'];
-                return new $class($args,[
-                    'parent' => $this,
-                    'record' => $subrecord,
-                    'files' => $files,
-                ]);
+                return new $class($args,$actionOptions);
             }
-            return $subrecord->asCreateAction($args, [ 
-                'parent' => $this,
-                'files' => $files,
-            ]);
+            return $subrecord->asCreateAction($args, $actionOptions);
         }
     }
 
