@@ -57,11 +57,7 @@ class Image extends Param
 
     public $argumentPostFilter;
 
-    public function preinit(& $args)
-    {
-        // TODO: should let user create the directory by themself
-        // futil_mkdir_if_not_exists(PH_APP_ROOT . DIRECTORY_SEPARATOR . 'webroot' . DIRECTORY_SEPARATOR . $this->putIn, 0777, true);
-    }
+    static $defaultUploadDirectory;
 
     public function build()
     {
@@ -75,6 +71,11 @@ class Image extends Param
         $this->renameFile = function($filename) {
             return Utils::filename_increase_suffix_number($filename);
         };
+
+        if (static::$defaultUploadDirectory) {
+            $this->putIn(static::$defaultUploadDirectory);
+        }
+
         $this->renderAs('ThumbImageFileInput',array(
             /* prefix path for widget rendering */
             'prefix' => '/',

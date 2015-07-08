@@ -20,9 +20,14 @@ class File extends Param
     public $paramType = 'file';
 
     public $sizeLimit;
+
     public $sourceField;  /* If field is not defined, use this source field */
+
     public $widgetClass = 'FileInput';
+
     public $renameFile;
+
+    static $defaultUploadDirectory;
 
     public function build()
     {
@@ -37,9 +42,10 @@ class File extends Param
             return Utils::filename_increase_suffix_number( $filename );
         };
          */
-        /*
-        $this->putIn("static/upload/");
-         */
+
+        if (static::$defaultUploadDirectory) {
+            $this->putIn(static::$defaultUploadDirectory);
+        }
     }
 
     public function validate($value)
