@@ -7,8 +7,8 @@ trait RoleChecker
 {
     public function currentUserCan($user, $right, $args = array())
     {
-        if (!isset($user)) {
-            return $this->deny();
+        if ($user === null || !isset($user)) {
+            return $this->deny("Anonymous user is not allowed.");
         }
 
         if (is_string($user)) {
