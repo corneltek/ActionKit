@@ -10,24 +10,26 @@ class Utils
         return ! preg_match( '/[^A-Za-z0-9:]/i' , $actionName  );
     }
 
-    public static function filename_increase_suffix_number($path)
+    /**
+    * @param string $path     file path.
+    * @param string $basepath basepath for checking file existence
+    */
+    public static function filename_increase_suffix_number($path, $basepath = './')
     {
-        if (! file_exists($path)) {
+        if ( ! file_exists($basepath . $path) ) {
             return $path;
         }
-
         $pos = strrpos( $path , '.' );
         if ($pos !== false) {
             $filepath = substr($path, 0 , $pos);
             $extension = substr($path, $pos);
             $newfilepath = $filepath . $extension;
             $i = 1;
-            while ( file_exists($newfilepath) ) {
-                $newfilepath = $filepath . "_" . ($i++)  . $extension;
+            while ( file_exists($basepath . $newfilepath) ) {
+                $newfilepath = $filepath . "_" . $i++ . $extension;
             }
             return $newfilepath;
         }
-
         return $path;
     }
 

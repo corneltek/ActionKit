@@ -1,32 +1,10 @@
 <?php
 namespace ActionKit\RecordAction;
 use Exception;
-
-/**
- * @param string $path     file path.
- * @param string $basepath basepath for checking file existence
- */
-function filename_increase_suffix_number($path, $basepath = "./")
-{
-    if ( ! file_exists($basepath . $path) ) {
-        return $path;
-    }
-    $pos = strrpos( $path , '.' );
-    if ($pos !== false) {
-        $filepath = substr($path, 0 , $pos);
-        $extension = substr($path, $pos);
-        $newfilepath = $filepath . $extension;
-        $i = 1;
-        while ( file_exists($basepath . $newfilepath) ) {
-            $newfilepath = $filepath . "_" . $i++ . $extension;
-        }
-        return $newfilepath;
-    }
-    return $path;
-}
+use ActionKit\Utils;
 
 function duplicate_file($from) {
-    $to = filename_increase_suffix_number($from);
+    $to = Utils::filename_increase_suffix_number($from);
     copy($from , $to);
     return $to;
 }
