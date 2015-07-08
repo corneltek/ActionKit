@@ -14,6 +14,7 @@ function CreateFilesStash($field, $filename, $type, $tmpname) {
             'name' => $filename,
             'type' => $type,
             'tmp_name' => $tmpname,
+            'saved_path' => $tmpname,
             'error' => UPLOAD_ERR_OK,
             'size' => filesize($tmpname),
         ],
@@ -61,7 +62,6 @@ class ProductBundleTest extends PHPUnit_Framework_TestCase
         $tmpfile = tempnam('/tmp', 'test_image_');
         copy('tests/data/404.png', $tmpfile);
         $files = CreateFilesStash('image', '404.png', 'image/png', $tmpfile);
-        $files['saved_path'] = $tmpfile;
 
         $request = new ActionRequest(['title' => 'Test Image'], $files);
         $create = new CreateProductImage(['title' => 'Test Image'], [ 'request' => $request ]);
@@ -73,7 +73,6 @@ class ProductBundleTest extends PHPUnit_Framework_TestCase
         $tmpfile = tempnam('/tmp', 'test_image_');
         copy('tests/data/404.png', $tmpfile);
         $files = CreateFilesStash('image', '404.png', 'image/png', $tmpfile);
-        $files['saved_path'] = $tmpfile;
 
         // new ActionRequest(['title' => 'Test Image'], $files);
         $create = new CreateProductImage(['title' => 'Test Image'], [ 'files' => $files ]);
@@ -82,10 +81,11 @@ class ProductBundleTest extends PHPUnit_Framework_TestCase
 
     public function testCreateProductFile()
     {
-        $create = new CreateProductFile([ 
-       
-        ]);
-        $create->run();
+        $tmpfile = tempnam('/tmp', 'test_image_');
+        copy('tests/data/404.png', $tmpfile);
+        $files = CreateFilesStash('image', '404.png', 'image/png', $tmpfile);
+        $create = new CreateProductFile([ ], [ 'files' => $files ]);
+        $create->invoke();
     }
 }
 
