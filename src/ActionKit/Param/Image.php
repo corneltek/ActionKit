@@ -155,25 +155,21 @@ class Image extends Param
 
     public function validate($value)
     {
-
         $ret = (array) parent::validate($value);
         if (false === $ret[0]) {
             return $ret;
         }
 
-        $file = $this->action->request->file($this->name);
-
-        // XXX: Consider required and optional situations.
-        if (isset($_FILES[ $this->name ]['tmp_name']) && $_FILES[ $this->name ]['tmp_name'] )  {
-            $file = new UploadFile( $this->name );
-            if ( $this->validExtensions ) {
-                if ( ! $file->validateExtension( $this->validExtensions ) ) {
-                    return array( false, _('Invalid File Extension: ') . $this->name );
+        if ($file = $this->action->request->file($this->name)) {
+            $uploadedFile = UploadedFile::createFromArray($file);
+            if ($this->validExtensions) {
+                if ( ! $uploadedFile->validateExtension($this->validExtensions) ) {
+                    return array( false, _('Invalid file extension: ') . $uploadedFile->getExtension() );
                 }
             }
 
             if ( $this->sizeLimit ) {
-                if ( ! $file->validateSize( $this->sizeLimit ) ) {
+                if ( ! $uploadedFile->validateSize( $this->sizeLimit ) ) {
                     return array( false, _("The uploaded file exceeds the size limitation. ") . futil_prettysize($this->sizeLimit * 1024) );
                 }
             }

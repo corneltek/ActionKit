@@ -22,7 +22,6 @@ function CreateFileArray($filename, $type, $tmpname) {
 
 class ProductBundleTest extends PHPUnit_Framework_TestCase
 {
-
     public function orderingActionMapProvider() 
     {
         return [
@@ -57,7 +56,7 @@ class ProductBundleTest extends PHPUnit_Framework_TestCase
 
     public function testCreateProductImageWithActionRequest()
     {
-        $tmpfile = tempnam('/tmp', 'test_image_');
+        $tmpfile = tempnam('/tmp', 'test_image_') . '.png';
         copy('tests/data/404.png', $tmpfile);
         $files = [
             'image' => CreateFileArray('404.png', 'image/png', $tmpfile),
@@ -65,13 +64,15 @@ class ProductBundleTest extends PHPUnit_Framework_TestCase
 
         $request = new ActionRequest(['title' => 'Test Image'], $files);
         $create = new CreateProductImage(['title' => 'Test Image'], [ 'request' => $request ]);
-        $create->invoke();
+        $ret = $create->invoke();
+        $this->assertTrue($ret);
+        $this->assertInstanceOf('ActionKit\Result', $create->getResult());
     }
 
 
     public function testCreateProductImageWithFilesArray()
     {
-        $tmpfile = tempnam('/tmp', 'test_image_');
+        $tmpfile = tempnam('/tmp', 'test_image_') . '.png';
         copy('tests/data/404.png', $tmpfile);
         $files = [
             'image' => CreateFileArray('404.png', 'image/png', $tmpfile),
