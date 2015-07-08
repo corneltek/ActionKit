@@ -87,22 +87,25 @@ class Param extends CascadingAttribute
     {
         /* if it's file type , should read from $_FILES , not from the args of action */
         // TODO: note, we should do this validation in File Param or Image Param
-        if ($this->paramType === 'file') {
-            if ($this->required
-                && ( ! $this->action->request->file($this->name) && ! $this->action->request->param($this->name) )
-            ) {
-                return array(false, __( Messages::get('file.required') , $this->getLabel()  ) );
+
+        if ($this->required) {
+
+            if ($this->paramType === 'file') {
+
+                if (! $this->action->request->file($this->name) && ! $this->action->request->param($this->name)) {
+                    return array(false, __( Messages::get('file.required') , $this->getLabel()  ) );
+                }
+
+            } else {
+
+                if ( ! isset($this->args[ $this->name ]) || ! $this->args[$this->name] && ! $this->default ) {
+                    return array(false, __( Messages::get('param.required') , $this->getLabel()  ) );
+                }
+
             }
-        } else {
-            if ( $this->required 
-                && ( ! isset($_REQUEST[ $this->name ])
-                        || ! $_REQUEST[$this->name] 
-                    )
-                && ! $this->default ) 
-            {
-                return array(false, __( Messages::get('param.required') , $this->getLabel()  ) );
-            }
+
         }
+
         if ($this->validator) {
             return call_user_func($this->validator,$value);
         }
