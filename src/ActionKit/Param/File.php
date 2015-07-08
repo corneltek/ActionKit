@@ -103,7 +103,7 @@ class File extends Param
          *
          * if POST,GET file column key is set. remove it from ->args
          */
-        if ( ! $this->putIn )
+        if (! $this->putIn)
             throw new Exception( "putIn attribute is not defined." );
 
         $req = new \Universal\Http\HttpRequest;
@@ -113,32 +113,44 @@ class File extends Param
          *
          * if not, check sourceField.
          * */
-        if ( isset($this->action->files[ $this->name ]) ) {
-            $file = $this->action->files[ $this->name ];
-        } elseif ( $this->sourceField && isset($this->action->files[ $this->sourceField ]) ) {
-            $file = $this->action->files[ $this->sourceField ];
+
+        if ($fileArg = $this->action->request->file($this->name)) {
+            $file = $fileArg;
+        } else if ($this->sourceField) {
+            if ($fileArg = $this->action->request->file($this->sourceField)) {
+                $file = $fileArg;
+            }
+        }
+        if (!$file) {
+            return false;
         }
 
-        if ( $file && file_exists($file['tmp_name'] ) ) {
-            $newName = $file['name'];
-            if ($this->renameFile) {
-                $newName = call_user_func($this->rename,$newName);
-            }
+        // TODO: Move this to a proper place
+        if ($this->putIn && ! file_exists($this->putIn)) {
+            mkdir($this->putIn, 0755 , true);
+        }
 
-            if ( $this->putIn && ! file_exists($this->putIn) )
-                mkdir( $this->putIn, 0755 , true );
+        $uploadedFile = UploadedFile::createFromArray($file);
 
-            /* if we use sourceField, than use Copy */
-            $savedPath = $this->putIn . DIRECTORY_SEPARATOR . $newName ;
-            if ($this->sourceField) {
-                copy( $file['tmp_name'] , $savedPath);
+        $newName = $uploadedFile->getOriginalFileName();
+        if ($this->renameFile) {
+            $newName = call_user_func($this->rename,$newName);
+        }
+        $targetPath = $this->putIn . DIRECTORY_SEPARATOR . $newName ;
+
+
+        // When sourceField enabled, we should either check saved_path or tmp_name
+        if ($this->sourceField) {
+            if ($savedPath = $uploadedFile->getSavedPath()) {
+                copy($savedPath, $targetPath);
             } else {
-                move_uploaded_file( $file['tmp_name'], $savedPath);
+                $uploadedFile->copy($targetPath);
             }
-            $this->action->files[ $this->name ]['saved_path'] = $savedPath;
-            $args[ $this->name ] = $savedPath;
-            $this->action->addData( $this->name , $savedPath );
+        } else {
+            $uploadedFile->move($targetPath);
         }
+        $args[$this->name] = $targetPath;
+        $this->action->addData( $this->name , $targetPath);
     }
 
 }
