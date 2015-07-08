@@ -167,6 +167,50 @@ class ProductBundleTest extends ModelTestCase
         foreach($images as $image) { $image->delete(); }
     }
 
+    public function testFetchOneToManyRelationCollection()
+    {
+        $tmpfile = tempnam('/tmp', 'test_image_');
+        copy('tests/data/404.png', $tmpfile);
+        $files = [
+            'images' => CreateFilesArrayWithAssociateKey([
+                'a' => [ 'image' => CreateFileArray('404.png', 'image/png', $tmpfile) ], 
+                'b' => [ 'image' => CreateFileArray('404.png', 'image/png', $tmpfile) ], 
+            ]),
+        ];
+        $args = ['name' => 'Test Product', 'images' => [ 
+            // files are in another array
+            'a' => [ ],
+            'b' => [ ],
+        ]];
+        $request = new ActionRequest($args, $files);
+        $create = new CreateProduct($args, [ 'request' => $request ]);
+        $result = $this->assertActionInvokeSuccess($create);
+
+        $product = $create->getRecord();
+        $this->assertNotNull($product);
+        $this->assertNotNull($product->id, 'product created');
+
+        $images = $product->images;
+        $this->assertCount(2, $images);
+
+        $images = $create->fetchOneToManyRelationCollection('images');
+        $this->assertCount(2, $images);
+
+        foreach($images as $image) { $image->delete(); }
+    }
+
+    public function testFetchManyToManyRelationCollection()
+    {
+        $args = [];
+        $files = [];
+        $request = new ActionRequest($args, $files);
+        $create = new CreateProduct($args, [ 'request' => $request ]);
+        $categories = $create->fetchManyToManyRelationCollection('categories');
+        $this->assertInstanceOf('ProductBundle\Model\CategoryCollection', $categories);
+    }
+
+
+
     public function testProductCreateWithProductImageSubAction()
     {
         $tmpfile = tempnam('/tmp', 'test_image_');
