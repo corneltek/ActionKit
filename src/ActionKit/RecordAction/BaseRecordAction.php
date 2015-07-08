@@ -452,15 +452,16 @@ class BaseRecordAction extends Action
             //
             // The {index} here is only used for identify the argument duplication.
             //
-            $argsList = $this->arg($relationId);
-            if (! $argsList) {
+            $argsList = $this->arg($relationId) ?: array();
+
+            $allfiles = $this->request->getFiles();
+
+            $indexList = array_unique(array_merge(array_keys($argsList),  array_keys($allfiles)));
+            if (empty($indexList)) {
                 continue;
             }
 
-            if ( Relationship::HAS_MANY === $relation['type'] ) {
-                // XXX: use the lazyrecord schema relationship!!!
-                //
-                //
+            if (Relationship::HAS_MANY === $relation['type']) {
                 // In this behavior, we don't handle the 
                 // previous created records, only the records from the form submit.
                 //
@@ -485,7 +486,15 @@ class BaseRecordAction extends Action
                 // where the index is 'the relational record id' or the timestamp.
                 //
                 // so let us iterating these fields
-                foreach ($argsList as $index => $args) {
+                foreach ($indexList as $index) {
+
+                    if (!isset($argsList[$index])) {
+                        continue;
+                    }
+
+                    $args = $argsList[$index];
+
+
                     // before here, we've loaded/created the main record,
                     // so that we already have the id of the main record.
 
@@ -495,12 +504,12 @@ class BaseRecordAction extends Action
 
                     // Get the file arguments from fixed $_FILES array.
                     // the ->files array is fixed in Action::__construct method
-                    $allfiles = $this->request->getFiles();
 
                     $files = null;
                     if (isset($allfiles[ $relationId ][ $index ])) {
                         $files = $allfiles[ $relationId ][ $index ];
                     }
+
                     $action = $this->createSubActionWithRelationship($relation, $args, $files);
                     if ($action->invoke() === false) {
                         // transfrer the error result to self,
@@ -509,7 +518,7 @@ class BaseRecordAction extends Action
                         return false;
                     }
                 }
-            } elseif (SchemaDeclare::many_to_many === $relation['type']) {
+            } else if (Relationship::MANY_TO_MANY === $relation['type']) {
                 // Process the junction of many-to-many relationship
                 //
                 // For the many-to-many relationship, we should simply focus on the
