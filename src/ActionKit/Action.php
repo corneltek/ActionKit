@@ -66,13 +66,6 @@ class Action implements IteratorAggregate
 
 
     /**
-     * @var array Converted & Fixed $_FILES
-     *
-     * TODO: use static array
-     */
-    public $files = array();
-
-    /**
      * @var boolean Enable CSRF token 
      */
     public $enableCSRFToken = true;
@@ -87,20 +80,6 @@ class Action implements IteratorAggregate
      */
     public function __construct(array $args = array(), $options = array())
     {
-        if (isset($args['_FILES'])) {
-
-            $this->files = FilesParameter::fix_files_array($args['_FILES']);
-
-        } else if (isset($options['files'])) {
-
-            $this->files = FilesParameter::fix_files_array($options['files']);
-
-        } else if (isset($_FILES) && ! empty($_FILES) ) {
-
-            // if not, always fix $_FILES
-            $this->files = FilesParameter::fix_files_array($_FILES);
-
-        }
 
         if (isset($options['current_user'])) {
             $this->currentUser = $options['current_user'];
@@ -108,9 +87,28 @@ class Action implements IteratorAggregate
 
         // backward compatible request object
         if (isset($options['request'])) {
+
             $this->request = $options['request'];
+
         } else {
-            $this->request = new ActionRequest($args, $this->files);
+
+            $files = array();
+
+            if (isset($options['files'])) {
+
+                $files = FilesParameter::fix_files_array($options['files']);
+
+            } else if (isset($args['_FILES'])) {
+
+                $files = FilesParameter::fix_files_array($args['_FILES']);
+
+            } else if (isset($_FILES) && ! empty($_FILES) ) {
+
+                // if not, always fix $_FILES
+                $files = FilesParameter::fix_files_array($_FILES);
+
+            }
+            $this->request = new ActionRequest($args, $files);
         }
 
         $this->result  = new Result;
@@ -622,21 +620,14 @@ class Action implements IteratorAggregate
      *
      * @return array
      */
-    public function getFile( $name )
+    public function file($name)
     {
-        if ( isset($this->files[$name]) ) {
-            return $this->files[$name];
-        }
+        return $this->request->file($name);
     }
 
     public function hasFile($name)
     {
-        if ( isset($this->files[$name])
-            && isset($this->files[$name]['name'])
-            && $this->files[$name]['name'])
-        {
-            return $this->files[$name];
-        }
+        return $this->request->file($name) ? true : false;
     }
 
     /**
