@@ -190,18 +190,6 @@ class BaseRecordAction extends Action
         $this->useRecordSchema();
     }
 
-
-    /**
-     * Get current action type
-     *
-     * @return string 'create','update','delete','bulk_delete'
-     */
-    public function getType()
-    {
-        return static::TYPE;
-    }
-
-
     /**
      * Get current record
      */
