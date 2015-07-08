@@ -1,6 +1,6 @@
 <?php
 namespace ActionKit;
-use ActionKit\Param;
+use ActionKit\Param\Param;
 use ActionKit\Action;
 use ActionKit\RecordAction\BaseRecordAction;
 use LazyRecord\BaseModel;

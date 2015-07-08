@@ -2,7 +2,9 @@
 namespace ActionKit;
 use Exception;
 use FormKit;
-use ActionKit\Param;
+use ActionKit\Param\Param;
+use ActionKit\Param\ImageParam;
+use ActionKit\Param\FileParam;
 use ActionKit\Result;
 use ActionKit\CsrfTokenProvider;
 use ActionKit\ActionRequest;
@@ -697,17 +699,17 @@ class Action implements IteratorAggregate
      *     $this->param('image', 'image' ); // use ActionKit\Param\Image
      *
      */
-    public function param($field, $type = null )
+    public function param($field, $type = null)
     {
-        // default column class
-        $class = 'ActionKit\\Param';
         if ($type) {
-            $class = ( $type[0] !== '+' )
-                ? $class . '\\' . ucfirst($type)
+            $class = ($type[0] !== '+')
+                ? 'ActionKit\\Param\\' . ucfirst($type) . 'Param'
                 : substr($type,1);
+        } else {
+            $class = 'ActionKit\\Param\\Param';
         }
 
-        if ( ! class_exists($class,true) ) { // trigger spl class autoloader to load class file.
+        if (! class_exists($class,true)) { // trigger spl class autoloader to load class file.
             throw new Exception("Action param($field): column class $class not found.");
         }
 

@@ -1,6 +1,6 @@
 <?php
 namespace ActionKit\Param;
-use ActionKit\Param;
+use ActionKit\Param\Param;
 use Exception;
 use LogicException;
 use RuntimeException;
@@ -10,7 +10,7 @@ use ActionKit\RecordAction\CreateRecordAction;
 use ActionKit\Utils;
 use Universal\Http\UploadedFile;
 
-class Image extends Param
+class ImageParam extends Param
 {
 
     // XXX: think about me.

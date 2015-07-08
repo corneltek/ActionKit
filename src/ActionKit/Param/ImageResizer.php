@@ -1,6 +1,6 @@
 <?php
 namespace ActionKit\Param;
-use ActionKit\Param;
+use ActionKit\Param\Param;
 /**
  * Preprocess image data fields
  *

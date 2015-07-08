@@ -1,6 +1,6 @@
 <?php
 namespace ActionKit\Param;
-use ActionKit\Param;
+use ActionKit\Param\Param;
 use ActionKit\Utils;
 use Universal\Http\UploadedFile;
 use Exception;
@@ -15,7 +15,7 @@ use Exception;
  *          ->validExtension( array('png') )
  *          ->renameFile(function() {  })
  */
-class File extends Param
+class FileParam extends Param
 {
     public $paramType = 'file';
 

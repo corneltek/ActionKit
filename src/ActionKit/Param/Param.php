@@ -1,5 +1,5 @@
 <?php
-namespace ActionKit;
+namespace ActionKit\Param;
 use CascadingAttribute;
 use FormKit;
 use ActionKit\Messages;

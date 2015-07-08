@@ -1,29 +1,24 @@
 <?php
+use ActionKit\Param\Param;
+use ActionKit\Param\ImageParam;
 
 class ParamTest extends PHPUnit_Framework_TestCase
 {
-    function test()
+    public function test()
     {
-        $column = new ActionKit\Param('name');
-        ok( $column );
-
+        $column = new Param('name');
         $column->required(1);
         ok($column->required);
-
         $column->default('John');
         is('John',$column->default);
     }
 
-    function testImage()
+    public function testImageParam()
     {
-        $image = new ActionKit\Param\Image('photo');
-        ok($image);
-
+        $image = new ImageParam('photo');
         ok($image->size(['width' => 100, 'height' => 200]));
-
         ok($image->autoResize(false));
         ok($image->autoResize(true));
-
     }
 }
 
