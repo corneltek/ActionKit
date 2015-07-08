@@ -62,7 +62,7 @@ class File extends Param
 
         // Consider required and optional situations.
         if ($fileArg = $this->action->request->file($this->name)) {
-            $file = new UploadedFile($fileArg);
+            $file = UploadedFile::createFromArray($fileArg);
 
             // If valid extensions are specified, pass to uploaded file to check the extension
             if ($this->validExtensions) {
