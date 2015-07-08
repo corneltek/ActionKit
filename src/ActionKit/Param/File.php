@@ -1,7 +1,7 @@
 <?php
 namespace ActionKit\Param;
 use ActionKit\Param;
-use Phifty\UploadFile;
+use Universal\Http\UploadedFile;
 use Phifty\FileUtils;
 use Exception;
 
@@ -61,27 +61,25 @@ class File extends Param
             return $ret;
 
         // Consider required and optional situations.
-        $file = $this->action->getFile($this->name);
-        if (@$file['tmp_name']) {
-            $dir = $this->putIn;
-            if ( ! file_exists( $dir ) )
+        if ($fileArg = $this->action->request->file($this->name)) {
+            $file = new UploadedFile($fileArg);
 
-                return array( false , _("Directory $dir doesn't exist.") );
-
-            $file = new UploadFile( $this->name );
+            // If valid extensions are specified, pass to uploaded file to check the extension
             if ($this->validExtensions) {
-                if ( ! $file->validateExtension( $this->validExtensions ) )
-
+                if ( ! $file->validateExtension($this->validExtensions) ) {
+                    // XXX: use ActionKit\Messages
                     return array( false, __('Invalid File Extension: %1' . $this->name ) );
+                }
             }
 
-            if ( $this->sizeLimit )
-                if ( ! $file->validateSize( $this->sizeLimit ) )
-
+            if ($this->sizeLimit) {
+                if (! $file->validateSize( $this->sizeLimit )) {
+                    // XXX: use ActionKit\Messages
                     return array( false,
-                        _("The uploaded file exceeds the size limitation. ") . $this->sizeLimit . ' KB.');
+                        _("The uploaded file exceeds the size limitation. ") . futil_prettysize($this->sizeLimit) . ' KB.');
+                }
+            }
         }
-
         return true;
     }
 
@@ -92,7 +90,7 @@ class File extends Param
                 $this->hint .= '<br/>';
             else
                 $this->hint = '';
-            $this->hint .= '檔案大小限制: ' . FileUtils::pretty_size($this->sizeLimit*1024);
+            $this->hint .= '檔案大小限制: ' . futil_prettysize($this->sizeLimit*1024);
         }
 
         return $this;
