@@ -408,6 +408,14 @@ class Action implements IteratorAggregate
             return false;
         }
 
+        if (session_id() && $this->enableCSRFToken) {
+            $token = CsrfTokenProvider::loadTokenWithSessionKey(); 
+            if ( !CsrfTokenProvider::verifyToken($token, $this->arg('_csrf_token'))) {
+                $this->result->error('CSRF invalid.');
+                return false;
+            }
+        }
+
         /* run column methods */
         // XXX: merge them all...
         $this->beforeRun();
@@ -415,13 +423,6 @@ class Action implements IteratorAggregate
             $mixin->beforeRun();
         }
 
-        if ( session_id() && $this->enableCSRFToken) {
-            $token = CsrfTokenProvider::loadTokenWithSessionKey(); 
-            if ( !CsrfTokenProvider::verifyToken($token, $this->arg('_csrf_token'))) {
-                $this->result->error('CSRF invalid.');
-                return false;
-            }
-        }
 
         if ( $this->enableValidation && false === $this->runValidate() ) {  // if found error, return true;
             return false;
