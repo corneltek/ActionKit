@@ -16,6 +16,12 @@ class Action implements IteratorAggregate
 {
     protected $currentUser;
 
+
+    /**
+     * @var Action parent action
+     */
+    protected $parent;
+
     public $nested = true;
 
     public $relationships = array();
@@ -83,6 +89,11 @@ class Action implements IteratorAggregate
 
         if (isset($options['current_user'])) {
             $this->currentUser = $options['current_user'];
+        }
+
+        // save parent action
+        if (isset($options['parent'])) {
+            $this->parent = $options['parent'];
         }
 
         // backward compatible request object
