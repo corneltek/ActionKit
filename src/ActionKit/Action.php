@@ -397,6 +397,14 @@ class Action implements IteratorAggregate
      */
     public function invoke()
     {
+        if (session_id() && $this->enableCSRFToken) {
+            $token = CsrfTokenProvider::loadTokenWithSessionKey(); 
+            if ( !CsrfTokenProvider::verifyToken($token, $this->arg('_csrf_token'))) {
+                $this->result->error('CSRF invalid.');
+                return false;
+            }
+        }
+
         $user = $this->getCurrentUser();
         $result =  $this->currentUserCan($user, 'run', $this->args);
         if ( is_array($result)) {
@@ -406,14 +414,6 @@ class Action implements IteratorAggregate
             }
         } else if (!$result) {
             return false;
-        }
-
-        if (session_id() && $this->enableCSRFToken) {
-            $token = CsrfTokenProvider::loadTokenWithSessionKey(); 
-            if ( !CsrfTokenProvider::verifyToken($token, $this->arg('_csrf_token'))) {
-                $this->result->error('CSRF invalid.');
-                return false;
-            }
         }
 
         /* run column methods */
