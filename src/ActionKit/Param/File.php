@@ -108,6 +108,7 @@ class File extends Param
         }
 
         $file = null;
+        $upload = false;
 
         /* if the column is defined, then use the column
          *
@@ -115,6 +116,7 @@ class File extends Param
          * */
 
         if ($fileArg = $this->action->request->file($this->name)) {
+            $upload = true;
             $file = $fileArg;
         } else if ($this->sourceField) {
             if ($fileArg = $this->action->request->file($this->sourceField)) {
@@ -140,15 +142,20 @@ class File extends Param
 
 
         // When sourceField enabled, we should either check saved_path or tmp_name
-        if ($this->sourceField) {
+        if ($upload) {
+
+            $uploadedFile->move($targetPath);
+
+        } else if ($this->sourceField) {
             if ($savedPath = $uploadedFile->getSavedPath()) {
                 copy($savedPath, $targetPath);
             } else {
                 $uploadedFile->copy($targetPath);
             }
         } else {
-            $uploadedFile->move($targetPath);
+            return;
         }
+
         $args[$this->name] = $targetPath;
         $this->action->addData( $this->name , $targetPath);
     }

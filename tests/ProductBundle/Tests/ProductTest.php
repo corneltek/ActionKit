@@ -69,6 +69,36 @@ class ProductBundleTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('ActionKit\Result', $create->getResult());
     }
 
+    public function resizeTypeProvider()
+    {
+        return [
+            ['max_width'],
+            ['max_height'],
+            ['scale'],
+            ['crop_and_scale'],
+        ];
+    }
+
+    /**
+     * @dataProvider resizeTypeProvider
+     */
+    public function testCreateProductImageWithAutoResize($resizeType)
+    {
+        $tmpfile = tempnam('/tmp', 'test_image_') . '.png';
+        copy('tests/data/404.png', $tmpfile);
+        $files = [
+            'image' => CreateFileArray('404.png', 'image/png', $tmpfile),
+        ];
+
+        // new ActionRequest(['title' => 'Test Image'], $files);
+        $create = new CreateProductImage([
+            'title' => 'Test Image',
+            'image_autoresize' => $resizeType,
+        ], [ 'files' => $files ]);
+        $ret = $create->invoke();
+        $this->assertTrue($ret);
+        $this->assertInstanceOf('ActionKit\Result', $create->getResult());
+    }
 
     public function testCreateProductImageWithFilesArray()
     {

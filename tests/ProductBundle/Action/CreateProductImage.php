@@ -12,8 +12,8 @@ class CreateProductImage  extends CreateRecordAction
 
         $imageSizeLimit = 1024; // 1024kb
         $imageSize = [
-            'width' => 512,
-            'height' => 512,
+            'width' => 200,
+            'height' => 200,
         ];
         $autoResize = true;
 
@@ -24,7 +24,7 @@ class CreateProductImage  extends CreateRecordAction
             ->sourceField( 'large' )
             ->required()
             ->hint('product image hint')
-            ->hintFromSizeInfo()
+            ->hintFromSizeInfo($imageSize)
             ->label('product image label')
             ->putIn('tests/upload')
             ;

@@ -277,8 +277,10 @@ class Image extends Param
                 $uploadedFile->copy($targetPath);
             }
 
-        } else if (isset($file['saved_path']) && file_exists($file['saved_path']) ) {
-            copy( $file['saved_path'], $targetPath);
+        } else {
+
+            return;
+
         }
 
 
