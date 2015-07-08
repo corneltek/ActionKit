@@ -18,6 +18,7 @@ class Image extends Param
 
     /* image column attributes */
     public $resizeWidth;
+
     public $resizeHeight;
 
 
@@ -168,7 +169,7 @@ class Image extends Param
         return $this;
     }
 
-    public function hintFromSizeInfo($size = null)
+    public function hintFromSizeInfo(array $size = null)
     {
         if ($size) {
             $this->size = $size;
@@ -295,10 +296,19 @@ class Image extends Param
 
         $this->action->addData($this->name , $targetPath);
 
-        // if the auto-resize is specified from front-end
-        if ( isset($args[$this->name . '_autoresize']) && $this->size ) {
+        // Don't resize gif files, gd doesn't support file resize with animation
+        if ($uploadedFile->getExtension() != 'gif') {
+            $this->autoResizeFile($targetPath);
+        }
+    }
 
-            $t = @$args[$this->name . '_autoresize_type' ] ?: 'crop_and_scale';
+    public function autoResizeFile($targetPath) 
+    {
+
+        // if the auto-resize is specified from front-end
+        if ($this->action->request->param($this->name . '_autoresize') && $this->size ) {
+
+            $t = $this->action->request->param($this->name . '_autoresize');
             $process = ImageResizer::create($t, $this);
             $process->resize( $targetPath );
 
@@ -313,5 +323,10 @@ class Image extends Param
             }
 
         }
+
     }
+
+
+
+
 }
