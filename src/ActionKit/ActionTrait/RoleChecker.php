@@ -1,6 +1,7 @@
 <?php
 namespace ActionKit\ActionTrait;
 use Kendo\Acl\MultiRoleInterface;
+use Exception;
 
 trait RoleChecker 
 {
@@ -23,19 +24,20 @@ trait RoleChecker
                 }
             }
             return $this->deny();
+        } else {
+            throw new Exception("Unsupported current user object");
         }
-
-        return $this->deny('Permission Denied.');
+        return $this->deny();
     }
 
     public function allow($message = null)
     {
-        return array(true, $message);
+        return array(true, $message ?: $this->permissionAllowedMessage());
     }
 
-    public function deny()
+    public function deny($message = null)
     {
-        return array(false, $this->permissionAllowedMessage());
+        return array(false, $message ?: $this->permissionDeniedMessage());
     }
 
     public function getAllowedRoles() 
@@ -43,7 +45,13 @@ trait RoleChecker
         return $this->allowedRoles;
     }
 
-    public function permissionAllowedMessage() {
-        return 'Permission Denied.';
+    public function permissionDeniedMessage()
+    {
+        return 'Permission denied.';
+    }
+
+    public function permissionAllowedMessage() 
+    {
+        return 'Permission allowed.';
     }
 }
