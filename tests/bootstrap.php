@@ -18,30 +18,23 @@ function __()
     return $msg;
 }
 
-/*
 $config = ConfigLoader::getInstance();
-$config->loadFromArray(array( 
-    'bootstrap' => array ('tests/bootstrap.php'),
-    'schema' => array(
+$config->loadFromArray(array(
+    'bootstrap' => ['tests/bootstrap.php'],
+    'schema' => [
         'auto_id' => 1,
-        'paths' => array('tests'),
-    ),
-    'data_sources' =>
-    array (
-        'default' =>
-            array (
+        'paths' => ['tests'],
+    ],
+    'data_sources' => [
+        'default' => [
                 'dsn' => 'sqlite::memory:',
-                // 'dsn' => 'sqlite:testing.sqlite3',
                 'user' => NULL,
                 'pass' => NULL,
-            ),
-        'pgsql' =>
-            array (
-                'dsn' => 'pgsql:host=localhost;dbname=testing',
-                'user' => 'postgres',
-            ),
-    ),
+        ],
+    ],
 ));
+
+/*
 
 $logger = new Logger;
 $logger->info("Building schema class files...");
