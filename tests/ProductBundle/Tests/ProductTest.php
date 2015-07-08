@@ -7,6 +7,7 @@ use ActionKit\ActionTemplate\TwigActionTemplate;
 use ActionKit\ActionTemplate\UpdateOrderingRecordActionTemplate;
 use ActionKit\Testing\ActionTestAssertions;
 use ProductBundle\Model\Product;
+use ProductBundle\Model\ProductImage;
 use ProductBundle\Model\ProductCollection;
 use ProductBundle\Model\ProductSchema;
 use ProductBundle\Action\CreateProduct;
@@ -199,6 +200,20 @@ class ProductBundleTest extends ModelTestCase
         $this->assertCount(2, $images);
 
         foreach($images as $image) { $image->delete(); }
+    }
+
+
+    /**
+     * XXX: add test details later
+     */
+    public function testConvertRecordValidation()
+    {
+        $image = new ProductImage;
+        $ret = $image->create([]);
+        $create = new CreateProductImage;
+        $create->convertRecordValidation($ret);
+        $result = $create->getResult();
+        $data = $result->data;
     }
 
     public function testFetchOneToManyRelationCollectionOnInexistingRelationIdShouldReturnNull()

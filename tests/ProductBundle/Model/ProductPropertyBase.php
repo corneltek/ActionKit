@@ -1,14 +1,9 @@
 <?php
-/**
-This is an auto-generated file,
-Please DO NOT modify this file directly.
-*/
 namespace ProductBundle\Model;
-
 use LazyRecord\BaseModel;
-
-class ProductPropertyBase  extends BaseModel {
-
+class ProductPropertyBase
+    extends BaseModel
+{
     const schema_proxy_class = 'ProductBundle\\Model\\ProductPropertySchemaProxy';
     const collection_class = 'ProductBundle\\Model\\ProductPropertyCollection';
     const model_class = 'ProductBundle\\Model\\ProductProperty';
@@ -16,53 +11,49 @@ class ProductPropertyBase  extends BaseModel {
     const read_source_id = 'default';
     const write_source_id = 'default';
     const primary_key = 'id';
-
-
-public static $column_names = array (
-  0 => 'name',
-  1 => 'val',
-  2 => 'product_id',
-  3 => 'id',
-);
-public static $column_hash = array (
-  'name' => 1,
-  'val' => 1,
-  'product_id' => 1,
-  'id' => 1,
-);
-public static $mixin_classes = array (
-);
-
-    public function getSchema() {
-    if ($this->_schema) {
-       return $this->_schema;
+    public static $column_names = array (
+      0 => 'name',
+      1 => 'val',
+      2 => 'product_id',
+      3 => 'id',
+    );
+    public static $column_hash = array (
+      'name' => 1,
+      'val' => 1,
+      'product_id' => 1,
+      'id' => 1,
+    );
+    public static $mixin_classes = array (
+    );
+    public function getSchema()
+    {
+        if ($this->_schema) {
+           return $this->_schema;
+        }
+        return $this->_schema = \LazyRecord\Schema\SchemaLoader::load('ProductBundle\\Model\\ProductPropertySchemaProxy');
     }
-    return $this->_schema = \LazyRecord\Schema\SchemaLoader::load('ProductBundle\\Model\\ProductPropertySchemaProxy');
-}
-
-    public function getName() {
-    if (isset($this->_data['name'])) {
-        return $this->_data['name'];
+    public function getName()
+    {
+        if (isset($this->_data['name'])) {
+            return $this->_data['name'];
+        }
+    }
+    public function getVal()
+    {
+        if (isset($this->_data['val'])) {
+            return $this->_data['val'];
+        }
+    }
+    public function getProductId()
+    {
+        if (isset($this->_data['product_id'])) {
+            return $this->_data['product_id'];
+        }
+    }
+    public function getId()
+    {
+        if (isset($this->_data['id'])) {
+            return $this->_data['id'];
+        }
     }
 }
-
-    public function getVal() {
-    if (isset($this->_data['val'])) {
-        return $this->_data['val'];
-    }
-}
-
-    public function getProductId() {
-    if (isset($this->_data['product_id'])) {
-        return $this->_data['product_id'];
-    }
-}
-
-    public function getId() {
-    if (isset($this->_data['id'])) {
-        return $this->_data['id'];
-    }
-}
-
-}
-
