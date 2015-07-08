@@ -24,6 +24,15 @@ trait ActionTestAssertions
         $this->assertEquals('success',$result->type, $result->message);
         return $result;
     }
+
+    public function assertActionInvokeFail(Action $action)
+    {
+        $ret = $action->invoke();
+        $result = $action->getResult();
+        $this->assertFalse($ret, $result->message);
+        $this->assertEquals('error',$result->type, $result->message);
+        return $result;
+    }
     
 }
 
