@@ -18,13 +18,11 @@
   </php>
 
   <filter>
-    <blacklist>
-      <directory suffix=".php">src/ActionKit/Cache</directory>
-    </blacklist>
     <whitelist>
         <directory suffix=".php">src/</directory>
         <exclude>
             <directory suffix=".php">src/ActionKit/Cache</directory>
+            <directory suffix=".php">src/ActionKit/Testing</directory>
         </exclude>
     </whitelist>
   </filter>
