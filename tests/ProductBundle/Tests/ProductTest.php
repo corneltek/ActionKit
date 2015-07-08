@@ -4,6 +4,8 @@ use ActionKit\ActionRequest;
 use ActionKit\ServiceContainer;
 use ActionKit\ActionTemplate\TwigActionTemplate;
 use ActionKit\ActionTemplate\UpdateOrderingRecordActionTemplate;
+use ProductBundle\Model\Product;
+use ProductBundle\Action\CreateProduct;
 use ProductBundle\Action\CreateProductFile;
 use ProductBundle\Action\CreateProductImage;
 
@@ -63,6 +65,25 @@ class ProductBundleTest extends PHPUnit_Framework_TestCase
         $action = $runner->createAction($actionClass);
         $this->assertNotNull($action);
     }
+
+
+    public function testProductSubActionWithCreateProductImage()
+    {
+        $files = [ ];
+        $request = new ActionRequest(['name' => 'Test Product'], $files);
+        $product = new Product;
+        $product->create([
+            'name' => 'Testing Product',
+        ]);
+        $this->assertNotNull($product->id);
+
+        $create = new CreateProduct(['name' => 'Test Product'], [ 'request' => $request, 'record' => $product, ]);
+
+        $relation = $create->getRelation('images');
+        $create->createSubAction($relation, [ ]);
+    }
+
+
 
     public function testCreateProductImageWithActionRequest()
     {

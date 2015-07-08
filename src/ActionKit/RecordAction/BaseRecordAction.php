@@ -29,24 +29,6 @@ class BaseRecordAction extends Action
 
     public $enableLoadRecord = false;
 
-    /**
-     * This method provides the default error message of a record action.
-     *
-     * @codeCoverageIgnore
-     */
-    public function successMessage($ret) { 
-        return $ret->message;
-    }
-
-    /**
-     * This method provides the default error message of a record action.
-     *
-     * @codeCoverageIgnore
-     */
-    public function errorMessage($ret) {
-        return $ret->message;
-    }
-
 
     /**
      * Construct an action object.
@@ -343,42 +325,54 @@ class BaseRecordAction extends Action
      */
     public function createSubAction($relation, array $args)
     {
-        $record = null;
+        $subrecord = null;
         if (isset($relation['foreign_schema']) ) {
             $schema = new $relation['foreign_schema'];
             $recordClass = $schema->getModelClass();
             // create record object, and load it with primary id
-            $record = new $recordClass;
+            $subrecord = new $recordClass;
             if ( isset($args['id']) && $args['id'] ) {
-                $record->load( $args['id'] );
+                $subrecord->load( $args['id'] );
             }
+        } else {
+            throw new Exception("Missing foreign_schema on relationship {$relation}");
         }
 
         // for relationships that has defined an action class,
         // we should just use it.
-        if ( isset($relation['action']) ) {
+        if (isset($relation['action'])) {
             $class = $relation['action'];
 
             // for record-based action, we should pass the record object.
             if (is_subclass_of($class,'ActionKit\\RecordAction\\BaseRecordAction',true)) {
-                return new $class($args, $record);
+                return new $class($args, [
+                    'record' => $subrecord,
+                    'request' => $this->request,
+                ]);
             } else {
                 // for simple action class without record.
-                return new $class($args);
+                return new $class($args, [ 
+                    'request' => $this->request,
+                ]);
             }
 
         } else {
 
             // If the record is loaded
-            if ($record->id) {
+            if ($subrecord->id) {
 
                 // if the update_action field is defined,
                 // then we should use the customized class to process our data.
-                if ( isset($relation['update_action']) ) {
+                if (isset($relation['update_action']) ) {
                     $class = $relation['update_action'];
-                    return new $class($args,$record);
+                    return new $class($args,[
+                        'record' => $subrecord,
+                        'request' => $this->request,
+                    ]);
                 }
-                return $record->asUpdateAction($args);
+                return $subrecord->asUpdateAction($args, [ 
+                    'request' => $this->request,
+                ]);
 
             } else {
 
@@ -387,9 +381,14 @@ class BaseRecordAction extends Action
                 unset($args['id']);
                 if ( isset($relation['create_action']) ) {
                     $class = $relation['create_action'];
-                    return new $class($args,$record);
+                    return new $class($args,[
+                        'record' => $subrecord,
+                        'request' => $this->request,
+                    ]);
                 }
-                return $record->asCreateAction($args);
+                return $subrecord->asCreateAction($args, [
+                    'request' => $this->request,
+                ]);
 
             }
             // won't be here.
@@ -569,5 +568,28 @@ class BaseRecordAction extends Action
         }
         return true;
     }
+
+
+
+
+
+    /**
+     * This method provides the default error message of a record action.
+     *
+     * @codeCoverageIgnore
+     */
+    public function successMessage($ret) { 
+        return $ret->message;
+    }
+
+    /**
+     * This method provides the default error message of a record action.
+     *
+     * @codeCoverageIgnore
+     */
+    public function errorMessage($ret) {
+        return $ret->message;
+    }
+
 
 }
