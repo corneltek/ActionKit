@@ -38,8 +38,9 @@ class StackViewTest extends PHPUnit_Framework_TestCase
             'no_form' => true,
             'no_layout' => true,
         ));
+        $this->assertNotNull($view);
+
         $view->buildRelationalActionViewForExistingRecords('categories');
-        ok( $view );
         $html = $view->getContainer()->render();
         ok( $html );
 

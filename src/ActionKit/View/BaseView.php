@@ -199,14 +199,18 @@ abstract class BaseView
 
     public function hasRecord()
     {
-        return $this->isRecordAction()
-            && $this->action->record->id;
+        if ($this->isRecordAction()) {
+            if ($record = $this->action->getRecord()) {
+                return $record->id ? true : false;
+            }
+        }
+        return false;
     }
 
     public function getRecord()
     {
         if ( $this->isRecordAction() ) {
-            return $this->action->record;
+            return $this->action->getRecord();
         }
     }
 

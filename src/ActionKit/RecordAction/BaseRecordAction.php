@@ -20,7 +20,7 @@ class BaseRecordAction extends Action
      *
      * @var Phifty\Model
      */
-    public $record; // record schema object
+    protected $record; // record schema object
 
     /**
      * @var string Record class
