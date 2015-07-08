@@ -33,7 +33,6 @@ class CreateProductImage  extends CreateRecordAction
             ->sizeLimit($imageSizeLimit)
             ->size( $imageSize )
             ->autoResize($autoResize)
-            ->required()
             ->hint('product large image hint')
             ->hintFromSizeInfo()
             ->label('product large image label')
