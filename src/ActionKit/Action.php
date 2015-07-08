@@ -407,12 +407,16 @@ class Action implements IteratorAggregate
 
         $user = $this->getCurrentUser();
         $result =  $this->currentUserCan($user, 'run', $this->args);
-        if ( is_array($result)) {
+        if (is_array($result)) {
             if (!$result[0]) {
                 $this->result->error( $result[1] );
                 return false;
             }
         } else if (!$result) {
+            return false;
+        }
+
+        if ( $this->enableValidation && false === $this->runValidate() ) {  // if found error, return true;
             return false;
         }
 
@@ -423,11 +427,7 @@ class Action implements IteratorAggregate
             $mixin->beforeRun();
         }
 
-
-        if ( $this->enableValidation && false === $this->runValidate() ) {  // if found error, return true;
-            return false;
-        }
-        if ( false === $this->run() ) {
+        if (false === $this->run()) {
             return false;
         }
 
