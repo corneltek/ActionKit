@@ -3,7 +3,7 @@ namespace ActionKit\ActionTrait;
 use Kendo\Acl\MultiRoleInterface;
 use Exception;
 
-trait RoleChecker 
+trait RoleChecker
 {
     public function currentUserCan($user, $right, $args = array())
     {

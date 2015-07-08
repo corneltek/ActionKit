@@ -56,7 +56,7 @@ class RecordActionTemplate extends CodeGenActionTemplate
                 'traits' => $traits,
                 'use' => $options['use']
             ];
-            
+
             $runner->register($actionClass, $asTemplate, $configs);
         }
     }
