@@ -104,7 +104,6 @@ class ProductBundleTest extends ModelTestCase
 
 
 
-
     /**
      * @expectedException Exception
      */
@@ -320,6 +319,24 @@ class ProductBundleTest extends ModelTestCase
         $this->assertInstanceOf('ActionKit\Result', $create->getResult());
     }
 
+
+    public function testCreateProductImageWithRequiredField()
+    {
+        $files = [ 'image' => [] ];
+        // new ActionRequest(['title' => 'Test Image'], $files);
+        $create = new CreateProductImage([], [ 'files' => $files ]);
+        $this->assertActionInvokeFail($create);
+    }
+
+    public function testCreateProductImageWithRequiredField2()
+    {
+        $files = [];
+        // new ActionRequest(['title' => 'Test Image'], $files);
+        $create = new CreateProductImage([], [ 'files' => $files ]);
+        $this->assertActionInvokeFail($create);
+    }
+
+
     public function testCreateProductFileWithFilesArray()
     {
         $tmpfile = tempnam('/tmp', 'test_image_');
@@ -332,6 +349,8 @@ class ProductBundleTest extends ModelTestCase
         $this->assertTrue($ret);
         $this->assertInstanceOf('ActionKit\Result', $create->getResult());
     }
+
+
 }
 
 
