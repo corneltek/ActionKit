@@ -33,6 +33,17 @@ class ProductBundleTest extends PHPUnit_Framework_TestCase
         ];
     }
 
+    public function resizeTypeProvider()
+    {
+        return [
+            ['max_width'],
+            ['max_height'],
+            ['scale'],
+            ['crop_and_scale'],
+        ];
+    }
+
+
     /**
      * @dataProvider orderingActionMapProvider
      */
@@ -66,16 +77,6 @@ class ProductBundleTest extends PHPUnit_Framework_TestCase
         $ret = $create->invoke();
         $this->assertTrue($ret);
         $this->assertInstanceOf('ActionKit\Result', $create->getResult());
-    }
-
-    public function resizeTypeProvider()
-    {
-        return [
-            ['max_width'],
-            ['max_height'],
-            ['scale'],
-            ['crop_and_scale'],
-        ];
     }
 
     /**
