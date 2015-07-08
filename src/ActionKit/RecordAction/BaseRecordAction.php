@@ -318,24 +318,47 @@ class BaseRecordAction extends Action
         return $actionFullClass;
     }
 
+    public function createSubAction($relation, array $args, array $files = null)
+    {
+        if (!$relation instanceof Relationship) {
+            if (is_string($relation)) {
+                $relation = $this->getRelation($relation);
+            }
+        }
+        if (!$relation) {
+            throw new Exception("Relationship undefined.");
+        }
+        return $this->createSubActionWithRelationship($relation, $args, $files);
+    }
 
     /**
      * Base on the relationship definition, we should
      * create the action object to process the nested data.
+     *
+     * When creating subaction with relationship, we don't pass the current request object, we 
+     * only pass the sub-parameters of the relationship (including files array)
+     *
+     * The subaction will create its own ActionRequest object to maintain the sub-parameters.
+     *
+     * @param LazyRecord\Schema\Relationship $relation
+     * @param array $args
+     * @param array $files
+     * @return ActionKit\Action
      */
-    public function createSubAction($relation, array $args)
+    public function createSubActionWithRelationship(Relationship $relation, array $args, array $files = null)
     {
         $subrecord = null;
-        if (isset($relation['foreign_schema']) ) {
-            $schema = new $relation['foreign_schema'];
-            $recordClass = $schema->getModelClass();
-            // create record object, and load it with primary id
-            $subrecord = new $recordClass;
-            if ( isset($args['id']) && $args['id'] ) {
-                $subrecord->load( $args['id'] );
-            }
-        } else {
+        if (!isset($relation['foreign_schema']) ) {
             throw new Exception("Missing foreign_schema on relationship {$relation}");
+        }
+
+        $schema = new $relation['foreign_schema'];
+        $recordClass = $schema->getModelClass();
+        // create record object, and load it with primary id
+        $subrecord = new $recordClass;
+        $primaryKey = $schema->primaryKey;
+        if (isset($args[$primaryKey]) && $args[$primaryKey] ) {
+            $subrecord->load( $args[$primaryKey] );
         }
 
         // for relationships that has defined an action class,
@@ -346,56 +369,54 @@ class BaseRecordAction extends Action
             // for record-based action, we should pass the record object.
             if (is_subclass_of($class,'ActionKit\\RecordAction\\BaseRecordAction',true)) {
                 return new $class($args, [
+                    'parent' => $this,
                     'record' => $subrecord,
-                    'request' => $this->request,
+                    'files' => $files,
                 ]);
             } else {
                 // for simple action class without record.
-                return new $class($args, [ 
-                    'request' => $this->request,
+                return new $class($args,[ 
+                    'parent' => $this,
+                    'files' => $files,
                 ]);
             }
+
+        } else if ($subrecord->id) {
+
+            // if the update_action field is defined,
+            // then we should use the customized class to process our data.
+            if (isset($relation['update_action']) ) {
+                $class = $relation['update_action'];
+                return new $class($args,[
+                    'parent' => $this,
+                    'record' => $subrecord,
+                    'files' => $files,
+                ]);
+            }
+            return $subrecord->asUpdateAction($args, [ 
+                'parent' => $this,
+                'files' => $files,
+            ]);
 
         } else {
 
-            // If the record is loaded
-            if ($subrecord->id) {
-
-                // if the update_action field is defined,
-                // then we should use the customized class to process our data.
-                if (isset($relation['update_action']) ) {
-                    $class = $relation['update_action'];
-                    return new $class($args,[
-                        'record' => $subrecord,
-                        'request' => $this->request,
-                    ]);
-                }
-                return $subrecord->asUpdateAction($args, [ 
-                    'request' => $this->request,
+            // we are going to create related records with subactions
+            // just ensure that we've unset the record identity.
+            unset($args[$primaryKey]);
+            if ( isset($relation['create_action']) ) {
+                $class = $relation['create_action'];
+                return new $class($args,[
+                    'parent' => $this,
+                    'record' => $subrecord,
+                    'files' => $files,
                 ]);
-
-            } else {
-
-                // we are going to create related records with subactions
-                // just ensure that we've unset the record identity.
-                unset($args['id']);
-                if ( isset($relation['create_action']) ) {
-                    $class = $relation['create_action'];
-                    return new $class($args,[
-                        'record' => $subrecord,
-                        'request' => $this->request,
-                    ]);
-                }
-                return $subrecord->asCreateAction($args, [
-                    'request' => $this->request,
-                ]);
-
             }
-            // won't be here.
+            return $subrecord->asCreateAction($args, [ 
+                'parent' => $this,
+                'files' => $files,
+            ]);
         }
-        // won't be here.
     }
-
 
     public function fetchOneToManyRelationCollection($relationId) {
         $record = $this->record;
@@ -474,21 +495,21 @@ class BaseRecordAction extends Action
 
                     // Get the file arguments from fixed $_FILES array.
                     // the ->files array is fixed in Action::__construct method
-                    if ( isset($this->files[ $relationId ][ $index ]) ) {
-                        $args['_FILES'] = $this->files[ $relationId ][ $index ];
-                    } else {
-                        $args['_FILES'] = array();
-                    }
-                    $action = $this->createSubAction($relation, $args);
+                    $allfiles = $this->request->getFiles();
 
-                    if ( $action->invoke() === false ) {
+                    $files = null;
+                    if (isset($allfiles[ $relationId ][ $index ])) {
+                        $files = $allfiles[ $relationId ][ $index ];
+                    }
+                    $action = $this->createSubActionWithRelationship($relation, $args, $files);
+                    if ($action->invoke() === false) {
                         // transfrer the error result to self,
                         // then report error.
                         $this->result = $action->result;
                         return false;
                     }
                 }
-            } elseif ( SchemaDeclare::many_to_many === $relation['type']) {
+            } elseif (SchemaDeclare::many_to_many === $relation['type']) {
                 // Process the junction of many-to-many relationship
                 //
                 // For the many-to-many relationship, we should simply focus on the

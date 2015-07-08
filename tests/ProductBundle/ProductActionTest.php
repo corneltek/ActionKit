@@ -264,19 +264,6 @@ class ProductActionTest extends ModelTestCase
         is(false, $create->hasRelation('product_categories'));
     }
 
-    public function testCreateSubAction()
-    {
-        $class = $this->createProductActionClass('Create');
-        $create = new $class(array('name' => 'Foo'));
-
-        /*
-        $subaction = $create->createSubAction('product_categories', [ 
-            'id' => 10, // an inexisting-record
-        ]);
-        $this->assertNotNull($subaction);
-        */
-    }
-
     /**
      * @expectedException  ActionKit\Exception\ActionException
      */

@@ -78,9 +78,7 @@ class ProductBundleTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($product->id);
 
         $create = new CreateProduct(['name' => 'Test Product'], [ 'request' => $request, 'record' => $product, ]);
-
-        $relation = $create->getRelation('images');
-        $create->createSubAction($relation, [ ]);
+        $create->createSubAction('images', [ ]);
     }
 
 
