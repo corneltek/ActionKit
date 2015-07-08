@@ -1,7 +1,7 @@
 CHANGELOGS
 ===================
 
-Version 1.6.0 - Tue Jun 30 14:23:00 2015
+Version 2.0.0 - Tue Jun 30 14:23:00 2015
 
 1. Improved action generator to use action template to generate action.
 2. Added action templates.
@@ -13,12 +13,19 @@ Version 1.6.0 - Tue Jun 30 14:23:00 2015
 4. Added service container.
 5. Added image process.
 6. Renamed SortRecordAction to UpdateOrderingRecordAction.
-7. Deprecated:
-  - ActionGenerator:generate2
-  - ActionGenerator:generateRecordAction
-  - ActionRunner:registerCRUD
-  - ActionKit/View
-  - ActionKit/CRUD
+7. Refactored RecordAction options
+  - Added options for 'request', 'parent', 'files' 
+  - Added ActionRequest for managing $_REQUEST, $_FILES parameters.
+8. Raised test coverage to 70%
+
+### Deprecation
+
+- ActionGenerator:generate2
+- ActionGenerator:generateRecordAction
+- ActionRunner:registerCRUD
+- ActionKit/View
+- ActionKit/CRUD
+
 
 Version 1.4 - Fri Apr 25 20:10:02 2014
 
