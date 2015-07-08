@@ -68,7 +68,8 @@ class ProductBundleTest extends PHPUnit_Framework_TestCase
         $create->invoke();
     }
 
-    public function testCreateProductImage()
+
+    public function testCreateProductImageWithFilesArray()
     {
         $tmpfile = tempnam('/tmp', 'test_image_');
         copy('tests/data/404.png', $tmpfile);
@@ -83,7 +84,7 @@ class ProductBundleTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('ActionKit\Result', $create->getResult());
     }
 
-    public function testCreateProductFile()
+    public function testCreateProductFileWithFilesArray()
     {
         $tmpfile = tempnam('/tmp', 'test_image_');
         copy('tests/data/404.png', $tmpfile);
