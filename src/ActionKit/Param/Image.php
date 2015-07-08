@@ -73,7 +73,7 @@ class Image extends Param
         $this->supportedAttributes[ 'compression' ] = self::ATTR_ANY;
         $this->supportedAttributes[ 'argumentPostFilter' ] = self::ATTR_ANY;
         $this->renameFile = function($filename) {
-            return Utils::filename_increase($filename);
+            return Utils::filename_increase_suffix_number($filename);
         };
         $this->renderAs('ThumbImageFileInput',array(
             /* prefix path for widget rendering */
@@ -241,7 +241,7 @@ class Image extends Param
         }
 
         while (file_exists($targetPath)) {
-            $targetPath = Utils::filename_increase( $targetPath );
+            $targetPath = Utils::filename_increase_suffix_number( $targetPath );
         }
 
         // If there is a file uploaded from HTTP

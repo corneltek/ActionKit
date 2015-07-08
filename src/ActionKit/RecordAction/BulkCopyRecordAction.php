@@ -6,7 +6,7 @@ use Exception;
  * @param string $path     file path.
  * @param string $basepath basepath for checking file existence
  */
-function filename_increase($path, $basepath = "./")
+function filename_increase_suffix_number($path, $basepath = "./")
 {
     if ( ! file_exists($basepath . $path) ) {
         return $path;
@@ -26,7 +26,7 @@ function filename_increase($path, $basepath = "./")
 }
 
 function duplicate_file($from) {
-    $to = filename_increase($from);
+    $to = filename_increase_suffix_number($from);
     copy($from , $to);
     return $to;
 }

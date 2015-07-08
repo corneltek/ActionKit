@@ -10,7 +10,7 @@ class Utils
         return ! preg_match( '/[^A-Za-z0-9:]/i' , $actionName  );
     }
 
-    public static function filename_increase($path)
+    public static function filename_increase_suffix_number($path)
     {
         if (! file_exists($path)) {
             return $path;

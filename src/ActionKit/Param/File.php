@@ -34,7 +34,7 @@ class File extends Param
 
         /*
         $this->renameFile = function($filename) {
-            return Utils::filename_increase( $filename );
+            return Utils::filename_increase_suffix_number( $filename );
         };
          */
         /*
