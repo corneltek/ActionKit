@@ -33,7 +33,6 @@ class ProductBundleTest extends PHPUnit_Framework_TestCase
         ];
     }
 
-
     /**
      * @dataProvider orderingActionMapProvider
      */

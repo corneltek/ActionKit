@@ -144,7 +144,21 @@ class File extends Param
         // When sourceField enabled, we should either check saved_path or tmp_name
         if ($upload) {
 
-            $uploadedFile->move($targetPath);
+            if ($savedPath = $uploadedFile->getSavedPath()) {
+
+                $uploadedFile->move($targetPath);
+
+            } else if ($uploadedFile->isUploadedFile()) {
+
+                // move calls move_uploaded_file, which is only available for files uploaded from HTTP
+                $uploadedFile->move($targetPath);
+
+            } else {
+
+                $uploadedFile->copy($targetPath);
+
+            }
+
 
         } else if ($this->sourceField) {
             if ($savedPath = $uploadedFile->getSavedPath()) {
