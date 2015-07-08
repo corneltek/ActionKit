@@ -42,7 +42,6 @@ class File extends Param
             return Utils::filename_increase_suffix_number( $filename );
         };
          */
-
         if (static::$defaultUploadDirectory) {
             $this->putIn(static::$defaultUploadDirectory);
         }
@@ -81,10 +80,11 @@ class File extends Param
     public function hintFromSizeLimit()
     {
         if ($this->sizeLimit) {
-            if ( $this->hint )
+            if ($this->hint) {
                 $this->hint .= '<br/>';
-            else
+            } else {
                 $this->hint = '';
+            }
             $this->hint .= '檔案大小限制: ' . futil_prettysize($this->sizeLimit*1024);
         }
 

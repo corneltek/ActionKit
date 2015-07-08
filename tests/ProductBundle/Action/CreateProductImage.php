@@ -25,6 +25,7 @@ class CreateProductImage  extends CreateRecordAction
             ->required()
             ->hint('product image hint')
             ->hintFromSizeInfo($imageSize)
+            ->hintFromSizeLimit()
             ->label('product image label')
             ->putIn('tests/upload')
             ;
