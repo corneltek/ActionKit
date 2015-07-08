@@ -320,6 +320,17 @@ class ProductBundleTest extends ModelTestCase
     }
 
 
+    /**
+     * @expectedException Exception
+     */
+    public function testCreateSubActionWithUndefinedRelation()
+    {
+        $files = [ 'image' => [] ];
+        // new ActionRequest(['title' => 'Test Image'], $files);
+        $create = new CreateProductImage([], [ 'files' => $files ]);
+        $create->createSubAction('foo', [], $files);
+    }
+
     public function testCreateProductImageWithRequiredField()
     {
         $files = [ 'image' => [] ];
