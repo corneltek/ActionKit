@@ -149,9 +149,6 @@ class BaseRecordAction extends Action
      */
     public function initRecordColumn()
     {
-        if (! $this->record) {
-            throw new ActionException('Record object is empty.', $this );
-        }
         $this->initParamsFromColumns( $this->record->getColumns(true), $this->record );
     }
 
