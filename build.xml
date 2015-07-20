@@ -173,13 +173,6 @@
      </exec>
  </target>
 
- <target name="phpwiki" description="Generate PHP Wiki">
-     <exec executable="phpwiki">
-         <arg value="doc"/>
-         <arg value="build/wiki"/>
-     </exec>
- </target>
-
  <target name="doxygen">
      <if>
          <available file="${basedir}/build/Doxyfile"/>
@@ -196,6 +189,9 @@
          <available file="composer.json"/>
          <then>
              <exec executable="composer" failonerror="true">
+                 <arg value="--no-interaction"/>
+                 <arg value="--no-ansi"/>
+                 <arg value="--quiet"/>
                  <arg value="install"/>
              </exec>
          </then>
