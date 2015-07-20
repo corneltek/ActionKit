@@ -211,12 +211,14 @@
  <!-- may we have a simple condition for phpunit.xml and phpunit-ci.xml ? -->
  <target name="phpunit" description="Run unit tests with PHPUnit">
      <if>
-         <available file="${basedir}/phpunit-ci.xml"/>
+         <available file="${basedir}/phpunit.xml.dist"/>
          <then>
              <exec executable="phpunit" failonerror="true">
                  <arg value="--debug"/>
                  <arg value="--configuration"/>
-                 <arg path="${basedir}/phpunit-ci.xml"/>
+                 <arg path="${basedir}/phpunit.xml.dist"/>
+                 <arg value="--exclude-group"/>
+                 <arg value="lazyrecord"/>
              </exec>
          </then>
          <else>
