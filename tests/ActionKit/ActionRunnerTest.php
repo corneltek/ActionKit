@@ -4,6 +4,9 @@ use ActionKit\ActionTemplate\RecordActionTemplate;
 use ActionKit\ServiceContainer;
 use ActionKit\ActionRunner;
 
+/**
+ * @group lazyrecord
+ */
 class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
 {
 
