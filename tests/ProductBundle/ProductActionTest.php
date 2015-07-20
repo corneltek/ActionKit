@@ -10,6 +10,8 @@ use ProductBundle\Model\ProductSchema;
 
 /**
  * RecordAction
+ *
+ * @group lazyrecord
  */
 class ProductActionTest extends ModelTestCase
 {

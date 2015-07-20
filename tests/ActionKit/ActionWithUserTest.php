@@ -13,6 +13,9 @@ class TestUser implements \Kendo\Acl\MultiRoleInterface
     }
 }
 
+/**
+ * @group lazyrecord
+ */
 class ActionWithUserTest extends \LazyRecord\Testing\ModelTestCase
 {
     public function getModels()

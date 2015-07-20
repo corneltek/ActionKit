@@ -51,6 +51,9 @@ function CreateFileArray($filename, $type, $tmpname) {
 }
 
 
+/**
+ * @group lazyrecord
+ */
 class ProductBundleTest extends ModelTestCase
 {
     use ActionTestAssertions;

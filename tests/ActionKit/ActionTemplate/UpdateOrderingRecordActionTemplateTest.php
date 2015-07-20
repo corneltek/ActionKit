@@ -4,6 +4,9 @@ use ActionKit\ActionTemplate\UpdateOrderingRecordActionTemplate;
 use ActionKit\ActionRunner;
 use ActionKit\GeneratedAction;
 
+/**
+ * @group lazyrecord
+ */
 class UpdateOrderingRecordActionTemplateTest extends ActionTestCase
 {
     public function failingArgumentProvider()
