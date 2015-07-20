@@ -105,10 +105,22 @@
 
  <target name="phploc" description="Measure project size using PHPLOC">
      <exec executable="phploc">
-         <arg value="--log-csv" />
-         <arg value="${basedir}/build/logs/phploc.csv" />
+         <arg value="--count-tests"/>
          <arg path="${basedir}/src"/>
+         <arg path="${basedir}/tests"/>
      </exec>
+ </target>
+
+ <target name="phploc-ci" depends="prepare" description="Measure project size using PHPLOC and log result in CSV and XML format">
+    <exec executable="phploc" taskname="phploc">
+        <arg value="--count-tests" />
+        <arg value="--log-csv" />
+        <arg path="${basedir}/build/logs/phploc.csv" />
+        <arg value="--log-xml" />
+        <arg path="${basedir}/build/logs/phploc.xml" />
+        <arg path="${basedir}/src" />
+        <arg path="${basedir}/tests" />
+    </exec>
  </target>
 
  <target name="pdepend" description="Calculate software metrics using PHP_Depend">
