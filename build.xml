@@ -199,7 +199,6 @@
          <then>
              <exec executable="composer" failonerror="true">
                  <arg value="install"/>
-                 <arg value="--dev"/>
              </exec>
          </then>
      </if>
