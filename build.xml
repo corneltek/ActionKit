@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Phifty" default="build">
     <!--
-    onion-install
-    compile-phar
     composer
     phpinfo
     -->
@@ -204,36 +202,6 @@
      </if>
  </target>
 
- <target name="onion-install">
-     <exec executable="onion" failonerror="true">
-         <arg value="-q"/>
-         <arg value="install"/>
-     </exec>
- </target>
-
- <target name="compile-phar">
-     <if>
-         <available file="scripts/compile"/>
-         <then>
-             <exec executable="bash" failonerror="true">
-                 <arg value="scripts/compile"/>
-             </exec>
-         </then>
-     </if>
- </target>
-
- <target name="pear">
-     <if>
-         <available file="package.ini"/>
-         <then>
-             <exec executable="onion" failonerror="true">
-                 <arg value="-q"/>
-                 <arg value="build"/>
-             </exec>
-         </then>
-     </if>
- </target>
-
  <!-- may we have a simple condition for phpunit.xml and phpunit-ci.xml ? -->
  <target name="phpunit" description="Run unit tests with PHPUnit">
      <if>
@@ -248,6 +216,8 @@
          <else>
              <exec executable="phpunit" failonerror="true">
                  <arg value="--debug"/>
+                 <arg value="--exclude-group"/>
+                 <arg value="lazyrecord"/>
              </exec>
          </else>
      </if>
