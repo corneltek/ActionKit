@@ -1,5 +1,4 @@
 <?php
-
 class CreateUserAction extends ActionKit\Action
 {
     public function schema() 
@@ -24,16 +23,29 @@ class CreateUserAction extends ActionKit\Action
     }
 }
 
-class StackViewTest extends PHPUnit_Framework_TestCase
+/**
+ * @group lazyrecord
+ */
+use LazyRecord\Testing\ModelTestCase;
+use ProductBundle\Model\ProductSchema;
+use ProductBundle\Model\Category;
+use ProductBundle\Action\CreateProduct;
+
+class StackViewTest extends ModelTestCase
 {
+
+    public function getModels()
+    {
+        return array(new ProductSchema);
+    }
 
     public function testNestedView()
     {
-        $c = new \ProductBundle\Model\Category;
+        $c = new Category;
         $c->create(array( 'name' => 'Foo' ));
 
 
-        $action = new \ProductBundle\Action\CreateProduct;
+        $action = new CreateProduct;
         $view = $action->asView('ActionKit\View\StackView',array(
             'no_form' => true,
             'no_layout' => true,
