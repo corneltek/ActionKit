@@ -716,6 +716,19 @@ class Action implements IteratorAggregate
         return $this->params[ $field ] = new $class( $field , $this );
     }
 
+
+    /**
+     * `description` method returns the human readable description for logging.
+     *
+     * by default it returns the class name of current instance.
+     *
+     * @return string
+     */
+    public function description()
+    {
+        return get_class($this);
+    }
+
     /**
      * Action schema is defined here.
      */
