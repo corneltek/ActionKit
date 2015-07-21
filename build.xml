@@ -7,7 +7,7 @@
     <taskdef resource="net/sf/antcontrib/antlib.xml"/>
 
     <target name="build"
-        depends="phpinfo,prepare,composer,phpunit,lint,phploc-ci,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpcb"/>
+        depends="phpinfo,prepare,composer,phpunit,lint,phploc-ci,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpcb,doc"/>
 
     <target name="doc" depends="doxygen,phpdox"/>
 
