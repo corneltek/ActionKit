@@ -177,10 +177,15 @@
  </target>
 
  <target name="phpdox" description="Generate API documentation using phpDox">
-     <exec executable="phpdox">
-         <arg value="--file" />
-         <arg value="${basedir}/build/phpdox.xml"/>
-     </exec>
+     <if>
+        <available file="${basedir}/build/phpdox.xml"/>
+        <then>
+            <exec executable="phpdox">
+                <arg value="--file" />
+                <arg value="${basedir}/build/phpdox.xml"/>
+            </exec>
+        </then>
+    </if>
  </target>
 
  <target name="doxygen">
