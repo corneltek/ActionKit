@@ -8,9 +8,6 @@
             <build engine="html" enabled="true" output="api">
               <file extension="html"/>
             </build>
-            <build engine="graph" enabled="true" output="graph">
-                <dot executable="/usr/bin/dot" render="true" format="png"/>
-            </build>
         </generator>
     </project>
 </phpdox>
