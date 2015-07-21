@@ -9,7 +9,7 @@
     <target name="build"
         depends="phpinfo,prepare,composer,phpunit,lint,phploc-ci,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpcb,doc"/>
 
-    <target name="doc" depends="doxygen,phpdox"/>
+    <target name="doc" depends="phpdox"/>
 
     <target name="build-parallel"
         depends="prepare,lint,tools-parallel,phpunit,phpcb"/>
