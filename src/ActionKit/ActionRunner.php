@@ -51,6 +51,8 @@ class ActionRunner
 
     public $cacheDir;
 
+    protected $debug;
+
     protected $currentUser;
 
     public function __construct($options = array()) {
@@ -79,6 +81,12 @@ class ActionRunner
             mkdir($this->cacheDir, 0755, true);
         }
     }
+
+    public function setDebug($debug = true)
+    {
+        $this->debug = $debug;
+    }
+
 
     public function getGenerator()
     {
@@ -121,10 +129,13 @@ class ActionRunner
 
 
     /**
+     * Run action request with a try catch block
+     * return ajax response when __ajax_request is defined.
      *
      * @param resource $stream STDIN, STDOUT, STDERR, or any resource
      * @param array $arguments Usually $_REQUEST array
      * @param array $files  Usually $_FILES array
+     * @return return true if it's an ajax response 
      */
     public function handleWith($stream, array $arguments = array(), array $files = null)
     {
@@ -144,14 +155,22 @@ class ActionRunner
                 return true;
             }
         } catch (Exception $e) {
-            @header('HTTP/1.0 403');
-            if ($request->isAjax() ) {
-                fwrite($stream, json_encode(array(
+            @header('HTTP/1.1 403 Action API Error');
+            if ($request->isAjax()) {
+                if ($this->debug) {
+                    fwrite($stream, json_encode(array(
                         'error' => 1,
                         'message' => $e->getMessage(),
                         'line' => $e->getLine(),
                         'file' => $e->getFile(),
-                )));
+                    )));
+                } else {
+                    fwrite($stream, json_encode(array(
+                        'error' => 1,
+                        'message' => $e->getMessage(),
+                    )));
+                }
+                return true;
             } else {
                 throw $e;
             }
