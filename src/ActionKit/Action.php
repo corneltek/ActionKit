@@ -16,8 +16,10 @@ use IteratorAggregate;
 
 class Action implements IteratorAggregate
 {
-    protected $currentUser;
 
+    public static $defaultFieldView = 'ActionKit\FieldView\DivFieldView';
+
+    protected $currentUser;
 
     /**
      * @var Action parent action
@@ -912,7 +914,7 @@ class Action implements IteratorAggregate
     {
         // the default field view class.
         $args = func_get_args();
-        $fieldViewClass = 'ActionKit\FieldView\DivFieldView';
+        $fieldViewClass = self::$defaultFieldView;
         $attrs = array();
         if ( count($args) == 2 ) {
             if ( is_string($args[1]) ) {
