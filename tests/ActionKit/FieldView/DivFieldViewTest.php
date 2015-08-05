@@ -4,7 +4,7 @@ use ActionKit\FieldView\DivFieldView;
 
 class DivFieldViewTest extends PHPUnit_Framework_TestCase
 {
-    public function test()
+    public function testText()
     {
         $column = new Param('name');
         $column->required(1);
@@ -31,4 +31,15 @@ class DivFieldViewTest extends PHPUnit_Framework_TestCase
         is('John', $input->value);
     }
 }
-   
+
+/*
+<div class="v-field formkit-widget-textinput">
+  <div class="label">
+    <label class="formkit-widget formkit-label formkit-widget-label">Name</label>
+  </div>
+  <div class="input">
+    <input class="formkit-widget formkit-widget-text" name="name" type="text" label="Name" value="John"/>
+  </div>
+</div>
+*/
+    
