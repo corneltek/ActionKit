@@ -59,7 +59,7 @@ class ActionRunner
 
         if ($options instanceof ServiceContainer) {
 
-            $this->cacheDir = __DIR__ . DIRECTORY_SEPARATOR . 'Cache';
+            $this->cacheDir = isset($options['cache_dir']) ? $options['cache_dir'] : __DIR__ . DIRECTORY_SEPARATOR . 'Cache';
             $this->generator = $options['generator'];
 
         } else if ($options instanceof ActionGenerator) {

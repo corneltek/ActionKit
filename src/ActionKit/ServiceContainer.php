@@ -36,7 +36,6 @@ class ServiceContainer extends Container
             return $loader;
         };
 
-
         $this['generator'] = function($c) use($self) {
             return new ActionGenerator(array( 'cache' => true ));
         };
