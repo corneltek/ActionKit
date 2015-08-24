@@ -25,10 +25,6 @@ class ActionRequest extends HttpRequest
             $this->ajax = true;
         }
 
-        if ($files) {
-            $this->files = FilesParameter::fix_files_array($files);
-        }
-
         unset($this->arguments['__action']);
         unset($this->arguments['action']);
 
