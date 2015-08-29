@@ -59,8 +59,9 @@ class ActionRunner
 
         if ($options instanceof ServiceContainer) {
 
+            // the cache_dir option is optional. if user provides one, we should use it.
             $this->cacheDir = isset($options['cache_dir']) ? $options['cache_dir'] : __DIR__ . DIRECTORY_SEPARATOR . 'Cache';
-            $this->generator = $options['generator'];
+            $this->generator = isset($options['generator']) ? $options['generator'] : new ActionGenerator;
 
         } else if ($options instanceof ActionGenerator) {
 

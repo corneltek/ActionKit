@@ -1,6 +1,12 @@
 CHANGELOGS
 ===================
 
+Version 2.1 - Sat Aug 29 13:55:39 2015
+
+1. Added `cache_dir` to ServiceContainer.
+2. Provided an option for customizing field view class.
+3. Added BootstrapFieldView class
+
 Version 2.0.0 - Tue Jun 30 14:23:00 2015
 
 1. Improved action generator to use action template to generate action.
