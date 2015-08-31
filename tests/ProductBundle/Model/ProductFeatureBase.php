@@ -32,20 +32,14 @@ class ProductFeatureBase
     }
     public function getProductId()
     {
-        if (isset($this->_data['product_id'])) {
-            return $this->_data['product_id'];
-        }
+            return $this->get('product_id');
     }
     public function getFeatureId()
     {
-        if (isset($this->_data['feature_id'])) {
-            return $this->_data['feature_id'];
-        }
+            return $this->get('feature_id');
     }
     public function getId()
     {
-        if (isset($this->_data['id'])) {
-            return $this->_data['id'];
-        }
+            return $this->get('id');
     }
 }

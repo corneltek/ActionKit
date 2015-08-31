@@ -36,32 +36,22 @@ class ProductImageBase
     }
     public function getProductId()
     {
-        if (isset($this->_data['product_id'])) {
-            return $this->_data['product_id'];
-        }
+            return $this->get('product_id');
     }
     public function getTitle()
     {
-        if (isset($this->_data['title'])) {
-            return $this->_data['title'];
-        }
+            return $this->get('title');
     }
     public function getImage()
     {
-        if (isset($this->_data['image'])) {
-            return $this->_data['image'];
-        }
+            return $this->get('image');
     }
     public function getLarge()
     {
-        if (isset($this->_data['large'])) {
-            return $this->_data['large'];
-        }
+            return $this->get('large');
     }
     public function getId()
     {
-        if (isset($this->_data['id'])) {
-            return $this->_data['id'];
-        }
+            return $this->get('id');
     }
 }

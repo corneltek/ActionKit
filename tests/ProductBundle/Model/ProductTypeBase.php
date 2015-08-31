@@ -36,32 +36,22 @@ class ProductTypeBase
     }
     public function getProductId()
     {
-        if (isset($this->_data['product_id'])) {
-            return $this->_data['product_id'];
-        }
+            return $this->get('product_id');
     }
     public function getName()
     {
-        if (isset($this->_data['name'])) {
-            return $this->_data['name'];
-        }
+            return $this->get('name');
     }
     public function getQuantity()
     {
-        if (isset($this->_data['quantity'])) {
-            return $this->_data['quantity'];
-        }
+            return $this->get('quantity');
     }
     public function getComment()
     {
-        if (isset($this->_data['comment'])) {
-            return $this->_data['comment'];
-        }
+            return $this->get('comment');
     }
     public function getId()
     {
-        if (isset($this->_data['id'])) {
-            return $this->_data['id'];
-        }
+            return $this->get('id');
     }
 }

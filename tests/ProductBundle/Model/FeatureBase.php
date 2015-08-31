@@ -34,26 +34,18 @@ class FeatureBase
     }
     public function getName()
     {
-        if (isset($this->_data['name'])) {
-            return $this->_data['name'];
-        }
+            return $this->get('name');
     }
     public function getDescription()
     {
-        if (isset($this->_data['description'])) {
-            return $this->_data['description'];
-        }
+            return $this->get('description');
     }
     public function getImage()
     {
-        if (isset($this->_data['image'])) {
-            return $this->_data['image'];
-        }
+            return $this->get('image');
     }
     public function getId()
     {
-        if (isset($this->_data['id'])) {
-            return $this->_data['id'];
-        }
+            return $this->get('id');
     }
 }

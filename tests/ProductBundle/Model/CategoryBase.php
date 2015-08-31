@@ -42,50 +42,34 @@ class CategoryBase
     }
     public function getName()
     {
-        if (isset($this->_data['name'])) {
-            return $this->_data['name'];
-        }
+            return $this->get('name');
     }
     public function getDescription()
     {
-        if (isset($this->_data['description'])) {
-            return $this->_data['description'];
-        }
+            return $this->get('description');
     }
     public function getParentId()
     {
-        if (isset($this->_data['parent_id'])) {
-            return $this->_data['parent_id'];
-        }
+            return $this->get('parent_id');
     }
     public function getHide()
     {
-        if (isset($this->_data['hide'])) {
-            return $this->_data['hide'];
-        }
+            return $this->get('hide');
     }
     public function getThumb()
     {
-        if (isset($this->_data['thumb'])) {
-            return $this->_data['thumb'];
-        }
+            return $this->get('thumb');
     }
     public function getImage()
     {
-        if (isset($this->_data['image'])) {
-            return $this->_data['image'];
-        }
+            return $this->get('image');
     }
     public function getHandle()
     {
-        if (isset($this->_data['handle'])) {
-            return $this->_data['handle'];
-        }
+            return $this->get('handle');
     }
     public function getId()
     {
-        if (isset($this->_data['id'])) {
-            return $this->_data['id'];
-        }
+            return $this->get('id');
     }
 }

@@ -34,26 +34,18 @@ class ResourceBase
     }
     public function getProductId()
     {
-        if (isset($this->_data['product_id'])) {
-            return $this->_data['product_id'];
-        }
+            return $this->get('product_id');
     }
     public function getUrl()
     {
-        if (isset($this->_data['url'])) {
-            return $this->_data['url'];
-        }
+            return $this->get('url');
     }
     public function getHtml()
     {
-        if (isset($this->_data['html'])) {
-            return $this->_data['html'];
-        }
+            return $this->get('html');
     }
     public function getId()
     {
-        if (isset($this->_data['id'])) {
-            return $this->_data['id'];
-        }
+            return $this->get('id');
     }
 }

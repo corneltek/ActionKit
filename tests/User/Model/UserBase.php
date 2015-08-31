@@ -34,26 +34,18 @@ class UserBase
     }
     public function getName()
     {
-        if (isset($this->_data['name'])) {
-            return $this->_data['name'];
-        }
+            return $this->get('name');
     }
     public function getEmail()
     {
-        if (isset($this->_data['email'])) {
-            return $this->_data['email'];
-        }
+            return $this->get('email');
     }
     public function getPassword()
     {
-        if (isset($this->_data['password'])) {
-            return $this->_data['password'];
-        }
+            return $this->get('password');
     }
     public function getId()
     {
-        if (isset($this->_data['id'])) {
-            return $this->_data['id'];
-        }
+            return $this->get('id');
     }
 }

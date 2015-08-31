@@ -36,32 +36,22 @@ class ProductSubsectionBase
     }
     public function getTitle()
     {
-        if (isset($this->_data['title'])) {
-            return $this->_data['title'];
-        }
+            return $this->get('title');
     }
     public function getCoverImage()
     {
-        if (isset($this->_data['cover_image'])) {
-            return $this->_data['cover_image'];
-        }
+            return $this->get('cover_image');
     }
     public function getContent()
     {
-        if (isset($this->_data['content'])) {
-            return $this->_data['content'];
-        }
+            return $this->get('content');
     }
     public function getProductId()
     {
-        if (isset($this->_data['product_id'])) {
-            return $this->_data['product_id'];
-        }
+            return $this->get('product_id');
     }
     public function getId()
     {
-        if (isset($this->_data['id'])) {
-            return $this->_data['id'];
-        }
+            return $this->get('id');
     }
 }

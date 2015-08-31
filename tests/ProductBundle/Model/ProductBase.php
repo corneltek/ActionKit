@@ -56,92 +56,62 @@ class ProductBase
     }
     public function getName()
     {
-        if (isset($this->_data['name'])) {
-            return $this->_data['name'];
-        }
+            return $this->get('name');
     }
     public function getSubtitle()
     {
-        if (isset($this->_data['subtitle'])) {
-            return $this->_data['subtitle'];
-        }
+            return $this->get('subtitle');
     }
     public function getSn()
     {
-        if (isset($this->_data['sn'])) {
-            return $this->_data['sn'];
-        }
+            return $this->get('sn');
     }
     public function getDescription()
     {
-        if (isset($this->_data['description'])) {
-            return $this->_data['description'];
-        }
+            return $this->get('description');
     }
     public function getContent()
     {
-        if (isset($this->_data['content'])) {
-            return $this->_data['content'];
-        }
+            return $this->get('content');
     }
     public function getCategoryId()
     {
-        if (isset($this->_data['category_id'])) {
-            return $this->_data['category_id'];
-        }
+            return $this->get('category_id');
     }
     public function getIsCover()
     {
-        if (isset($this->_data['is_cover'])) {
-            return $this->_data['is_cover'];
-        }
+            return $this->get('is_cover');
     }
     public function getSellable()
     {
-        if (isset($this->_data['sellable'])) {
-            return $this->_data['sellable'];
-        }
+            return $this->get('sellable');
     }
     public function getOrigPrice()
     {
-        if (isset($this->_data['orig_price'])) {
-            return $this->_data['orig_price'];
-        }
+            return $this->get('orig_price');
     }
     public function getPrice()
     {
-        if (isset($this->_data['price'])) {
-            return $this->_data['price'];
-        }
+            return $this->get('price');
     }
     public function getExternalLink()
     {
-        if (isset($this->_data['external_link'])) {
-            return $this->_data['external_link'];
-        }
+            return $this->get('external_link');
     }
     public function getToken()
     {
-        if (isset($this->_data['token'])) {
-            return $this->_data['token'];
-        }
+            return $this->get('token');
     }
     public function getOrdering()
     {
-        if (isset($this->_data['ordering'])) {
-            return $this->_data['ordering'];
-        }
+            return $this->get('ordering');
     }
     public function getHide()
     {
-        if (isset($this->_data['hide'])) {
-            return $this->_data['hide'];
-        }
+            return $this->get('hide');
     }
     public function getId()
     {
-        if (isset($this->_data['id'])) {
-            return $this->_data['id'];
-        }
+            return $this->get('id');
     }
 }

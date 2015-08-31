@@ -32,20 +32,14 @@ class OrderBase
     }
     public function getSum()
     {
-        if (isset($this->_data['sum'])) {
-            return $this->_data['sum'];
-        }
+            return $this->get('sum');
     }
     public function getQty()
     {
-        if (isset($this->_data['qty'])) {
-            return $this->_data['qty'];
-        }
+            return $this->get('qty');
     }
     public function getId()
     {
-        if (isset($this->_data['id'])) {
-            return $this->_data['id'];
-        }
+            return $this->get('id');
     }
 }

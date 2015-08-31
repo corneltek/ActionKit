@@ -41,7 +41,10 @@ class ColumnConvert
         $param = new Param( $name );
 
         // convert notNull to required
-        $param->required = $column->notNull;
+        // XXX: for creating records, we should remove the required
+        if (!$column->primary) {
+            $param->required = $column->notNull;
+        }
         foreach ($column->attributes as $k => $v) {
             // if the model column validator is not compatible with action validator
             if ( $k === 'validator' ) {

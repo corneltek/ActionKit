@@ -32,20 +32,14 @@ class ProductCategoryBase
     }
     public function getProductId()
     {
-        if (isset($this->_data['product_id'])) {
-            return $this->_data['product_id'];
-        }
+            return $this->get('product_id');
     }
     public function getCategoryId()
     {
-        if (isset($this->_data['category_id'])) {
-            return $this->_data['category_id'];
-        }
+            return $this->get('category_id');
     }
     public function getId()
     {
-        if (isset($this->_data['id'])) {
-            return $this->_data['id'];
-        }
+            return $this->get('id');
     }
 }

@@ -34,26 +34,18 @@ class ProductFileBase
     }
     public function getProductId()
     {
-        if (isset($this->_data['product_id'])) {
-            return $this->_data['product_id'];
-        }
+            return $this->get('product_id');
     }
     public function getTitle()
     {
-        if (isset($this->_data['title'])) {
-            return $this->_data['title'];
-        }
+            return $this->get('title');
     }
     public function getFile()
     {
-        if (isset($this->_data['file'])) {
-            return $this->_data['file'];
-        }
+            return $this->get('file');
     }
     public function getId()
     {
-        if (isset($this->_data['id'])) {
-            return $this->_data['id'];
-        }
+            return $this->get('id');
     }
 }
