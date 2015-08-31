@@ -39,6 +39,9 @@ class ColumnConvert
     {
         $name = $column->name;
         $param = new Param( $name );
+
+        // convert notNull to required
+        $param->required = $column->notNull;
         foreach ($column->attributes as $k => $v) {
             // if the model column validator is not compatible with action validator
             if ( $k === 'validator' ) {
