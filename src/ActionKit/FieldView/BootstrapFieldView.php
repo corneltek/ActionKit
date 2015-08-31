@@ -16,9 +16,9 @@ class BootstrapFieldView
 
     public $wrapperClass = 'form-group';
 
-    public $labelClass = 'control-label';
+    public $labelClass = 'control-label col-lg-2';
 
-    public $inputWrapperClass = '';
+    public $inputWrapperClass = 'col-lg-10';
 
     public $hintClass = 'hint';
 
@@ -63,23 +63,33 @@ class BootstrapFieldView
             'class' => $this->wrapperClass,
         ));
 
-
         $widget = $this->column->createWidget(null, $this->widgetAttributes);
+        $widget->addClass('form-control');
+        $widgetId = $widget->getSerialId();
+
         $wrapper->addClass($widget->convertClassToCssClassName());
 
+        /*
         if ( $widget instanceof CheckboxInput ) {
             $label = $this->column->createLabelWidget();
             $label->prepend($widget);
             $wrapper->append($label);
-        } elseif ( $widget instanceof HiddenInput) {
+        */
+        if ($widget instanceof HiddenInput) {
+
             $wrapper->append( $widget );
+
         } else {
-            $inputDiv = new Div(array( 'class' => $this->inputWrapperClass ));
-            $inputDiv->append( $widget );
+
+            $inputDiv = new Div(array('class' => $this->inputWrapperClass));
+            $inputDiv->append($widget);
+
             $label = $this->column->createLabelWidget();
-            $label->setAttributes(array( 'class' => $this->labelClass ));
+            $label->setAttributes(array('class' => $this->labelClass, 'for' => $widgetId));
+
             $wrapper->append($label);
             $wrapper->append($inputDiv);
+
             if ($this->column->hint) {
                 $hintEl  = new Span(array( 'class' => $this->hintClass ));
                 $hintEl->append( $this->column->hint );
