@@ -42,6 +42,7 @@ class ColumnConvert
 
         // convert notNull to required
         // XXX: for creating records, we should remove the required
+        // but for record updating, we need this constraint. related issue: https://github.com/c9s/LazyRecord/issues/125
         if (!$column->primary) {
             $param->required = $column->notNull;
         }
