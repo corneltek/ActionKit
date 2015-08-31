@@ -17,7 +17,6 @@ class BootstrapFieldViewTest extends PHPUnit_Framework_TestCase
           'placeholder' => "ariel123",
           'readoly' => "",
           'autocomplete' => "off",
-          'class' => "form-control"
         ));
         $html = $field->render();
 
@@ -26,12 +25,12 @@ class BootstrapFieldViewTest extends PHPUnit_Framework_TestCase
         is('form-group formkit-widget-textinput', (string)$xml->attributes()['class']);
         $label = $xml->label;
         is('col-lg-2', (string)$label->attributes()['class']);
-        is('Account', (string)$label[0]);
+        is('* Account', (string)$label[0]);
 
         $div = $xml->div;
         is('col-lg-10', (string)$div->attributes()['class']);
         $input = $div->input->attributes();
-        is('form-control', $input->class);
+        is('formkit-widget formkit-widget-text form-control', $input->class);
         is('account', $input->name);
         is('ariel123', $input->placeholder);
         is('off', $input->autocomplete);

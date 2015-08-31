@@ -17,7 +17,7 @@ class DivFieldViewTest extends PHPUnit_Framework_TestCase
         is('v-field formkit-widget-textinput', (string)$xml->attributes()['class']);
         $div = $xml->div[0];
         is('label', (string)$div->attributes()['class']);
-        is('Name', (string)$div->label);
+        is('* Name', (string)$div->label);
 
         $label = $div->label;
         is('formkit-widget formkit-label formkit-widget-label', (string)$label->attributes()['class']);
