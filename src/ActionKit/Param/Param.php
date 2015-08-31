@@ -23,6 +23,8 @@ class Param extends CascadingAttribute
 
     /**
      * @var boolean is a required column ?
+     *
+     * XXX: note this is defined in supportedAttributes
      */
     public $required;
 
@@ -62,7 +64,10 @@ class Param extends CascadingAttribute
         $this->name = $name;
         $this->action = $action;
 
+        // provide immutable setter
         $this->setAttributeType('immutable', static::ATTR_FLAG);
+
+        // provide required() setter
         $this->setAttributeType('required',  static::ATTR_FLAG);
         $this->build();
     }
@@ -206,7 +211,10 @@ class Param extends CascadingAttribute
     public function createLabelWidget($widgetClass = null , $attributes = array() )
     {
         $class = $widgetClass ?: 'FormKit\\Widget\\Label';
-        return new $class( $this->getLabel() );
+        if ($this->required) {
+            return new $class('* ' . $this->getLabel());
+        }
+        return new $class($this->getLabel());
     }
 
 
