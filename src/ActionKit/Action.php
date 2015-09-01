@@ -389,7 +389,7 @@ class Action implements IteratorAggregate
          * for generic action, just traverse all params. */
         $foundError = false;
         foreach ($this->params as $name => $param) {
-            if ( false === $this->validateParam( $name ) ) {
+            if (false === $this->validateParam($name)) {
                 $foundError = true;
             }
         }
@@ -1026,7 +1026,7 @@ class Action implements IteratorAggregate
      */
     public function getCSRFToken()
     {
-        if ( $this->enableCSRFToken && !isset($this->args['_csrf_token']) ) {
+        if ($this->enableCSRFToken && !isset($this->args['_csrf_token'])) {
             $token = CsrfTokenProvider::loadTokenWithSessionKey('_csrf_token', true);
             if ( $token == null || !$token->checkExpiry($_SERVER['REQUEST_TIME']) ) {
                 $token = CsrfTokenProvider::generateToken();
