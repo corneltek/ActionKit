@@ -44,7 +44,8 @@ class ColumnConvert
         // XXX: for creating records, we should remove the required
         // but for record updating, we need this constraint. related issue: https://github.com/c9s/LazyRecord/issues/125
         if (!$column->primary) {
-            $param->required = $column->notNull;
+            // FIXME there is a side effect here
+            // $param->required = $column->notNull;
         }
         foreach ($column->attributes as $k => $v) {
             // if the model column validator is not compatible with action validator
