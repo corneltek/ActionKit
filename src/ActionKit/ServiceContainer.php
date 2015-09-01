@@ -2,6 +2,7 @@
 namespace ActionKit;
 use Pimple\Container;
 use ActionKit\ActionGenerator;
+use ActionKit\CsrfTokenProvider;
 use Twig_Loader_Filesystem;
 use ReflectionClass;
 
@@ -24,6 +25,16 @@ class ServiceContainer extends Container
     public function __construct()
     {
         $self = $this;
+
+        $this['csrf_token'] = function() {
+            // try to load csrf token in the current session
+            $token = CsrfTokenProvider::loadTokenWithSessionKey('_csrf_token', true);
+            if ($token == null || !$token->checkExpiry($_SERVER['REQUEST_TIME'])) {
+                $token = CsrfTokenProvider::generateToken();
+            }
+            return $token->hash;
+        };
+
 
         // The default twig loader
         $this['twig_loader'] = function($c) {
