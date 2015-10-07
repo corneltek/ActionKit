@@ -623,7 +623,8 @@ class Action implements IteratorAggregate
             if (array_key_exists($name, $this->args)) {
                 $value = $this->args[$name];
                 if ($param = $this->getParam($name)) {
-                    return $param->typeCastValue($value);
+                    $value = $param->typeCastValue($value);
+                    return $param->inflate($value);
                 }
                 return $value;
             }

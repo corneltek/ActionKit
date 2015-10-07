@@ -3,6 +3,8 @@ namespace ActionKit\Param;
 use CascadingAttribute;
 use FormKit;
 use ActionKit\Messages;
+use DateTime;
+use InvalidArgumentException;
 
 class Param extends CascadingAttribute
 {
@@ -91,6 +93,32 @@ class Param extends CascadingAttribute
         if ($this->inflator) {
             return call_user_func($this->inflator, $value, $this, $this->action);
         }
+
+        // Built-in supported inflators
+        if ($isa = $this->getAttributeValue('isa')) {
+            switch ($isa) {
+                case "DateTime":
+                    if (is_int($value)) {
+                        $dateTime = new DateTime();
+                        $dateTime->setTimestamp($value);
+                        return $dateTime;
+                    } else if (is_string($value)) {
+                        $dateTime = new DateTime($value);
+                        return $dateTime;
+                    } else {
+                        throw new InvalidArgumentException("Invalid argument value for DateTime type param.");
+                    }
+                break;
+                case "json":
+                    if (is_string($value)) {
+                        return json_decode($json);
+                    } else {
+                        throw new InvalidArgumentException("Invalid argument value for JSON type param.");
+                    }
+                break;
+            }
+        }
+
         return $value;
     }
 
