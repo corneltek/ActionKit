@@ -297,9 +297,10 @@ class Action implements IteratorAggregate
         ));
     }
 
-    public function requireArg($n) {
+    public function requireArg($n)
+    {
         $v = $this->arg($n);
-        if ( $v === null || $v === "" ) {
+        if ($v === null || $v === "") {
             $param = $this->getParam($n);
             $this->result->addValidation($n, array(
                 'valid' => false,
@@ -358,7 +359,7 @@ class Action implements IteratorAggregate
          *
          *    [ boolean pass ]
          */
-        $ret = (array) $param->validate( @$this->args[$name] );
+        $ret = (array) $param->validate($this->arg($name));
         if ( is_array($ret) ) {
             if ($ret[0]) { // success
                 # $this->result->addValidation( $name, array( "valid" => $ret[1] ));
@@ -415,7 +416,7 @@ class Action implements IteratorAggregate
     /**
      * Invoke is a run method wraper
      */
-    public function invoke()
+    final public function invoke()
     {
         if (session_id() && $this->enableCSRFToken) {
             $token = CsrfTokenProvider::loadTokenWithSessionKey(); 
@@ -730,8 +731,7 @@ class Action implements IteratorAggregate
         if (! class_exists($class,true)) { // trigger spl class autoloader to load class file.
             throw new Exception("Action param($field): column class $class not found.");
         }
-
-        return $this->params[$field] = new $class( $field , $this );
+        return $this->params[$field] = new $class($field , $this);
     }
 
 
