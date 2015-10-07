@@ -9,6 +9,11 @@ use ActionKit\Testing\ActionTestAssertions;
 use OrderBundle\Model\Order;
 use OrderBundle\Model\OrderCollection;
 use OrderBundle\Model\OrderSchema;
+
+use OrderBundle\Model\OrderItem;
+use OrderBundle\Model\OrderItemCollection;
+use OrderBundle\Model\OrderItemSchema;
+
 use LazyRecord\Testing\ModelTestCase;
 use ActionKit\RecordAction\CreateRecordAction;
 use ActionKit\RecordAction\UpdateRecordAction;
@@ -17,7 +22,7 @@ use ActionKit\RecordAction\DeleteRecordAction;
 /**
  * @group lazyrecord
  */
-class OrderBundleTest extends ModelTestCase
+class OrderItemTest extends ModelTestCase
 {
     use ActionTestAssertions;
 
@@ -25,29 +30,87 @@ class OrderBundleTest extends ModelTestCase
 
     public function getModels()
     {
-        return array( new OrderSchema );
+        return [new OrderSchema, new OrderItemSchema];
     }
 
-    public function testGeneratedCreateAction()
+    public function testCreateWithoutPrimaryKeyValue()
     {
-        $order = new Order;
-        $schema = $order->getSchema();
+        $orderItem = new OrderItem;
+        $schema = $orderItem->getSchema();
         $this->assertEquals('id',$schema->primaryKey);
 
         $primaryKeyColumn = $schema->getColumn('id');
         $this->assertNotNull($primaryKeyColumn);
 
-        var_dump( $primaryKeyColumn->autoIncrement ); 
-        
+        $this->assertTrue($primaryKeyColumn->autoIncrement, 'primary key is a auto-increment column');
 
-
-
-        $create = $order->asCreateAction();
+        $create = $orderItem->asCreateAction([ 'quantity' => 3, 'subtotal' => 120 ]);
         $this->assertNotNull($create);
         $this->assertInstanceOf('ActionKit\\RecordAction\\BaseRecordAction', $create);
         $this->assertInstanceOf('ActionKit\\RecordAction\\CreateRecordAction', $create);
+
+        $success = $create();
+        $this->assertTrue($success, 'Should be able to create without primary key value.');
     }
 
+
+
+    /**
+     * @expectedException Exception
+     */
+    public function testUpdateWithoutPrimaryKeyValue()
+    {
+        $orderItem = new OrderItem;
+        $schema = $orderItem->getSchema();
+        $this->assertEquals('id',$schema->primaryKey);
+
+        $primaryKeyColumn = $schema->getColumn('id');
+        $this->assertNotNull($primaryKeyColumn);
+        $this->assertTrue($primaryKeyColumn->autoIncrement, 'primary key is a auto-increment column');
+
+        $create = $orderItem->asCreateAction([ 'quantity' => 3, 'subtotal' => 120 ]);
+        $this->assertNotNull($create);
+        $this->assertInstanceOf('ActionKit\\RecordAction\\BaseRecordAction', $create);
+        $this->assertInstanceOf('ActionKit\\RecordAction\\CreateRecordAction', $create);
+        $success = $create();
+        $this->assertTrue($success, 'Should be able to create without primary key value.');
+
+
+        $orderItem2 = new OrderItem;
+        $update = $orderItem2->asUpdateAction(['quantity' => 3]);
+        $this->assertNotNull($update);
+        $this->assertInstanceOf('ActionKit\\RecordAction\\BaseRecordAction', $update);
+        $this->assertInstanceOf('ActionKit\\RecordAction\\UpdateRecordAction', $update);
+        $update();
+    }
+
+
+    public function testUpdateRequiredFieldWithNullValue()
+    {
+        $orderItem = new OrderItem;
+        $schema = $orderItem->getSchema();
+        $this->assertEquals('id',$schema->primaryKey);
+
+        $primaryKeyColumn = $schema->getColumn('id');
+        $this->assertNotNull($primaryKeyColumn);
+        $this->assertTrue($primaryKeyColumn->autoIncrement, 'primary key is a auto-increment column');
+
+        $create = $orderItem->asCreateAction([ 'quantity' => 3, 'subtotal' => 120 ]);
+        $this->assertNotNull($create);
+        $this->assertInstanceOf('ActionKit\\RecordAction\\BaseRecordAction', $create);
+        $this->assertInstanceOf('ActionKit\\RecordAction\\CreateRecordAction', $create);
+        $success = $create();
+        $this->assertTrue($success, 'Should be able to create without primary key value.');
+
+
+        $orderItem2 = new OrderItem;
+        $update = $orderItem2->asUpdateAction(['id' => $orderItem->id, 'quantity' => null]);
+        $this->assertNotNull($update);
+        $this->assertInstanceOf('ActionKit\\RecordAction\\BaseRecordAction', $update);
+        $this->assertInstanceOf('ActionKit\\RecordAction\\UpdateRecordAction', $update);
+        $success = $update();
+        $this->assertFalse($success, 'Should not be able to update required field with null value.');
+    }
 
 }
 

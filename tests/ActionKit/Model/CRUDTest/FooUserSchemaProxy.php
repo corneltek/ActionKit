@@ -24,7 +24,7 @@ class FooUserSchemaProxy extends RuntimeSchema
   2 => 'id',
 );
 
-    const schema_class = 'LazyRecord\\Schema\\DynamicSchemaDeclare';
+    const schema_class = 'LazyRecord\\Schema\\DynamicDeclareSchema';
     const collection_class = 'ActionKit\\Model\\CRUDTest\\FooUserCollection';
     const model_class = 'ActionKit\\Model\\CRUDTest\\FooUser';
     const model_name = 'FooUser';

@@ -230,19 +230,19 @@ class ProductActionTest extends ModelTestCase
     public function testRecordUpdate()
     {
         $product = $this->createProduct('Book A');
+        $this->assertNotNull($product->id);
+        $this->assertEquals(1, $product->id, 'product id');
+
         $class = $this->createProductActionClass('Update');
+        $this->assertEquals('ProductBundle\\Action\\UpdateProduct', $class);
+
         $update = new $class(array('id' => $product->id , 'name' => 'Foo'));
-        ok( $update->run() );
+        $success = $update->invoke();
+        $this->assertTrue($success, $update->result);
+
         $record = $update->getRecord();
-        ok($record->id);
-        is('Foo', $record->name);
-
-        $result = $update->loadRecord(['id' => $product->id]);
-        is(true, $result);
-
-        $update->args = array('id' => $product->id , 'name' => 'Bar');
-        $result = $update->invoke();
-        is(true, $result);
+        $this->assertNotNull($record->id);
+        $this->assertEquals('Foo', $record->name);
         $record->delete();
     }
 

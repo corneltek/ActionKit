@@ -1,8 +1,8 @@
 <?php
 namespace ProductBundle\Model;
-use LazyRecord\Schema\SchemaDeclare;
+use LazyRecord\Schema\DeclareSchema;
 
-class ProductImageSchema extends SchemaDeclare
+class ProductImageSchema extends DeclareSchema
 {
 
     public function getLabel() {

@@ -4,9 +4,9 @@ use ProductBundle\Model\ProductCollection;
 use ProductBundle\Model\ProductTypeCollection;
 use ProductBundle\Model\ProductImageCollection;
 use ProductBundle\Model\ResourceCollection;
-use LazyRecord\Schema\SchemaDeclare;
+use LazyRecord\Schema\DeclareSchema;
 
-class ProductSchema extends SchemaDeclare
+class ProductSchema extends DeclareSchema
 {
     public function schema()
     {

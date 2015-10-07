@@ -1,7 +1,7 @@
 <?php
 namespace OrderBundle\Model;
 
-class OrderSchema extends \LazyRecord\Schema\SchemaDeclare
+class OrderSchema extends \LazyRecord\Schema\DeclareSchema
 {
     public function schema()
     {

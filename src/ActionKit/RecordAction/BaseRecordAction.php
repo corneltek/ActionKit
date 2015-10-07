@@ -6,7 +6,7 @@ use ActionKit\Exception\ActionException;
 use ActionKit\Exception\RequiredConfigKeyException;
 use ActionKit\ActionTemplate\RecordActionTemplate;
 use ActionKit\RecordAction\CreateRecordAction;
-use LazyRecord\Schema\SchemaDeclare;
+use LazyRecord\Schema\DeclareSchema;
 use LazyRecord\Schema\Relationship;
 use LazyRecord\BaseModel;
 use LazyRecord\Result;
@@ -28,6 +28,8 @@ class BaseRecordAction extends Action
     public $recordClass;
 
     public $enableLoadRecord = false;
+
+    public $recordResult;
 
 
     /**
@@ -149,12 +151,13 @@ class BaseRecordAction extends Action
         $this->params = array();
     }
 
-    public function initParamsFromColumns(array $columns, BaseModel $record = null) {
-        foreach ( $columns as $column ) {
-            if ( ! isset($this->params[$column->name] ) ) {
+    public function initParamsFromColumns(array $columns, BaseModel $record = null)
+    {
+        foreach ($columns as $column) {
+            if (! isset($this->params[$column->name] ) ) {
                 // do not render this field if renderable === false
                 if ( false !== $column->get('renderable') ) {
-                    $this->params[ $column->name ] = ColumnConvert::toParam( $column , $record );
+                    $this->params[ $column->name ] = ColumnConvert::toParam($column , $record, $this);
                 }
             }
         }
@@ -194,7 +197,7 @@ class BaseRecordAction extends Action
         // Action param object.
         if ($column = $this->record->getColumn('id')) {
             if ( ! isset($this->params[$column->name] ) ) {
-                $this->params[ $column->name ] = ColumnConvert::toParam( $column , $record );
+                $this->params[ $column->name ] = ColumnConvert::toParam($column , $record, $this);
             }
         }
 

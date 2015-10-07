@@ -34,26 +34,21 @@ $config->loadFromArray(array(
     ],
 ));
 
-/*
 
-$logger = new Logger;
-$logger->info("Building schema class files...");
+
+
+
+$logger = new CLIFramework\Logger;
+// $logger->setQuiet();
+$logger->info("Updating schema class files...");
 $schemas = array(
-    new \TestApp\Model\UserSchema,
-    new \TestApp\Model\IDNumberSchema,
-    new \TestApp\Model\NameSchema,
-    new \AuthorBooks\Model\AddressSchema,
-    new \AuthorBooks\Model\BookSchema,
-    new \AuthorBooks\Model\AuthorSchema,
-    new \AuthorBooks\Model\AuthorBookSchema,
-    new \AuthorBooks\Model\PublisherSchema,
-    new \MetricApp\Model\MetricValueSchema,
-    new \PageApp\Model\PageSchema,
+    new \User\Model\UserSchema,
+    new \OrderBundle\Model\OrderSchema,
+    new \OrderBundle\Model\OrderItemSchema,
 );
 $g = new \LazyRecord\Schema\SchemaGenerator($config, $logger);
 $g->setForceUpdate(true);
 $g->generate($schemas);
- */
 
 
 

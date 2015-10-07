@@ -1,8 +1,8 @@
 <?php
 namespace ProductBundle\Model;
-use LazyRecord\Schema\SchemaDeclare;
+use LazyRecord\Schema\DeclareSchema;
 
-class ProductTypeSchema extends SchemaDeclare
+class ProductTypeSchema extends DeclareSchema
 {
     /* ProductType is like, Product Attribute 
      *

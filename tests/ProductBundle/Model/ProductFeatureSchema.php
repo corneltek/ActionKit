@@ -1,8 +1,8 @@
 <?php
 namespace ProductBundle\Model;
-use LazyRecord\Schema\SchemaDeclare;
+use LazyRecord\Schema\DeclareSchema;
 
-class ProductFeatureSchema extends SchemaDeclare
+class ProductFeatureSchema extends DeclareSchema
 {
     # feature relations
     public $table = 'product_feature_junction';

@@ -8,11 +8,9 @@ abstract class CreateRecordAction
 
     public $enableLoadRecord = false;
 
-    public $recordResult;
-
     public function create($args)
     {
-        $ret = $this->record->create($args);
+        $this->recordResult = $ret = $this->record->create($args);
 
         /* error checking */
         if (false === $ret->success) {
@@ -30,12 +28,11 @@ abstract class CreateRecordAction
     public function run()
     {
         /* default run method , to run create action */
-        $ret = $this->create( $this->args );
+        $success = $this->create( $this->args );
         if ( $this->nested && ! empty($this->relationships) ) {
-            $ret = $this->processSubActions();
+            $success = $this->processSubActions();
         }
-
-        return $ret;
+        return $success;
     }
 
     public function successMessage($ret)

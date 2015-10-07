@@ -1,8 +1,8 @@
 <?php
 namespace ProductBundle\Model;
-use LazyRecord\Schema\SchemaDeclare;
+use LazyRecord\Schema\DeclareSchema;
 
-class FeatureSchema extends SchemaDeclare
+class FeatureSchema extends DeclareSchema
 {
     public $table = 'product_features';
 

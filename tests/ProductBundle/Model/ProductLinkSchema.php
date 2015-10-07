@@ -1,8 +1,8 @@
 <?php
 namespace ProductBundle\Model;
-use LazyRecord\Schema\SchemaDeclare;
+use LazyRecord\Schema\DeclareSchema;
 
-class ProductLinkSchema extends SchemaDeclare
+class ProductLinkSchema extends DeclareSchema
 {
     public function schema() 
     {

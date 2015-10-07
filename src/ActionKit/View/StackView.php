@@ -9,7 +9,7 @@ use FormKit\Widget\ButtonInput;
 use FormKit\Widget\SubmitInput;
 use FormKit\Widget\CheckboxInput;
 use FormKit\Layout\GenericLayout;
-use LazyRecord\Schema\SchemaDeclare;
+use LazyRecord\Schema\DeclareSchema;
 use LazyRecord\Schema\Relationship;
 use LazyRecord\BaseModel;
 use LazyRecord\BaseCollection;

@@ -3,9 +3,9 @@ namespace ProductBundle\Model;
 use ProductBundle\Model\ProductBundle;
 use ProductBundle\Model\ProductCollection;
 use ProductBundle\Model\CategoryCollection;
-use LazyRecord\Schema\SchemaDeclare;
+use LazyRecord\Schema\DeclareSchema;
 
-class CategorySchema extends SchemaDeclare
+class CategorySchema extends DeclareSchema
 {
     public function schema()
     {
