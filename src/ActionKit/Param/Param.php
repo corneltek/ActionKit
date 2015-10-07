@@ -19,7 +19,7 @@ class Param extends CascadingAttribute
     /**
      * @var string action param type
      */
-    public $type;
+    public $isa;
 
     /**
      * @var boolean is a required column ?
@@ -66,6 +66,7 @@ class Param extends CascadingAttribute
 
         // provide immutable setter
         $this->setAttributeType('immutable', static::ATTR_FLAG);
+        $this->setAttributeType('isa', static::ATTR_STRING);
 
         // provide required() setter
         $this->setAttributeType('required',  static::ATTR_FLAG);
@@ -159,7 +160,7 @@ class Param extends CascadingAttribute
      *
      * @return self
      */
-    public function renderAs( $type , $attributes = null )
+    public function renderAs($type , array $attributes = null)
     {
         $this->widgetClass = $type;
         if ($attributes) {
@@ -253,7 +254,7 @@ class Param extends CascadingAttribute
 
         // for inputs (except password input),
         // we should render the value (or default value)
-        if ( false === stripos( $class , 'Password' ) ) {
+        if (false === stripos($class , 'Password')) {
             // The Param class should respect the data type
             if ($this->value !== NULL) {
                 $newAttributes['value'] = $this->getRenderableCurrentValue();
@@ -275,10 +276,10 @@ class Param extends CascadingAttribute
 
         // merge override attributes
         if ($this->widgetAttributes) {
-            $newAttributes = array_merge( $newAttributes , $this->widgetAttributes );
+            $newAttributes = array_merge($newAttributes , $this->widgetAttributes);
         }
         if ($attributes) {
-            $newAttributes = array_merge( $newAttributes , $attributes );
+            $newAttributes = array_merge($newAttributes , $attributes);
         }
 
         // if it's not a full-qualified class name
