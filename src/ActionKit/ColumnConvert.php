@@ -3,6 +3,9 @@ namespace ActionKit;
 use ActionKit\Param\Param;
 use ActionKit\Action;
 use ActionKit\RecordAction\BaseRecordAction;
+use ActionKit\RecordAction\CreateRecordAction;
+use ActionKit\RecordAction\UpdateRecordAction;
+use ActionKit\RecordAction\DeleteRecordAction;
 use LazyRecord\BaseModel;
 use LazyRecord\Schema\DeclareSchema;
 use LazyRecord\Schema\SchemaInterface;
@@ -34,19 +37,43 @@ class ColumnConvert
 
 
     /**
+     * Translate LazyRecord RuntimeColumn to ActionKit param object.
+     *
+     * @param RuntimeColumn $column
+     * @param BaseModel $record
+     * @return Param;
      */
-    public static function toParam(RuntimeColumn $column , BaseModel $record = null )
+    public static function toParam(RuntimeColumn $column , BaseModel $record = null, Action $action = null)
     {
         $name = $column->name;
-        $param = new Param( $name );
+        $param = new Param($name, $action);
+        $param->isa = $column->isa;
 
-        // convert notNull to required
-        // XXX: for creating records, we should remove the required
-        // but for record updating, we need this constraint. related issue: https://github.com/c9s/LazyRecord/issues/125
-        if (!$column->primary) {
-            // FIXME there is a side effect here
-            // $param->required = $column->notNull;
+        // Convert notNull to required
+        // required() is basically the same as notNull but provides extra
+        // software validation.
+        // When creating records, the primary key with auto-increment support is not required.
+        // However when updating records, the primary key is required for updating the existing record..
+        if ($column->notNull) {
+            if ($action && $column->primary) {
+                if ($action instanceof CreateRecordAction) {
+
+                    // autoIncrement is not defined, then it requires the input value.
+                    if ($column->autoIncrement) {
+                        $param->required = false;
+                    } else {
+                        $param->required = true;
+                    }
+
+                } else if ($action instanceof UpdateRecordAction || $action instanceof DeleteRecordAction) {
+                    // primary key column is required to update/delete records.
+                    $param->required = true;
+                }
+            } else {
+                $param->required = true;
+            }
         }
+
         foreach ($column->attributes as $k => $v) {
             // if the model column validator is not compatible with action validator
             if ( $k === 'validator' ) {
@@ -97,7 +124,7 @@ class ColumnConvert
                         $options[ $label ] = $item->dataKeyValue();
                     }
                     $param->validValues = $options;
-                } elseif ( is_subclass_of($referClass, 'LazyRecord\\Schema\\SchemaDeclare', true) ) {
+                } elseif ( is_subclass_of($referClass, 'LazyRecord\\Schema\\DeclareSchema', true) ) {
                     $schema = new $referClass;
                     $collection = $schema->newCollection();
 
