@@ -59,6 +59,8 @@ class Param extends CascadingAttribute
 
     public $validator;
 
+    protected $inflator;
+
     public function __construct( $name , $action = null )
     {
         $this->name = $name;
@@ -77,6 +79,22 @@ class Param extends CascadingAttribute
     {
 
     }
+
+    public function inflator(callable $inflator)
+    {
+        $this->inflator = $inflator;
+        return $this;
+    }
+
+    public function inflate($value)
+    {
+        if ($this->inflator) {
+            return call_user_func($this->inflator, $value, $this, $this->action);
+        }
+        return $value;
+    }
+
+
 
 
     /**
