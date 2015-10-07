@@ -11,6 +11,7 @@ use ActionKit\ActionRequest;
 use Universal\Http\HttpRequest;
 use Universal\Http\FilesParameter;
 use InvalidArgumentException;
+use BadMethodCallException;
 use ArrayAccess;
 use IteratorAggregate;
 
@@ -615,13 +616,27 @@ class Action implements IteratorAggregate
     public function arg($name)
     {
         $args = func_get_args();
-        if ( 1 === count($args) ) {
-            return isset($this->args[ $name ]) ?
-                         $this->args[ $name ]  : null;
-        } else if ( 2 === count($args) ) {
+        $nOfArgs = count($args);
+
+        // getting values
+        if (1 === $nOfArgs) {
+
+            if (array_key_exists($name, $this->args)) {
+                $value = $this->args[$name];
+                if ($param = $this->getParam($name)) {
+                    return $param->typeCastValue($value);
+                }
+                return $value;
+            }
+            return null;
+
+        } else if (2 === $nOfArgs) {
             // set value
             return $this->args[ $name ] = $args[1];
-        } else { die('arg error.'); }
+
+        } else {
+            throw new InvalidArgumentException("arg() method only allows setting value by 2 arguments. getting value by 1 argument.");
+        }
     }
 
     public function defined($name) {
@@ -715,7 +730,7 @@ class Action implements IteratorAggregate
             throw new Exception("Action param($field): column class $class not found.");
         }
 
-        return $this->params[ $field ] = new $class( $field , $this );
+        return $this->params[$field] = new $class( $field , $this );
     }
 
 

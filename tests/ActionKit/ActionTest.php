@@ -46,17 +46,17 @@ class LoginTestAction extends Action
         $this->filterOut(array('token'));
     }
 
-    public function run() {
+    public function run()
+    {
         // test filterOut
-        if ( $this->arg('token') ) {
+        if ($this->arg('token')) {
             return $this->error('token should be filter out.');
         }
-
-        if ( $this->arg('username') == 'admin' &&
-            $this->arg('password') == 's3cr3t' ) {
+        if ($this->arg('username') === 'admin' &&
+            $this->arg('password') === 's3cr3t' ) {
                 return $this->success('Login');
         }
-        return $this->error('Error');
+        return $this->error('Login Error');
     }
 }
 
@@ -135,11 +135,11 @@ class ActionTest extends PHPUnit_Framework_TestCase
             'password' => 's3cr3t',
             'token' => 'blah',
         ));
-        ok($action,'Got action');
 
         $success = $action->invoke();
-        ok($success, $action->result->message);
-
+        $result = $action->getResult();
+        
+        $this->assertTrue($success, $result->message);
 
         $result = $action->result;
         ok($result,'Got Result');

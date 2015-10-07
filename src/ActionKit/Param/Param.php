@@ -78,6 +78,47 @@ class Param extends CascadingAttribute
 
     }
 
+
+    /**
+     * typeCastValue method cast the form values to the corresponding php runtime value type.
+     *
+     * @param string|mixed $formValue usually string. (derived from $_POST, $_GET)
+     */
+    public function typeCastValue($formValue)
+    {
+        if ($isa = $this->getAttributeValue('isa')) {
+            switch ($isa) {
+            case 'int':
+                return intval($formValue);
+            case 'str':
+                return (string) $formValue;
+            case 'float':
+                return floatval($formValue);
+            case 'bool':
+                if ($formValue === NULL) {
+                    return NULL;
+                }
+                if (is_string($formValue)) {
+                    if ($formValue === '') {
+                        return NULL;
+                    } else if ($formValue === '1') {
+                        return true;
+                    } else if ($formValue === '0') {
+                        return false;
+                    } else if (strcasecmp($formValue,'false') === 0) {
+                        return false;
+                    } else if (strcasecmp($formValue,'true') === 0) {
+                        return true;
+                    } else {
+                        throw new Exception("Unexpected value for boolean type.");
+                    }
+                }
+            }
+        }
+        return $formValue;
+    }
+
+
     /**
      * We dont save any value here,
      * The value's should be passed from outside.
@@ -89,29 +130,22 @@ class Param extends CascadingAttribute
      *
      * @return array|true Returns error with message or true
      */
-    public function validate( $value )
+    public function validate($value)
     {
         /* if it's file type , should read from $_FILES , not from the args of action */
         // TODO: note, we should do this validation in File Param or Image Param
 
         if ($this->required) {
-
             if ($this->paramType === 'file') {
-
                 if (! $this->action->request->file($this->name) && ! $this->action->request->param($this->name)) {
                     return array(false, __( Messages::get('file.required') , $this->getLabel()  ) );
                 }
-
             } else {
-
                 if ( ! isset($this->args[ $this->name ]) || ! $this->args[$this->name] && ! $this->default ) {
                     return array(false, __( Messages::get('param.required') , $this->getLabel()  ) );
                 }
-
             }
-
         }
-
         if ($this->validator) {
             return call_user_func($this->validator,$value);
         }
@@ -145,9 +179,28 @@ class Param extends CascadingAttribute
         return $this->default;
     }
 
-    /**************************
-     * Widget related methods
-     **************************/
+
+    public function getValidValues()
+    {
+        if ( is_callable($this->validValues) ) {
+            return call_user_func($this->validValues);
+        }
+        return $this->validValues;
+    }
+
+    public function getOptionValues()
+    {
+        if ( is_callable($this->optionValues) ) {
+            return call_user_func($this->optionValues);
+        }
+        return $this->optionValues;
+    }
+
+
+
+    /*******************************************************************************
+     * Widget/UI Related Methods
+     ******************************************************************************/
 
     /**
      * Render action column as {Type}Widget, with extra options/attributes
@@ -170,6 +223,7 @@ class Param extends CascadingAttribute
         return $this;
     }
 
+
     /**
      * Render current parameter column to HTML
      *
@@ -180,22 +234,6 @@ class Param extends CascadingAttribute
     {
         return $this->createWidget( null , $attributes )
             ->render();
-    }
-
-    public function getValidValues()
-    {
-        if ( is_callable($this->validValues) ) {
-            return call_user_func($this->validValues);
-        }
-        return $this->validValues;
-    }
-
-    public function getOptionValues()
-    {
-        if ( is_callable($this->optionValues) ) {
-            return call_user_func($this->optionValues);
-        }
-        return $this->optionValues;
     }
 
     public function createHintWidget($widgetClass = null , $attributes = array() )
@@ -224,8 +262,6 @@ class Param extends CascadingAttribute
         // XXX: we should handle "false", "true", and "NULL"
         return $this->value instanceof \LazyRecord\BaseModel ? $this->value->dataKeyValue() : $this->value;
     }
-
-
 
     /**
      * A simple widget factory for Action Param
