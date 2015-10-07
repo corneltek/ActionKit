@@ -3,6 +3,7 @@ namespace ActionKit\Param;
 use CascadingAttribute;
 use FormKit;
 use ActionKit\Messages;
+use ActionKit\Action;
 use DateTime;
 use InvalidArgumentException;
 
@@ -63,7 +64,7 @@ class Param extends CascadingAttribute
 
     protected $inflator;
 
-    public function __construct( $name , $action = null )
+    public function __construct($name, Action $action = null)
     {
         $this->name = $name;
         $this->action = $action;
