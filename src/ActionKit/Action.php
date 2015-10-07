@@ -522,10 +522,9 @@ class Action implements IteratorAggregate
 
     public function removeParam($field)
     {
-        if ( isset($this->params[$field]) ) {
+        if (isset($this->params[$field])) {
             $param = $this->params[$field];
             unset($this->params[$field]);
-
             return $param;
         }
     }
@@ -639,7 +638,8 @@ class Action implements IteratorAggregate
         }
     }
 
-    public function defined($name) {
+    public function defined($name)
+    {
         return isset($this->args[$name]);
     }
 
@@ -706,8 +706,8 @@ class Action implements IteratorAggregate
      * Note: when using this method, a param that is already
      * defined will be override.
      *
-     * @param string $field Field name
-     * @param string $type  Field Type (will be Param Type)
+     * @param string $field      Field name
+     * @param string $paramType  Field Type (will be Param Type)
      *
      * @return ActionKit\Param
      *
@@ -716,12 +716,12 @@ class Action implements IteratorAggregate
      *     $this->param('image', 'image' ); // use ActionKit\Param\Image
      *
      */
-    public function param($field, $type = null)
+    public function param($field, $paramType = null)
     {
-        if ($type) {
-            $class = ($type[0] !== '+')
-                ? 'ActionKit\\Param\\' . ucfirst($type) . 'Param'
-                : substr($type,1);
+        if ($paramType) {
+            $class = ($paramType[0] !== '+')
+                ? 'ActionKit\\Param\\' . ucfirst($paramType) . 'Param'
+                : substr($paramType,1);
         } else {
             $class = 'ActionKit\\Param\\Param';
         }

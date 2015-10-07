@@ -92,7 +92,6 @@ class ActionTest extends PHPUnit_Framework_TestCase
     public function testRender()
     {
         $login = new LoginTestAction;
-
         ok($login->render());
         ok($login->render('username'));
         ok($login->renderWidget('username'));
@@ -107,12 +106,9 @@ class ActionTest extends PHPUnit_Framework_TestCase
     public function testGetParamsWithFilterOut() 
     {
         $login = new LoginTestAction;
-        ok($login);
-
         $params = $login->getParams(); // get params with param filter
-        ok( $params );
-
-        count_ok(2, array_keys($params));
+        $this->assertNotEmpty($params);
+        $this->assertCount(2, array_keys($params));
         ok( !isset($params['token']) , 'Should not include token param.' );
         ok( isset($params['username']) , 'Should have username param' );
         ok( isset($params['password']) , 'Should have password param' );
@@ -142,10 +138,9 @@ class ActionTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($success, $result->message);
 
         $result = $action->result;
-        ok($result,'Got Result');
-
-        is('Login', $result->message);
-        ok( $result->isSuccess() );
+        $this->assertNotNull($result,'Got Result');
+        $this->assertEquals('Login', $result->message);
+        $this->assertTrue($result->isSuccess());
     }
 
     public function testParams()
@@ -158,15 +153,12 @@ class ActionTest extends PHPUnit_Framework_TestCase
 
         is('Foo', $login->arg('username', 'Foo'));
 
-        ok($login->params());
+        $this->assertNotEmpty($login->params());
+        $this->assertNotEmpty($login->params(true));
 
-        ok($login->params(true));
-
-        is(true, $login->hasParam('username'));
-
-        ok($login->removeParam('username'));
-        is(false, $login->hasParam('username'));
-        is(false, $login->define('username'));
+        $this->assertTrue($login->hasParam('username'));
+        $this->assertNotNull($removed = $login->removeParam('username'));
+        $this->assertFalse($login->hasParam('username'));
     }
 
     /**
