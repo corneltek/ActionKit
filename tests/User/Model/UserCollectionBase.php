@@ -4,9 +4,10 @@ use LazyRecord\BaseCollection;
 class UserCollectionBase
     extends BaseCollection
 {
-    const schema_proxy_class = 'User\\Model\\UserSchemaProxy';
-    const model_class = 'User\\Model\\User';
-    const table = 'users';
-    const read_source_id = 'default';
-    const write_source_id = 'default';
+    const SCHEMA_PROXY_CLASS = 'User\\Model\\UserSchemaProxy';
+    const MODEL_CLASS = 'User\\Model\\User';
+    const TABLE = 'users';
+    const READ_SOURCE_ID = 'default';
+    const WRITE_SOURCE_ID = 'default';
+    const PRIMARY_KEY = 'id';
 }

@@ -1,29 +1,31 @@
 <?php
 namespace ProductBundle\Model;
+use LazyRecord\Schema\SchemaLoader;
 use LazyRecord\BaseModel;
 class ProductTypeBase
     extends BaseModel
 {
-    const schema_proxy_class = 'ProductBundle\\Model\\ProductTypeSchemaProxy';
-    const collection_class = 'ProductBundle\\Model\\ProductTypeCollection';
-    const model_class = 'ProductBundle\\Model\\ProductType';
-    const table = 'product_types';
-    const read_source_id = 'default';
-    const write_source_id = 'default';
-    const primary_key = 'id';
+    const SCHEMA_PROXY_CLASS = 'ProductBundle\\Model\\ProductTypeSchemaProxy';
+    const COLLECTION_CLASS = 'ProductBundle\\Model\\ProductTypeCollection';
+    const MODEL_CLASS = 'ProductBundle\\Model\\ProductType';
+    const TABLE = 'product_types';
+    const READ_SOURCE_ID = 'default';
+    const WRITE_SOURCE_ID = 'default';
+    const PRIMARY_KEY = 'id';
+    const FIND_BY_PRIMARY_KEY_SQL = 'SELECT * FROM product_types WHERE id = :id';
     public static $column_names = array (
-      0 => 'product_id',
-      1 => 'name',
-      2 => 'quantity',
-      3 => 'comment',
-      4 => 'id',
+      0 => 'id',
+      1 => 'product_id',
+      2 => 'name',
+      3 => 'quantity',
+      4 => 'comment',
     );
     public static $column_hash = array (
+      'id' => 1,
       'product_id' => 1,
       'name' => 1,
       'quantity' => 1,
       'comment' => 1,
-      'id' => 1,
     );
     public static $mixin_classes = array (
     );
@@ -32,7 +34,11 @@ class ProductTypeBase
         if ($this->_schema) {
            return $this->_schema;
         }
-        return $this->_schema = \LazyRecord\Schema\SchemaLoader::load('ProductBundle\\Model\\ProductTypeSchemaProxy');
+        return $this->_schema = SchemaLoader::load('ProductBundle\\Model\\ProductTypeSchemaProxy');
+    }
+    public function getId()
+    {
+            return $this->get('id');
     }
     public function getProductId()
     {
@@ -49,9 +55,5 @@ class ProductTypeBase
     public function getComment()
     {
             return $this->get('comment');
-    }
-    public function getId()
-    {
-            return $this->get('id');
     }
 }

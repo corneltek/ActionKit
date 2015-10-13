@@ -1,34 +1,37 @@
 <?php
 namespace ProductBundle\Model;
+use LazyRecord\Schema\SchemaLoader;
 use LazyRecord\BaseModel;
 class ProductBase
     extends BaseModel
 {
-    const schema_proxy_class = 'ProductBundle\\Model\\ProductSchemaProxy';
-    const collection_class = 'ProductBundle\\Model\\ProductCollection';
-    const model_class = 'ProductBundle\\Model\\Product';
-    const table = 'products';
-    const read_source_id = 'default';
-    const write_source_id = 'default';
-    const primary_key = 'id';
+    const SCHEMA_PROXY_CLASS = 'ProductBundle\\Model\\ProductSchemaProxy';
+    const COLLECTION_CLASS = 'ProductBundle\\Model\\ProductCollection';
+    const MODEL_CLASS = 'ProductBundle\\Model\\Product';
+    const TABLE = 'products';
+    const READ_SOURCE_ID = 'default';
+    const WRITE_SOURCE_ID = 'default';
+    const PRIMARY_KEY = 'id';
+    const FIND_BY_PRIMARY_KEY_SQL = 'SELECT * FROM products WHERE id = :id';
     public static $column_names = array (
-      0 => 'name',
-      1 => 'subtitle',
-      2 => 'sn',
-      3 => 'description',
-      4 => 'content',
-      5 => 'category_id',
-      6 => 'is_cover',
-      7 => 'sellable',
-      8 => 'orig_price',
-      9 => 'price',
-      10 => 'external_link',
-      11 => 'token',
-      12 => 'ordering',
-      13 => 'hide',
-      14 => 'id',
+      0 => 'id',
+      1 => 'name',
+      2 => 'subtitle',
+      3 => 'sn',
+      4 => 'description',
+      5 => 'content',
+      6 => 'category_id',
+      7 => 'is_cover',
+      8 => 'sellable',
+      9 => 'orig_price',
+      10 => 'price',
+      11 => 'external_link',
+      12 => 'token',
+      13 => 'ordering',
+      14 => 'hide',
     );
     public static $column_hash = array (
+      'id' => 1,
       'name' => 1,
       'subtitle' => 1,
       'sn' => 1,
@@ -43,7 +46,6 @@ class ProductBase
       'token' => 1,
       'ordering' => 1,
       'hide' => 1,
-      'id' => 1,
     );
     public static $mixin_classes = array (
     );
@@ -52,7 +54,11 @@ class ProductBase
         if ($this->_schema) {
            return $this->_schema;
         }
-        return $this->_schema = \LazyRecord\Schema\SchemaLoader::load('ProductBundle\\Model\\ProductSchemaProxy');
+        return $this->_schema = SchemaLoader::load('ProductBundle\\Model\\ProductSchemaProxy');
+    }
+    public function getId()
+    {
+            return $this->get('id');
     }
     public function getName()
     {
@@ -109,9 +115,5 @@ class ProductBase
     public function getHide()
     {
             return $this->get('hide');
-    }
-    public function getId()
-    {
-            return $this->get('id');
     }
 }

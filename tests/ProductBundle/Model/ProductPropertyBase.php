@@ -1,27 +1,29 @@
 <?php
 namespace ProductBundle\Model;
+use LazyRecord\Schema\SchemaLoader;
 use LazyRecord\BaseModel;
 class ProductPropertyBase
     extends BaseModel
 {
-    const schema_proxy_class = 'ProductBundle\\Model\\ProductPropertySchemaProxy';
-    const collection_class = 'ProductBundle\\Model\\ProductPropertyCollection';
-    const model_class = 'ProductBundle\\Model\\ProductProperty';
-    const table = 'product_properties';
-    const read_source_id = 'default';
-    const write_source_id = 'default';
-    const primary_key = 'id';
+    const SCHEMA_PROXY_CLASS = 'ProductBundle\\Model\\ProductPropertySchemaProxy';
+    const COLLECTION_CLASS = 'ProductBundle\\Model\\ProductPropertyCollection';
+    const MODEL_CLASS = 'ProductBundle\\Model\\ProductProperty';
+    const TABLE = 'product_properties';
+    const READ_SOURCE_ID = 'default';
+    const WRITE_SOURCE_ID = 'default';
+    const PRIMARY_KEY = 'id';
+    const FIND_BY_PRIMARY_KEY_SQL = 'SELECT * FROM product_properties WHERE id = :id';
     public static $column_names = array (
-      0 => 'name',
-      1 => 'val',
-      2 => 'product_id',
-      3 => 'id',
+      0 => 'id',
+      1 => 'name',
+      2 => 'val',
+      3 => 'product_id',
     );
     public static $column_hash = array (
+      'id' => 1,
       'name' => 1,
       'val' => 1,
       'product_id' => 1,
-      'id' => 1,
     );
     public static $mixin_classes = array (
     );
@@ -30,7 +32,11 @@ class ProductPropertyBase
         if ($this->_schema) {
            return $this->_schema;
         }
-        return $this->_schema = \LazyRecord\Schema\SchemaLoader::load('ProductBundle\\Model\\ProductPropertySchemaProxy');
+        return $this->_schema = SchemaLoader::load('ProductBundle\\Model\\ProductPropertySchemaProxy');
+    }
+    public function getId()
+    {
+            return $this->get('id');
     }
     public function getName()
     {
@@ -43,9 +49,5 @@ class ProductPropertyBase
     public function getProductId()
     {
             return $this->get('product_id');
-    }
-    public function getId()
-    {
-            return $this->get('id');
     }
 }

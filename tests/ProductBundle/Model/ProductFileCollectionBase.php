@@ -4,9 +4,10 @@ use LazyRecord\BaseCollection;
 class ProductFileCollectionBase
     extends BaseCollection
 {
-    const schema_proxy_class = 'ProductBundle\\Model\\ProductFileSchemaProxy';
-    const model_class = 'ProductBundle\\Model\\ProductFile';
-    const table = 'product_files';
-    const read_source_id = 'default';
-    const write_source_id = 'default';
+    const SCHEMA_PROXY_CLASS = 'ProductBundle\\Model\\ProductFileSchemaProxy';
+    const MODEL_CLASS = 'ProductBundle\\Model\\ProductFile';
+    const TABLE = 'product_files';
+    const READ_SOURCE_ID = 'default';
+    const WRITE_SOURCE_ID = 'default';
+    const PRIMARY_KEY = 'id';
 }

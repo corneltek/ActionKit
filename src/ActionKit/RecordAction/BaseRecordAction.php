@@ -202,9 +202,10 @@ class BaseRecordAction extends Action
         }
 
         // build relationship config from model schema
-        $relations = $this->record->getSchema()->relations;
-        foreach ( $relations as $rId => $relation ) {
-            $this->addRelation($rId, $relation);
+        if ($relations = $this->record->getSchema()->relations) {
+            foreach ( $relations as $rId => $relation ) {
+                $this->addRelation($rId, $relation);
+            }
         }
     }
 

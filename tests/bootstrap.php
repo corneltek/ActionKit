@@ -1,6 +1,8 @@
 <?php
 use LazyRecord\Schema\SchemaGenerator;
+use LazyRecord\Schema\SchemaLoader;
 use LazyRecord\ConfigLoader;
+use LazyRecord\ConnectionManager;
 
 define('ROOT' , dirname(__DIR__) );
 $loader = require ROOT . '/vendor/autoload.php';
@@ -33,8 +35,8 @@ $config->loadFromArray(array(
         ],
     ],
 ));
-
-
+$connectionManager = ConnectionManager::getInstance();
+$connectionManager->init($config);
 
 
 

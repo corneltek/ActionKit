@@ -4,9 +4,10 @@ use LazyRecord\BaseCollection;
 class ResourceCollectionBase
     extends BaseCollection
 {
-    const schema_proxy_class = 'ProductBundle\\Model\\ResourceSchemaProxy';
-    const model_class = 'ProductBundle\\Model\\Resource';
-    const table = 'product_resources';
-    const read_source_id = 'default';
-    const write_source_id = 'default';
+    const SCHEMA_PROXY_CLASS = 'ProductBundle\\Model\\ResourceSchemaProxy';
+    const MODEL_CLASS = 'ProductBundle\\Model\\Resource';
+    const TABLE = 'product_resources';
+    const READ_SOURCE_ID = 'default';
+    const WRITE_SOURCE_ID = 'default';
+    const PRIMARY_KEY = 'id';
 }

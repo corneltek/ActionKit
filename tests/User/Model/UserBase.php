@@ -1,27 +1,29 @@
 <?php
 namespace User\Model;
+use LazyRecord\Schema\SchemaLoader;
 use LazyRecord\BaseModel;
 class UserBase
     extends BaseModel
 {
-    const schema_proxy_class = 'User\\Model\\UserSchemaProxy';
-    const collection_class = 'User\\Model\\UserCollection';
-    const model_class = 'User\\Model\\User';
-    const table = 'users';
-    const read_source_id = 'default';
-    const write_source_id = 'default';
-    const primary_key = 'id';
+    const SCHEMA_PROXY_CLASS = 'User\\Model\\UserSchemaProxy';
+    const COLLECTION_CLASS = 'User\\Model\\UserCollection';
+    const MODEL_CLASS = 'User\\Model\\User';
+    const TABLE = 'users';
+    const READ_SOURCE_ID = 'default';
+    const WRITE_SOURCE_ID = 'default';
+    const PRIMARY_KEY = 'id';
+    const FIND_BY_PRIMARY_KEY_SQL = 'SELECT * FROM users WHERE id = :id';
     public static $column_names = array (
-      0 => 'name',
-      1 => 'email',
-      2 => 'password',
-      3 => 'id',
+      0 => 'id',
+      1 => 'name',
+      2 => 'email',
+      3 => 'password',
     );
     public static $column_hash = array (
+      'id' => 1,
       'name' => 1,
       'email' => 1,
       'password' => 1,
-      'id' => 1,
     );
     public static $mixin_classes = array (
     );
@@ -30,7 +32,11 @@ class UserBase
         if ($this->_schema) {
            return $this->_schema;
         }
-        return $this->_schema = \LazyRecord\Schema\SchemaLoader::load('User\\Model\\UserSchemaProxy');
+        return $this->_schema = SchemaLoader::load('User\\Model\\UserSchemaProxy');
+    }
+    public function getId()
+    {
+            return $this->get('id');
     }
     public function getName()
     {
@@ -43,9 +49,5 @@ class UserBase
     public function getPassword()
     {
             return $this->get('password');
-    }
-    public function getId()
-    {
-            return $this->get('id');
     }
 }

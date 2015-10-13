@@ -1,29 +1,31 @@
 <?php
 namespace ProductBundle\Model;
+use LazyRecord\Schema\SchemaLoader;
 use LazyRecord\BaseModel;
 class ProductImageBase
     extends BaseModel
 {
-    const schema_proxy_class = 'ProductBundle\\Model\\ProductImageSchemaProxy';
-    const collection_class = 'ProductBundle\\Model\\ProductImageCollection';
-    const model_class = 'ProductBundle\\Model\\ProductImage';
-    const table = 'product_images';
-    const read_source_id = 'default';
-    const write_source_id = 'default';
-    const primary_key = 'id';
+    const SCHEMA_PROXY_CLASS = 'ProductBundle\\Model\\ProductImageSchemaProxy';
+    const COLLECTION_CLASS = 'ProductBundle\\Model\\ProductImageCollection';
+    const MODEL_CLASS = 'ProductBundle\\Model\\ProductImage';
+    const TABLE = 'product_images';
+    const READ_SOURCE_ID = 'default';
+    const WRITE_SOURCE_ID = 'default';
+    const PRIMARY_KEY = 'id';
+    const FIND_BY_PRIMARY_KEY_SQL = 'SELECT * FROM product_images WHERE id = :id';
     public static $column_names = array (
-      0 => 'product_id',
-      1 => 'title',
-      2 => 'image',
-      3 => 'large',
-      4 => 'id',
+      0 => 'id',
+      1 => 'product_id',
+      2 => 'title',
+      3 => 'image',
+      4 => 'large',
     );
     public static $column_hash = array (
+      'id' => 1,
       'product_id' => 1,
       'title' => 1,
       'image' => 1,
       'large' => 1,
-      'id' => 1,
     );
     public static $mixin_classes = array (
     );
@@ -32,7 +34,11 @@ class ProductImageBase
         if ($this->_schema) {
            return $this->_schema;
         }
-        return $this->_schema = \LazyRecord\Schema\SchemaLoader::load('ProductBundle\\Model\\ProductImageSchemaProxy');
+        return $this->_schema = SchemaLoader::load('ProductBundle\\Model\\ProductImageSchemaProxy');
+    }
+    public function getId()
+    {
+            return $this->get('id');
     }
     public function getProductId()
     {
@@ -49,9 +55,5 @@ class ProductImageBase
     public function getLarge()
     {
             return $this->get('large');
-    }
-    public function getId()
-    {
-            return $this->get('id');
     }
 }

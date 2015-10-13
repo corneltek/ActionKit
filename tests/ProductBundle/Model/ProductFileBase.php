@@ -1,27 +1,29 @@
 <?php
 namespace ProductBundle\Model;
+use LazyRecord\Schema\SchemaLoader;
 use LazyRecord\BaseModel;
 class ProductFileBase
     extends BaseModel
 {
-    const schema_proxy_class = 'ProductBundle\\Model\\ProductFileSchemaProxy';
-    const collection_class = 'ProductBundle\\Model\\ProductFileCollection';
-    const model_class = 'ProductBundle\\Model\\ProductFile';
-    const table = 'product_files';
-    const read_source_id = 'default';
-    const write_source_id = 'default';
-    const primary_key = 'id';
+    const SCHEMA_PROXY_CLASS = 'ProductBundle\\Model\\ProductFileSchemaProxy';
+    const COLLECTION_CLASS = 'ProductBundle\\Model\\ProductFileCollection';
+    const MODEL_CLASS = 'ProductBundle\\Model\\ProductFile';
+    const TABLE = 'product_files';
+    const READ_SOURCE_ID = 'default';
+    const WRITE_SOURCE_ID = 'default';
+    const PRIMARY_KEY = 'id';
+    const FIND_BY_PRIMARY_KEY_SQL = 'SELECT * FROM product_files WHERE id = :id';
     public static $column_names = array (
-      0 => 'product_id',
-      1 => 'title',
-      2 => 'file',
-      3 => 'id',
+      0 => 'id',
+      1 => 'product_id',
+      2 => 'title',
+      3 => 'file',
     );
     public static $column_hash = array (
+      'id' => 1,
       'product_id' => 1,
       'title' => 1,
       'file' => 1,
-      'id' => 1,
     );
     public static $mixin_classes = array (
     );
@@ -30,7 +32,11 @@ class ProductFileBase
         if ($this->_schema) {
            return $this->_schema;
         }
-        return $this->_schema = \LazyRecord\Schema\SchemaLoader::load('ProductBundle\\Model\\ProductFileSchemaProxy');
+        return $this->_schema = SchemaLoader::load('ProductBundle\\Model\\ProductFileSchemaProxy');
+    }
+    public function getId()
+    {
+            return $this->get('id');
     }
     public function getProductId()
     {
@@ -43,9 +49,5 @@ class ProductFileBase
     public function getFile()
     {
             return $this->get('file');
-    }
-    public function getId()
-    {
-            return $this->get('id');
     }
 }

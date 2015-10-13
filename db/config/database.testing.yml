@@ -1,6 +1,5 @@
 ---
 bootstrap:
-  - tests/bootstrap.php
 schema:
   auto_id: true
   paths:

@@ -1,27 +1,29 @@
 <?php
 namespace ProductBundle\Model;
+use LazyRecord\Schema\SchemaLoader;
 use LazyRecord\BaseModel;
 class FeatureBase
     extends BaseModel
 {
-    const schema_proxy_class = 'ProductBundle\\Model\\FeatureSchemaProxy';
-    const collection_class = 'ProductBundle\\Model\\FeatureCollection';
-    const model_class = 'ProductBundle\\Model\\Feature';
-    const table = 'product_features';
-    const read_source_id = 'default';
-    const write_source_id = 'default';
-    const primary_key = 'id';
+    const SCHEMA_PROXY_CLASS = 'ProductBundle\\Model\\FeatureSchemaProxy';
+    const COLLECTION_CLASS = 'ProductBundle\\Model\\FeatureCollection';
+    const MODEL_CLASS = 'ProductBundle\\Model\\Feature';
+    const TABLE = 'product_features';
+    const READ_SOURCE_ID = 'default';
+    const WRITE_SOURCE_ID = 'default';
+    const PRIMARY_KEY = 'id';
+    const FIND_BY_PRIMARY_KEY_SQL = 'SELECT * FROM product_features WHERE id = :id';
     public static $column_names = array (
-      0 => 'name',
-      1 => 'description',
-      2 => 'image',
-      3 => 'id',
+      0 => 'id',
+      1 => 'name',
+      2 => 'description',
+      3 => 'image',
     );
     public static $column_hash = array (
+      'id' => 1,
       'name' => 1,
       'description' => 1,
       'image' => 1,
-      'id' => 1,
     );
     public static $mixin_classes = array (
     );
@@ -30,7 +32,11 @@ class FeatureBase
         if ($this->_schema) {
            return $this->_schema;
         }
-        return $this->_schema = \LazyRecord\Schema\SchemaLoader::load('ProductBundle\\Model\\FeatureSchemaProxy');
+        return $this->_schema = SchemaLoader::load('ProductBundle\\Model\\FeatureSchemaProxy');
+    }
+    public function getId()
+    {
+            return $this->get('id');
     }
     public function getName()
     {
@@ -43,9 +49,5 @@ class FeatureBase
     public function getImage()
     {
             return $this->get('image');
-    }
-    public function getId()
-    {
-            return $this->get('id');
     }
 }

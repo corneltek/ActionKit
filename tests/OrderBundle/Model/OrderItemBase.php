@@ -1,16 +1,18 @@
 <?php
 namespace OrderBundle\Model;
+use LazyRecord\Schema\SchemaLoader;
 use LazyRecord\BaseModel;
 class OrderItemBase
     extends BaseModel
 {
-    const schema_proxy_class = 'OrderBundle\\Model\\OrderItemSchemaProxy';
-    const collection_class = 'OrderBundle\\Model\\OrderItemCollection';
-    const model_class = 'OrderBundle\\Model\\OrderItem';
-    const table = 'order_items';
-    const read_source_id = 'default';
-    const write_source_id = 'default';
-    const primary_key = 'id';
+    const SCHEMA_PROXY_CLASS = 'OrderBundle\\Model\\OrderItemSchemaProxy';
+    const COLLECTION_CLASS = 'OrderBundle\\Model\\OrderItemCollection';
+    const MODEL_CLASS = 'OrderBundle\\Model\\OrderItem';
+    const TABLE = 'order_items';
+    const READ_SOURCE_ID = 'default';
+    const WRITE_SOURCE_ID = 'default';
+    const PRIMARY_KEY = 'id';
+    const FIND_BY_PRIMARY_KEY_SQL = 'SELECT * FROM order_items WHERE id = :id';
     public static $column_names = array (
       0 => 'id',
       1 => 'quantity',
@@ -28,7 +30,7 @@ class OrderItemBase
         if ($this->_schema) {
            return $this->_schema;
         }
-        return $this->_schema = \LazyRecord\Schema\SchemaLoader::load('OrderBundle\\Model\\OrderItemSchemaProxy');
+        return $this->_schema = SchemaLoader::load('OrderBundle\\Model\\OrderItemSchemaProxy');
     }
     public function getId()
     {

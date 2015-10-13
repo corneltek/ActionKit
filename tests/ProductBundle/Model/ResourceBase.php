@@ -1,27 +1,29 @@
 <?php
 namespace ProductBundle\Model;
+use LazyRecord\Schema\SchemaLoader;
 use LazyRecord\BaseModel;
 class ResourceBase
     extends BaseModel
 {
-    const schema_proxy_class = 'ProductBundle\\Model\\ResourceSchemaProxy';
-    const collection_class = 'ProductBundle\\Model\\ResourceCollection';
-    const model_class = 'ProductBundle\\Model\\Resource';
-    const table = 'product_resources';
-    const read_source_id = 'default';
-    const write_source_id = 'default';
-    const primary_key = 'id';
+    const SCHEMA_PROXY_CLASS = 'ProductBundle\\Model\\ResourceSchemaProxy';
+    const COLLECTION_CLASS = 'ProductBundle\\Model\\ResourceCollection';
+    const MODEL_CLASS = 'ProductBundle\\Model\\Resource';
+    const TABLE = 'product_resources';
+    const READ_SOURCE_ID = 'default';
+    const WRITE_SOURCE_ID = 'default';
+    const PRIMARY_KEY = 'id';
+    const FIND_BY_PRIMARY_KEY_SQL = 'SELECT * FROM product_resources WHERE id = :id';
     public static $column_names = array (
-      0 => 'product_id',
-      1 => 'url',
-      2 => 'html',
-      3 => 'id',
+      0 => 'id',
+      1 => 'product_id',
+      2 => 'url',
+      3 => 'html',
     );
     public static $column_hash = array (
+      'id' => 1,
       'product_id' => 1,
       'url' => 1,
       'html' => 1,
-      'id' => 1,
     );
     public static $mixin_classes = array (
     );
@@ -30,7 +32,11 @@ class ResourceBase
         if ($this->_schema) {
            return $this->_schema;
         }
-        return $this->_schema = \LazyRecord\Schema\SchemaLoader::load('ProductBundle\\Model\\ResourceSchemaProxy');
+        return $this->_schema = SchemaLoader::load('ProductBundle\\Model\\ResourceSchemaProxy');
+    }
+    public function getId()
+    {
+            return $this->get('id');
     }
     public function getProductId()
     {
@@ -43,9 +49,5 @@ class ResourceBase
     public function getHtml()
     {
             return $this->get('html');
-    }
-    public function getId()
-    {
-            return $this->get('id');
     }
 }

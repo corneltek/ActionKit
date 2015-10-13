@@ -4,9 +4,10 @@ use LazyRecord\BaseCollection;
 class CategoryCollectionBase
     extends BaseCollection
 {
-    const schema_proxy_class = 'ProductBundle\\Model\\CategorySchemaProxy';
-    const model_class = 'ProductBundle\\Model\\Category';
-    const table = 'product_categories';
-    const read_source_id = 'default';
-    const write_source_id = 'default';
+    const SCHEMA_PROXY_CLASS = 'ProductBundle\\Model\\CategorySchemaProxy';
+    const MODEL_CLASS = 'ProductBundle\\Model\\Category';
+    const TABLE = 'product_categories';
+    const READ_SOURCE_ID = 'default';
+    const WRITE_SOURCE_ID = 'default';
+    const PRIMARY_KEY = 'id';
 }
