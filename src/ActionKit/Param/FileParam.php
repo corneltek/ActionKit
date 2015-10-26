@@ -61,16 +61,21 @@ class FileParam extends Param
             // If valid extensions are specified, pass to uploaded file to check the extension
             if ($this->validExtensions) {
                 if ( ! $file->validateExtension($this->validExtensions) ) {
-                    // XXX: use ActionKit\Messages
-                    return array( false, __('Invalid File Extension: %1' . $this->name ) );
+                    // return array(false, __('Invalid File Extension: %1' . $this->name ) );
+                    return array(
+                        false,
+                        MessagePool::getInstance()->translate('Invalid File Extension: %1'),
+                        $this->name 
+                    );
                 }
             }
 
             if ($this->sizeLimit) {
                 if (! $file->validateSize( $this->sizeLimit )) {
-                    // XXX: use ActionKit\Messages
-                    return array( false,
-                        _("The uploaded file exceeds the size limitation. ") . futil_prettysize($this->sizeLimit) . ' KB.');
+                    return array(
+                        false,
+                        MessagePool::getInstance()->translate("The uploaded file exceeds the size limitation. %1 KB ", futil_prettysize($this->sizeLimit))
+                    );
                 }
             }
         }

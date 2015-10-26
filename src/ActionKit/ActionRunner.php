@@ -57,11 +57,19 @@ class ActionRunner
 
     public function __construct($options = array()) {
 
+        $messagePool = MessagePool::getInstance();
+
         if ($options instanceof ServiceContainer) {
 
             // the cache_dir option is optional. if user provides one, we should use it.
             $this->cacheDir = isset($options['cache_dir']) ? $options['cache_dir'] : __DIR__ . DIRECTORY_SEPARATOR . 'Cache';
             $this->generator = isset($options['generator']) ? $options['generator'] : new ActionGenerator;
+
+            if (isset($options['locale'])) {
+                $messagePool->loadByLocale($options['locale']);
+            } else {
+                $messagePool->loadByLocale('en'); // default to en
+            }
 
         } else if ($options instanceof ActionGenerator) {
 
@@ -76,6 +84,12 @@ class ActionRunner
             }
 
             $this->generator = new ActionGenerator;
+
+            if (isset($options['locale'])) {
+                $messagePool->loadByLocale($options['locale']);
+            } else {
+                $messagePool->loadByLocale('en'); // default to en
+            }
         }
 
         if ($this->cacheDir && ! file_exists($this->cacheDir)) {
@@ -387,7 +401,7 @@ class ActionRunner
     
     public function offsetUnset($name)
     {
-        unset( $this->results[$name] );
+        unset($this->results[$name]);
     }
     
 }

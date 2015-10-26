@@ -8,6 +8,7 @@ use ActionKit\Param\FileParam;
 use ActionKit\Result;
 use ActionKit\CsrfTokenProvider;
 use ActionKit\ActionRequest;
+use ActionKit\MessagePool;
 use Universal\Http\HttpRequest;
 use Universal\Http\FilesParameter;
 use InvalidArgumentException;
@@ -304,7 +305,7 @@ class Action implements IteratorAggregate
             $param = $this->getParam($n);
             $this->result->addValidation($n, array(
                 'valid' => false,
-                'message' => __(Messages::get('param.required'), $param ? $param->getLabel() : $n ),
+                'message' => MessagePool::getInstance()->translate('param.required', $param ? $param->getLabel() : $n),
                 'field' => $n,
             ));
             return false;
@@ -398,7 +399,7 @@ class Action implements IteratorAggregate
 
         // we do this here because we need to validate all param(s)
         if ($foundError) {
-            $this->result->error( _(Messages::get('validation.error') ) );
+            $this->result->error(MessagePool::getInstance()->translate('validation.error'));
             return false;
         }
 

@@ -2,7 +2,7 @@
 namespace ActionKit\Param;
 use CascadingAttribute;
 use FormKit;
-use ActionKit\Messages;
+use ActionKit\MessagePool;
 use ActionKit\Action;
 use DateTime;
 use InvalidArgumentException;
@@ -184,11 +184,11 @@ class Param extends CascadingAttribute
         if ($this->action && $this->required) {
             if ($this->paramType === 'file') {
                 if (! $this->action->request->file($this->name) && ! $this->action->request->param($this->name)) {
-                    return array(false, __( Messages::get('file.required') , $this->getLabel()  ) );
+                    return array(false, MessagePool::getInstance()->translate('file.required') , $this->getLabel());
                 }
             } else {
                 if ($this->action->request->existsParam($this->name) && $this->action->request->param($this->name) === null && ! $this->default) {
-                    return array(false, __( Messages::get('param.required') , $this->getLabel()  ) );
+                    return array(false, MessagePool::getInstance()->translate('param.required') , $this->getLabel());
                 }
             }
         }

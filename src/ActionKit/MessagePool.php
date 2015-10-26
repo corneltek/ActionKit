@@ -8,7 +8,7 @@ use Exception;
 class MessagePool implements ArrayAccess, IteratorAggregate
 {
     protected $messages = [
-        'file.required'  => 'File Field %1 is required.',
+        'file.required'  => 'File field %1 is required.',
         'param.required' => 'Field %1 is required.',
         'validation.error' => 'Please check your input.',
     ];
@@ -32,7 +32,6 @@ class MessagePool implements ArrayAccess, IteratorAggregate
         $localeFile = __DIR__ . DIRECTORY_SEPARATOR . 'Messages' . DIRECTORY_SEPARATOR . $locale . '.php';
         return $this->loadMessagesFromFile($localeFile);
     }
-
 
     public function loadMessagesFromFile($localeFile)
     {
