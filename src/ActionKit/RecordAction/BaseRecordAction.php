@@ -132,10 +132,10 @@ class BaseRecordAction extends Action
      */
     public function loadRecordFromArguments(array $args)
     {
-        $schema = $this->record->getSchema();
-        $primaryKey = $schema::PRIMARY_KEY;
-        if ($primaryKey && isset($args[$primaryKey])) {
-            return $this->record->find($args[$primaryKey])->success;
+        if ($primaryKey = $this->record->getSchema()->primaryKey) {
+            if (isset($args[$primaryKey])) {
+                return $this->record->find($args[$primaryKey])->success;
+            }
         }
         return false;
     }
