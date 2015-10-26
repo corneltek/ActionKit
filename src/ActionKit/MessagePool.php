@@ -1,11 +1,11 @@
 <?php
 namespace ActionKit;
+use ArrayAccess;
+use IteratorAggregate;
+use ArrayIterator;
 use Exception;
 
-/**
- * @codeCoverageIgnore
- */
-class MessagePool
+class MessagePool implements ArrayAccess, IteratorAggregate
 {
     protected $messages = [
         'file.required'  => 'File Field %1 is required.',
@@ -13,11 +13,38 @@ class MessagePool
         'validation.error' => 'Please check your input.',
     ];
 
+    /**
+     * The constructor will detect if gettext extension is loaded.
+     */
     public function __construct()
     {
         $this->gettextEnabled = extension_loaded('gettext');
     }
 
+    /**
+     * Load messages by locale name
+     *
+     * @param string $locale
+     * @return boolean
+     */
+    public function loadByLocale($locale)
+    {
+        $localeFile = __DIR__ . DIRECTORY_SEPARATOR . 'Messages' . DIRECTORY_SEPARATOR . $locale . '.php';
+        return $this->loadMessagesFromFile($localeFile);
+    }
+
+
+    public function loadMessagesFromFile($localeFile)
+    {
+        if (!file_exists($localeFile)) {
+            return false;
+        }
+        if ($messages = require $localeFile) {
+            $this->messages = $messages;
+            return true;
+        }
+        return false;
+    }
 
     public function format($msg, array $args)
     {
@@ -40,7 +67,7 @@ class MessagePool
         array_shift($args);
 
         if (!isset($this->messages[$msgId])) {
-            throw new Exception("Message ID $msgId undefined.");
+            throw new Exception("Message ID '$msgId' undefined.");
         }
 
         $msg = $this->messages[$msgId];
@@ -78,6 +105,32 @@ class MessagePool
         }
         return $instance = new self;
     }
+    
+    public function offsetSet($name,$value)
+    {
+        $this->messages[ $name ] = $value;
+    }
+    
+    public function offsetExists($name)
+    {
+        return isset($this->messages[ $name ]);
+    }
+    
+    public function offsetGet($name)
+    {
+        return $this->messages[ $name ];
+    }
+    
+    public function offsetUnset($name)
+    {
+        unset($this->messages[$name]);
+    }
+
+    public function getIterator()
+    {
+        return new ArrayIterator($this->messages);
+    }
+    
 }
 
 /**

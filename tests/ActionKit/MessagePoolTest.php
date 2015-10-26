@@ -26,4 +26,11 @@ class MessagePoolTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('John works in google', $msg);
     }
 
+    public function testLoadFromFile()
+    {
+        $messages = new MessagePool;
+        $messages->loadMessagesFromFile('src/ActionKit/Messages/zh_TW.php');
+    }
+
+
 }
