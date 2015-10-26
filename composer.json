@@ -1,10 +1,7 @@
 {
     "name": "corneltek/actionkit",
     "authors": [
-        {
-            "name": "c9s",
-            "email": "yoanlin93+composer@gmail.com"
-        }
+        { "name": "c9s", "email": "yoanlin93+composer@gmail.com" }
     ],
     "require": {
         "corneltek/cascading-attribute": "^1",
