@@ -24,7 +24,7 @@ config/database.yml
 config/framework.yml
 utils/Selenium/
 cache.properties
-# *SchemaProxy.php
+*SchemaProxy.php
 # *CollectionBase.php
 *.swp
 composer.lock
