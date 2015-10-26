@@ -28,3 +28,4 @@ cache.properties
 # *CollectionBase.php
 *.swp
 composer.lock
+/build/
