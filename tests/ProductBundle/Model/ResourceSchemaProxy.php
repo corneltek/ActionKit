@@ -7,19 +7,13 @@ class ResourceSchemaProxy
     extends RuntimeSchema
 {
     const schema_class = 'ProductBundle\\Model\\ResourceSchema';
-    const COLLECTION_CLASS = 'ProductBundle\\Model\\ResourceCollection';
-    const MODEL_CLASS = 'ProductBundle\\Model\\Resource';
     const model_name = 'Resource';
     const model_namespace = 'ProductBundle\\Model';
+    const COLLECTION_CLASS = 'ProductBundle\\Model\\ResourceCollection';
+    const MODEL_CLASS = 'ProductBundle\\Model\\Resource';
     const PRIMARY_KEY = 'id';
     const TABLE = 'product_resources';
     const LABEL = 'Resource';
-    public static $column_names = array (
-      0 => 'id',
-      1 => 'product_id',
-      2 => 'url',
-      3 => 'html',
-    );
     public static $column_hash = array (
       'id' => 1,
       'product_id' => 1,
@@ -28,12 +22,6 @@ class ResourceSchemaProxy
     );
     public static $mixin_classes = array (
     );
-    public static $column_names_include_virtual = array (
-      0 => 'id',
-      1 => 'product_id',
-      2 => 'url',
-      3 => 'html',
-    );
     public $columnNames = array (
       0 => 'id',
       1 => 'product_id',
@@ -41,9 +29,12 @@ class ResourceSchemaProxy
       3 => 'html',
     );
     public $primaryKey = 'id';
-    public $table = 'product_resources';
-    public $modelClass = 'ProductBundle\\Model\\Resource';
-    public $collectionClass = 'ProductBundle\\Model\\ResourceCollection';
+    public $columnNamesIncludeVirtual = array (
+      0 => 'id',
+      1 => 'product_id',
+      2 => 'url',
+      3 => 'html',
+    );
     public $label = 'Resource';
     public $readSourceId = 'default';
     public $writeSourceId = 'default';

@@ -7,18 +7,13 @@ class ProductFeatureSchemaProxy
     extends RuntimeSchema
 {
     const schema_class = 'ProductBundle\\Model\\ProductFeatureSchema';
-    const COLLECTION_CLASS = 'ProductBundle\\Model\\ProductFeatureCollection';
-    const MODEL_CLASS = 'ProductBundle\\Model\\ProductFeature';
     const model_name = 'ProductFeature';
     const model_namespace = 'ProductBundle\\Model';
+    const COLLECTION_CLASS = 'ProductBundle\\Model\\ProductFeatureCollection';
+    const MODEL_CLASS = 'ProductBundle\\Model\\ProductFeature';
     const PRIMARY_KEY = 'id';
     const TABLE = 'product_feature_junction';
     const LABEL = 'ProductFeature';
-    public static $column_names = array (
-      0 => 'id',
-      1 => 'product_id',
-      2 => 'feature_id',
-    );
     public static $column_hash = array (
       'id' => 1,
       'product_id' => 1,
@@ -26,20 +21,17 @@ class ProductFeatureSchemaProxy
     );
     public static $mixin_classes = array (
     );
-    public static $column_names_include_virtual = array (
-      0 => 'id',
-      1 => 'product_id',
-      2 => 'feature_id',
-    );
     public $columnNames = array (
       0 => 'id',
       1 => 'product_id',
       2 => 'feature_id',
     );
     public $primaryKey = 'id';
-    public $table = 'product_feature_junction';
-    public $modelClass = 'ProductBundle\\Model\\ProductFeature';
-    public $collectionClass = 'ProductBundle\\Model\\ProductFeatureCollection';
+    public $columnNamesIncludeVirtual = array (
+      0 => 'id',
+      1 => 'product_id',
+      2 => 'feature_id',
+    );
     public $label = 'ProductFeature';
     public $readSourceId = 'default';
     public $writeSourceId = 'default';

@@ -7,18 +7,13 @@ class OrderItemSchemaProxy
     extends RuntimeSchema
 {
     const schema_class = 'OrderBundle\\Model\\OrderItemSchema';
-    const COLLECTION_CLASS = 'OrderBundle\\Model\\OrderItemCollection';
-    const MODEL_CLASS = 'OrderBundle\\Model\\OrderItem';
     const model_name = 'OrderItem';
     const model_namespace = 'OrderBundle\\Model';
+    const COLLECTION_CLASS = 'OrderBundle\\Model\\OrderItemCollection';
+    const MODEL_CLASS = 'OrderBundle\\Model\\OrderItem';
     const PRIMARY_KEY = 'id';
     const TABLE = 'order_items';
     const LABEL = 'OrderItem';
-    public static $column_names = array (
-      0 => 'id',
-      1 => 'quantity',
-      2 => 'subtotal',
-    );
     public static $column_hash = array (
       'id' => 1,
       'quantity' => 1,
@@ -26,20 +21,17 @@ class OrderItemSchemaProxy
     );
     public static $mixin_classes = array (
     );
-    public static $column_names_include_virtual = array (
-      0 => 'id',
-      1 => 'quantity',
-      2 => 'subtotal',
-    );
     public $columnNames = array (
       0 => 'id',
       1 => 'quantity',
       2 => 'subtotal',
     );
     public $primaryKey = 'id';
-    public $table = 'order_items';
-    public $modelClass = 'OrderBundle\\Model\\OrderItem';
-    public $collectionClass = 'OrderBundle\\Model\\OrderItemCollection';
+    public $columnNamesIncludeVirtual = array (
+      0 => 'id',
+      1 => 'quantity',
+      2 => 'subtotal',
+    );
     public $label = 'OrderItem';
     public $readSourceId = 'default';
     public $writeSourceId = 'default';

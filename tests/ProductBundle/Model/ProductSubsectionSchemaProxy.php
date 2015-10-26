@@ -7,20 +7,13 @@ class ProductSubsectionSchemaProxy
     extends RuntimeSchema
 {
     const schema_class = 'ProductBundle\\Model\\ProductSubsectionSchema';
-    const COLLECTION_CLASS = 'ProductBundle\\Model\\ProductSubsectionCollection';
-    const MODEL_CLASS = 'ProductBundle\\Model\\ProductSubsection';
     const model_name = 'ProductSubsection';
     const model_namespace = 'ProductBundle\\Model';
+    const COLLECTION_CLASS = 'ProductBundle\\Model\\ProductSubsectionCollection';
+    const MODEL_CLASS = 'ProductBundle\\Model\\ProductSubsection';
     const PRIMARY_KEY = 'id';
     const TABLE = 'product_subsections';
     const LABEL = 'ProductSubsection';
-    public static $column_names = array (
-      0 => 'id',
-      1 => 'title',
-      2 => 'cover_image',
-      3 => 'content',
-      4 => 'product_id',
-    );
     public static $column_hash = array (
       'id' => 1,
       'title' => 1,
@@ -30,13 +23,6 @@ class ProductSubsectionSchemaProxy
     );
     public static $mixin_classes = array (
     );
-    public static $column_names_include_virtual = array (
-      0 => 'id',
-      1 => 'title',
-      2 => 'cover_image',
-      3 => 'content',
-      4 => 'product_id',
-    );
     public $columnNames = array (
       0 => 'id',
       1 => 'title',
@@ -45,9 +31,13 @@ class ProductSubsectionSchemaProxy
       4 => 'product_id',
     );
     public $primaryKey = 'id';
-    public $table = 'product_subsections';
-    public $modelClass = 'ProductBundle\\Model\\ProductSubsection';
-    public $collectionClass = 'ProductBundle\\Model\\ProductSubsectionCollection';
+    public $columnNamesIncludeVirtual = array (
+      0 => 'id',
+      1 => 'title',
+      2 => 'cover_image',
+      3 => 'content',
+      4 => 'product_id',
+    );
     public $label = 'ProductSubsection';
     public $readSourceId = 'default';
     public $writeSourceId = 'default';

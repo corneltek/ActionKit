@@ -1,6 +1,11 @@
 <?php
 namespace ProductBundle\Model;
 use LazyRecord\Schema\SchemaLoader;
+use LazyRecord\Result;
+use SQLBuilder\Bind;
+use SQLBuilder\ArgumentArray;
+use PDO;
+use SQLBuilder\Universal\Query\InsertQuery;
 use LazyRecord\BaseModel;
 class ProductLinkBase
     extends BaseModel
@@ -12,7 +17,7 @@ class ProductLinkBase
     const READ_SOURCE_ID = 'default';
     const WRITE_SOURCE_ID = 'default';
     const PRIMARY_KEY = 'id';
-    const FIND_BY_PRIMARY_KEY_SQL = 'SELECT * FROM product_links WHERE id = :id';
+    const FIND_BY_PRIMARY_KEY_SQL = 'SELECT * FROM product_links WHERE id = :id LIMIT 1';
     public static $column_names = array (
       0 => 'id',
       1 => 'label',
@@ -27,6 +32,9 @@ class ProductLinkBase
     );
     public static $mixin_classes = array (
     );
+    protected $table = 'product_links';
+    public $readSourceId = 'default';
+    public $writeSourceId = 'default';
     public function getSchema()
     {
         if ($this->_schema) {

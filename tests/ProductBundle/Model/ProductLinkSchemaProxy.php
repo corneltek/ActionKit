@@ -7,19 +7,13 @@ class ProductLinkSchemaProxy
     extends RuntimeSchema
 {
     const schema_class = 'ProductBundle\\Model\\ProductLinkSchema';
-    const COLLECTION_CLASS = 'ProductBundle\\Model\\ProductLinkCollection';
-    const MODEL_CLASS = 'ProductBundle\\Model\\ProductLink';
     const model_name = 'ProductLink';
     const model_namespace = 'ProductBundle\\Model';
+    const COLLECTION_CLASS = 'ProductBundle\\Model\\ProductLinkCollection';
+    const MODEL_CLASS = 'ProductBundle\\Model\\ProductLink';
     const PRIMARY_KEY = 'id';
     const TABLE = 'product_links';
     const LABEL = 'ProductLink';
-    public static $column_names = array (
-      0 => 'id',
-      1 => 'label',
-      2 => 'url',
-      3 => 'product_id',
-    );
     public static $column_hash = array (
       'id' => 1,
       'label' => 1,
@@ -28,12 +22,6 @@ class ProductLinkSchemaProxy
     );
     public static $mixin_classes = array (
     );
-    public static $column_names_include_virtual = array (
-      0 => 'id',
-      1 => 'label',
-      2 => 'url',
-      3 => 'product_id',
-    );
     public $columnNames = array (
       0 => 'id',
       1 => 'label',
@@ -41,9 +29,12 @@ class ProductLinkSchemaProxy
       3 => 'product_id',
     );
     public $primaryKey = 'id';
-    public $table = 'product_links';
-    public $modelClass = 'ProductBundle\\Model\\ProductLink';
-    public $collectionClass = 'ProductBundle\\Model\\ProductLinkCollection';
+    public $columnNamesIncludeVirtual = array (
+      0 => 'id',
+      1 => 'label',
+      2 => 'url',
+      3 => 'product_id',
+    );
     public $label = 'ProductLink';
     public $readSourceId = 'default';
     public $writeSourceId = 'default';

@@ -7,19 +7,13 @@ class UserSchemaProxy
     extends RuntimeSchema
 {
     const schema_class = 'User\\Model\\UserSchema';
-    const COLLECTION_CLASS = 'User\\Model\\UserCollection';
-    const MODEL_CLASS = 'User\\Model\\User';
     const model_name = 'User';
     const model_namespace = 'User\\Model';
+    const COLLECTION_CLASS = 'User\\Model\\UserCollection';
+    const MODEL_CLASS = 'User\\Model\\User';
     const PRIMARY_KEY = 'id';
     const TABLE = 'users';
     const LABEL = 'User';
-    public static $column_names = array (
-      0 => 'id',
-      1 => 'name',
-      2 => 'email',
-      3 => 'password',
-    );
     public static $column_hash = array (
       'id' => 1,
       'name' => 1,
@@ -28,12 +22,6 @@ class UserSchemaProxy
     );
     public static $mixin_classes = array (
     );
-    public static $column_names_include_virtual = array (
-      0 => 'id',
-      1 => 'name',
-      2 => 'email',
-      3 => 'password',
-    );
     public $columnNames = array (
       0 => 'id',
       1 => 'name',
@@ -41,9 +29,12 @@ class UserSchemaProxy
       3 => 'password',
     );
     public $primaryKey = 'id';
-    public $table = 'users';
-    public $modelClass = 'User\\Model\\User';
-    public $collectionClass = 'User\\Model\\UserCollection';
+    public $columnNamesIncludeVirtual = array (
+      0 => 'id',
+      1 => 'name',
+      2 => 'email',
+      3 => 'password',
+    );
     public $label = 'User';
     public $readSourceId = 'default';
     public $writeSourceId = 'default';

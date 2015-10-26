@@ -7,19 +7,13 @@ class ProductFileSchemaProxy
     extends RuntimeSchema
 {
     const schema_class = 'ProductBundle\\Model\\ProductFileSchema';
-    const COLLECTION_CLASS = 'ProductBundle\\Model\\ProductFileCollection';
-    const MODEL_CLASS = 'ProductBundle\\Model\\ProductFile';
     const model_name = 'ProductFile';
     const model_namespace = 'ProductBundle\\Model';
+    const COLLECTION_CLASS = 'ProductBundle\\Model\\ProductFileCollection';
+    const MODEL_CLASS = 'ProductBundle\\Model\\ProductFile';
     const PRIMARY_KEY = 'id';
     const TABLE = 'product_files';
     const LABEL = '產品檔案';
-    public static $column_names = array (
-      0 => 'id',
-      1 => 'product_id',
-      2 => 'title',
-      3 => 'file',
-    );
     public static $column_hash = array (
       'id' => 1,
       'product_id' => 1,
@@ -28,12 +22,6 @@ class ProductFileSchemaProxy
     );
     public static $mixin_classes = array (
     );
-    public static $column_names_include_virtual = array (
-      0 => 'id',
-      1 => 'product_id',
-      2 => 'title',
-      3 => 'file',
-    );
     public $columnNames = array (
       0 => 'id',
       1 => 'product_id',
@@ -41,9 +29,12 @@ class ProductFileSchemaProxy
       3 => 'file',
     );
     public $primaryKey = 'id';
-    public $table = 'product_files';
-    public $modelClass = 'ProductBundle\\Model\\ProductFile';
-    public $collectionClass = 'ProductBundle\\Model\\ProductFileCollection';
+    public $columnNamesIncludeVirtual = array (
+      0 => 'id',
+      1 => 'product_id',
+      2 => 'title',
+      3 => 'file',
+    );
     public $label = '產品檔案';
     public $readSourceId = 'default';
     public $writeSourceId = 'default';

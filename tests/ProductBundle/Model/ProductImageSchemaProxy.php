@@ -7,20 +7,13 @@ class ProductImageSchemaProxy
     extends RuntimeSchema
 {
     const schema_class = 'ProductBundle\\Model\\ProductImageSchema';
-    const COLLECTION_CLASS = 'ProductBundle\\Model\\ProductImageCollection';
-    const MODEL_CLASS = 'ProductBundle\\Model\\ProductImage';
     const model_name = 'ProductImage';
     const model_namespace = 'ProductBundle\\Model';
+    const COLLECTION_CLASS = 'ProductBundle\\Model\\ProductImageCollection';
+    const MODEL_CLASS = 'ProductBundle\\Model\\ProductImage';
     const PRIMARY_KEY = 'id';
     const TABLE = 'product_images';
     const LABEL = '產品圖';
-    public static $column_names = array (
-      0 => 'id',
-      1 => 'product_id',
-      2 => 'title',
-      3 => 'image',
-      4 => 'large',
-    );
     public static $column_hash = array (
       'id' => 1,
       'product_id' => 1,
@@ -30,13 +23,6 @@ class ProductImageSchemaProxy
     );
     public static $mixin_classes = array (
     );
-    public static $column_names_include_virtual = array (
-      0 => 'id',
-      1 => 'product_id',
-      2 => 'title',
-      3 => 'image',
-      4 => 'large',
-    );
     public $columnNames = array (
       0 => 'id',
       1 => 'product_id',
@@ -45,9 +31,13 @@ class ProductImageSchemaProxy
       4 => 'large',
     );
     public $primaryKey = 'id';
-    public $table = 'product_images';
-    public $modelClass = 'ProductBundle\\Model\\ProductImage';
-    public $collectionClass = 'ProductBundle\\Model\\ProductImageCollection';
+    public $columnNamesIncludeVirtual = array (
+      0 => 'id',
+      1 => 'product_id',
+      2 => 'title',
+      3 => 'image',
+      4 => 'large',
+    );
     public $label = '產品圖';
     public $readSourceId = 'default';
     public $writeSourceId = 'default';

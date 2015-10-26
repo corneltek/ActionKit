@@ -7,18 +7,13 @@ class ProductProductSchemaProxy
     extends RuntimeSchema
 {
     const schema_class = 'ProductBundle\\Model\\ProductProductSchema';
-    const COLLECTION_CLASS = 'ProductBundle\\Model\\ProductProductCollection';
-    const MODEL_CLASS = 'ProductBundle\\Model\\ProductProduct';
     const model_name = 'ProductProduct';
     const model_namespace = 'ProductBundle\\Model';
+    const COLLECTION_CLASS = 'ProductBundle\\Model\\ProductProductCollection';
+    const MODEL_CLASS = 'ProductBundle\\Model\\ProductProduct';
     const PRIMARY_KEY = 'id';
     const TABLE = 'product_products';
     const LABEL = 'ProductProduct';
-    public static $column_names = array (
-      0 => 'id',
-      1 => 'product_id',
-      2 => 'related_product_id',
-    );
     public static $column_hash = array (
       'id' => 1,
       'product_id' => 1,
@@ -26,20 +21,17 @@ class ProductProductSchemaProxy
     );
     public static $mixin_classes = array (
     );
-    public static $column_names_include_virtual = array (
-      0 => 'id',
-      1 => 'product_id',
-      2 => 'related_product_id',
-    );
     public $columnNames = array (
       0 => 'id',
       1 => 'product_id',
       2 => 'related_product_id',
     );
     public $primaryKey = 'id';
-    public $table = 'product_products';
-    public $modelClass = 'ProductBundle\\Model\\ProductProduct';
-    public $collectionClass = 'ProductBundle\\Model\\ProductProductCollection';
+    public $columnNamesIncludeVirtual = array (
+      0 => 'id',
+      1 => 'product_id',
+      2 => 'related_product_id',
+    );
     public $label = 'ProductProduct';
     public $readSourceId = 'default';
     public $writeSourceId = 'default';

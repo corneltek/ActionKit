@@ -1,6 +1,11 @@
 <?php
 namespace OrderBundle\Model;
 use LazyRecord\Schema\SchemaLoader;
+use LazyRecord\Result;
+use SQLBuilder\Bind;
+use SQLBuilder\ArgumentArray;
+use PDO;
+use SQLBuilder\Universal\Query\InsertQuery;
 use LazyRecord\BaseModel;
 class OrderItemBase
     extends BaseModel
@@ -12,7 +17,7 @@ class OrderItemBase
     const READ_SOURCE_ID = 'default';
     const WRITE_SOURCE_ID = 'default';
     const PRIMARY_KEY = 'id';
-    const FIND_BY_PRIMARY_KEY_SQL = 'SELECT * FROM order_items WHERE id = :id';
+    const FIND_BY_PRIMARY_KEY_SQL = 'SELECT * FROM order_items WHERE id = :id LIMIT 1';
     public static $column_names = array (
       0 => 'id',
       1 => 'quantity',
@@ -25,6 +30,9 @@ class OrderItemBase
     );
     public static $mixin_classes = array (
     );
+    protected $table = 'order_items';
+    public $readSourceId = 'default';
+    public $writeSourceId = 'default';
     public function getSchema()
     {
         if ($this->_schema) {

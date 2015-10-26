@@ -7,23 +7,13 @@ class CategorySchemaProxy
     extends RuntimeSchema
 {
     const schema_class = 'ProductBundle\\Model\\CategorySchema';
-    const COLLECTION_CLASS = 'ProductBundle\\Model\\CategoryCollection';
-    const MODEL_CLASS = 'ProductBundle\\Model\\Category';
     const model_name = 'Category';
     const model_namespace = 'ProductBundle\\Model';
+    const COLLECTION_CLASS = 'ProductBundle\\Model\\CategoryCollection';
+    const MODEL_CLASS = 'ProductBundle\\Model\\Category';
     const PRIMARY_KEY = 'id';
     const TABLE = 'product_categories';
     const LABEL = 'Category';
-    public static $column_names = array (
-      0 => 'id',
-      1 => 'name',
-      2 => 'description',
-      3 => 'parent_id',
-      4 => 'hide',
-      5 => 'thumb',
-      6 => 'image',
-      7 => 'handle',
-    );
     public static $column_hash = array (
       'id' => 1,
       'name' => 1,
@@ -36,16 +26,6 @@ class CategorySchemaProxy
     );
     public static $mixin_classes = array (
     );
-    public static $column_names_include_virtual = array (
-      0 => 'id',
-      1 => 'name',
-      2 => 'description',
-      3 => 'parent_id',
-      4 => 'hide',
-      5 => 'thumb',
-      6 => 'image',
-      7 => 'handle',
-    );
     public $columnNames = array (
       0 => 'id',
       1 => 'name',
@@ -57,9 +37,16 @@ class CategorySchemaProxy
       7 => 'handle',
     );
     public $primaryKey = 'id';
-    public $table = 'product_categories';
-    public $modelClass = 'ProductBundle\\Model\\Category';
-    public $collectionClass = 'ProductBundle\\Model\\CategoryCollection';
+    public $columnNamesIncludeVirtual = array (
+      0 => 'id',
+      1 => 'name',
+      2 => 'description',
+      3 => 'parent_id',
+      4 => 'hide',
+      5 => 'thumb',
+      6 => 'image',
+      7 => 'handle',
+    );
     public $label = 'Category';
     public $readSourceId = 'default';
     public $writeSourceId = 'default';

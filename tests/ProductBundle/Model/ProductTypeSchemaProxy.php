@@ -7,20 +7,13 @@ class ProductTypeSchemaProxy
     extends RuntimeSchema
 {
     const schema_class = 'ProductBundle\\Model\\ProductTypeSchema';
-    const COLLECTION_CLASS = 'ProductBundle\\Model\\ProductTypeCollection';
-    const MODEL_CLASS = 'ProductBundle\\Model\\ProductType';
     const model_name = 'ProductType';
     const model_namespace = 'ProductBundle\\Model';
+    const COLLECTION_CLASS = 'ProductBundle\\Model\\ProductTypeCollection';
+    const MODEL_CLASS = 'ProductBundle\\Model\\ProductType';
     const PRIMARY_KEY = 'id';
     const TABLE = 'product_types';
     const LABEL = '產品類型';
-    public static $column_names = array (
-      0 => 'id',
-      1 => 'product_id',
-      2 => 'name',
-      3 => 'quantity',
-      4 => 'comment',
-    );
     public static $column_hash = array (
       'id' => 1,
       'product_id' => 1,
@@ -30,13 +23,6 @@ class ProductTypeSchemaProxy
     );
     public static $mixin_classes = array (
     );
-    public static $column_names_include_virtual = array (
-      0 => 'id',
-      1 => 'product_id',
-      2 => 'name',
-      3 => 'quantity',
-      4 => 'comment',
-    );
     public $columnNames = array (
       0 => 'id',
       1 => 'product_id',
@@ -45,9 +31,13 @@ class ProductTypeSchemaProxy
       4 => 'comment',
     );
     public $primaryKey = 'id';
-    public $table = 'product_types';
-    public $modelClass = 'ProductBundle\\Model\\ProductType';
-    public $collectionClass = 'ProductBundle\\Model\\ProductTypeCollection';
+    public $columnNamesIncludeVirtual = array (
+      0 => 'id',
+      1 => 'product_id',
+      2 => 'name',
+      3 => 'quantity',
+      4 => 'comment',
+    );
     public $label = '產品類型';
     public $readSourceId = 'default';
     public $writeSourceId = 'default';

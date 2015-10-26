@@ -7,30 +7,13 @@ class ProductSchemaProxy
     extends RuntimeSchema
 {
     const schema_class = 'ProductBundle\\Model\\ProductSchema';
-    const COLLECTION_CLASS = 'ProductBundle\\Model\\ProductCollection';
-    const MODEL_CLASS = 'ProductBundle\\Model\\Product';
     const model_name = 'Product';
     const model_namespace = 'ProductBundle\\Model';
+    const COLLECTION_CLASS = 'ProductBundle\\Model\\ProductCollection';
+    const MODEL_CLASS = 'ProductBundle\\Model\\Product';
     const PRIMARY_KEY = 'id';
     const TABLE = 'products';
     const LABEL = 'Product';
-    public static $column_names = array (
-      0 => 'id',
-      1 => 'name',
-      2 => 'subtitle',
-      3 => 'sn',
-      4 => 'description',
-      5 => 'content',
-      6 => 'category_id',
-      7 => 'is_cover',
-      8 => 'sellable',
-      9 => 'orig_price',
-      10 => 'price',
-      11 => 'external_link',
-      12 => 'token',
-      13 => 'ordering',
-      14 => 'hide',
-    );
     public static $column_hash = array (
       'id' => 1,
       'name' => 1,
@@ -50,23 +33,6 @@ class ProductSchemaProxy
     );
     public static $mixin_classes = array (
     );
-    public static $column_names_include_virtual = array (
-      0 => 'id',
-      1 => 'name',
-      2 => 'subtitle',
-      3 => 'sn',
-      4 => 'description',
-      5 => 'content',
-      6 => 'category_id',
-      7 => 'is_cover',
-      8 => 'sellable',
-      9 => 'orig_price',
-      10 => 'price',
-      11 => 'external_link',
-      12 => 'token',
-      13 => 'ordering',
-      14 => 'hide',
-    );
     public $columnNames = array (
       0 => 'id',
       1 => 'name',
@@ -85,9 +51,23 @@ class ProductSchemaProxy
       14 => 'hide',
     );
     public $primaryKey = 'id';
-    public $table = 'products';
-    public $modelClass = 'ProductBundle\\Model\\Product';
-    public $collectionClass = 'ProductBundle\\Model\\ProductCollection';
+    public $columnNamesIncludeVirtual = array (
+      0 => 'id',
+      1 => 'name',
+      2 => 'subtitle',
+      3 => 'sn',
+      4 => 'description',
+      5 => 'content',
+      6 => 'category_id',
+      7 => 'is_cover',
+      8 => 'sellable',
+      9 => 'orig_price',
+      10 => 'price',
+      11 => 'external_link',
+      12 => 'token',
+      13 => 'ordering',
+      14 => 'hide',
+    );
     public $label = 'Product';
     public $readSourceId = 'default';
     public $writeSourceId = 'default';

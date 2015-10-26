@@ -7,18 +7,13 @@ class OrderSchemaProxy
     extends RuntimeSchema
 {
     const schema_class = 'OrderBundle\\Model\\OrderSchema';
-    const COLLECTION_CLASS = 'OrderBundle\\Model\\OrderCollection';
-    const MODEL_CLASS = 'OrderBundle\\Model\\Order';
     const model_name = 'Order';
     const model_namespace = 'OrderBundle\\Model';
+    const COLLECTION_CLASS = 'OrderBundle\\Model\\OrderCollection';
+    const MODEL_CLASS = 'OrderBundle\\Model\\Order';
     const PRIMARY_KEY = 'id';
     const TABLE = 'orders';
     const LABEL = 'Order';
-    public static $column_names = array (
-      0 => 'id',
-      1 => 'sum',
-      2 => 'qty',
-    );
     public static $column_hash = array (
       'id' => 1,
       'sum' => 1,
@@ -26,20 +21,17 @@ class OrderSchemaProxy
     );
     public static $mixin_classes = array (
     );
-    public static $column_names_include_virtual = array (
-      0 => 'id',
-      1 => 'sum',
-      2 => 'qty',
-    );
     public $columnNames = array (
       0 => 'id',
       1 => 'sum',
       2 => 'qty',
     );
     public $primaryKey = 'id';
-    public $table = 'orders';
-    public $modelClass = 'OrderBundle\\Model\\Order';
-    public $collectionClass = 'OrderBundle\\Model\\OrderCollection';
+    public $columnNamesIncludeVirtual = array (
+      0 => 'id',
+      1 => 'sum',
+      2 => 'qty',
+    );
     public $label = 'Order';
     public $readSourceId = 'default';
     public $writeSourceId = 'default';
