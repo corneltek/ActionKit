@@ -21,7 +21,13 @@ class MessagePool
 
     public function format($msg, array $args)
     {
-        $placeholders = array_map(function($a) { return '%' . $a; },range(1, count($args) + 1));
+        $placeholders = array_map(function($a){ 
+            if (is_numeric($a)) {
+                return '%' . ($a+1); // start from %1
+            } else {
+                return '%' . $a;
+            }
+        }, array_keys($args));
         return str_replace($placeholders, $args, $msg);
     }
 

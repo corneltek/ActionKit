@@ -17,8 +17,13 @@ class MessagePoolTest extends PHPUnit_Framework_TestCase
 
         $msg = $messages->format('%1 %2 %3',[1,2,3]);
         $this->assertEquals('1 2 3', $msg);
+    }
 
-
+    public function testFormat()
+    {
+        $messages = new MessagePool;
+        $msg = $messages->format('%name works in google', ['name' => 'John' ]);
+        $this->assertEquals('John works in google', $msg);
     }
 
 }
