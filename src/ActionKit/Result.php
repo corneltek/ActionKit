@@ -178,17 +178,24 @@ class Result
     {
         $errors = array();
         foreach ($this->validations as $field => $attrs) {
-            if ( @$attrs['invalid'] && is_string( @$attrs['invalid'] ) ) {
-                array_push( $errors , $attrs['invalid'] );
+            if (isset($attrs['invalid']) && is_string($attrs['invalid']) ) {
+                $errors[] = $attrs['invalid'];
+            } else if (array_key_exists('valid', $attrs) && $attrs['valid'] == false && isset($attrs['message'])) {
+                $errors[] = $attrs['message'];
             }
         }
         return $errors;
     }
 
-
-    public function hasInvalidMessages() {
+    /**
+     * Check if some validation return failed.
+     *
+     * @return bool
+     */
+    public function hasInvalidMessages()
+    {
         foreach ($this->validations as $field => $attrs) {
-            if ( isset($attrs['valid']) && $attrs['valid'] === false) {
+            if (array_key_exists('valid', $attrs) && $attrs['valid'] === false) {
                 return true;
             }
         }

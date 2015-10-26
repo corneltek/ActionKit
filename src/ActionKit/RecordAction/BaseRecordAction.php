@@ -80,9 +80,10 @@ class BaseRecordAction extends Action
 
         $this->setRecord($record);
 
+        // CreateRecordAction doesn't require primary key to be existed.
         if ( ! $record->id && ! $this instanceof CreateRecordAction && $this->enableLoadRecord ) {
             // for create action, we don't need to create record
-            if ( ! $this->loadRecordFromArguments( $args ) ) {
+            if (! $this->loadRecordFromArguments( $args )) {
                 throw new ActionException( get_class($this) . " Record action can not load record from {$this->recordClass}", $this );
             }
         }
@@ -131,9 +132,10 @@ class BaseRecordAction extends Action
      */
     public function loadRecordFromArguments(array $args)
     {
-        $primaryKey = $this->record->getSchema()->primaryKey;
-        if (isset( $args[$primaryKey])) {
-            return $this->record->load( $args[$primaryKey] )->success;
+        $schema = $this->record->getSchema();
+        $primaryKey = $schema::PRIMARY_KEY;
+        if ($primaryKey && isset($args[$primaryKey])) {
+            return $this->record->find($args[$primaryKey])->success;
         }
         return false;
     }
@@ -238,10 +240,10 @@ class BaseRecordAction extends Action
     {
         if ($ret->validations) {
             foreach ($ret->validations as $vld) {
-                $this->result->addValidation( $vld->field , array(
-                    'valid'   => $vld->valid,
-                    'message' => $vld->message,
-                    'field'   => $vld->field,
+                $this->result->addValidation($vld['field'] , array(
+                    'valid'   => $vld['valid'],
+                    'message' => $vld['message'],
+                    'field'   => $vld['field'],
                 ));
             }
         }
