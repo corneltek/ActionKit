@@ -13,11 +13,13 @@ class Messages
         'validation.error' => 'Please check your input.',
     );
 
-    static public function set($msgId, $msgStr) {
+    static public function set($msgId, $msgStr)
+    {
         self::$messages[ $msgId ] = $msgStr;
     }
 
-    static public function get($msgId) {
+    static public function get($msgId)
+    {
         if ( $msgId != _($msgId) ) {
             return _($msgId);
         }
@@ -28,6 +30,15 @@ class Messages
         // pass to gettext to translate
         // throw new Exception("MessageId $msgId is not defined.");
         return $msgId;
+    }
+
+    static public function getInstance()
+    {
+        static $instance;
+        if ($instance) {
+            return $instance;
+        }
+        return $instance = new self;
     }
 }
 
