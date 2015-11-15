@@ -1,6 +1,11 @@
 CHANGELOGS
 ===================
 
+Version x - Sun Nov 15 13:07:53 2015
+
+1. CSRFTokenProvider now must be instancialized.
+2. CSRF token verification is now enabled only when csrf token provider is given.
+
 Version 2.1 - Sat Aug 29 13:55:39 2015
 
 1. Added `cache_dir` to ServiceContainer.
