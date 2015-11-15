@@ -22,7 +22,7 @@ class CsrfTokenProviderTest extends PHPUnit_Framework_TestCase
         ok($token); 
         
         is('_csrf_token', $token->sessionKey);
-        is('300', $token->ttl);
+        $this->assertEquals(1200, $token->ttl);
         ok($token->hash);
         ok($_SESSION['_csrf_token']);
 
@@ -30,7 +30,7 @@ class CsrfTokenProviderTest extends PHPUnit_Framework_TestCase
         ok($tokenWithKey); 
         
         is('test_token', $tokenWithKey->sessionKey);
-        is('500', $tokenWithKey->ttl);
+        $this->assertEquals(500, $tokenWithKey->ttl);
         ok($tokenWithKey->hash);
         ok($_SESSION['test_token']);
     }
