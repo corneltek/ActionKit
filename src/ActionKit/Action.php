@@ -79,8 +79,11 @@ class Action implements IteratorAggregate
 
     /**
      * @var boolean Enable CSRF token 
+     *
+     * A user class may override this property to disable/enable csrf token
+     * verification.
      */
-    public $enableCSRFToken = false;
+    public $enableCSRFToken = true;
 
 
 
@@ -111,7 +114,6 @@ class Action implements IteratorAggregate
 
         // If CSRFTokenProvider is given, csrf token verification is on.
         if (isset($options['csrf'])) {
-            $this->enableCSRFToken = true;
             $this->csrf = $options['csrf'];
         }
 
@@ -432,7 +434,7 @@ class Action implements IteratorAggregate
      */
     final public function invoke()
     {
-        if (session_id() && $this->enableCSRFToken) {
+        if (session_id() && $this->csrf && $this->enableCSRFToken) {
             $token = $this->csrf->loadTokenWithSessionKey(); 
             if ( !$this->csrf->verifyToken($token, $this->arg('_csrf_token'))) {
                 $this->result->error('CSRF invalid.');
@@ -1057,10 +1059,10 @@ class Action implements IteratorAggregate
     public function getCSRFToken()
     {
         // TODO support loading csrf token from session or header "X-CSRF-TOKEN"
-        if ($this->enableCSRFToken && $this->csrf && !isset($this->args['_csrf_token'])) {
+        if ($this->csrf && $this->enableCSRFToken && !isset($this->args['_csrf_token'])) {
             $token = $this->csrf->loadTokenWithSessionKey('_csrf_token', true);
             if ( $token == null || !$token->checkExpiry($_SERVER['REQUEST_TIME']) ) {
-                $token = CsrfTokenProvider::generateToken();
+                $token = $this->csrf->generateToken();
             }
             return $token->hash;
         }
