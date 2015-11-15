@@ -26,11 +26,15 @@ class ServiceContainer extends Container
     {
         $self = $this;
 
+        $this['csrf'] = function() {
+            return new CsrfTokenProvider;
+        };
+
         $this['csrf_token'] = function() {
             // try to load csrf token in the current session
-            $token = CsrfTokenProvider::loadTokenWithSessionKey('_csrf_token', true);
+            $token = $this['csrf']->loadTokenWithSessionKey('_csrf_token', true);
             if ($token == null || !$token->checkExpiry($_SERVER['REQUEST_TIME'])) {
-                $token = CsrfTokenProvider::generateToken();
+                $token = $this['csrf']->generateToken();
             }
             return $token->hash;
         };

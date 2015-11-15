@@ -1,17 +1,22 @@
 <?php
+use ActionKit\CsrfTokenProvider;
 
 class CsrfTokenProviderTest extends PHPUnit_Framework_TestCase 
 {
     protected $token;
+
     protected $tokenWithKey;
 
-    protected function setUp()
+    protected $provider;
+
+    public function setUp()
     {
-        $this->token = ActionKit\CsrfTokenProvider::generateToken();
-        $this->tokenWithKey = ActionKit\CsrfTokenProvider::generateToken('test_token', 500);
+        $this->provider = new CsrfTokenProvider;
+        $this->token = $this->provider->generateToken();
+        $this->tokenWithKey = $this->provider->generateToken('test_token', 500);
     }
 
-    function testGenerateToken() 
+    public function testGenerateToken() 
     {
         $token = $this->token;
         ok($token); 
@@ -30,27 +35,27 @@ class CsrfTokenProviderTest extends PHPUnit_Framework_TestCase
         ok($_SESSION['test_token']);
     }
 
-    function testLoadTokenWithSessionKey()
+    public function testLoadTokenWithSessionKey()
     {
-        $token = ActionKit\CsrfTokenProvider::loadTokenWithSessionKey();
+        $token = $this->provider->loadTokenWithSessionKey();
         ok($token);
-        ok( ! isset($token->hash));
+        ok(! isset($token->hash));
         is($this->token->salt, $token->salt);
 
-        $tokenWithHash = ActionKit\CsrfTokenProvider::loadTokenWithSessionKey('_csrf_token', true);
+        $tokenWithHash = $this->provider->loadTokenWithSessionKey('_csrf_token', true);
         ok(isset($tokenWithHash->hash));
         is($this->token->hash, $tokenWithHash->hash);
 
-        $tokenWithKey = ActionKit\CsrfTokenProvider::loadTokenWithSessionKey('test_token');
+        $tokenWithKey = $this->provider->loadTokenWithSessionKey('test_token');
         ok($tokenWithKey);
         is('test_token', $tokenWithKey->sessionKey);
         is($this->tokenWithKey->salt, $tokenWithKey->salt);
     }
 
-    function testVerifyToken()
+    public function testVerifyToken()
     {
-        $token = ActionKit\CsrfTokenProvider::loadTokenWithSessionKey();
-        $result = ActionKit\CsrfTokenProvider::verifyToken($token, $this->token->hash);
+        $token = $this->provider->loadTokenWithSessionKey();
+        $result = $this->provider->verifyToken($token, $this->token->hash);
         is(true, $result);
     }
 }

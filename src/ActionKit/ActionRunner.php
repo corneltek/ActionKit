@@ -55,6 +55,17 @@ class ActionRunner
 
     protected $currentUser;
 
+
+    /**
+     * @param array $options
+     *
+     * Options:
+     *
+     *   'locale': optional, the current locale 
+     *   'cache_dir': optional, the cache directory of generated action classes
+     *   'generator': optional, the customized Generator object.
+     *
+     */
     public function __construct($options = array()) {
 
         $messagePool = MessagePool::getInstance();
@@ -76,6 +87,8 @@ class ActionRunner
             $this->generator = $options;
 
         } else {
+
+            // Default initializor
 
             if (isset($options['cache_dir'])) {
                 $this->cacheDir = $options['cache_dir'];
