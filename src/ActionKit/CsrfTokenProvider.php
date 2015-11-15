@@ -62,13 +62,18 @@ class CsrfTokenProvider
         return sha1($_SESSION[$token->sessionKey]);
     }
 
+    public function loadToken($withHash = false)
+    {
+        return $this->loadTokenWithSessionKey($this->sessionKey, $withHash);
+    }
+
     /**
      * Load a CSRF token from session by specific session key
      *
      * @param string $sessionKey
      * @param boolean $withHash
      */
-    public function loadTokenWithSessionKey($sessionKey = '_csrf_token', $withHash = false)
+    public function loadTokenWithSessionKey($sessionKey, $withHash = false)
     {
         if (isset($_SESSION[$sessionKey])) {
             $token = unserialize($_SESSION[$sessionKey]);

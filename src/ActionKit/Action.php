@@ -15,6 +15,7 @@ use InvalidArgumentException;
 use BadMethodCallException;
 use ArrayAccess;
 use IteratorAggregate;
+use FormKit\Widget\HiddenInput;
 
 class Action implements IteratorAggregate
 {
@@ -33,6 +34,11 @@ class Action implements IteratorAggregate
     public $relationships = array();
 
     public $actionFieldName = '__action';
+
+    /**
+     * @var string the csrf token field name is used for rendering a hidden widget for csrf token.
+     */
+    protected $csrfTokenFieldName = '_csrf_token';
 
     /**
      * @var array
@@ -435,9 +441,18 @@ class Action implements IteratorAggregate
     final public function invoke()
     {
         if (session_id() && $this->csrf && $this->enableCSRFToken) {
-            $token = $this->csrf->loadTokenWithSessionKey(); 
-            if ( !$this->csrf->verifyToken($token, $this->arg('_csrf_token'))) {
-                $this->result->error('CSRF invalid.');
+            // load the existing token from session
+            $token = $this->csrf->loadToken(); 
+            $insecureToken = $this->arg($this->csrfTokenFieldName);
+            if (!$insecureToken && isset($_SERVER['HTTP_X_CSRF_TOKEN'])) {
+                $insecureToken = $_SERVER['HTTP_X_CSRF_TOKEN'];
+            }
+            if (!$insecureToken) {
+                $this->result->error('CSRF token is invalid: empty token given.');
+                return false;
+            }
+            if (!$this->csrf->verifyToken($token, $insecureToken)) {
+                $this->result->error('CSRF mismatch.');
                 return false;
             }
         }
@@ -1035,7 +1050,7 @@ class Action implements IteratorAggregate
      */
     public function createSignatureWidget()
     {
-        return new \FormKit\Widget\HiddenInput($this->actionFieldName, array( 'value' => $this->getSignature() ));
+        return new HiddenInput($this->actionFieldName, array( 'value' => $this->getSignature() ));
     }
 
     /**
@@ -1059,9 +1074,9 @@ class Action implements IteratorAggregate
     public function getCSRFToken()
     {
         // TODO support loading csrf token from session or header "X-CSRF-TOKEN"
-        if ($this->csrf && $this->enableCSRFToken && !isset($this->args['_csrf_token'])) {
-            $token = $this->csrf->loadTokenWithSessionKey('_csrf_token', true);
-            if ( $token == null || !$token->checkExpiry($_SERVER['REQUEST_TIME']) ) {
+        if ($this->csrf && $this->enableCSRFToken && !isset($this->args[$this->csrfTokenFieldName])) {
+            $token = $this->csrf->loadToken(true);
+            if ($token == null || !$token->checkExpiry($_SERVER['REQUEST_TIME'])) {
                 $token = $this->csrf->generateToken();
             }
             return $token->hash;
@@ -1080,7 +1095,7 @@ class Action implements IteratorAggregate
     {
         $hash = $this->getCSRFToken();
         if ($hash) {
-            $hidden = new \FormKit\Widget\HiddenInput('_csrf_token', array( 'value' => $hash ));
+            $hidden = new HiddenInput($this->csrfTokenFieldName, array( 'value' => $hash ));
             return $hidden->render($attrs);
         } else {
             return null;

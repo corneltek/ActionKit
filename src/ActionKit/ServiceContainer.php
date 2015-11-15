@@ -7,11 +7,10 @@ use Twig_Loader_Filesystem;
 use ReflectionClass;
 
 /**
- *
  * Provided services:
  *
  *    generator:  ActionKit\ActionGenerator
- *    cache_dir
+ *    cache_dir string
  *
  * Usage:
  *
@@ -32,7 +31,7 @@ class ServiceContainer extends Container
 
         $this['csrf_token'] = function() {
             // try to load csrf token in the current session
-            $token = $this['csrf']->loadTokenWithSessionKey('_csrf_token', true);
+            $token = $this['csrf']->loadToken(true);
             if ($token == null || !$token->checkExpiry($_SERVER['REQUEST_TIME'])) {
                 $token = $this['csrf']->generateToken();
             }
