@@ -15,7 +15,7 @@ use ActionKit\Exception\UnableToCreateActionException;
  *
  *
  *      full-qualified action name in web form:
- *              Yasumi::Action::Login
+ *              MyApp::Action::Login
  *              Phifty::Action::Login
  *      names like "Login", "Signup" should refer to
  *              {App}::Action::Login or

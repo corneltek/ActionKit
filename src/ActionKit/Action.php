@@ -1,16 +1,16 @@
 <?php
 namespace ActionKit;
-use Exception;
 use FormKit;
 use ActionKit\Param\Param;
 use ActionKit\Param\ImageParam;
 use ActionKit\Param\FileParam;
 use ActionKit\Result;
-use ActionKit\CsrfTokenProvider;
 use ActionKit\ActionRequest;
 use ActionKit\MessagePool;
+use ActionKit\CsrfTokenProvider;
 use Universal\Http\HttpRequest;
 use Universal\Http\FilesParameter;
+use Exception;
 use InvalidArgumentException;
 use BadMethodCallException;
 use ArrayAccess;
@@ -118,9 +118,11 @@ class Action implements IteratorAggregate
             $this->parent = $options['parent'];
         }
 
-        // If CSRFTokenProvider is given, csrf token verification is on.
+        // When CSRFTokenProvider is given, csrf token verification is on.
         if (isset($options['csrf'])) {
             $this->csrf = $options['csrf'];
+        } else {
+            $this->csrf = new CsrfTokenProvider;
         }
 
         // backward compatible request object
@@ -448,7 +450,8 @@ class Action implements IteratorAggregate
                 $insecureToken = $_SERVER['HTTP_X_CSRF_TOKEN'];
             }
             if (!$insecureToken) {
-                $this->result->error('CSRF token is invalid: empty token given.');
+                // $this->result->error('CSRF token is invalid: empty token given.');
+                $this->result->error('CSRF token invalid');
                 return false;
             }
             if (!$this->csrf->verifyToken($token, $insecureToken)) {
@@ -1067,14 +1070,14 @@ class Action implements IteratorAggregate
     }
 
     /**
-     * Get CSRF token
+     * Get the current CSRF token in the session
      *
      * @return string CSRF token string
      */
     public function getCSRFToken()
     {
         // TODO support loading csrf token from session or header "X-CSRF-TOKEN"
-        if ($this->csrf && $this->enableCSRFToken && !isset($this->args[$this->csrfTokenFieldName])) {
+        if ($this->csrf) {
             $token = $this->csrf->loadToken(true);
             if ($token == null || !$token->checkExpiry($_SERVER['REQUEST_TIME'])) {
                 $token = $this->csrf->generateToken();
@@ -1093,6 +1096,10 @@ class Action implements IteratorAggregate
      */
     public function renderCSRFTokenWidget(array $attrs = array())
     {
+        // Create csrf token widget only when csrf provider is defined and enableCSRFToken is on.
+        if (!$this->csrf || !$this->enableCSRFToken) {
+            throw new Exception('csrf token provider is not provided.');
+        }
         $hash = $this->getCSRFToken();
         if ($hash) {
             $hidden = new HiddenInput($this->csrfTokenFieldName, array( 'value' => $hash ));
