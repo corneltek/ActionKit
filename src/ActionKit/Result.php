@@ -170,24 +170,6 @@ class Result
     }
 
     /**
-     * Transform validation messages into errors.
-     *
-     * @return array
-     */
-    public function gatherInvalidMsgs()
-    {
-        $errors = array();
-        foreach ($this->validations as $field => $attrs) {
-            if (isset($attrs['invalid']) && is_string($attrs['invalid']) ) {
-                $errors[] = $attrs['invalid'];
-            } else if (array_key_exists('valid', $attrs) && $attrs['valid'] == false && isset($attrs['message'])) {
-                $errors[] = $attrs['message'];
-            }
-        }
-        return $errors;
-    }
-
-    /**
      * Check if some validation return failed.
      *
      * @return bool
