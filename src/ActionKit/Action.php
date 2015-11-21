@@ -313,10 +313,11 @@ class Action implements IteratorAggregate
         return $this;
     }
 
-    public function invalidField($n, $message) {
+    public function invalidField($n, $message, $desc = null) {
         $this->result->addValidation($n, array(
             'valid' => false,
             'message' => $message,
+            'desc' => $desc,
             'field' => $n,
         ));
     }

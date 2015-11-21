@@ -195,13 +195,13 @@ class Result
     public function addInvalid($field, $message, $desc = null)
     {
         $this->type = 'invalid';
-        $this->validations[$field] = [ 'valid' => false, 'message' => $message, 'desc' => $desc ];
+        $this->validations[$field] = [ 'valid' => false, 'message' => $message, 'desc' => $desc, 'field' => $field, ];
     }
 
 
     public function addValid($field, $message, $desc = null)
     {
-        $this->validations[$field] = [ 'valid' => true, 'message' => $message, 'desc' => $desc ];
+        $this->validations[$field] = [ 'valid' => true, 'message' => $message, 'desc' => $desc, 'field' => $field, ];
     }
 
 
