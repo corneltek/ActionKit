@@ -169,6 +169,43 @@ class Result
         return $this;
     }
 
+
+
+    /**
+     * Add new validation entry
+     *
+     * This method doesn't set type to invalid or valid, it depends on the attributes.
+     *
+     * @return this
+     */
+    public function addValidation($field, array $attrs)
+    {
+        $this->validations[ $field ] = $attrs;
+        return $this;
+    }
+
+    /**
+     * Remove an validation
+     */
+    public function removeValidation($field)
+    {
+        unset($this->validations[$field]);
+    }
+
+    public function addInvalid($field, $message, $desc = null)
+    {
+        $this->type = 'invalid';
+        $this->validations[$field] = [ 'valid' => false, 'message' => $message, 'desc' => $desc ];
+    }
+
+
+    public function addValid($field, $message, $desc = null)
+    {
+        $this->validations[$field] = [ 'valid' => true, 'message' => $message, 'desc' => $desc ];
+    }
+
+
+
     /**
      * Check if some validation return failed.
      *
@@ -283,27 +320,21 @@ class Result
     public function valid( $message = null )
     {
         $this->type = 'valid';
-        if ( $message )
+        if ($message) {
             $this->message = $message;
-
+        }
         return $this;
     }
 
-    public function invalid( $message = null )
+    public function invalid($message = null )
     {
         $this->type = 'invalid';
-        if ( $message )
+        if ($message) {
             $this->message = $message;
-
+        }
         return $this;
     }
 
-    public function addValidation( $field , $attrs )
-    {
-        $this->validations[ $field ] = $attrs;
-
-        return $this;
-    }
 
     public function toArray()
     {
@@ -333,7 +364,7 @@ class Result
             $ret = array_merge( $ret , $this->completion );
         }
 
-        if ( $this->validations ) {
+        if (!empty($this->validations)) {
             $ret['validations'] = $this->validations;
         }
 
