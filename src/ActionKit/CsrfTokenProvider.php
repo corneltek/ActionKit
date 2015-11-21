@@ -18,7 +18,7 @@ class CsrfTokenProvider
      *
      * @param integer $ttl time to live
      */
-    public function generateToken($sessionKey = null, $ttl = 120)
+    public function generateToken($sessionKey = null, $ttl = 1200)
     {
         $token = new CsrfToken($sessionKey ?: $this->sessionKey, $ttl);
         $token->timestamp = time();
