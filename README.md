@@ -298,7 +298,12 @@ class UpdateAction extends UpdateRecordAction {
             ->useSuggestion();
 
         $this->param( 'password' )
-            ->useValidator();
+            ->validator(function($value) {
+                if ($value) {
+                    return [false, "reason"];
+                }
+                return [true, "success!!"];
+            });
 
         $this->filterOut(array('auth_token'));
     }
