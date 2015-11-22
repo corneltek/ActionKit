@@ -741,7 +741,10 @@ class Action implements IteratorAggregate
      * Define a param object from Action,
      *
      * Note: when using this method, a param that is already
-     * defined will be override.
+     * defined will be overrided.
+     *
+     * TODO: add 'replaceParam' to replace a param object, 'param' should just 
+     * return the original param object.
      *
      * @param string $field      Field name
      * @param string $paramType  Field Type (will be Param Type)
