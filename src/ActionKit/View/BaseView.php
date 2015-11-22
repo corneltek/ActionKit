@@ -2,6 +2,7 @@
 namespace ActionKit\View;
 use FormKit;
 use FormKit\Layout\GenericLayout;
+use ActionKit\Action;
 
 
 /**
@@ -46,7 +47,7 @@ abstract class BaseView
      * @param ActionKit\Action $action
      * @param array $options
      */
-    public function __construct($action, $options = array() )
+    public function __construct(Action $action, array $options = array() )
     {
         $this->action = $action;
         $this->options = $options;
@@ -240,7 +241,7 @@ abstract class BaseView
      * Register widgets into container object or layout object
      * Hidden fields will be container, visiable fields will be in layout.
      *
-     * @param FormKit\Widget\BaseWidget[]
+     * @param FormKit\Widget\BaseWidget[] however this could an iterator.
      */
     public function registerWidgets($widgets)
     {
