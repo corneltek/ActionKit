@@ -446,6 +446,10 @@ class Action implements IteratorAggregate
         if (session_id() && $this->csrf && $this->enableCSRFToken) {
             // load the existing token from session
             $token = $this->csrf->loadToken(); 
+            if (!$token) {
+                return $this->result->error('CSRF token expired.');
+            }
+
             $insecureToken = $this->arg($this->csrfTokenFieldName);
             if (!$insecureToken && isset($_SERVER['HTTP_X_CSRF_TOKEN'])) {
                 $insecureToken = $_SERVER['HTTP_X_CSRF_TOKEN'];
