@@ -20,7 +20,7 @@ class BootstrapFieldView
 
     public $inputWrapperClass = 'col-lg-10';
 
-    public $hintClass = 'hint';
+    public $hintClass = 'help-block hint';
 
     public $container;
 
@@ -91,9 +91,9 @@ class BootstrapFieldView
             $wrapper->append($inputDiv);
 
             if ($this->column->hint) {
-                $hintEl  = new Span(array( 'class' => $this->hintClass ));
+                $hintEl  = new Span(array('class' => $this->hintClass ));
                 $hintEl->append( $this->column->hint );
-                $wrapper->append($hintEl);
+                $inputDiv->append($hintEl);
             }
         }
         return $wrapper;
