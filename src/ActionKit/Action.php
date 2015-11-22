@@ -758,6 +758,22 @@ class Action implements IteratorAggregate
      */
     public function param($field, $paramType = null)
     {
+        if (isset($this->params[$field])) {
+            return $this->params[$field];
+        }
+        return $this->replaceParam($field, $paramType);
+    }
+
+
+    /**
+     *
+     * @param string $field      Field name
+     * @param string $paramType  Field Type (will be Param Type)
+     *
+     * @return ActionKit\Param
+     */
+    public function replaceParam($field, $paramType = null)
+    {
         if ($paramType) {
             $class = ($paramType[0] !== '+')
                 ? 'ActionKit\\Param\\' . ucfirst($paramType) . 'Param'
@@ -765,13 +781,11 @@ class Action implements IteratorAggregate
         } else {
             $class = 'ActionKit\\Param\\Param';
         }
-
         if (! class_exists($class,true)) { // trigger spl class autoloader to load class file.
             throw new Exception("Action param($field): column class $class not found.");
         }
         return $this->params[$field] = new $class($field , $this);
     }
-
 
     /**
      * `description` method returns the human readable description for logging.
