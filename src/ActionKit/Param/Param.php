@@ -6,6 +6,7 @@ use ActionKit\MessagePool;
 use ActionKit\Action;
 use DateTime;
 use InvalidArgumentException;
+use Exception;
 
 class Param extends CascadingAttribute
 {
@@ -142,22 +143,15 @@ class Param extends CascadingAttribute
             case 'float':
                 return floatval($formValue);
             case 'bool':
+            case 'boolean':
                 if ($formValue === NULL) {
                     return NULL;
                 }
                 if (is_string($formValue)) {
                     if ($formValue === '') {
                         return NULL;
-                    } else if ($formValue === '1') {
-                        return true;
-                    } else if ($formValue === '0') {
-                        return false;
-                    } else if (strcasecmp($formValue,'false') === 0) {
-                        return false;
-                    } else if (strcasecmp($formValue,'true') === 0) {
-                        return true;
                     } else {
-                        throw new Exception("Unexpected value for boolean type.");
+                        return filter_var($formValue, FILTER_VALIDATE_BOOLEAN, array('flags' => FILTER_NULL_ON_FAILURE));
                     }
                 }
             }
