@@ -167,7 +167,7 @@ class ActionTest extends PHPUnit_Framework_TestCase
     public function testWrongType()
     {
         $login = new LoginTestAction;
-        $login->param('username', 'TestType');
+        $login->replaceParam('username', 'TestType');
     }
 }
 

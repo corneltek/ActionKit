@@ -135,9 +135,10 @@ class ProductActionTest extends ModelTestCase
     {
         $class = BaseRecordAction::createCRUDClass('ProductBundle\\Model\\Product', 'Create');
         $create = new $class;
-        ok($create);
-        $html = $create->asView()->render();
-        ok($html);
+        $view = $create->asView();
+        $this->assertNotNull($view);
+        $html = $view->render();
+        $this->assertNotNull($html);
 
         $dom = new DOMDocument;
         $dom->load($html);

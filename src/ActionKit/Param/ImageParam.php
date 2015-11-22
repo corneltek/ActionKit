@@ -159,13 +159,13 @@ class ImageParam extends Param
     // XXX: should be inhertied from Param\File.
     public function hintFromSizeLimit()
     {
-        if ( $this->sizeLimit ) {
-            if ( $this->hint ) {
+        if ($this->sizeLimit) {
+            if ($this->hint) {
                 $this->hint .= '<br/>';
             } else {
                 $this->hint = '';
             }
-            $this->hint .= '檔案大小限制: ' . futil_prettysize( $this->sizeLimit * 1024);
+            $this->hint .= '檔案大小限制: ' . futil_prettysize($this->sizeLimit * 1024);
         }
         return $this;
     }

@@ -17,7 +17,7 @@ class CreateProductImage  extends CreateRecordAction
         ];
         $autoResize = true;
 
-        $this->param('image','Image')
+        $this->replaceParam('image','Image')
             ->sizeLimit($imageSizeLimit)
             ->size( $imageSize )
             ->autoResize($autoResize)
@@ -30,7 +30,7 @@ class CreateProductImage  extends CreateRecordAction
             ->putIn('tests/upload')
             ;
 
-        $this->param('large','Image')
+        $this->replaceParam('large','Image')
             ->sizeLimit($imageSizeLimit)
             ->size( $imageSize )
             ->autoResize($autoResize)

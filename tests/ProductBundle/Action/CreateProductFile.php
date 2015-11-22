@@ -12,7 +12,7 @@ class CreateProductFile  extends CreateRecordAction
 
         $sizeLimit = 1024; // 1024kb
 
-        $this->param('file','File')
+        $this->replaceParam('file','File')
             ->sizeLimit($sizeLimit)
             ->required()
             ->hint('product file hint')

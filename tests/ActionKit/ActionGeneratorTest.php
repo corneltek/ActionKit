@@ -66,10 +66,11 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
 
         $className = 'test\Action\UpdatetestModel';
 
-        $generatedAction = $generator->generateUnderDirectory('/tmp', 'RecordActionTemplate', $className, $actionArgs);
+        @mkdir('tmp', 0755, true);
+        $generatedAction = $generator->generateUnderDirectory('tmp', 'RecordActionTemplate', $className, $actionArgs);
         $this->assertNotNull($generatedAction);
 
-        $filePath = '/tmp' . DIRECTORY_SEPARATOR . $generatedAction->getPsrClassPath();
+        $filePath = 'tmp' . DIRECTORY_SEPARATOR . $generatedAction->getPsrClassPath();
         $this->assertFileExists($filePath, $filePath);
         unlink($filePath);
     }
