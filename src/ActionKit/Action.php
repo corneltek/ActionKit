@@ -1198,10 +1198,10 @@ class Action implements IteratorAggregate
      * @param string $message Success message
      * @param mixed  $data
      */
-    public function success( $message , $data = null )
+    public function success($message, array $data = null )
     {
         $this->result->success( $message );
-        if ( $data ) {
+        if ($data) {
             $this->result->mergeData( $data );
         }
         return true;
@@ -1212,10 +1212,10 @@ class Action implements IteratorAggregate
      *
      * @param string $message Error message
      */
-    public function error($message, $data = null )
+    public function error($message, array $data = null)
     {
         $this->result->error( $message );
-        if ( $data ) {
+        if ($data) {
             $this->result->mergeData( $data );
         }
         return false;
