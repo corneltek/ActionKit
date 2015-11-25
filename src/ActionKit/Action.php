@@ -446,8 +446,11 @@ class Action implements IteratorAggregate
         if (session_id() && $this->csrf && $this->enableCSRFToken) {
             // load the existing token from session
             $token = $this->csrf->loadToken(); 
+
             if (!$token) {
-                return $this->result->error('CSRF token expired.');
+                $errorMsg = MessagePool::getInstance()->translate('csrf.token_expired');
+                $this->result->error($errorMsg);
+                return false;
             }
 
             $insecureToken = $this->arg($this->csrfTokenFieldName);
@@ -456,11 +459,13 @@ class Action implements IteratorAggregate
             }
             if (!$insecureToken) {
                 // $this->result->error('CSRF token is invalid: empty token given.');
-                $this->result->error('CSRF token invalid');
+                $errorMsg = MessagePool::getInstance()->translate('csrf.token_invalid');
+                $this->result->error($errorMsg);
                 return false;
             }
             if (!$this->csrf->verifyToken($token, $insecureToken)) {
-                $this->result->error('CSRF mismatch.');
+                $errorMsg = MessagePool::getInstance()->translate('csrf.token_mismatch');
+                $this->result->error($errorMsg);
                 return false;
             }
         }

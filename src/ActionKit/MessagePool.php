@@ -11,6 +11,9 @@ class MessagePool implements ArrayAccess, IteratorAggregate
         'file.required'  => 'File field %1 is required.',
         'param.required' => 'Field %1 is required.',
         'validation.error' => 'Please check your input.',
+        'csrf.token_expired' => 'CSRF Token is expired.',
+        'csrf.token_mismatch' => 'CSRF Token mismatched.',
+        'csrf.token_invalid' => 'CSRF token invalid.',
     ];
 
     /**
