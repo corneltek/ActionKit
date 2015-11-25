@@ -19,9 +19,10 @@ class MessagePool implements ArrayAccess, IteratorAggregate
     /**
      * The constructor will detect if gettext extension is loaded.
      */
-    public function __construct()
+    public function __construct($locale)
     {
         $this->gettextEnabled = extension_loaded('gettext');
+        $this->loadByLocale($locale);
     }
 
     /**
@@ -99,13 +100,13 @@ class MessagePool implements ArrayAccess, IteratorAggregate
         return $msgId;
     }
 
-    static public function getInstance()
+    static public function getInstance($locale = 'en')
     {
         static $instance;
         if ($instance) {
             return $instance;
         }
-        return $instance = new self;
+        return $instance = new self($locale);
     }
     
     public function offsetSet($name,$value)

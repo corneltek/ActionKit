@@ -30,8 +30,14 @@ class ServiceContainer extends Container
     protected function preset()
     {
         $self = $this;
+
+        $this['locale'] = '';
+
         $this['messages'] = function($c) {
-            return new MessagePool;
+            if (isset($c['locale'])) {
+                return new MessagePool($c['locale']);
+            }
+            return new MessagePool('en');
         };
 
         $this['csrf'] = function($c) {

@@ -5,7 +5,7 @@ class MessagePoolTest extends PHPUnit_Framework_TestCase
 {
     public function testMessagePool()
     {
-        $messages = new MessagePool;
+        $messages = new MessagePool('en');
         $messages->loadMessages([
             'file.required'  => 'File Field %1 is required. %2',
             'param.required' => 'Field %1 is required.',
@@ -21,14 +21,14 @@ class MessagePoolTest extends PHPUnit_Framework_TestCase
 
     public function testFormat()
     {
-        $messages = new MessagePool;
+        $messages = new MessagePool('en');
         $msg = $messages->format('%name works in google', ['name' => 'John' ]);
         $this->assertEquals('John works in google', $msg);
     }
 
     public function testLoadFromFile()
     {
-        $messages = new MessagePool;
+        $messages = new MessagePool('en');
         $messages->loadMessagesFromFile('src/ActionKit/Messages/zh_TW.php');
     }
 
