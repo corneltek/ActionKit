@@ -28,6 +28,6 @@
             "ActionKit\\": "src/ActionKit/"
         }
     },
-    "license": "MIT",
-    "version": "2.1.0"
+    "extra": { "branch-alias": { "dev-master": "3.0.x-dev" } },
+    "license": "MIT"
 }
