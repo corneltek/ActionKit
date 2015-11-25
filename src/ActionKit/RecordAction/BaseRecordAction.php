@@ -441,6 +441,14 @@ class BaseRecordAction extends Action
             //
             $argsList = $this->arg($relationId) ?: array();
 
+            // Form field '$relationId' for relationship is not an array,
+            // that might be scalar field value to be passed to model.
+            if (!is_array($argsList)) {
+                // TODO: improve me!
+                // throw new Exception("Form field '$relationId' for relationship is not an array, got " . var_export($argsList, true) );
+                continue;
+            }
+
             $allfiles = $this->request->getFiles();
 
             $indexList = array_unique(array_merge(array_keys($argsList),  array_keys($allfiles)));
