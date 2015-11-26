@@ -60,7 +60,7 @@ abstract class DeleteRecordAction
      */
     public function runValidate()
     {
-        if ( isset( $this->args['id'] ) ) {
+        if (isset($this->args['id'])) {
             return true;
         }
         return false;
@@ -68,12 +68,12 @@ abstract class DeleteRecordAction
 
     public function successMessage($ret)
     {
-        return __('%1 record is deleted.' , $this->record->getLabel() );
+        return $this->messagePool->translate('record_action.successful_delete', $this->record->getLabel());
     }
 
     public function errorMessage($ret)
     {
-        return __('Can not delete %1 record.' , $this->record->getLabel() );
+        return $this->messagePool->translate('record_action.failed_delete', $this->record->getLabel());
     }
 
     public function deleteSuccess($ret)

@@ -17,6 +17,9 @@ return [
 
     'bulk_delete.successful_delete' => '%1 items were deleted successfully.',
 
-    'record_action.successful_create' => "%1 record is created.",
+    'record_action.successful_create' => "%1 record is created successfully.",
     'record_action.failed_create'     => "%1 record create failed.",
+
+    'record_action.successful_delete' => "%1 record is deleted successfully.",
+    'record_action.failed_delete'     => "%1 record delete failed.",
 ];
