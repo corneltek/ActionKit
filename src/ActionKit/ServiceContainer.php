@@ -37,8 +37,10 @@ class ServiceContainer extends Container
         // the default cache dir
         $this['cache_dir'] = __DIR__ . DIRECTORY_SEPARATOR . 'Cache';
 
+        $this['message_directory'] = __DIR__ . DIRECTORY_SEPARATOR . 'Messages';
+
         $this['message_pool'] = function($c) {
-            return new MessagePool($c['locale']);
+            return new MessagePool($c['locale'], $c['message_directory']);
         };
 
         $this['csrf'] = function($c) {

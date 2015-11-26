@@ -5,6 +5,9 @@ use IteratorAggregate;
 use ArrayIterator;
 use Exception;
 
+/**
+ * A non-gettext dependent class for translating messages
+ */
 class MessagePool implements ArrayAccess, IteratorAggregate
 {
     protected $messages = [ ];
@@ -36,7 +39,7 @@ class MessagePool implements ArrayAccess, IteratorAggregate
             throw new Exception("Can't load translation entries from '$localeFile'");
         }
         if ($messages = require $localeFile) {
-            $this->messages = array_merge($this->messages, $messages);
+            $this->messages = $messages;
             return true;
         }
         return false;
