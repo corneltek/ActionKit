@@ -17,4 +17,8 @@ return array(
 
     /* bulk delete action */
     'bulk_delete.successful_delete' => '%1 個項目已成功刪除',
+
+    // record action messages
+    'record_action.successful_create' => "%1 成功建立",
+    'record_action.failed_create'     => "%1 無法建立",
 );

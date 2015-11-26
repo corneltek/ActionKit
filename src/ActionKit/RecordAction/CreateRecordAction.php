@@ -37,7 +37,7 @@ abstract class CreateRecordAction
 
     public function successMessage($ret)
     {
-        return __("%1 Record is created." , $this->record->getLabel() );
+        return $this->messagePool->translate('record_action.successful_create', $this->record->getLabel());
     }
 
     public function errorMessage($ret)
@@ -46,7 +46,7 @@ abstract class CreateRecordAction
         if ($ret->exception) {
             return __('Can not create %1 record: %2' , $this->record->getLabel(), $ret->exception->getMessage() );
         }
-        return __('Can not create %1 record.' , $this->record->getLabel() );
+        return $this->messagePool->translate('record_action.failed_create', $this->record->getLabel());
     }
 
     public function createSuccess($ret)
@@ -58,7 +58,7 @@ abstract class CreateRecordAction
 
     public function createError($ret)
     {
-        return $this->error( $this->errorMessage($ret) );
+        return $this->error($this->errorMessage($ret));
     }
 
 }

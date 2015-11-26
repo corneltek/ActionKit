@@ -15,5 +15,8 @@ return [
     'record_action.successful_update' => '%1 record is updated successfully.',
     'record_action.failed_update' => '%1 record update failed.',
 
-    'bulk_delete.successful_delete' => '%1 items were deleted successfully.'
+    'bulk_delete.successful_delete' => '%1 items were deleted successfully.',
+
+    'record_action.successful_create' => "%1 record is created.",
+    'record_action.failed_create'     => "%1 record create failed.",
 ];
