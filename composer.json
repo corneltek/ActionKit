@@ -7,6 +7,7 @@
         "corneltek/cascading-attribute": "^1",
         "corneltek/universal-cache": "^1",
         "corneltek/fileutil": "^1",
+        "corneltek/locale": "2.0.x-dev",
         "corneltek/universal": "^1.7",
         "corneltek/imagekit": "^1",
         "corneltek/class-template": "^2",
