@@ -21,16 +21,19 @@ abstract class UpdateRecordAction
         }
         if ($this->loadByArray) {
             $ret = $this->record->load($args);
-        } elseif ( isset($args['id']) ) {
+        } else if (isset($args['id'])) {
             $ret = $this->record->find( $args['id'] );
         } else {
-            return $this->error( _('Require an ID to update record.') );
+            $msg = $this->messagePool->translate('record_action.primary_key_is_required');
+            return $this->error($msg);
         }
-        if ( ! $ret->success ) {
-            return $this->error(__('Load Error: %1', $ret->message));
+        if (! $ret->success) {
+            $msg = $this->messagePool->translate('record_action.load_failed');
+            return $this->error($msg);
         }
-        if ( ! $this->record->id ) {
-            return $this->recordNotFound();
+        if (! $this->record->id) {
+            $msg = $this->messagePool->translate('record_action.record_not_found', $this->record->getLabel());
+            return $this->error($msg);
         }
         return true;
     }
@@ -80,28 +83,30 @@ abstract class UpdateRecordAction
             }
         }
         if ( $error ) {
-            $this->result->error( _('Validation Error') );
+            $msg = $this->messagePool->translate('record_action.validation_error');
+            $this->result->error($msg);
             return false;
         }
         return true;
     }
 
-    public function recordNotFound()
+    protected function recordNotFound()
     {
-        return $this->error( __("%1 not found, can not update.", $this->record->getLabel()  ) );
+        $msg = $this->messagePool->translate('record_action.record_not_found', $this->record->getLabel());
+        return $this->error($msg);
     }
 
     public function successMessage($ret)
     {
-        return __('%1 Record is updated.', $this->record->getLabel() );
+        return $this->messagePool->translate('record_action.successful_update', $this->record->getLabel());
     }
 
     public function errorMessage($ret)
     {
         if (!empty($ret->validations)) {
-            return __('%1 validation failed.', $this->record->getLabel());
+            return $this->messagePool->translate('record_action.validation_error', $this->record->getLabel());
         }
-        return __('%1 update failed.', $this->record->getLabel());
+        return $this->messagePool->translate('record_action.failed_update', $this->record->getLabel());
     }
 
     public function updateSuccess($ret)
