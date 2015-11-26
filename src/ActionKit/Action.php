@@ -93,7 +93,6 @@ class Action implements IteratorAggregate
     public $enableCSRFToken = true;
 
 
-
     /**
      * @var ActionKit\CSRFTokenProvider
      */
@@ -104,6 +103,12 @@ class Action implements IteratorAggregate
      * @var Pimple\Container
      */
     protected $services;
+
+
+    /**
+     * @var ActionKit\MessagePool
+     */
+    protected $messagePool;
 
     /**
      * Constructing Action objects
@@ -131,13 +136,26 @@ class Action implements IteratorAggregate
             $this->currentUser = $this->services['current_user'];
         }
 
+        if (isset($options['csrf'])) {
+            $this->csrf = $options['csrf'];
+        } else if (isset($this->services['csrf'])) {
+            $this->csrf = $this->services['csrf'];
+        }
+
+
+        if (isset($options['message_pool'])) {
+            $this->messagePool = $options['message_pool'];
+        } else if (isset($this->services['message_pool'])) {
+            $this->messagePool = $this->services['message_pool'];
+        }
+
         // save parent action
         if (isset($options['parent'])) {
             $this->parent = $options['parent'];
         }
 
-
         // backward compatible request object
+        // ActionRequest
         if (isset($options['request'])) {
 
             $this->request = $options['request'];
@@ -145,6 +163,9 @@ class Action implements IteratorAggregate
             if (isset($options['files'])) {
                 trigger_error('"files" is ignored because you passed action request object');
             }
+        } else if (isset($this->services['action_request'])) {
+
+            $this->request = $this->services['action_request'];
 
         } else {
 
@@ -455,10 +476,9 @@ class Action implements IteratorAggregate
      */
     final public function invoke()
     {
-        if (session_id() && isset($this->services['csrf']) && $this->enableCSRFToken) {
+        if (session_id() && $this->csrf && $this->enableCSRFToken) {
             // load the existing token from session
-            $csrfTokenProvider = $this->services['csrf'];
-            $token = $csrfTokenProvider->loadToken(); 
+            $token = $this->csrf->loadToken(); 
 
             if (!$token) {
                 $errorMsg = MessagePool::getInstance()->translate('csrf.token_expired');
@@ -476,7 +496,7 @@ class Action implements IteratorAggregate
                 $this->result->error($errorMsg);
                 return false;
             }
-            if (!$csrfTokenProvider->verifyToken($token, $insecureToken)) {
+            if (!$this->csrf->verifyToken($token, $insecureToken)) {
                 $errorMsg = MessagePool::getInstance()->translate('csrf.token_mismatch');
                 $this->result->error($errorMsg);
                 return false;
@@ -1121,10 +1141,10 @@ class Action implements IteratorAggregate
     public function getCSRFToken()
     {
         // TODO support loading csrf token from session or header "X-CSRF-TOKEN"
-        if (isset($this->services['csrf'])) {
-            $token = $this->services['csrf']->loadToken(true);
+        if ($this->csrf) {
+            $token = $this->csrf->loadToken(true);
             if ($token == null || !$token->checkExpiry($_SERVER['REQUEST_TIME'])) {
-                $token = $this->services['csrf']->generateToken();
+                $token = $this->csrf->generateToken();
             }
             return $token->hash;
         }
@@ -1141,7 +1161,7 @@ class Action implements IteratorAggregate
     public function renderCSRFTokenWidget(array $attrs = array())
     {
         // Create csrf token widget only when csrf provider is defined and enableCSRFToken is on.
-        if (!isset($this->services['csrf']) || !$this->enableCSRFToken) {
+        if (!$this->csrf || !$this->enableCSRFToken) {
             throw new Exception('csrf token provider is not provided.');
         }
         $hash = $this->getCSRFToken();

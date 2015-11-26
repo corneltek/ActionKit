@@ -69,42 +69,28 @@ class ActionRunner
      */
     public function __construct($options = array())
     {
-        $messagePool = MessagePool::getInstance();
-
         if ($options instanceof ServiceContainer) {
 
             // the cache_dir option is optional. if user provides one, we should use it.
-            $this->cacheDir = isset($options['cache_dir']) ? $options['cache_dir'] : __DIR__ . DIRECTORY_SEPARATOR . 'Cache';
-            $this->generator = isset($options['generator']) ? $options['generator'] : new ActionGenerator;
-
-            if (isset($options['locale'])) {
-                $messagePool->loadByLocale($options['locale']);
-            } else {
-                $messagePool->loadByLocale('en'); // default to en
-            }
-
+            $this->cacheDir = $options['cache_dir'];
+            $this->generator = $options['generator'];
             $this->serviceContainer = $options;
-
-        } else if ($options instanceof ActionGenerator) {
-
-            $this->generator = $options;
 
         } else {
 
-            // Default initializor
+            $this->serviceContainer = new ServiceContainer;
 
+            // Default initializor
             if (isset($options['cache_dir'])) {
                 $this->cacheDir = $options['cache_dir'];
             } else {
-                $this->cacheDir = __DIR__ . DIRECTORY_SEPARATOR . 'Cache';
+                $this->cacheDir = $this->serviceContainer['cache_dir'];
             }
 
-            $this->generator = new ActionGenerator;
-
-            if (isset($options['locale'])) {
-                $messagePool->loadByLocale($options['locale']);
+            if (isset($options['generator'])) {
+                $this->generator = $options['generator'];
             } else {
-                $messagePool->loadByLocale('en'); // default to en
+                $this->generator = $this->serviceContainer['generator'];
             }
         }
 
@@ -334,7 +320,6 @@ class ActionRunner
         $action = new $class($args, array(
             'request'  => $request,
             'services' => $this->serviceContainer,
-            'csrf'     => $this->serviceContainer['csrf'],
         ));
         $action->setCurrentUser($this->currentUser);
         return $action;

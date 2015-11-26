@@ -33,7 +33,7 @@ class SampleActionTemplateTest extends PHPUnit_Framework_TestCase
     {
         $generator = new ActionGenerator();
         $generator->registerTemplate('SampleActionTemplate', new SampleActionTemplate());
-        $runner = new ActionRunner($generator);
+        $runner = new ActionRunner([ 'generator' => $generator ]);
         // $runner->registerAction('SampleActionTemplate', array('action_class' => 'SampleAction'));
         $runner->getGenerator()->generate('SampleActionTemplate', 'SampleAction', [ 
             'namespace' => 'FooBar',

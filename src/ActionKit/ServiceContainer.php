@@ -31,9 +31,15 @@ class ServiceContainer extends Container
     {
         $self = $this;
 
-        $this['locale'] = '';
+        // the default parameter
+        $this['locale'] = 'en';
 
-        $this['messages'] = function($c) {
+        // the default cache dir
+        $this['cache_dir'] = function($c) {
+            return __DIR__ . DIRECTORY_SEPARATOR . 'Cache';
+        };
+
+        $this['message_pool'] = function($c) {
             if (isset($c['locale'])) {
                 return new MessagePool($c['locale']);
             }
@@ -65,8 +71,8 @@ class ServiceContainer extends Container
             return $loader;
         };
 
-        $this['generator'] = function($c) use($self) {
-            return new ActionGenerator(array( 'cache' => true ));
+        $this['generator'] = function($c) {
+            return new ActionGenerator;
         };
     }
 }

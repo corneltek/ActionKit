@@ -26,7 +26,7 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
     {
         $generator = new ActionGenerator();
         $generator->registerTemplate('RecordActionTemplate', new RecordActionTemplate());
-        $runner = new ActionRunner($generator);
+        $runner = new ActionRunner([  'generator' => $generator ]);
         $runner->registerAction('RecordActionTemplate', array());
     }
 
@@ -51,7 +51,7 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
     {
         $generator = new ActionGenerator();
         $generator->registerTemplate('RecordActionTemplate', new RecordActionTemplate());
-        $runner = new ActionRunner($generator);
+        $runner = new ActionRunner([  'generator' => $generator ]);
         $actionArgs = array(
             'namespace' => 'test',
             'model' => 'testModel',
@@ -79,7 +79,7 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
     {
         $generator = new ActionGenerator();
         $generator->registerTemplate('RecordActionTemplate', new RecordActionTemplate());
-        $runner = new ActionRunner($generator);
+        $runner = new ActionRunner([ 'generator' => $generator ]);
         $actionArgs = array(
             'namespace' => 'test',
             'model' => 'testModel',
@@ -103,7 +103,7 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
     {
         $generator = new ActionGenerator();
         $generator->registerTemplate('RecordActionTemplate', new RecordActionTemplate());
-        $runner = new ActionRunner($generator);
+        $runner = new ActionRunner([  'generator' => $generator ]);
         $actionArgs = array(
             'namespace' => 'test',
             'model' => 'testModel',
@@ -143,7 +143,7 @@ class ActionGeneratorTest extends PHPUnit_Framework_TestCase
         $template = $generator->getTemplate('TwigActionTemplate');
         $this->assertInstanceOf('ActionKit\ActionTemplate\ActionTemplate', $template);
 
-        $runner = new ActionRunner($generator);
+        $runner = new ActionRunner([  'generator' => $generator ]);
         $template->register($runner, 'TwigActionTemplate', array(
             'action_class' => 'User\\Action\\BulkUpdateUser',
             'template' => '@ActionKit/RecordAction.html.twig',
