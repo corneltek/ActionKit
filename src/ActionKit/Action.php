@@ -8,6 +8,7 @@ use ActionKit\Result;
 use ActionKit\ActionRequest;
 use ActionKit\MessagePool;
 use ActionKit\CsrfTokenProvider;
+use ActionKit\ServiceContainer;
 use Universal\Http\HttpRequest;
 use Universal\Http\FilesParameter;
 use Exception;
@@ -98,6 +99,12 @@ class Action implements IteratorAggregate
      */
     protected $csrf;
 
+
+    /**
+     * @var Pimple\Container
+     */
+    protected $services;
+
     /**
      * Constructing Action objects
      *
@@ -117,6 +124,13 @@ class Action implements IteratorAggregate
         if (isset($options['parent'])) {
             $this->parent = $options['parent'];
         }
+
+        if (isset($options['services'])) {
+            $this->services = $options['services'];
+        } else {
+            $this->services = new ServiceContainer;
+        }
+
 
         // When CSRFTokenProvider is given, csrf token verification is on.
         if (isset($options['csrf'])) {

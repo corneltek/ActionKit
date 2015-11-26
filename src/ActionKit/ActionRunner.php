@@ -57,6 +57,8 @@ class ActionRunner
 
     protected $csrfTokenProvider;
 
+    protected $serviceContainer;
+
     /**
      * @param array $options
      *
@@ -67,8 +69,8 @@ class ActionRunner
      *   'generator': optional, the customized Generator object.
      *
      */
-    public function __construct($options = array()) {
-
+    public function __construct($options = array())
+    {
         $messagePool = MessagePool::getInstance();
 
         if ($options instanceof ServiceContainer) {
@@ -84,6 +86,7 @@ class ActionRunner
             }
 
             $this->csrfTokenProvider = $options['csrf'];
+            $this->serviceContainer = $options;
 
         } else if ($options instanceof ActionGenerator) {
 

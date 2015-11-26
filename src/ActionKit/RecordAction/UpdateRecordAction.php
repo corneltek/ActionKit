@@ -96,7 +96,7 @@ abstract class UpdateRecordAction
         if (!empty($ret->validations)) {
             return __('%1 validation failed.', $this->record->getLabel());
         }
-        return __('%1 update failed.', $this->record->getLabel() );
+        return __('%1 update failed.', $this->record->getLabel());
     }
 
     public function updateSuccess($ret)
