@@ -14,4 +14,6 @@ return [
     'record_action.validation_error' => '%1 validation failed.',
     'record_action.successful_update' => '%1 record is updated successfully.',
     'record_action.failed_update' => '%1 record update failed.',
+
+    'bulk_delete.successful_delete' => '%1 items were deleted successfully.'
 ];

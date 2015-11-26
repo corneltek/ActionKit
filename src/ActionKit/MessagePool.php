@@ -49,7 +49,7 @@ class MessagePool implements ArrayAccess, IteratorAggregate
             return false;
         }
         if ($messages = require $localeFile) {
-            $this->messages = $messages;
+            $this->messages = array_merge($this->messages, $messages);
             return true;
         }
         return false;

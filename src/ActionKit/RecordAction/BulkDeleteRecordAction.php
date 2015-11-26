@@ -20,6 +20,7 @@ abstract class BulkDeleteRecordAction extends BulkRecordAction
             $delete = $record->asDeleteAction();
             $delete->run();
         }
-        return $this->success( count($records) . '個項目刪除成功');
+        $msg = $this->messagePool->translate('bulk_delete.successful_delete', count($records));
+        return $this->success($msg);
     }
 }
