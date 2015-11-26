@@ -55,8 +55,6 @@ class ActionRunner
 
     protected $currentUser;
 
-    protected $csrfTokenProvider;
-
     protected $serviceContainer;
 
     /**
@@ -85,7 +83,6 @@ class ActionRunner
                 $messagePool->loadByLocale('en'); // default to en
             }
 
-            $this->csrfTokenProvider = $options['csrf'];
             $this->serviceContainer = $options;
 
         } else if ($options instanceof ActionGenerator) {
@@ -335,8 +332,9 @@ class ActionRunner
             }
         }
         $action = new $class($args, array(
-            'request' => $request,
-            'csrf'    => $this->csrfTokenProvider,
+            'request'  => $request,
+            'services' => $this->serviceContainer,
+            'csrf'     => $this->serviceContainer['csrf'],
         ));
         $action->setCurrentUser($this->currentUser);
         return $action;
