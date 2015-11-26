@@ -108,7 +108,7 @@ class Action implements IteratorAggregate
     /**
      * @var ActionKit\MessagePool
      */
-    protected $messagePool;
+    public $messagePool;
 
     /**
      * Constructing Action objects

@@ -1,5 +1,5 @@
 <?php
-return array(
+return [
     'file.required'    => '請上傳檔案欄位 %1',
     'param.required'   => '請輸入欄位 %1',
     'validation.error' => '請檢查表單欄位是否正確。',
@@ -25,4 +25,4 @@ return array(
 
     'record_action.successful_delete' => "%1 成功刪除",
     'record_action.failed_delete'     => "%1 無法刪除",
-);
+];

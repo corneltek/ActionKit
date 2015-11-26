@@ -7,20 +7,7 @@ use Exception;
 
 class MessagePool implements ArrayAccess, IteratorAggregate
 {
-    protected $messages = [
-        'file.required'  => 'File field %1 is required.',
-        'param.required' => 'Field %1 is required.',
-        'validation.error' => 'Please check your input.',
-        'csrf.token_expired' => 'CSRF Token is expired.',
-        'csrf.token_mismatch' => 'CSRF Token mismatched.',
-        'csrf.token_invalid' => 'CSRF token invalid.',
-        'record_action.primary_key_is_required' => 'Updating record requires primary key value.',
-        'record_action.load_failed' => 'Can not load record.',
-        'record_action.record_not_found' => '%1 record not found.',
-        'record_action.validation_error' => '%1 validation failed.',
-        'record_action.successful_update' => '%1 record is updated successfully.',
-        'record_action.failed_update' => '%1 record update failed.',
-    ];
+    protected $messages = [ ];
 
     /**
      * The constructor will detect if gettext extension is loaded.
@@ -46,7 +33,7 @@ class MessagePool implements ArrayAccess, IteratorAggregate
     public function loadMessagesFromFile($localeFile)
     {
         if (!file_exists($localeFile)) {
-            return false;
+            throw new Exception("Can't load translation entries from '$localeFile'");
         }
         if ($messages = require $localeFile) {
             $this->messages = array_merge($this->messages, $messages);
@@ -141,18 +128,4 @@ class MessagePool implements ArrayAccess, IteratorAggregate
     }
     
 }
-
-/**
- * This is used for gettext message parser
- * @codeCoverageIgnore
-
-_('file.required');
-_('param.required');
-_('validation.error');
-_('Validation Error');
-_('Field %1 is required.');
-_('File Field %1 is required.');
-
- */
-
 

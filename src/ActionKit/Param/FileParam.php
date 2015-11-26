@@ -64,7 +64,7 @@ class FileParam extends Param
                     // return array(false, __('Invalid File Extension: %1' . $this->name ) );
                     return array(
                         false,
-                        MessagePool::getInstance()->translate('Invalid File Extension: %1'),
+                        $this->action->messagePool->translate('Invalid File Extension: %1'),
                         $this->name 
                     );
                 }
@@ -74,7 +74,7 @@ class FileParam extends Param
                 if (! $file->validateSize( $this->sizeLimit )) {
                     return array(
                         false,
-                        MessagePool::getInstance()->translate("The uploaded file exceeds the size limitation. %1 KB ", futil_prettysize($this->sizeLimit))
+                        $this->action->messagePool->translate("The uploaded file exceeds the size limitation. %1 KB ", futil_prettysize($this->sizeLimit))
                     );
                 }
             }
