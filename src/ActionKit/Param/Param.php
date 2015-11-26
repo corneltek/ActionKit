@@ -181,7 +181,8 @@ class Param extends CascadingAttribute
                     return array(false, $this->action->messagePool->translate('file.required', $this->getLabel()));
                 }
             } else {
-                if ($this->action->request->existsParam($this->name) && $this->action->request->param($this->name) === null && ! $this->default) {
+                // We use '==' here because form values might be "" zero length string.
+                if ($this->action->request->existsParam($this->name) && $this->action->request->param($this->name) == null && ! $this->default) {
                     return array(false, $this->action->messagePool->translate('param.required', $this->getLabel()));
                 }
             }
