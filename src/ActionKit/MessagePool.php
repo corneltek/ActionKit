@@ -14,6 +14,7 @@ class MessagePool implements ArrayAccess, IteratorAggregate
         'csrf.token_expired' => 'CSRF Token is expired.',
         'csrf.token_mismatch' => 'CSRF Token mismatched.',
         'csrf.token_invalid' => 'CSRF token invalid.',
+        'record_action.primary_key_is_required' => 'Updating record requires primary key value.',
     ];
 
     /**

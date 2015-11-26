@@ -6,18 +6,23 @@ abstract class UpdateRecordAction
 {
     const TYPE = 'update';
 
+    /**
+     * @var boolean load record by conditions defined in array.
+     */
     public $loadByArray = false;
 
     public $enableLoadRecord = true;
 
-    public function loadRecord($args) {
+    public function loadRecord($args)
+    {
         if ( ! isset($args['id']) && ! $this->loadByArray ) {
-            return $this->error(_('Updating record requires an ID'));
+            $msg = $this->messagePool->translate('record_action.primary_key_is_required');
+            return $this->error($msg);
         }
-        if ( $this->loadByArray ) {
+        if ($this->loadByArray) {
             $ret = $this->record->load($args);
         } elseif ( isset($args['id']) ) {
-            $ret = $this->record->load( $args['id'] );
+            $ret = $this->record->find( $args['id'] );
         } else {
             return $this->error( _('Require an ID to update record.') );
         }

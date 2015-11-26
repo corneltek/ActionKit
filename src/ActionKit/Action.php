@@ -362,7 +362,7 @@ class Action implements IteratorAggregate
             $param = $this->getParam($n);
             $this->result->addValidation($n, array(
                 'valid' => false,
-                'message' => MessagePool::getInstance()->translate('param.required', $param ? $param->getLabel() : $n),
+                'message' => $this->messagePool->translate('param.required', $param ? $param->getLabel() : $n),
                 'field' => $n,
             ));
             return false;
@@ -456,7 +456,7 @@ class Action implements IteratorAggregate
 
         // we do this here because we need to validate all param(s)
         if ($foundError) {
-            $this->result->error(MessagePool::getInstance()->translate('validation.error'));
+            $this->result->error($this->messagePool->translate('validation.error'));
             return false;
         }
 
@@ -481,7 +481,7 @@ class Action implements IteratorAggregate
             $token = $this->csrf->loadToken(); 
 
             if (!$token) {
-                $errorMsg = MessagePool::getInstance()->translate('csrf.token_expired');
+                $errorMsg = $this->messagePool->translate('csrf.token_expired');
                 $this->result->error($errorMsg);
                 return false;
             }
@@ -492,12 +492,12 @@ class Action implements IteratorAggregate
             }
             if (!$insecureToken) {
                 // $this->result->error('CSRF token is invalid: empty token given.');
-                $errorMsg = MessagePool::getInstance()->translate('csrf.token_invalid');
+                $errorMsg = $this->messagePool->translate('csrf.token_invalid');
                 $this->result->error($errorMsg);
                 return false;
             }
             if (!$this->csrf->verifyToken($token, $insecureToken)) {
-                $errorMsg = MessagePool::getInstance()->translate('csrf.token_mismatch');
+                $errorMsg = $this->messagePool->translate('csrf.token_mismatch');
                 $this->result->error($errorMsg);
                 return false;
             }
