@@ -70,12 +70,6 @@ class Param extends CascadingAttribute
     {
         $this->name = $name;
         $this->action = $action;
-
-        // provide immutable setter
-        $this->setAttributeType('immutable', static::ATTR_FLAG);
-
-        // provide required() setter
-        $this->setAttributeType('required',  static::ATTR_FLAG);
         $this->build();
     }
 
@@ -94,7 +88,17 @@ class Param extends CascadingAttribute
         return $this;
     }
 
+    public function immutable()
+    {
+        $this->immutable = true;
+        return $this;
+    }
 
+    public function required()
+    {
+        $this->required = true;
+        return $this;
+    }
 
     public function inflator(callable $inflator)
     {
