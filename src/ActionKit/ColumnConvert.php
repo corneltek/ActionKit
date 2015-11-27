@@ -84,10 +84,9 @@ class ColumnConvert
 
         // if we got record, load the value from it.
         if ($record) {
-            $val = $record->{$name};
-            $val = $val instanceof BaseModel ? $val->dataKeyValue() : $val;
-            // echo $name . " : " . var_export($val, true), "<br/>\n";
-            // var_dump( $name, $val, $val->results[0] );
+            // $val = $record->{$name};
+            // $val = $val instanceof BaseModel ? $val->dataKeyValue() : $val;
+            $val = $record->getValue($name);
             $param->value   = $val;
 
             // XXX: should get default value (from column definition)
@@ -96,9 +95,11 @@ class ColumnConvert
             $param->value = $column->getDefaultValue();
         }
 
+
+
         // convert related collection model to validValues
         if ($param->refer && ! $param->validValues) {
-            if ( class_exists($param->refer,true) ) {
+            if (class_exists($param->refer,true) ) {
                 $referClass = $param->refer;
 
                 // it's a `has many`-like relationship

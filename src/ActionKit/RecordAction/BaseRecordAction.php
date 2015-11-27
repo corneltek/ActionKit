@@ -90,11 +90,6 @@ class BaseRecordAction extends Action
 
         // initialize schema , init base action stuff
         parent::__construct($args , $options);
-
-        if ( $this->record->id ) {
-            // load record values to params
-            $this->loadRecordValuesToParams();
-        }
     }
 
 

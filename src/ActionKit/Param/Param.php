@@ -7,6 +7,7 @@ use ActionKit\Action;
 use DateTime;
 use InvalidArgumentException;
 use Exception;
+use LazyRecord\BaseModel;
 
 class Param extends CascadingAttribute
 {
@@ -301,7 +302,7 @@ class Param extends CascadingAttribute
     public function getRenderableCurrentValue()
     {
         // XXX: we should handle "false", "true", and "NULL"
-        return $this->value instanceof \LazyRecord\BaseModel ? $this->value->dataKeyValue() : $this->value;
+        return $this->value instanceof BaseModel ? $this->value->dataKeyValue() : $this->value;
     }
 
     /**
