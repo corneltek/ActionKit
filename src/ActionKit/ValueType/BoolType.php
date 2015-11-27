@@ -6,25 +6,16 @@ class BoolType extends BaseType
 {
     public function test($value)
     {
-        if (is_string($value)) {
-            $value = strtolower($value);
-
-            return ('0' == $value || '1' == $value || 'true' == $value || 'false' == $value);
+        $var = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+        if (is_bool($var)) {
+            return true;
+        } else {
+            return false;
         }
-
-        return is_bool($value);
     }
 
     public function parse($value)
     {
-        $value = strtolower($value);
-        if ($value == '0' || $value == 'false') {
-            return false;
-        }
-        if ($value == '1' || $value == 'true') {
-            return true;
-        }
-
-        return false;
+        return filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
     }
 }
