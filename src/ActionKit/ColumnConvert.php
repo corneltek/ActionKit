@@ -47,7 +47,9 @@ class ColumnConvert
     {
         $name = $column->name;
         $param = new Param($name, $action);
-        $param->isa = $column->isa;
+        if ($column->isa) {
+            $param->isa($column->isa);
+        }
 
         // Convert notNull to required
         // required() is basically the same as notNull but provides extra
