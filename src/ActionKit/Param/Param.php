@@ -73,7 +73,6 @@ class Param extends CascadingAttribute
 
         // provide immutable setter
         $this->setAttributeType('immutable', static::ATTR_FLAG);
-        $this->setAttributeType('isa', static::ATTR_STRING);
 
         // provide required() setter
         $this->setAttributeType('required',  static::ATTR_FLAG);
@@ -84,6 +83,18 @@ class Param extends CascadingAttribute
     {
 
     }
+
+    public function isa($isa)
+    {
+        // valid isa type
+        if (!in_array(ucfirst($isa), ['Int', 'Num', 'Str', 'Bool', 'Dir', 'Date', 'Ip', 'Ipv4', 'Ipv6', 'Path', 'Regex', 'Url'])) {
+            throw new LogicException("Invalid type on param {$this->name}.");
+        }
+        $this->isa = $isa;
+        return $this;
+    }
+
+
 
     public function inflator(callable $inflator)
     {
