@@ -1,29 +1,30 @@
 <?php
+
 namespace ActionKit\ValueType;
 
 abstract class BaseType
 {
     /**
-     * Type option
+     * Type option.
      * 
      * @var mixed
      */
-    public $option;
+    public $value;
 
-    public function __construct($option = null)
+    public function __construct($value = null)
     {
-        if($option) $this->option = $option;
+        $this->value = $value;
     }
 
     /**
-     * Test a value to see if it fit the type
+     * Test a value to see if it fit the type.
      *
      * @param mixed $value
      */
     abstract public function test($value);
 
     /**
-     * Parse a string value into it's type value
+     * Parse a string value into it's type value.
      *
      * @param mixed $value
      */

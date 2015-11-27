@@ -1,13 +1,16 @@
 <?php
+
 namespace ActionKit\ValueType;
 
 class EmailType extends BaseType
 {
-    public function test($value) {
-        return filter_var($value, FILTER_VALIDATE_EMAIL);
+    public function test($value)
+    {
+        return filter_var($value, FILTER_VALIDATE_EMAIL, FILTER_NULL_ON_FAILURE) ? true : false;
     }
 
-    public function parse($value) {
+    public function parse($value)
+    {
         return strval($value);
     }
 }

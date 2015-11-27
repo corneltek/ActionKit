@@ -1,4 +1,5 @@
 <?php
+
 namespace ActionKit\ValueType;
 
 class IntType extends BaseType
@@ -13,6 +14,3 @@ class IntType extends BaseType
         return intval($value);
     }
 }
-
-
-
