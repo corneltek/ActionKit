@@ -753,30 +753,45 @@ class Action implements IteratorAggregate
      *
      * @return this
      */
-    public function setArgument($name,$value)
+    protected function setArgument($name,$value)
     {
         $this->args[ $name ] = $value ;
         return $this;
     }
 
-    public function setArg($name, $value)
+    protected function setArguments(array $args)
+    {
+        $this->args = $args;
+        return $this;
+    }
+
+    protected function removeArgument($name)
+    {
+        unset($this->args[$name]);
+        return $this;
+    }
+
+
+    protected function setArg($name, $value)
     {
         $this->args[ $name ] = $value ;
         return $this;
     }
-
 
     /**
      * Set arguments
      *
      * @param array
      */
-    public function setArgs(array $args)
+    protected function setArgs(array $args)
     {
-        $this->args = array_merge($this->args , $args );
-
+        $this->args = $args;
         return $this;
     }
+
+
+
+
 
 
     /**
