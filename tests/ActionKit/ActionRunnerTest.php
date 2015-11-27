@@ -84,9 +84,9 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
         $this->assertNotNull($result);
 
         $json = $result->__toString();
-        ok($json,'json output');
+        $this->assertNotNull($json, 'json output');
         $data = json_decode($json);
-        ok($data->success);
+        $this->assertTrue($data->success);
         ok($data->data);
         ok($data->data->id);
 

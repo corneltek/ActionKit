@@ -11,6 +11,9 @@ use LazyRecord\BaseModel;
 
 class Param extends CascadingAttribute
 {
+    static public $typeClasses = [];
+
+
     /**
      * @var ActionKit\Action action object referenece
      * */
@@ -78,10 +81,21 @@ class Param extends CascadingAttribute
 
     }
 
+    public static function getTypeClass($isa)
+    {
+        $isa = ucfirst($isa);
+        if (!isset(self::$typeClasses[$isa])) {
+            $isaClass = "ActionKit\\ValueType\\{$isa}Type";
+            self::$typeClasses[$isa] = new $isaClass;
+        }
+        return self::$typeClasses[$isa];
+    }
+
     public function isa($isa)
     {
+        $isa = ucfirst($isa);
         // valid isa type
-        if (!in_array(ucfirst($isa), ['Int', 'Num', 'Str', 'Bool', 'Dir', 'Date', 'Ip', 'Ipv4', 'Ipv6', 'Path', 'Regex', 'Url'])) {
+        if (!in_array($isa, ['Int', 'Num', 'Str', 'Bool', 'Dir', 'Date', 'Ip', 'Ipv4', 'Ipv6', 'Path', 'Regex', 'Url'])) {
             throw new LogicException("Invalid type on param {$this->name}.");
         }
         $this->isa = $isa;
@@ -194,15 +208,26 @@ class Param extends CascadingAttribute
         if ($this->action && $this->required) {
             if ($this->paramType === 'file') {
                 if (! $this->action->request->file($this->name) && ! $this->action->request->param($this->name)) {
-                    return array(false, $this->action->messagePool->translate('file.required', $this->getLabel()));
+                    return [false, $this->action->messagePool->translate('file.required', $this->getLabel())];
                 }
             } else {
                 // We use '==' here because form values might be "" zero length string.
                 if ($this->action->request->existsParam($this->name) && $this->action->request->param($this->name) == null && ! $this->default) {
-                    return array(false, $this->action->messagePool->translate('param.required', $this->getLabel()));
+                    return [false, $this->action->messagePool->translate('param.required', $this->getLabel())];
                 }
             }
+
         }
+
+        // Isa should only work for non-null values.
+        if ($this->action->request->existsParam($this->name) && $this->isa) {
+            $type = self::getTypeClass($this->isa);
+            if (false === $type->test($value)) {
+                return [false, "invalid type value on {$this->isa}"];
+            }
+        }
+
+
         if ($this->validator) {
             return call_user_func($this->validator,$value);
         }
