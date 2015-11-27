@@ -1,9 +1,10 @@
 <?php
-namespace GetOptionKit\ValueType;
+namespace ActionKit\ValueType;
 
-class BooleanType extends BaseType
+class BoolType extends BaseType
 {
-    public function test($value) { 
+    public function test($value)
+    {
         if (is_string($value) ) {
             $value = strtolower($value);
             return ('0' == $value || '1' == $value || 'true' == $value || 'false' == $value);

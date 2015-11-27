@@ -1,7 +1,7 @@
 <?php
-namespace GetOptionKit\ValueType;
+namespace ActionKit\ValueType;
 
-class StringType extends BaseType
+class StrType extends BaseType
 {
     public function test($value) { 
         return is_string($value);

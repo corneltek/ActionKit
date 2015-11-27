@@ -1,18 +1,18 @@
 <?php
 namespace ActionKit\ValueType;
-use SplFileInfo;
 
-class PathType extends BaseType
+class IntType extends BaseType
 {
     public function test($value)
     {
-        return file_exists($value);
+        return is_int($value);
     }
 
     public function parse($value)
     {
-        return new SplFileInfo($value);
+        return intval($value);
     }
 }
+
 
 

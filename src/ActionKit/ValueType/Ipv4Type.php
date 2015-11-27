@@ -1,5 +1,5 @@
 <?php
-namespace GetOptionKit\ValueType;
+namespace ActionKit\ValueType;
 
 class Ipv4Type extends BaseType
 {

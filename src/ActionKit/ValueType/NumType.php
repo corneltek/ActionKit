@@ -1,7 +1,7 @@
 <?php
-namespace GetOptionKit\ValueType;
+namespace ActionKit\ValueType;
 
-class NumberType extends BaseType
+class NumType extends BaseType
 {
     public function test($value) { 
         return is_numeric($value);
