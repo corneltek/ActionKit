@@ -10,6 +10,10 @@ class FakeMixin extends MixinAction {
 
 }
 
+
+
+
+
 class ImageParamTestAction extends Action {
 
     public function mixins() {
@@ -160,6 +164,8 @@ class ActionTest extends PHPUnit_Framework_TestCase
         $this->assertNotNull($removed = $login->removeParam('username'));
         $this->assertFalse($login->hasParam('username'));
     }
+
+
 
     /**
     *   @expectedException  Exception

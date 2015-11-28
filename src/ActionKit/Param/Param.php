@@ -7,6 +7,7 @@ use ActionKit\Action;
 use DateTime;
 use InvalidArgumentException;
 use Exception;
+use LogicException;
 use LazyRecord\BaseModel;
 
 class Param extends CascadingAttribute
@@ -95,7 +96,7 @@ class Param extends CascadingAttribute
     {
         $isa = ucfirst($isa);
         // valid isa type
-        if (!in_array($isa, ['Int', 'Num', 'Str', 'Bool', 'Dir', 'Date', 'Ip', 'Ipv4', 'Ipv6', 'Path', 'Regex', 'Url'])) {
+        if (!in_array($isa, ['Int', 'Num', 'Str', 'Bool', 'Dir', 'Date', 'Ip', 'Ipv4', 'Ipv6', 'Path', 'Regex', 'Url', 'Email'])) {
             throw new LogicException("Invalid type on param {$this->name}.");
         }
         $this->isa = $isa;
