@@ -18,4 +18,9 @@ class BoolType extends BaseType
     {
         return filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
     }
+
+    public function deflate($value)
+    {
+        return var_export($value, true);
+    }
 }

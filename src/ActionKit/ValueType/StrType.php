@@ -13,4 +13,9 @@ class StrType extends BaseType
     {
         return strval($value);
     }
+
+    public function deflate($value)
+    {
+        return $value;
+    }
 }

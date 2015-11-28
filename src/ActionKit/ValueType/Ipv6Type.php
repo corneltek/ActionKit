@@ -13,4 +13,9 @@ class Ipv6Type extends BaseType
     {
         return ip2long($value);
     }
+
+    public function deflate($value)
+    {
+        return long2ip($value);
+    }
 }

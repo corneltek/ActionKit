@@ -17,4 +17,7 @@ abstract class BaseType
      * @param mixed $value
      */
     abstract public function parse($value);
+
+    abstract public function deflate($value);
+
 }

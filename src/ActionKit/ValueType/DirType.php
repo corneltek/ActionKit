@@ -15,4 +15,9 @@ class DirType extends BaseType
     {
         return new SplFileInfo($value);
     }
+
+    public function deflate($value)
+    {
+        return $value->getPathname();
+    }
 }

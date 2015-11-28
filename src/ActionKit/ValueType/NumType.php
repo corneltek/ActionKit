@@ -13,4 +13,9 @@ class NumType extends BaseType
     {
         return intval($value);
     }
+
+    public function deflate($value)
+    {
+        return $value;
+    }
 }
