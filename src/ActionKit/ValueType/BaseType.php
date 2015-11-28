@@ -5,7 +5,7 @@ namespace ActionKit\ValueType;
 abstract class BaseType
 {
     /**
-     * Test a value to see if it fit the type.
+     * Test a value to see if it can be parsed into the type.
      *
      * @param mixed $value
      */

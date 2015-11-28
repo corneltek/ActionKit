@@ -11,6 +11,6 @@ class IpType extends BaseType
 
     public function parse($value)
     {
-        return strval($value);
+        return ip2long($value);
     }
 }
