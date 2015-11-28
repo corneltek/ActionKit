@@ -7,7 +7,11 @@ class DateTimeType extends BaseType
 {
     public function test($value)
     {
-        return date_parse($value) !== false ? true : false;
+        $ret = date_parse($value);
+        if ($ret === false || !empty($ret['errors'])) {
+            return false;
+        }
+        return true;
     }
 
 
