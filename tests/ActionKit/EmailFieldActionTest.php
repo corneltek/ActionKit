@@ -16,6 +16,14 @@ class EmailFieldTestAction extends Action
 class EmailFieldActionTest extends PHPUnit_Framework_TestCase
 {
 
+
+    public function testInvalidEmailFieldAction()
+    {
+        $action = new EmailFieldTestAction([ 'email' => 'yoanlin93' ]);
+        $ret = $action->invoke();
+        $this->assertFalse($ret);
+    }
+
     public function testEmailFieldAction()
     {
         $action = new EmailFieldTestAction([ 'email' => 'yoanlin93@gmail.com' ]);
