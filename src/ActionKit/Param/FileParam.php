@@ -146,12 +146,12 @@ class FileParam extends Param
 
             if ($savedPath = $uploadedFile->getSavedPath()) {
 
-                $uploadedFile->move($targetPath);
+                $ret = $uploadedFile->move($targetPath);
 
             } else if ($uploadedFile->isUploadedFile()) {
 
                 // move calls move_uploaded_file, which is only available for files uploaded from HTTP
-                $uploadedFile->move($targetPath);
+                $ret = $uploadedFile->move($targetPath);
 
             } else {
 
