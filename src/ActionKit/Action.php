@@ -39,7 +39,7 @@ class Action implements IteratorAggregate
     /**
      * @var string the csrf token field name is used for rendering a hidden widget for csrf token.
      */
-    protected $csrfTokenFieldName = '_csrf_token';
+    public $csrfTokenFieldName = '_csrf_token';
 
     /**
      * @var array
