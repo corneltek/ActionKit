@@ -2,8 +2,8 @@
 namespace ActionKit;
 use Exception;
 
-class CsrfToken {
-    
+class CsrfToken
+{
     public $sessionKey;
 
     /**
@@ -47,4 +47,15 @@ class CsrfToken {
     {
         return ($timestamp - $this->timestamp) < $this->ttl;
     }
+
+    public function toPublicArray()
+    {
+        return array(
+            'hash'      => $this->hash,
+            'ttl'       => $this->ttl,
+            'timestamp' => $this->timestamp,
+        );
+    }
+
+
 }
