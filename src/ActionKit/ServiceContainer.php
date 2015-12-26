@@ -53,7 +53,7 @@ class ServiceContainer extends Container
             if ($token == null || !$token->checkExpiry($_SERVER['REQUEST_TIME'])) {
                 $token = $c['csrf']->generateToken();
             }
-            return $token->hash;
+            return $token;
         });
 
 
