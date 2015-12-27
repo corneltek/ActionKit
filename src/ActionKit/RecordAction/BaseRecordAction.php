@@ -484,6 +484,11 @@ class BaseRecordAction extends Action
 
                     $args = $argsList[$index];
 
+                    // copy csrf token recursively
+                    if (isset($this->args['_csrf_token'])) {
+                        $args['_csrf_token'] = $this->args['_csrf_token'];
+                    }
+
 
                     // before here, we've loaded/created the main record,
                     // so that we already have the id of the main record.
