@@ -849,7 +849,8 @@ class Action implements IteratorAggregate
     }
 
     /**
-     * `description` method returns the human readable description for logging.
+     * Return the description of this action class, `description` method
+     * returns the human readable description for logging.
      *
      * by default it returns the class name of current instance.
      *
@@ -859,6 +860,18 @@ class Action implements IteratorAggregate
     {
         return get_class($this);
     }
+
+    /**
+     * Return the dynamic description of the execution.
+     *
+     * @return string
+     */
+    public function behaviorDescription()
+    {
+        return 'Executed ' . get_class($this) . ' with ' . var_export($this->args, true);
+    }
+
+
 
     /**
      * Action schema is defined here.
