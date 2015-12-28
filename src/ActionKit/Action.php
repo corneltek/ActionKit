@@ -861,17 +861,6 @@ class Action implements IteratorAggregate
         return get_class($this);
     }
 
-    /**
-     * Return the dynamic description of the execution.
-     *
-     * @return string
-     */
-    public function behaviorDescription()
-    {
-        return 'Executed ' . get_class($this) . ' with ' . var_export($this->args, true);
-    }
-
-
 
     /**
      * Action schema is defined here.
