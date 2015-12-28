@@ -130,8 +130,18 @@ class ActionRunner
         /* register results into hash */
         $action = $this->createAction($class, $arguments, $request);
         $action->invoke();
+
+        if (isset($this->serviceContainer['action_logger'])) {
+            $logger = $this->serviceContainer['action_logger'];
+            if ($logger instanceof Closure) {
+                $logger($action);
+            } else {
+                $logger->log($action);
+            }
+        }
         return $this->results[ $actionName ] = $action->getResult();
     }
+
 
     public function runWithRequest(ActionRequest $request)
     {
