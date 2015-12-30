@@ -35,8 +35,15 @@ class GeneratedAction
         return $tmpname;
     }
 
+    public function getPsr4ClassPath($namespacePrefix)
+    {
+        $class = ltrim($this->className, '\\');
+        $class = str_replace($namespacePrefix, '', $class);
+        return str_replace('\\', DIRECTORY_SEPARATOR, $class) . '.php';
+    }
+
     public function getPsrClassPath()
     {
-        return str_replace('\\', DIRECTORY_SEPARATOR, ltrim($this->className,'\\'));
+        return str_replace('\\', DIRECTORY_SEPARATOR, ltrim($this->className,'\\')) . '.php';
     }
 }
