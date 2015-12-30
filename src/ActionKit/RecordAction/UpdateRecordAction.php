@@ -82,8 +82,8 @@ abstract class UpdateRecordAction
                 $error = true;
             }
         }
-        if ( $error ) {
-            $msg = $this->messagePool->translate('record_action.validation_error');
+        if ($error) {
+            $msg = $this->messagePool->translate('record_action.validation_error', $this->record->getLabel());
             $this->result->error($msg);
             return false;
         }
