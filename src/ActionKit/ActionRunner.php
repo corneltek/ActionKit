@@ -204,6 +204,17 @@ class ActionRunner
         }
     }
 
+    public function generateActionClass($class, array $pretreatment = null)
+    {
+        if (!$pretreatment) {
+            if (!isset($this->pretreatments[$class])) {
+                return false;
+            }
+            $pretreatment = $this->pretreatments[$class];
+        }
+        return $this->generator->generate($pretreatment['template'], $class, $pretreatment['arguments']);
+    }
+
     /**
      * loadActionClass trigger the action class generation if the class doesn't
      * exist and loads the action class.
@@ -217,13 +228,11 @@ class ActionRunner
         }
 
         $pretreatment = $this->pretreatments[$class];
-
         if ($this->loadClassCache($class, $pretreatment['arguments']) ) {
             return true;
         }
 
-        $generatedAction = $this->generator->generate($pretreatment['template'], $class, $pretreatment['arguments']);
-
+        $generatedAction = $this->generateActionClass($class, $pretreatment);
         $cacheFile = $this->getClassCacheFile($class, $pretreatment['arguments']);
         $generatedAction->requireAt($cacheFile);
         return true;
@@ -235,9 +244,9 @@ class ActionRunner
      * @param string $className
      * @return string path
      */
-    public function getClassCacheFile($className, array $params = array())
+    protected function getClassCacheFile($className, array $params = array())
     {
-        $chk = ! empty($params) ? md5(serialize($params)) : '';
+        $chk = !empty($params) ? md5(serialize($params)) : '';
         return $this->cacheDir . DIRECTORY_SEPARATOR . str_replace('\\','_',$className) . $chk . '.php';
     }
 
@@ -246,7 +255,8 @@ class ActionRunner
      *
      * @param string $className the action class
      */
-    public function loadClassCache($className, array $params = array()) {
+    protected function loadClassCache($className, array $params = array())
+    {
         $file = $this->getClassCacheFile($className, $params);
         if ( file_exists($file) ) {
             require $file;
