@@ -5,10 +5,12 @@ use IteratorAggregate;
 use ArrayAccess;
 use ActionKit\Utils;
 use ActionKit\ActionRequest;
+use ActionKit\ActionLogger;
 use ActionKit\Exception\InvalidActionNameException;
 use ActionKit\Exception\ActionNotFoundException;
 use ActionKit\Exception\UnableToWriteCacheException;
 use ActionKit\Exception\UnableToCreateActionException;
+use Closure;
 
 /**
  * Run actions!
@@ -135,7 +137,7 @@ class ActionRunner
             $logger = $this->serviceContainer['action_logger'];
             if ($logger instanceof Closure) {
                 $logger($action);
-            } else {
+            } else if ($logger instanceof ActionLogger) {
                 $logger->log($action);
             }
         }
