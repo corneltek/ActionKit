@@ -10,6 +10,7 @@ use ActionKit\Exception\InvalidActionNameException;
 use ActionKit\Exception\ActionNotFoundException;
 use ActionKit\Exception\UnableToWriteCacheException;
 use ActionKit\Exception\UnableToCreateActionException;
+use ActionKit\Loggable;
 use Closure;
 
 /**
@@ -133,8 +134,10 @@ class ActionRunner
         $action = $this->createAction($class, $arguments, $request);
         $action->invoke();
 
-        if (isset($this->serviceContainer['action_logger'])) {
+        if (isset($this->serviceContainer['action_logger']) && $action instanceof Loggable) {
             $logger = $this->serviceContainer['action_logger'];
+
+            // how do we call the logger?
             if ($logger instanceof Closure) {
                 $logger($action);
             } else if ($logger instanceof ActionLogger) {
