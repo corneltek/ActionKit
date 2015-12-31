@@ -47,8 +47,10 @@ abstract class DeleteRecordAction
 
     public function doDelete($args)
     {
+        $backup = clone $this->record;
         $ret = $this->record->delete();
         if ($ret->success) {
+            $this->record = $backup;
             return $this->deleteSuccess($ret);
         } else {
             return $this->deleteError($ret);
