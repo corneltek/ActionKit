@@ -30,6 +30,8 @@ abstract class DeleteRecordAction
             }
         }
 
+        /*
+        FIXME
         $relations = $schema->getRelations();
         foreach( $relations as $rId => $relation ) {
             if ( ! $relation->isHasMany() ) {
@@ -41,6 +43,7 @@ abstract class DeleteRecordAction
                 $rr->delete();
             }
         }
+        */
 
         return $this->doDelete( $this->args );
     }
