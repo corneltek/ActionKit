@@ -816,7 +816,7 @@ class Action implements IteratorAggregate
     public function param($field, $paramType = null)
     {
         if (isset($this->params[$field]) && $paramType != null) {
-            throw new Exception('You were trying to set param type on an existed param object. Please use "replaceParam" method instead.');
+            throw new Exception(get_class($this) . ': You were trying to set param type on an existed param object. Please use "replaceParam" method instead.');
         }
 
         if (isset($this->params[$field])) {
