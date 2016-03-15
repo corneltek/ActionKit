@@ -241,8 +241,9 @@ class ImageParam extends Param
             $targetPath = call_user_func($this->renameFile, $targetPath, $file);
         }
 
-        while (file_exists($targetPath)) {
-            $targetPath = Utils::filename_increase_suffix_number( $targetPath );
+        $renameLimit = 5;
+        while (file_exists($targetPath) && $renameLimit--) {
+            $targetPath = Utils::filename_increase_suffix_number($targetPath);
         }
 
         // If there is a file uploaded from HTTP
