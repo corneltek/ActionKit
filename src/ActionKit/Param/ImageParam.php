@@ -232,18 +232,23 @@ class ImageParam extends Param
         }
 
         $uploadedFile = UploadedFile::createFromArray($file);
-
-        $targetPath = trim($this->putIn, DIRECTORY_SEPARATOR) 
-            . DIRECTORY_SEPARATOR 
-            . $uploadedFile->getOriginalFileName();
-
-        if ($this->renameFile) {
-            $targetPath = call_user_func($this->renameFile, $targetPath, $file);
+        $origFilename = $uploadedFile->getOriginalFileName();
+        if (!$origFilename) {
+            return;
         }
 
-        $renameLimit = 5;
-        while (file_exists($targetPath) && $renameLimit--) {
-            $targetPath = Utils::filename_increase_suffix_number($targetPath);
+        $targetPath = trim($this->putIn, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $origFilename;
+        if ($this->renameFile) {
+            if ($ret = call_user_func($this->renameFile, $targetPath, $file)) {
+                $targetPath = $ret;
+            }
+        }
+
+        $renameLimit = 10;
+        while ($targetPath && file_exists($targetPath) && $renameLimit--) {
+            if ($a = Utils::filename_increase_suffix_number($targetPath)) {
+                $targetPath = $a;
+            }
         }
 
         // If there is a file uploaded from HTTP
