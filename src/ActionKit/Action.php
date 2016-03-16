@@ -39,7 +39,7 @@ class Action implements IteratorAggregate
     /**
      * @var string the csrf token field name is used for rendering a hidden widget for csrf token.
      */
-    public $csrfTokenFieldName = '_csrf_token';
+    public $csrfTokenFieldName = '__csrf_token';
 
     /**
      * @var array
@@ -486,7 +486,7 @@ class Action implements IteratorAggregate
                 return false;
             }
 
-            $insecureToken = $this->arg($this->csrfTokenFieldName);
+            $insecureToken = $this->arg($this->csrfTokenFieldName) ?: $this->arg('_csrf_token'); // _csrf_token is for backward compatibility
             if (!$insecureToken && isset($_SERVER['HTTP_X_CSRF_TOKEN'])) {
                 $insecureToken = $_SERVER['HTTP_X_CSRF_TOKEN'];
             }
@@ -1171,7 +1171,7 @@ class Action implements IteratorAggregate
     /**
      * Render action hidden field for csrf token
      *
-     *      <input type="hidden" name="_csrf_token" value="NGE1YWQ4N2I5MTRjMjYzZTkxZGY3MmJhYjVkODE0ZmIyMmNiYzk1MA=="/>
+     *      <input type="hidden" name="__csrf_token" value="NGE1YWQ4N2I5MTRjMjYzZTkxZGY3MmJhYjVkODE0ZmIyMmNiYzk1MA=="/>
      *
      * @return string Hidden input HTML
      */

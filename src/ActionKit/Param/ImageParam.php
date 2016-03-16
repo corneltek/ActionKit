@@ -244,6 +244,7 @@ class ImageParam extends Param
             }
         }
 
+        // TODO: improve the file rename approach
         $renameLimit = 10;
         while ($targetPath && file_exists($targetPath) && $renameLimit--) {
             if ($a = Utils::filename_increase_suffix_number($targetPath)) {
