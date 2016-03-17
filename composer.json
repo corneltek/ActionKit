@@ -21,6 +21,8 @@
     "require-dev": {
         "corneltek/phpunit-testmore": "dev-master",
         "corneltek/lazyrecord": "dev-master",
+        "corneltek/cliframework": "@dev",
+        "corneltek/sqlbuilder": "@dev",
         "corneltek/webserver-runner": "dev-master",
         "corneltek/kendo": "dev-master"
     },
