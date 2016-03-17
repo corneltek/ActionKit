@@ -46,12 +46,13 @@ class Utils
         return str_replace( '::' , '\\' , $sig );
     }
 
-    public static function createFileArrayFromPath($path)
+    public static function createFileArrayFromPath($path, $uploadedFile = null)
     {
         $pathinfo = pathinfo($path);
         $file = array(
             'name' => $pathinfo['basename'],
             'tmp_name' => $path,
+            'type' => $uploadedFile ? $uploadedFile->getType() : null,
             'saved_path' => $path,
             'size' => filesize($path)
         );

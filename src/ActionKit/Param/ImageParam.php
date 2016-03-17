@@ -139,18 +139,24 @@ class ImageParam extends Param
             return $ret;
         }
 
-        if ($file = $this->action->request->file($this->name)) {
+        $file = $this->action->request->file($this->name);
+
+
+        if (!empty($file) && $file['name'] && $file['type']) {
             $uploadedFile = UploadedFile::createFromArray($file);
             if ($this->validExtensions) {
-                if ( ! $uploadedFile->validateExtension($this->validExtensions) ) {
-                    return array( false, _('Invalid file extension: ') . $uploadedFile->getExtension() );
+                if (! $uploadedFile->validateExtension($this->validExtensions) ) {
+                    return [false, _('Invalid file extension: ') . $uploadedFile->getExtension()];
                 }
             }
-
             if ( $this->sizeLimit ) {
                 if ( ! $uploadedFile->validateSize( $this->sizeLimit ) ) {
-                    return array( false, _("The uploaded file exceeds the size limitation. ") . futil_prettysize($this->sizeLimit * 1024) );
+                    return [false, _("The uploaded file exceeds the size limitation. ") . futil_prettysize($this->sizeLimit * 1024)];
                 }
+            }
+        } else {
+            if ($this->required) {
+                return [false, "Field {$this->name} is required."];
             }
         }
         return true;
@@ -204,9 +210,10 @@ class ImageParam extends Param
 
         } else if ($this->action->arg($this->name)) {
 
+            $realfile = $this->action->request->file($this->sourceField);
             // If there is a file path specified in the form field instead of $_FILES
             // We will create a FILE array from the file system.
-            $file = Utils::createFileArrayFromPath($this->action->arg($this->name));
+            $file = Utils::createFileArrayFromPath($this->action->arg($this->name), $realfile);
 
         } else if ($this->sourceField) {
             // if there is no file found in $_FILES and $_REQUEST
@@ -222,7 +229,7 @@ class ImageParam extends Param
 
                 // If not, check another field's upload (either from POST or GET method)
                 // Rebuild $_FILES arguments from file path (string) .
-                $file = Utils::createFileArrayFromPath($arg);
+                $file = Utils::createFileArrayFromPath($arg, $sourceFile);
 
             }
         }
