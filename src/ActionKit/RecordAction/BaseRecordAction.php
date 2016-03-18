@@ -101,10 +101,11 @@ class BaseRecordAction extends Action
             $name = $column->name;
             if (isset($this->params[$name] ) ) {
                 $param = $this->params[$name];
-                if ($value = $this->record->getValue($name)) {
-                    $param->value = $value;
+                $value = $this->record->getValue($name);
+                if ($value !== NULL) {
+                    $param->value($value);
                 } else {
-                    $param->value = $column->getDefaultValue();
+                    $param->value($column->getDefaultValue());
                 }
             }
         }
