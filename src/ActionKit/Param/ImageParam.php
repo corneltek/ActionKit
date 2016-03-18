@@ -10,6 +10,7 @@ use ActionKit\RecordAction\CreateRecordAction;
 use ActionKit\Utils;
 use Universal\Http\UploadedFile;
 
+
 class ImageParam extends Param
 {
 
@@ -191,6 +192,30 @@ class ImageParam extends Param
     }
 
 
+    protected function _findUploadedFile($name, & $requireUploadMove)
+    {
+        $uploadedFile = $this->action->request->uploadedFile($name, 0);
+        if ($uploadedFile) {
+            return $uploadedFile;
+        }
+
+        // Uploaded by static path
+        if ($uploadedPath = $this->action->request->arg($name)) {
+            $fileArray = Utils::createFileArrayFromPath($uploadedPath);
+            return UploadedFile::createFromArray($fileArray);
+        }
+
+        // create an uploaded file object from here
+        $fileArray = $this->action->request->file($this->name);
+
+        // if there is an upload file in $_FILES
+        if ($fileArray && $fileArray['error'] == 0) {
+            $requireUploadMove = true;
+            return UploadedFile::createFromArray($fileArray);
+        }
+        return null;
+    }
+
     /**
      * This init method move the uploaded file to the target directory.
      *
@@ -198,55 +223,28 @@ class ImageParam extends Param
      */
     public function init( & $args )
     {
-
-        // Upload from HTTP
-        $upload = false;
-
-        $file = $this->action->request->file($this->name);
-        
-        if ($file) {
-
-            $upload = true;
-
-        } else if ($this->action->arg($this->name)) {
-
-            $realfile = $this->action->request->file($this->sourceField);
-            // If there is a file path specified in the form field instead of $_FILES
-            // We will create a FILE array from the file system.
-            $file = Utils::createFileArrayFromPath($this->action->arg($this->name), $realfile);
-
-        } else if ($this->sourceField) {
-            // if there is no file found in $_FILES and $_REQUEST
-            // we copy the file from another field's upload ($_FILES)
-
-            $sourceFile = $this->action->request->file($this->sourceField);
-
-            if ($sourceFile) {
-
-                $file = $sourceFile;
-
-            } else if ($arg = $this->action->arg($this->sourceField) ) {
-
-                // If not, check another field's upload (either from POST or GET method)
-                // Rebuild $_FILES arguments from file path (string) .
-                $file = Utils::createFileArrayFromPath($arg, $sourceFile);
-
+        // Is the file upload from HTTP
+        $requireUploadMove = false;
+        $uploadedFile = $this->_findUploadedFile($this->name, $requireUploadMove);
+        if (!$uploadedFile) {
+            if ($this->sourceField) {
+                $uploadedFile = $this->_findUploadedFile($this->sourceField, $requireUploadMove);
             }
         }
 
-        if ($file == null) {
+        if (!$uploadedFile) {
             return;
         }
 
-        $uploadedFile = UploadedFile::createFromArray($file);
         $origFilename = $uploadedFile->getOriginalFileName();
         if (!$origFilename) {
+            error_log('ImageParam: source field file not found');
             return;
         }
 
         $targetPath = trim($this->putIn, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $origFilename;
         if ($this->renameFile) {
-            if ($ret = call_user_func($this->renameFile, $targetPath, $file)) {
+            if ($ret = call_user_func($this->renameFile, $targetPath, $uploadedFile)) {
                 $targetPath = $ret;
             }
         }
@@ -259,8 +257,9 @@ class ImageParam extends Param
             }
         }
 
+
         // If there is a file uploaded from HTTP
-        if ($upload) {
+        if ($requireUploadMove) {
 
             // The file array might be created from file system 
             if ($savedPath = $uploadedFile->getSavedPath()) {
@@ -274,9 +273,12 @@ class ImageParam extends Param
 
             } else {
 
+
                 $uploadedFile->copy($targetPath);
 
             }
+
+            $this->action->request->saveUploadedFile($this->name, 0, $uploadedFile);
 
         } else if ($this->sourceField) { // If there is no http upload, copy the file from source field
 
@@ -286,11 +288,17 @@ class ImageParam extends Param
                 return;
             }
 
+            // Copy the file directly from the moved file path
             if ($savedPath = $uploadedFile->getSavedPath()) {
+
                 copy($savedPath, $targetPath);
+
             } else {
+
                 $uploadedFile->copy($targetPath);
             }
+
+            $this->action->request->saveUploadedFile($this->name, 0, $uploadedFile);
 
         } else {
 

@@ -13,6 +13,8 @@ class ActionRequest extends HttpRequest
 
     protected $actionName;
 
+    protected $uploadedFiles = array();
+
     public function __construct(array $requestParameters = array(), array $files = null)
     {
         parent::__construct($requestParameters, $files);
@@ -43,10 +45,8 @@ class ActionRequest extends HttpRequest
         return null;
     }
 
-    public function getFiles() 
-    {
-        return $this->files;
-    }
+
+
 
     /**
      * isInvalidActionName returns int
@@ -82,6 +82,21 @@ class ActionRequest extends HttpRequest
     public static function hasAction(array $requestParameters = array())
     {
         return isset($requestParameters['__action']);
+    }
+
+    /**
+     * This is a simple uploaded file storage, it doesn't support multiple files
+     */
+    public function uploadedFile($fieldName, $index = 0)
+    {
+        if (isset($this->uploadedFiles[$fieldName][$index])) {
+            return $this->uploadedFiles[$fieldName][$index];
+        }
+    }
+
+    public function saveUploadedFile($fieldName, $index, $file)
+    {
+        return $this->uploadedFiles[$fieldName][$index] = $file;
     }
 
 }

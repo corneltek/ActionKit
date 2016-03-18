@@ -13,6 +13,7 @@
         "corneltek/class-template": "^2",
         "corneltek/formkit": "^1",
         "twig/twig": "^1",
+        "pekkis/mime-types": "^1",
         "pimple/pimple": "^3.0"
     },
     "suggest": {

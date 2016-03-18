@@ -4,6 +4,8 @@ use Twig_Loader_Filesystem;
 use ReflectionClass;
 use ActionKit\ColumnConvert;
 
+use Pekkis\MimeTypes\MimeTypes;
+
 class Utils
 {
     public static function validateActionName($actionName) {
@@ -48,15 +50,19 @@ class Utils
 
     public static function createFileArrayFromPath($path, $uploadedFile = null)
     {
+        $filetype = $uploadedFile ? $uploadedFile->getType() : null;
+        if (!$filetype) {
+            $mt = new MimeTypes;
+            $filetype = $mt->resolveMimeType($path);
+        }
         $pathinfo = pathinfo($path);
         $file = array(
             'name' => $pathinfo['basename'],
             'tmp_name' => $path,
-            'type' => $uploadedFile ? $uploadedFile->getType() : null,
+            'type' => $filetype,
             'saved_path' => $path,
             'size' => filesize($path)
         );
-
         return $file;
     }
 }
