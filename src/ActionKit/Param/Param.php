@@ -220,11 +220,15 @@ class Param extends CascadingAttribute
 
         }
 
-        // Isa should only work for non-null values.
-        if ($this->action->request->existsParam($this->name) && $this->isa) {
-            $type = self::getTypeClass($this->isa);
-            if (false === $type->test($value)) {
-                return [false, "invalid type value on {$this->isa}"];
+        // isa should only work for non-null values.
+        // empty string parameter is equal to null
+        if ($this->isa && $this->action->request->existsParam($this->name))
+        {
+            if ($value !== '' && $value !== null) {
+                $type = self::getTypeClass($this->isa);
+                if (false === $type->test($value)) {
+                    return [false, "Invalid type value on {$this->isa}"];
+                }
             }
         }
 
