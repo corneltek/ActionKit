@@ -214,11 +214,7 @@ class Action implements IteratorAggregate
             $this->setParamNamesWithIndex($relationId);
         }
 
-        // load param values from $arguments
-        $overlap = array_intersect_key($this->args,$this->params);
-        foreach ($overlap as $name => $val) {
-            $this->getParam($name)->value($val);
-        }
+        $this->loadParamValues();
 
         // action & parameters initialization
         // ===================================
@@ -261,6 +257,23 @@ class Action implements IteratorAggregate
         );
     }
 
+    protected function loadParamValues()
+    {
+        // load param values from $arguments
+        $this->loadParamValuesFromArguments();
+    }
+
+
+    /**
+     * Load argument value into param object.
+     */
+    protected function loadParamValuesFromArguments()
+    {
+        $overlap = array_intersect_key($this->args,$this->params);
+        foreach ($overlap as $name => $val) {
+            $this->getParam($name)->value($val);
+        }
+    }
 
 
     /**

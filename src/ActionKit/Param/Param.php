@@ -18,7 +18,7 @@ class Param extends CascadingAttribute
     /**
      * @var ActionKit\Action action object referenece
      * */
-    public $action;
+    protected $action;
 
     /**
      * @var string action param name

@@ -90,8 +90,26 @@ class BaseRecordAction extends Action
 
         // initialize schema , init base action stuff
         parent::__construct($args , $options);
+
     }
 
+    protected function loadParamValues()
+    {
+        // load record values into param objects
+        $columns = $this->record->getColumns(true);
+        foreach ($columns as $column) {
+            $name = $column->name;
+            if (isset($this->params[$name] ) ) {
+                $param = $this->params[$name];
+                if ($value = $this->record->getValue($name)) {
+                    $param->value = $value;
+                } else {
+                    $param->value = $column->getDefaultValue();
+                }
+            }
+        }
+        parent::loadParamValues();
+    }
 
 
     /**
