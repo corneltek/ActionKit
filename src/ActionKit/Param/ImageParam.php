@@ -296,6 +296,7 @@ class ImageParam extends Param
             } else {
 
                 $uploadedFile->copy($targetPath);
+
             }
 
             $this->action->request->saveUploadedFile($this->name, 0, $uploadedFile);
