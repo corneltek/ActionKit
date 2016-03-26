@@ -47,9 +47,9 @@ class CsrfTokenProvider
         return $token;
     }
 
-    public function verifyToken(CsrfToken $token, $tokenHash) {
+    public function verifyToken(CsrfToken $token, $tokenHash, $requestTime) {
         if ($token != null) {
-            if (!$token->isExpired($_SERVER['REQUEST_TIME'])) {
+            if (!$token->isExpired($requestTime)) {
                 return false;
             }
             $tokenHash = base64_decode($tokenHash);
