@@ -2,9 +2,16 @@
 namespace ActionKit;
 use Exception;
 use ActionKit\Messages;
+use ArrayAccess;
 
-class Result
+class Result implements ArrayAccess
 {
+    /**
+     * @var array The internal stash array of the data presentation
+     */
+    protected $stash = [];
+
+
     /**
      * @var string success, error
      */
@@ -338,7 +345,8 @@ class Result
 
     public function toArray()
     {
-        $ret = array();
+        // this will copy the stash array
+        $ret = array_merge([], $this->stash);
 
         if ($this->args) {
             $ret['args'] = $this->args;
@@ -376,6 +384,28 @@ class Result
         }
 
         return $ret;
+    }
+
+
+
+    public function offsetSet($name,$value)
+    {
+        $this->stash[ $name ] = $value;
+    }
+
+    public function offsetExists($name)
+    {
+        return isset($this->stash[ $name ]);
+    }
+
+    public function offsetGet($name)
+    {
+        return $this->stash[ $name ];
+    }
+
+    public function offsetUnset($name)
+    {
+        unset($this->stash[$name]);
     }
 
     public function __toString()
