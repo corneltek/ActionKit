@@ -114,10 +114,9 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
             'email' => 'foo@foo'
         ));
         is(true, $result);
-
         fseek($stream, 0);
         $output = stream_get_contents($stream);
-        $expected_output = '{"args":{"email":"foo@foo"},"success":true,"message":"User record is created successfully.","data":{"email":"foo@foo","id":1}}';
+        $expected_output = '{"code":200,"args":{"email":"foo@foo"},"success":true,"message":"User record is created successfully.","data":{"email":"foo@foo","id":1}}';
         is($expected_output, $output);
     }
 

@@ -86,6 +86,12 @@ class ProductBundleTest extends ModelTestCase
         return array( new ProductSchema );
     }
 
+    public function setUp()
+    {
+        $records = new ProductCollection;
+        $records->delete();
+    }
+
 
     /**
      * @dataProvider orderingActionMapProvider
