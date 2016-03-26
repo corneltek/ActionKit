@@ -13,7 +13,11 @@ class ActionRequest extends HttpRequest
 
     protected $actionName;
 
+    /**
+     * @var array[Universal\Http\UploadedFile] the request-wide file objects.
+     */
     protected $uploadedFiles = array();
+
 
     public function __construct(array $requestParameters = array(), array $files = null)
     {
@@ -84,6 +88,10 @@ class ActionRequest extends HttpRequest
         return isset($requestParameters['__action']);
     }
 
+
+
+
+    // XXX: the uploadedFile methods should be not used.
     /**
      * This is a simple uploaded file storage, it doesn't support multiple files
      */
