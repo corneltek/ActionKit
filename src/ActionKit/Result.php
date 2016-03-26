@@ -15,7 +15,7 @@ class Result implements ArrayAccess
     /**
      * @var integer http response code, by default we return 200.
      */
-    protected $responseCode = 200;
+    public $responseCode = 200;
 
     /**
      * @var string success, error

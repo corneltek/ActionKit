@@ -175,6 +175,10 @@ class ActionRunner
             $request = new ActionRequest($arguments, $files);
             $result = $this->runWithRequest($request);
             if ($result && $request->isAjax()) {
+                if ($result->responseCode) {
+                    http_response_code($result->responseCode);
+                }
+
                 // Deprecated:
                 // The text/plain seems work for IE8 (IE8 wraps the 
                 // content with a '<pre>' tag.
