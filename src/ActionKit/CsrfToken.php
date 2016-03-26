@@ -43,20 +43,23 @@ class CsrfToken
         $this->sessionKey = $sessionKey;
     }
 
-    public function checkExpiry($timestamp)
+    public function isExpired($timestamp)
     {
-        return ($timestamp - $this->timestamp) < $this->ttl;
+        if ($this->ttl !== 0) {
+            return ($timestamp - $this->timestamp) < $this->ttl;
+        }
+        return true;
     }
 
     public function toPublicArray()
     {
-        return array(
+        return [
             'hash'      => $this->hash,
             'ttl'       => $this->ttl,
             'timestamp' => $this->timestamp,
             'created_at' => date('c', $this->timestamp),
             'expired_at' => date('c', $this->timestamp + $this->ttl),
-        );
+        ];
     }
 
 
