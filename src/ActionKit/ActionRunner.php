@@ -191,10 +191,11 @@ class ActionRunner
             if ($request->isAjax()) {
                 if ($this->debug) {
                     fwrite($stream, json_encode(array(
-                        'error' => 1,
-                        'message' => $e->getMessage(),
-                        'line' => $e->getLine(),
-                        'file' => $e->getFile(),
+                        'error'     => 1,
+                        'message'   => $e->getMessage(),
+                        'line'      => $e->getLine(),
+                        'file'      => $e->getFile(),
+                        'backtrace' => $e->getTrace(),
                     )));
                 } else {
                     fwrite($stream, json_encode(array(
