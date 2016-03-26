@@ -190,12 +190,13 @@ class ActionRunner
             @header('HTTP/1.1 403 Action API Error');
             if ($request->isAjax()) {
                 if ($this->debug) {
+                    // $trace = debug_backtrace();
                     fwrite($stream, json_encode(array(
                         'error'     => 1,
                         'message'   => $e->getMessage(),
                         'line'      => $e->getLine(),
                         'file'      => $e->getFile(),
-                        'backtrace' => $e->getTrace(),
+                        'trace' => $e->getTraceAsString(),
                     )));
                 } else {
                     fwrite($stream, json_encode(array(
