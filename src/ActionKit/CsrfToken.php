@@ -54,6 +54,8 @@ class CsrfToken
             'hash'      => $this->hash,
             'ttl'       => $this->ttl,
             'timestamp' => $this->timestamp,
+            'created_at' => date('c', $this->timestamp),
+            'expired_at' => date('c', $this->timestamp + $this->ttl),
         );
     }
 
