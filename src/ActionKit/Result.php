@@ -311,20 +311,26 @@ class Result implements ArrayAccess
         return $this;
     }
 
-    public function success( $message = null )
+    public function success($message = null, $responseCode = null)
     {
         $this->type = 'success';
-        if ( $message ) {
+        if ($message) {
             $this->message = $message;
+        }
+        if ($responseCode) {
+            $this->responseCode = $responseCode;
         }
         return $this;
     }
 
-    public function error( $message = null )
+    public function error($message = null, $responseCode = null)
     {
         $this->type = 'error';
-        if ( $message ) {
+        if ($message) {
             $this->message = $message;
+        }
+        if ($responseCode) {
+            $this->responseCode = $responseCode;
         }
         return $this;
     }
