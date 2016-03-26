@@ -7,8 +7,9 @@ use ActionKit\ActionTemplate\TwigActionTemplate;
 use ActionKit\ActionTemplate\UpdateOrderingRecordActionTemplate;
 use ActionKit\Testing\ActionTestAssertions;
 use ProductBundle\Model\Product;
-use ProductBundle\Model\ProductImage;
 use ProductBundle\Model\ProductCollection;
+use ProductBundle\Model\ProductImage;
+use ProductBundle\Model\ProductImageCollection;
 use ProductBundle\Model\ProductSchema;
 use ProductBundle\Action\CreateProduct;
 use ProductBundle\Action\UpdateProduct;
@@ -88,7 +89,11 @@ class ProductBundleTest extends ModelTestCase
 
     public function setUp()
     {
+        parent::setUp();
         $records = new ProductCollection;
+        $records->delete();
+
+        $records = new ProductImageCollection;
         $records->delete();
     }
 
