@@ -180,6 +180,7 @@ class Action implements IteratorAggregate
             $files = array();
 
             if (isset($options['files'])) {
+
                 $files = FilesParameter::fix_files_array($options['files']);
 
             } else if (isset($args['_FILES'])) {
@@ -192,8 +193,6 @@ class Action implements IteratorAggregate
                 $files = FilesParameter::fix_files_array($_FILES);
 
             }
-
-
 
             $this->request = new ActionRequest($args, $files);
         }
@@ -218,6 +217,8 @@ class Action implements IteratorAggregate
         // use the schema definitions to filter arguments
         $this->args = $this->_filterArguments($args);
 
+        // See if we need to render the input names with relationship ID and
+        // index?
         if ( $relationId = $this->arg('__nested') ) {
             $this->setParamNamesWithIndex($relationId);
         }
@@ -519,7 +520,7 @@ class Action implements IteratorAggregate
                 $this->result['csrf_token_invalid'] = true;
                 return false;
             }
-            if (!$this->csrf->verifyToken($token, $insecureToken)) {
+            if (!$this->csrf->verifyToken($token, $insecureToken, $_SERVER['REQUEST_TIME'])) {
                 $errorMsg = $this->messagePool->translate('csrf.token_mismatch');
                 $this->result->error($errorMsg, 403);
                 $this->result['csrf_token_mismatch'] = true;
@@ -1184,7 +1185,7 @@ class Action implements IteratorAggregate
         // TODO support loading csrf token from session or header "X-CSRF-TOKEN"
         if ($this->csrf) {
             $token = $this->csrf->loadToken(true);
-            if ($token == null || !$token->checkExpiry($_SERVER['REQUEST_TIME'])) {
+            if ($token == null || !$token->isExpired($_SERVER['REQUEST_TIME'])) {
                 $token = $this->csrf->generateToken();
             }
             return $token->hash;
