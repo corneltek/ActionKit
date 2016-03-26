@@ -7,19 +7,32 @@ class CsrfTokenProvider
 {
     protected $sessionKey;
 
-    public function __construct($sessionKey = '_csrf_token')
+    protected $ttl = 1800;
+
+    public function __construct($sessionKey = '__csrf_token')
     {
         $this->sessionKey = $sessionKey;
+    }
+
+    public function setTtl($seconds)
+    {
+        $this->ttl = $seconds;
+    }
+
+    public function dropToken($sessionKey)
+    {
+        unset($_SESSION[$sessionKey]);
     }
 
     /**
      * Generate a CSRF token and save the token into the session with the
      * current session key.
      *
-     * @param integer $ttl time to live
+     * @param integer $ttl time to live seconds
      */
-    public function generateToken($sessionKey = null, $ttl = 1200)
+    public function generateToken($sessionKey = null, $ttl = null)
     {
+        $ttl = $ttl ?: $this->ttl; // fallback to default ttl
         $token = new CsrfToken($sessionKey ?: $this->sessionKey, $ttl);
         $token->timestamp = time();
         $token->salt = $this->randomString(32);
