@@ -13,6 +13,11 @@ class Result implements ArrayAccess
 
 
     /**
+     * @var integer http response code, by default we return 200.
+     */
+    protected $responseCode = 200;
+
+    /**
      * @var string success, error
      */
     public $type;  // success, error, valid, invalid, completion, redirect
@@ -347,6 +352,8 @@ class Result implements ArrayAccess
     {
         // this will copy the stash array
         $ret = array_merge([], $this->stash);
+
+        $ret['code'] = $this->responseCode;
 
         if ($this->args) {
             $ret['args'] = $this->args;
