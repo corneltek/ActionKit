@@ -43,8 +43,16 @@ class Action implements IteratorAggregate
 
     /**
      * @var array
+     *
+     * TODO: should be protected
      */
     public $args = array();   // post,get args for action
+
+
+    /**
+     * @var array[Universal\Http\UploadedFile] the action wide file objects.
+     */
+    protected $uploadedFiles = array();
 
     /**
      * @var ActionKit\Result
@@ -1293,6 +1301,21 @@ class Action implements IteratorAggregate
                 return call_user_func_array(array($mixin,$m), $args);
             }
         }
+    }
+
+    /**
+     * This is a simple uploaded file storage, it doesn't support multiple files
+     */
+    public function uploadedFile($fieldName, $index = 0)
+    {
+        if (isset($this->uploadedFiles[$fieldName][$index])) {
+            return $this->uploadedFiles[$fieldName][$index];
+        }
+    }
+
+    public function saveUploadedFile($fieldName, $index, $file)
+    {
+        return $this->uploadedFiles[$fieldName][$index] = $file;
     }
 
 
