@@ -37,7 +37,11 @@ class CsrfTokenProvider
         $token->timestamp = time();
         $token->salt = $this->randomString(32);
         $token->sessionId = session_id();
-        $token->ip = $_SERVER['REMOTE_ADDR'];
+        if (isset($_SERVER['REMOTE_ADDR'])) {
+            $token->ip = $_SERVER['REMOTE_ADDR'];
+        } else {
+            $token->ip = '0.0.0.0';
+        }
         $_SESSION[$token->sessionKey] = serialize($token);
         $token->hash = $this->encodeToken($token);
         return $token;
