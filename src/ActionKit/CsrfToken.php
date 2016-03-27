@@ -40,6 +40,7 @@ class CsrfToken
     public function __construct($sessionKey, $ttl)
     {
         $this->ttl = $ttl;
+        $this->timestamp = time(); // created_at
         $this->sessionKey = $sessionKey;
     }
 
