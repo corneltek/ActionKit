@@ -42,7 +42,7 @@ class CsrfTokenProvider
         ]);
 
         // Store the token object in session
-        $_SESSION[$this->sessionKey] = serialize($token);
+        $_SESSION[$sessionKey] = serialize($token);
 
         // Reeturn the Csrf token
         return $token;
