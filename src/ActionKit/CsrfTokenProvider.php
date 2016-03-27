@@ -35,7 +35,7 @@ class CsrfTokenProvider
     public function generateToken($sessionKey = null, $ttl = null)
     {
         $ttl = $ttl ?: $this->ttl; // fallback to default ttl
-        $sessionkey = $sessionKey ?: $this->sessionKey;
+        $sessionKey = $sessionKey ?: $this->sessionKey;
         $token = new CsrfToken($sessionKey, $ttl, [
             'session_id'  => session_id(),
             'remote_addr' => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '0.0.0.0',
