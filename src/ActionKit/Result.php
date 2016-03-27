@@ -4,6 +4,12 @@ use Exception;
 use ActionKit\Messages;
 use ArrayAccess;
 
+
+/**
+ * This class defines the response properties of an action.
+ *
+ * @package ActionKit
+ */
 class Result implements ArrayAccess
 {
     /**
