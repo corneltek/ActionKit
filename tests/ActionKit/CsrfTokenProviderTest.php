@@ -1,5 +1,5 @@
 <?php
-use ActionKit\CsrfTokenProvider;
+use ActionKit\Csrf\CsrfTokenProvider;
 
 class CsrfTokenProviderTest extends PHPUnit_Framework_TestCase 
 {
