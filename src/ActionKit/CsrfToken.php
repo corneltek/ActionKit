@@ -40,12 +40,13 @@ class CsrfToken
         $this->sessionKey = $sessionKey;
         $this->salt = $this->randomString(32);
         $this->extra = $extra;
+        $this->hash = $this->generateChecksum();
     }
 
     public function isExpired($timestamp)
     {
         if ($this->ttl !== 0) {
-            return ($timestamp - $this->timestamp) < $this->ttl;
+            return ($timestamp - $this->timestamp) > $this->ttl;
         }
         return true;
     }
@@ -74,4 +75,13 @@ class CsrfToken
     }
 
 
+    /**
+     * generateChecksum generates sha1 checksum and stored in base64 format string
+     *
+     * @return string
+     */
+    protected function generateChecksum()
+    {
+        return base64_encode(sha1(serialize($this)));
+    }
 }
