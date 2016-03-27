@@ -22,26 +22,24 @@ class CsrfToken
      */
     public $salt;
 
-    /**
-     * @var string
-     */
-    public $sessionId;
-
-    /**
-     * @var string
-     */
-    public $ip;
 
     /**
      * @var string
      */
     public $hash;
 
-    public function __construct($sessionKey, $ttl)
+    /**
+     * @var array $extra information
+     */
+    public $extra = [];
+
+    public function __construct($sessionKey, $ttl = 0, array $extra = array())
     {
         $this->ttl = $ttl;
         $this->timestamp = time(); // created_at
         $this->sessionKey = $sessionKey;
+        $this->salt = $this->randomString(32);
+        $this->extra = $extra;
     }
 
     public function isExpired($timestamp)
@@ -61,6 +59,18 @@ class CsrfToken
             'created_at' => date('c', $this->timestamp),
             'expired_at' => date('c', $this->timestamp + $this->ttl),
         ];
+    }
+
+    protected function randomString($len = 10)
+    {
+        $rString = '';
+        $chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789';
+        $charsTotal  = strlen($chars);
+        for ($i = 0; $i < $len; $i++) {
+            $rInt = (integer) mt_rand(0, $charsTotal);
+            $rString .= substr($chars, $rInt, 1);
+        }
+        return $rString;
     }
 
 
