@@ -43,12 +43,12 @@ class CsrfToken
         $this->hash = $this->generateChecksum();
     }
 
-    public function isExpired($timestamp)
+    public function isExpired($now)
     {
-        if ($this->ttl !== 0) {
-            return ($timestamp - $this->timestamp) > $this->ttl;
+        if ($this->ttl != 0) {
+            return ($now - $this->timestamp) > $this->ttl;
         }
-        return true;
+        return false;
     }
 
     public function toPublicArray()
