@@ -1,27 +1,23 @@
 <?php
 namespace ActionKit\Csrf;
 use ActionKit\Csrf\CsrfToken;
+use ActionKit\Csrf\CsrfStorage;
 use Exception;
 
 class CsrfTokenProvider
 {
-    protected $sessionKey;
-
     protected $ttl = 1800;
 
-    public function __construct($sessionKey = '__csrf_token')
+    protected $storage;
+
+    public function __construct(CsrfStorage $storage)
     {
-        $this->sessionKey = $sessionKey;
+        $this->storage = $storage;
     }
 
     public function setTtl($seconds)
     {
         $this->ttl = $seconds;
-    }
-
-    public function dropToken($sessionKey)
-    {
-        unset($_SESSION[$sessionKey]);
     }
 
     /**
@@ -32,27 +28,46 @@ class CsrfTokenProvider
      *
      * @return CsrfToken
      */
-    public function generateToken($sessionKey = null, $ttl = null)
+    public function generateToken()
     {
-        $ttl = $ttl ?: $this->ttl; // fallback to default ttl
-        $sessionKey = $sessionKey ?: $this->sessionKey;
-        $token = new CsrfToken($sessionKey, $ttl, [
+        $token = new CsrfToken(session_id(), $this->ttl, [
             'session_id'  => session_id(),
             'remote_addr' => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '0.0.0.0',
         ]);
-
-        // Store the token object in session
-        $_SESSION[$sessionKey] = serialize($token);
-
-        // Reeturn the Csrf token
         return $token;
+    }
+
+    public function loadCurrentToken($refresh = false)
+    {
+        if ($refresh) {
+            $token = $this->generateToken();
+            $this->storage->store($token);
+        }
+        if ($token = $this->storage->load()) {
+            return $token;
+        }
+        $token = $this->generateToken();
+        $this->storage->store($token);
+        return $token;
+    }
+
+    public function getStorage()
+    {
+        return $this->storage;
     }
 
     /**
      * Verify incoming csrf token
+     *
+     * @param string $insecureTokenHash
+     * @param integer $requestTime
+     * @return boolean
      */
-    public function verifyToken(CsrfToken $token, $insecureTokenHash, $requestTime) {
-        if ($token != null) {
+    public function isValidToken($insecureTokenHash, $requestTime)
+    {
+        // Load the token object from the storage (session storage)
+        $token = $this->storage->load();
+        if ($token) {
             if ($token->isExpired($requestTime)) {
                 return false;
             }
@@ -63,27 +78,4 @@ class CsrfTokenProvider
         }
         return false;
     }
-
-    public function loadToken()
-    {
-        return $this->loadTokenWithSessionKey($this->sessionKey);
-    }
-
-    /**
-     * Load a CSRF token from session by specific session key
-     *
-     * @param string $sessionKey
-     * @param boolean $withHash
-     *
-     * @return CsrfToken
-     */
-    public function loadTokenWithSessionKey($sessionKey)
-    {
-        if (isset($_SESSION[$sessionKey])) {
-            // unserialized the token from session
-            return unserialize($_SESSION[$sessionKey]);
-        } 
-        return null;
-    }
-
 }

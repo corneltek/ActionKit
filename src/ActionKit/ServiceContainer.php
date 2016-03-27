@@ -4,6 +4,8 @@ use Pimple\Container;
 use ActionKit\ActionGenerator;
 use ActionKit\Csrf\CsrfTokenProvider;
 use ActionKit\Csrf\CsrfToken;
+use ActionKit\Csrf\CsrfSessionStorage;
+use ActionKit\Csrf\CsrfStorage;
 use ActionKit\Csrf\CsrfTokenRegister;
 use Phifty\MessagePool;
 use Twig_Loader_Filesystem;
@@ -46,21 +48,22 @@ class ServiceContainer extends Container
         };
 
         $this['csrf'] = function($c) {
-            return new CsrfTokenProvider;
+            return new CsrfTokenProvider(new CsrfSessionStorage('__csrf_token'));
         };
 
         // This factory will always generate new csrf token
         $this['csrf_token_new'] = $this->factory(function($c) {
-            return $c['csrf']->generateToken();
+            return $c['csrf']->loadCurrentToken($refresh = true);
         });
 
         // Create csrf token on demain
         $this['csrf_token'] = $this->factory(function($c) {
             $provider = $c['csrf'];
             // try to load csrf token in the current session
-            $token = $provider->loadToken(true);
+            $token = $provider->loadCurrentToken();
             if ($token == null || $token->isExpired($_SERVER['REQUEST_TIME'])) {
-                $token = $provider->generateToken();
+                // generate a new token
+                return $provider->loadCurrentToken(true);
             }
             return $token;
         });

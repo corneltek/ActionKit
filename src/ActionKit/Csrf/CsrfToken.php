@@ -4,7 +4,8 @@ use Exception;
 
 class CsrfToken
 {
-    public $sessionKey;
+    public $id;
+
 
     /**
      * @var integer time to live of the token. using seconds.
@@ -33,11 +34,11 @@ class CsrfToken
      */
     public $extra = [];
 
-    public function __construct($sessionKey, $ttl = 0, array $extra = array())
+    public function __construct($id, $ttl = 0, array $extra = array())
     {
+        $this->id = $id;
         $this->ttl = $ttl;
         $this->timestamp = time(); // created_at
-        $this->sessionKey = $sessionKey;
         $this->salt = $this->randomString(32);
         $this->extra = $extra;
         $this->hash = $this->generateChecksum();

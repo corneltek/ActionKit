@@ -506,22 +506,14 @@ class Action implements IteratorAggregate
     final public function invoke()
     {
         if (session_id() && $this->csrf && $this->enableCSRFToken) {
-            // load the existing token from session
-            $token = $this->csrf->loadToken();
-
-            if (!$token) {
-                $errorMsg = $this->messagePool->translate('csrf.token_expired');
-                $this->result->error($errorMsg, 401);
-                $this->result['csrf_token_expired'] = true;
-                return false;
-            }
-
             // read csrf token from __csrf_token field or _csrf_token field
             $insecureToken = $this->arg($this->csrfTokenFieldName) ?: $this->arg('_csrf_token'); // _csrf_token is for backward compatibility
 
             // or we can read the csrf token from http header
-            if (!$insecureToken && isset($_SERVER['HTTP_X_CSRF_TOKEN'])) {
-                $insecureToken = $_SERVER['HTTP_X_CSRF_TOKEN'];
+            if (!$insecureToken) {
+                if (isset($_SERVER['HTTP_X_CSRF_TOKEN'])) {
+                    $insecureToken = $_SERVER['HTTP_X_CSRF_TOKEN'];
+                }
             }
 
             // if we still don't get the csrf token
@@ -533,7 +525,7 @@ class Action implements IteratorAggregate
                 return false;
             }
 
-            if (!$this->csrf->verifyToken($token, $insecureToken, $_SERVER['REQUEST_TIME'])) {
+            if (!$this->csrf->isValidToken($insecureToken, $_SERVER['REQUEST_TIME'])) {
                 $errorMsg = $this->messagePool->translate('csrf.token_mismatch');
                 $this->result->error($errorMsg, 401);
                 $this->result['csrf_token_mismatch'] = true;
@@ -1197,7 +1189,7 @@ class Action implements IteratorAggregate
     {
         // TODO support loading csrf token from session or header "X-CSRF-TOKEN"
         if ($this->csrf) {
-            $token = $this->csrf->loadToken(true);
+            $token = $this->csrf->loadCurrentToken();
             if ($token == null || $token->isExpired($_SERVER['REQUEST_TIME'])) {
                 $token = $this->csrf->generateToken();
             }
