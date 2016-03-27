@@ -93,7 +93,7 @@ class Action implements IteratorAggregate
 
 
     /**
-     * @var boolean Enable CSRF token 
+     * @var boolean Enable CSRF token
      *
      * A user class may override this property to disable/enable csrf token
      * verification.
@@ -516,10 +516,15 @@ class Action implements IteratorAggregate
                 return false;
             }
 
+            // read csrf token from __csrf_token field or _csrf_token field
             $insecureToken = $this->arg($this->csrfTokenFieldName) ?: $this->arg('_csrf_token'); // _csrf_token is for backward compatibility
+
+            // or we can read the csrf token from http header
             if (!$insecureToken && isset($_SERVER['HTTP_X_CSRF_TOKEN'])) {
                 $insecureToken = $_SERVER['HTTP_X_CSRF_TOKEN'];
             }
+
+            // if we still don't get the csrf token
             if (!$insecureToken) {
                 // $this->result->error('CSRF token is invalid: empty token given.');
                 $errorMsg = $this->messagePool->translate('csrf.token_invalid');
@@ -527,6 +532,7 @@ class Action implements IteratorAggregate
                 $this->result['csrf_token_invalid'] = true;
                 return false;
             }
+
             if (!$this->csrf->verifyToken($token, $insecureToken, $_SERVER['REQUEST_TIME'])) {
                 $errorMsg = $this->messagePool->translate('csrf.token_mismatch');
                 $this->result->error($errorMsg, 401);
@@ -1210,7 +1216,7 @@ class Action implements IteratorAggregate
     public function renderCSRFTokenWidget(array $attrs = array())
     {
         // Create csrf token widget only when csrf provider is defined and enableCSRFToken is on.
-        if (!$this->csrf || !$this->enableCSRFToken) {
+        if (!$this->csrf) {
             throw new Exception('csrf token provider is not provided.');
         }
         $hash = $this->getCSRFToken();
