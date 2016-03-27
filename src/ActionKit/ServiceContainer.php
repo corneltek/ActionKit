@@ -47,15 +47,21 @@ class ServiceContainer extends Container
             return new CsrfTokenProvider;
         };
 
+        // This factory will always generate new csrf token
+        $this['csrf_token_new'] = $this->factory(function($c) {
+            return $c['csrf']->generateToken();
+        });
+
+        // Create csrf token on demain
         $this['csrf_token'] = $this->factory(function($c) {
+            $provider = $c['csrf'];
             // try to load csrf token in the current session
-            $token = $c['csrf']->loadToken(true);
-            if ($token == null || !$token->checkExpiry($_SERVER['REQUEST_TIME'])) {
-                $token = $c['csrf']->generateToken();
+            $token = $provider->loadToken(true);
+            if ($token == null || !$token->isExpired($_SERVER['REQUEST_TIME'])) {
+                $token = $provider->generateToken();
             }
             return $token;
         });
-
 
         // The default twig loader
         $this['twig_loader'] = function($c) {
