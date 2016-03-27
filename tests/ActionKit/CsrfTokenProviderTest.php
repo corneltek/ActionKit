@@ -55,7 +55,7 @@ class CsrfTokenProviderTest extends PHPUnit_Framework_TestCase
     public function testVerifyToken()
     {
         $token = $this->provider->loadToken();
-        $result = $this->provider->verifyToken($token, $this->token->hash);
-        is(true, $result);
+        $result = $this->provider->verifyToken($token, $this->token->hash, time());
+        $this->assertTrue($result);
     }
 }
