@@ -504,7 +504,7 @@ class Action implements IteratorAggregate
 
             if (!$token) {
                 $errorMsg = $this->messagePool->translate('csrf.token_expired');
-                $this->result->error($errorMsg, 403);
+                $this->result->error($errorMsg, 401);
                 $this->result['csrf_token_expired'] = true;
                 return false;
             }
@@ -516,13 +516,13 @@ class Action implements IteratorAggregate
             if (!$insecureToken) {
                 // $this->result->error('CSRF token is invalid: empty token given.');
                 $errorMsg = $this->messagePool->translate('csrf.token_invalid');
-                $this->result->error($errorMsg, 403);
+                $this->result->error($errorMsg, 401);
                 $this->result['csrf_token_invalid'] = true;
                 return false;
             }
             if (!$this->csrf->verifyToken($token, $insecureToken, $_SERVER['REQUEST_TIME'])) {
                 $errorMsg = $this->messagePool->translate('csrf.token_mismatch');
-                $this->result->error($errorMsg, 403);
+                $this->result->error($errorMsg, 401);
                 $this->result['csrf_token_mismatch'] = true;
                 return false;
             }
