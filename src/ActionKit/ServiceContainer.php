@@ -57,7 +57,7 @@ class ServiceContainer extends Container
             $provider = $c['csrf'];
             // try to load csrf token in the current session
             $token = $provider->loadToken(true);
-            if ($token == null || !$token->isExpired($_SERVER['REQUEST_TIME'])) {
+            if ($token == null || $token->isExpired($_SERVER['REQUEST_TIME'])) {
                 $token = $provider->generateToken();
             }
             return $token;
