@@ -2,7 +2,9 @@
 namespace ActionKit;
 use Pimple\Container;
 use ActionKit\ActionGenerator;
-use ActionKit\CsrfTokenProvider;
+use ActionKit\Csrf\CsrfTokenProvider;
+use ActionKit\Csrf\CsrfToken;
+use ActionKit\Csrf\CsrfTokenRegister;
 use Phifty\MessagePool;
 use Twig_Loader_Filesystem;
 use ReflectionClass;
