@@ -140,9 +140,13 @@ class ImageParam extends Param
             return $ret;
         }
 
+        $requireUploadMove = false;
+        $uploadedFile = $this->_findUploadedFile($this->name, $requireUploadMove);
+        if ($uploadedFile && $uploadedFile->hasError()) {
+            return [false, $uploadedFile->getUserErrorMessage()];
+        }
+
         $file = $this->action->request->file($this->name);
-
-
         if (!empty($file) && $file['name'] && $file['type']) {
             $uploadedFile = UploadedFile::createFromArray($file);
             if ($this->validExtensions) {
@@ -150,7 +154,7 @@ class ImageParam extends Param
                     return [false, _('Invalid file extension: ') . $uploadedFile->getExtension()];
                 }
             }
-            if ( $this->sizeLimit ) {
+            if ($this->sizeLimit) {
                 if ( ! $uploadedFile->validateSize( $this->sizeLimit ) ) {
                     return [false, _("The uploaded file exceeds the size limitation. ") . futil_prettysize($this->sizeLimit * 1024)];
                 }
@@ -192,22 +196,38 @@ class ImageParam extends Param
     }
 
 
+    /**
+     * file uploading issue:
+     *
+     * When processing sub-actions, the file objects are shared across the
+     * parent action. sometimes the column name will collide with the parent action column names.  
+     * To solve this issue, we have to separate the namespace.
+     *
+     *   solutions:
+     *     1. the file upload object should be action-wide not request-wide
+     *     2. save the file upload object in the action, not in the request object.
+     *     3. do not access $_FILES or request->files directly.
+     *
+     *   plan:
+     *      1. Moved uploadedFile access methods from ActionRequest to Action itself.
+     *
+     */
     protected function _findUploadedFile($name, & $requireUploadMove)
     {
+        // See if there is any UploadedFile object created in this action.
         $uploadedFile = $this->action->request->uploadedFile($name, 0);
         if ($uploadedFile) {
             return $uploadedFile;
         }
 
         // Uploaded by static path
-        if ($uploadedPath = $this->action->request->arg($name)) {
+        if ($uploadedPath = $this->action->arg($name)) {
             $fileArray = Utils::createFileArrayFromPath($uploadedPath);
             return UploadedFile::createFromArray($fileArray);
         }
 
         // create an uploaded file object from here
         $fileArray = $this->action->request->file($this->name);
-
         // if there is an upload file in $_FILES
         if ($fileArray && $fileArray['error'] == 0) {
             $requireUploadMove = true;
@@ -227,12 +247,17 @@ class ImageParam extends Param
         $requireUploadMove = false;
         $uploadedFile = $this->_findUploadedFile($this->name, $requireUploadMove);
         if (!$uploadedFile) {
+            // Try to load uploadedFile from sourceField
             if ($this->sourceField) {
                 $uploadedFile = $this->_findUploadedFile($this->sourceField, $requireUploadMove);
             }
         }
 
         if (!$uploadedFile) {
+            return;
+        }
+
+        if ($uploadedFile->hasError()) {
             return;
         }
 
@@ -272,13 +297,13 @@ class ImageParam extends Param
                 $uploadedFile->move($targetPath);
 
             } else {
-
-
+                // is not an uploaded file?
+                // may happen error here
                 $uploadedFile->copy($targetPath);
 
             }
 
-            $this->action->request->saveUploadedFile($this->name, 0, $uploadedFile);
+            $this->action->saveUploadedFile($this->name, 0, $uploadedFile);
 
         } else if ($this->sourceField) { // If there is no http upload, copy the file from source field
 
@@ -299,7 +324,7 @@ class ImageParam extends Param
 
             }
 
-            $this->action->request->saveUploadedFile($this->name, 0, $uploadedFile);
+            $this->action->saveUploadedFile($this->name, 0, $uploadedFile);
 
         } else {
 

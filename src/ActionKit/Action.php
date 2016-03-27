@@ -186,11 +186,16 @@ class Action implements IteratorAggregate
                 // fallback to action_request defiend in service
                 $this->request = $this->services['action_request'];
 
-            } else if (isset($_FILES) && ! empty($_FILES) ) {
+            } else if (isset($_FILES)) {
 
                 // if not, always fix $_FILES
                 $files = FilesParameter::fix_files_array($_FILES);
                 $this->request = new ActionRequest($args, $files);
+
+            } else {
+
+                // When rendering Action with view, we probably won't have this request object.
+                $this->request = new ActionRequest($args, []);
 
             }
         }
