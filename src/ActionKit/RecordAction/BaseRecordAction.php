@@ -352,13 +352,14 @@ class BaseRecordAction extends Action
     }
 
     /**
-     * Base on the relationship definition, we should
-     * create the action object to process the nested data.
+     * Base on the relationship definition, this method creates the action
+     * object to process the nested data.
      *
-     * When creating subaction with relationship, we don't pass the current request object, we 
-     * only pass the sub-parameters of the relationship (including files array)
+     * When creating subaction with relationship, we don't pass the current request object, we
+     * only pass the sub-parameters of the relationship (including the sub-section of the $_FILES array)
      *
-     * The subaction will create its own ActionRequest object to maintain the sub-parameters.
+     * The subaction will create its own ActionRequest object to maintain the
+     * sub-parameters.
      *
      * @param LazyRecord\Schema\Relationship $relation
      * @param array $args
@@ -464,7 +465,6 @@ class BaseRecordAction extends Action
             }
 
             $allfiles = $this->request->getFiles();
-
             $indexList = array_unique(array_merge(array_keys($argsList),  array_keys($allfiles)));
             if (empty($indexList)) {
                 continue;
@@ -504,8 +504,8 @@ class BaseRecordAction extends Action
                     $args = $argsList[$index];
 
                     // copy csrf token recursively
-                    if (isset($this->args['_csrf_token'])) {
-                        $args['_csrf_token'] = $this->args['_csrf_token'];
+                    if (isset($this->args['__csrf_token'])) {
+                        $args['__csrf_token'] = $this->args['__csrf_token'];
                     }
 
 
@@ -519,9 +519,9 @@ class BaseRecordAction extends Action
                     // Get the file arguments from fixed $_FILES array.
                     // the ->files array is fixed in Action::__construct method
 
-                    $files = null;
-                    if (isset($allfiles[ $relationId ][ $index ])) {
-                        $files = $allfiles[ $relationId ][ $index ];
+                    $files = array();
+                    if (isset($allfiles[$relationId][$index])) {
+                        $files = $allfiles[$relationId][$index];
                     }
 
                     $action = $this->createSubActionWithRelationship($relation, $args, $files);
