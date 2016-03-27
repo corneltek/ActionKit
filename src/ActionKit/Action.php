@@ -98,7 +98,7 @@ class Action implements IteratorAggregate
      * A user class may override this property to disable/enable csrf token
      * verification.
      */
-    public $enableCSRFToken = true;
+    protected $enableCSRFToken = true;
 
 
     /**
@@ -492,6 +492,13 @@ class Action implements IteratorAggregate
     }
 
 
+    /**
+     * Disable CsrfTokenProtection
+     */
+    public function disableCsrfTokenProtection()
+    {
+        $this->enableCSRFToken = false;
+    }
 
     /**
      * Invoke is a run method wraper
