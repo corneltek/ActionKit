@@ -75,6 +75,15 @@ class CsrfToken
         return $rString;
     }
 
+    /**
+     * Output token hash 
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->hash;
+    }
 
     /**
      * generateChecksum generates sha1 checksum and stored in base64 format string
