@@ -1198,7 +1198,7 @@ class Action implements IteratorAggregate
         // TODO support loading csrf token from session or header "X-CSRF-TOKEN"
         if ($this->csrf) {
             $token = $this->csrf->loadToken(true);
-            if ($token == null || !$token->isExpired($_SERVER['REQUEST_TIME'])) {
+            if ($token == null || $token->isExpired($_SERVER['REQUEST_TIME'])) {
                 $token = $this->csrf->generateToken();
             }
             return $token->hash;
