@@ -7,7 +7,8 @@ use ActionKit\Param\FileParam;
 use ActionKit\Result;
 use ActionKit\ActionRequest;
 use ActionKit\MessagePool;
-use ActionKit\CsrfTokenProvider;
+use ActionKit\Csrf\CsrfTokenProvider;
+use ActionKit\Csrf\CsrfToken;
 use ActionKit\ServiceContainer;
 use Universal\Http\HttpRequest;
 use Universal\Http\FilesParameter;
@@ -171,31 +172,30 @@ class Action implements IteratorAggregate
             if (isset($options['files'])) {
                 trigger_error('"files" is ignored because you passed action request object');
             }
-        } else if (isset($this->services['action_request'])) {
-
-            $this->request = $this->services['action_request'];
 
         } else {
 
-            $files = array();
-
+            // Create request object manually
             if (isset($options['files'])) {
 
                 $files = FilesParameter::fix_files_array($options['files']);
+                $this->request = new ActionRequest($args, $files);
 
-            } else if (isset($args['_FILES'])) {
+            } else if (isset($this->services['action_request'])) {
 
-                $files = FilesParameter::fix_files_array($args['_FILES']);
+                // fallback to action_request defiend in service
+                $this->request = $this->services['action_request'];
 
             } else if (isset($_FILES) && ! empty($_FILES) ) {
 
                 // if not, always fix $_FILES
                 $files = FilesParameter::fix_files_array($_FILES);
+                $this->request = new ActionRequest($args, $files);
 
             }
-
-            $this->request = new ActionRequest($args, $files);
         }
+
+
 
         $this->result  = new Result;
         $this->mixins = $this->mixins();
