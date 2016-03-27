@@ -169,7 +169,7 @@ class ActionRunner
      * @param array $files  Usually $_FILES array
      * @return return true if it's an ajax response 
      */
-    public function handleWith($stream, array $arguments = array(), array $files = null)
+    public function handleWith($stream, array $arguments = array(), array $files = array())
     {
         try {
             $request = new ActionRequest($arguments, $files);
