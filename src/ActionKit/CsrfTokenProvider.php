@@ -29,59 +29,44 @@ class CsrfTokenProvider
      * current session key.
      *
      * @param integer $ttl time to live seconds
+     *
+     * @return CsrfToken
      */
     public function generateToken($sessionKey = null, $ttl = null)
     {
         $ttl = $ttl ?: $this->ttl; // fallback to default ttl
-        $token = new CsrfToken($sessionKey ?: $this->sessionKey, $ttl);
-        $token->timestamp = time();
-        $token->salt = $this->randomString(32);
-        $token->sessionId = session_id();
-        if (isset($_SERVER['REMOTE_ADDR'])) {
-            $token->ip = $_SERVER['REMOTE_ADDR'];
-        } else {
-            $token->ip = '0.0.0.0';
-        }
-        $_SESSION[$token->sessionKey] = serialize($token);
-        $token->hash = $this->encodeToken($token);
+        $sessionkey = $sessionKey ?: $this->sessionKey;
+        $token = new CsrfToken($sessionKey, $ttl, [
+            'session_id'  => session_id(),
+            'remote_addr' => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '0.0.0.0',
+        ]);
+
+        // Store the token object in session
+        $_SESSION[$this->sessionKey] = serialize($token);
+
+        // Reeturn the Csrf token
         return $token;
     }
 
-    public function verifyToken(CsrfToken $token, $tokenHash, $requestTime) {
+    /**
+     * Verify incoming csrf token
+     */
+    public function verifyToken(CsrfToken $token, $insecureTokenHash, $requestTime) {
         if ($token != null) {
-            if (!$token->isExpired($requestTime)) {
+            if ($token->isExpired($requestTime)) {
                 return false;
             }
-            $tokenHash = base64_decode($tokenHash);
-            $generatedHash = $this->calculateHash($token);
-            if ($tokenHash and $generatedHash) {
-                return $tokenHash == $generatedHash;
+            $generatedHash = $token->hash;
+            if ($insecureTokenHash !== null && $generatedHash !== null) {
+                return $insecureTokenHash === $generatedHash;
             }
         }
         return false;
     }
 
-    protected function randomString($len = 10)
+    public function loadToken()
     {
-        $rString = '';
-        $chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789';
-        $charsTotal  = strlen($chars);
-        for ($i = 0; $i < $len; $i++) {
-            $rInt = (integer) mt_rand(0, $charsTotal);
-            $rString .= substr($chars, $rInt, 1);
-        }
-        return $rString;
-    }
-    
-
-    protected function calculateHash(CsrfToken $token)
-    {
-        return sha1($_SESSION[$token->sessionKey]);
-    }
-
-    public function loadToken($withHash = false)
-    {
-        return $this->loadTokenWithSessionKey($this->sessionKey, $withHash);
+        return $this->loadTokenWithSessionKey($this->sessionKey);
     }
 
     /**
@@ -89,22 +74,16 @@ class CsrfTokenProvider
      *
      * @param string $sessionKey
      * @param boolean $withHash
+     *
+     * @return CsrfToken
      */
-    public function loadTokenWithSessionKey($sessionKey, $withHash = false)
+    public function loadTokenWithSessionKey($sessionKey)
     {
         if (isset($_SESSION[$sessionKey])) {
-            $token = unserialize($_SESSION[$sessionKey]);
-            if ($withHash) {
-                $token->hash = $this->encodeToken($token);
-            }
-            return $token;
+            // unserialized the token from session
+            return unserialize($_SESSION[$sessionKey]);
         } 
         return null;
     }
 
-    protected function encodeToken(CsrfToken $token)
-    {
-        $hash = $this->calculateHash($token);
-        return base64_encode($hash);
-    }
 }
