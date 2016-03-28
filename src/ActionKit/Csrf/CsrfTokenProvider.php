@@ -6,7 +6,7 @@ use Exception;
 
 class CsrfTokenProvider
 {
-    protected $ttl = 1800;
+    protected $ttl = 0;
 
     protected $storage;
 
