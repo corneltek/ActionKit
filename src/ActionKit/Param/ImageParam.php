@@ -123,13 +123,16 @@ class ImageParam extends Param
         return $this;
     }
 
-    public function size( $size )
+    /**
+     * size method define the upload image dimension
+     *
+     * @param array $size
+     */
+    public function size($size)
     {
-        if ( ! empty($size) ) {
-            $this->size = $size;
-            $this->widgetAttributes['dataWidth'] = $size['width'];
-            $this->widgetAttributes['dataHeight'] = $size['height'];
-        }
+        $this->size = $size;
+        $this->widgetAttributes['dataWidth'] = $size['width'];
+        $this->widgetAttributes['dataHeight'] = $size['height'];
         return $this;
     }
 
