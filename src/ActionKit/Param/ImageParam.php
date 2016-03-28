@@ -36,6 +36,8 @@ class ImageParam extends Param
      */
     public $size = array();
 
+    public $displaySize = array();
+
     public $validExtensions = array('jpg','jpeg','png','gif');
 
     public $compression = 99;
@@ -120,6 +122,17 @@ class ImageParam extends Param
                 $this->widgetAttributes['autoresize_types'][ _('Fit Height') ] = 'max_height';
             }
         }
+        return $this;
+    }
+
+    /**
+     * Setup display size
+     */
+    public function displaySize($size)
+    {
+        $this->displaySize = $size;
+        $this->widgetAttributes['dataDisplayWidth'] = $size['width'];
+        $this->widgetAttributes['dataDisplayHeight'] = $size['height'];
         return $this;
     }
 
