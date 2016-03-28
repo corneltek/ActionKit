@@ -14,6 +14,7 @@ class CsrfTokenProviderTest extends PHPUnit_Framework_TestCase
         // $storage = new CsrfSessionStorage('__csrf_token');
         $storage = new CsrfArrayStorage('__csrf_token');
         $this->provider = new CsrfTokenProvider($storage);
+        $this->provider->setTtl(1800);
         $this->token = $this->provider->loadCurrentToken(true);
     }
 
