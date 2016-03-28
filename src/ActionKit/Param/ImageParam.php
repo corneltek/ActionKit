@@ -79,6 +79,8 @@ class ImageParam extends Param
             $this->putIn(static::$defaultUploadDirectory);
         }
 
+        $this->displaySize([ 'width' => 150, 'height' => 140 ]);
+
         $this->renderAs('ThumbImageFileInput',array(
             /* prefix path for widget rendering */
             'prefix' => '/',
