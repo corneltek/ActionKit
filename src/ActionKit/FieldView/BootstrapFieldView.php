@@ -16,9 +16,9 @@ class BootstrapFieldView
 
     public $wrapperClass = 'form-group';
 
-    public $labelClass = 'control-label col-lg-3 col-md-12';
+    public $labelClass = 'control-label col-lg-3';
 
-    public $inputWrapperClass = 'col-lg-7 col-md-12';
+    public $inputWrapperClass = 'col-lg-7';
 
     public $hintClass = 'help-block hint';
 
