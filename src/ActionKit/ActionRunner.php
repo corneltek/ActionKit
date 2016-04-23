@@ -215,6 +215,19 @@ class ActionRunner
         }
     }
 
+    /**
+     * Generate an action class with pretreatment config.
+     *
+     * This method could be used when you want to customize more about the
+     * generated action class rather than the default pretreatment.
+     *
+     * Note the pretreatment argument can be ignored if you want to use the
+     * default pretreatment config.
+     *
+     * @param string $class action class name
+     * @param array $pretreatment the pretreatment config array
+     * @return GeneratedAction
+     */
     public function generateActionClass($class, array $pretreatment = null)
     {
         if (!$pretreatment) {
