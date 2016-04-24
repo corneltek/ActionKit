@@ -318,13 +318,13 @@ class BaseRecordAction extends Action
      */
     public static function createCRUDClass( $recordClass , $type )
     {
-        $template = new RecordActionTemplate;
         list($modelNs, $modelName) = explode('\\Model\\', $recordClass);
         $modelNs = ltrim($modelNs,'\\');
         $actionFullClass = $modelNs . '\\Action\\' . $type . $modelName;
         $recordClass  = $modelNs . '\\Model\\' . $modelName;
         $baseAction   = $type . 'RecordAction';
 
+        $template = new RecordActionTemplate;
         $generatedAction = $template->generate($actionFullClass, [
             'extends' => '\\ActionKit\\RecordAction\\' . $baseAction,
             'properties' => [
