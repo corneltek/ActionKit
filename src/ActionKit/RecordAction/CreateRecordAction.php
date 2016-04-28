@@ -8,18 +8,15 @@ abstract class CreateRecordAction
 
     public $enableLoadRecord = false;
 
-    public function create($args)
+    public function create(array $args)
     {
         $this->recordResult = $ret = $this->record->create($args);
-
-        /* error checking */
-        if (false === $ret->success) {
-            $this->convertRecordValidation( $ret );
-            return $this->createError( $ret );
+        if ($ret->error) {
+            $this->convertRecordValidation($ret);
+            return $this->createError($ret);
         }
-        $this->result->data( $this->record->getStashedData() );
-
-        return $this->createSuccess( $ret );
+        $this->result->data($this->record->getStashedData());
+        return $this->createSuccess($ret);
     }
 
     /**
@@ -28,8 +25,8 @@ abstract class CreateRecordAction
     public function run()
     {
         /* default run method , to run create action */
-        $success = $this->create( $this->args );
-        if ( $this->nested && ! empty($this->relationships) ) {
+        $success = $this->create($this->args);
+        if ($this->nested && ! empty($this->relationships)) {
             $success = $this->processSubActions();
         }
         return $success;
