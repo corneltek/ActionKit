@@ -23,9 +23,9 @@ abstract class CreateRecordAction
     {
         if ($this->takeFields) {
             // take these fields only
-            return array_intersect_key( $args , array_fill_keys($this->takeFields,1) );
+            return array_intersect_key($args, array_fill_keys($this->takeFields,1) );
         } elseif ($this->filterOutFields) {
-            return array_diff_key( $args , array_fill_keys($this->filterOutFields,1) );
+            return array_diff_key($args, array_fill_keys($this->filterOutFields,1) );
         }
         return $args;
     }

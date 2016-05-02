@@ -101,16 +101,17 @@ class BaseRecordAction extends Action
     protected function loadParamValues()
     {
         // load record values into param objects
-        $columns = $this->record->getColumns(true);
-        foreach ($columns as $column) {
-            $name = $column->name;
-            if (isset($this->params[$name] ) ) {
-                $param = $this->params[$name];
-                $value = $this->record->getValue($name);
-                if ($value !== NULL) {
-                    $param->value($value);
-                } else {
-                    $param->value($column->getDefaultValue());
+        if ($columns = $this->record->getColumns(true)) {
+            foreach ($columns as $column) {
+                $name = $column->name;
+                if (isset($this->params[$name] ) ) {
+                    $param = $this->params[$name];
+                    $value = $this->record->getValue($name);
+                    if ($value !== NULL) {
+                        $param->value($value);
+                    } else {
+                        $param->value($column->getDefaultValue());
+                    }
                 }
             }
         }
