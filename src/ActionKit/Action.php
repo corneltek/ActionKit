@@ -220,7 +220,7 @@ class Action implements IteratorAggregate
         }
 
         // use the schema definitions to filter arguments
-        $this->args = $this->_filterArguments($args);
+        $this->args = $this->filterArguments($args);
 
         // See if we need to render the input names with relationship ID and
         // index?
@@ -283,7 +283,7 @@ class Action implements IteratorAggregate
      */
     protected function loadParamValuesFromArguments()
     {
-        $overlap = array_intersect_key($this->args,$this->params);
+        $overlap = array_intersect_key($this->args, $this->params);
         foreach ($overlap as $name => $val) {
             $this->getParam($name)->value($val);
         }
@@ -335,10 +335,12 @@ class Action implements IteratorAggregate
         return $this;
     }
 
-    public function _filterArguments(array $args)
+    protected function filterArguments(array $args)
     {
         // find immutable params and unset them
         foreach ($this->params as $name => $param) {
+            // should n't unset values if we are going to create
+            // this method will be overrided in CreateRecordAction
             if ($param->immutable) {
                 unset($args[$name]);
             }
@@ -349,7 +351,6 @@ class Action implements IteratorAggregate
         } elseif ($this->filterOutFields) {
             return array_diff_key( $args , array_fill_keys($this->filterOutFields,1) );
         }
-
         return $args;
     }
 

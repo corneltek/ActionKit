@@ -8,7 +8,7 @@ abstract class CreateRecordAction
 
     public $enableLoadRecord = false;
 
-    public function create(array $args)
+    protected function create(array $args)
     {
         $this->recordResult = $ret = $this->record->create($args);
         if ($ret->error) {
@@ -17,6 +17,17 @@ abstract class CreateRecordAction
         }
         $this->result->data($this->record->getStashedData());
         return $this->createSuccess($ret);
+    }
+
+    protected function filterArguments(array $args)
+    {
+        if ($this->takeFields) {
+            // take these fields only
+            return array_intersect_key( $args , array_fill_keys($this->takeFields,1) );
+        } elseif ($this->filterOutFields) {
+            return array_diff_key( $args , array_fill_keys($this->filterOutFields,1) );
+        }
+        return $args;
     }
 
     /**

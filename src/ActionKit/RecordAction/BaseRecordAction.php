@@ -93,6 +93,11 @@ class BaseRecordAction extends Action
 
     }
 
+    /**
+     * Load record values into param instead of arguments.
+     *
+     * @override
+     */
     protected function loadParamValues()
     {
         // load record values into param objects
