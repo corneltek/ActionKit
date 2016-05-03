@@ -77,7 +77,8 @@ class BootstrapFieldView
         */
         if ($widget instanceof HiddenInput) {
 
-            $wrapper->append( $widget );
+            // $wrapper->append( $widget );
+            return $widget;
 
         } else {
 
