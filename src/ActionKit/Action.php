@@ -826,8 +826,11 @@ class Action implements IteratorAggregate
     }
 
 
-
-
+    protected function mergeArgs(array $args)
+    {
+        $this->args = array_merge($this->args, $args);
+        return $this;
+    }
 
 
     /**
