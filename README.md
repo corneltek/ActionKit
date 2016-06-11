@@ -1,9 +1,8 @@
 ActionKit
 =========
 
-[![Coverage Status](https://coveralls.io/repos/c9s/ActionKit/badge.svg?branch=master)](https://coveralls.io/r/c9s/ActionKit?branch=master)
-[![Build Status](https://travis-ci.org/c9s/ActionKit.svg?branch=master)](https://travis-ci.org/c9s/ActionKit)
-
+[![Coverage Status](https://coveralls.io/repos/corneltek/ActionKit/badge.svg?branch=master)](https://coveralls.io/r/corneltek/ActionKit?branch=master)
+[![Build Status](https://travis-ci.org/corneltek/ActionKit.svg?branch=master)](https://travis-ci.org/corneltek/ActionKit)
 [![Latest Stable Version](https://poser.pugx.org/corneltek/actionkit/v/stable)](https://packagist.org/packages/corneltek/actionkit) [![Total Downloads](https://poser.pugx.org/corneltek/actionkit/downloads)](https://packagist.org/packages/corneltek/actionkit) [![Latest Unstable Version](https://poser.pugx.org/corneltek/actionkit/v/unstable)](https://packagist.org/packages/corneltek/actionkit) [![License](https://poser.pugx.org/corneltek/actionkit/license)](https://packagist.org/packages/corneltek/actionkit)
 
 ActionKit is a library that let you share the business logics across
