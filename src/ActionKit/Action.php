@@ -99,7 +99,7 @@ class Action implements IteratorAggregate
      * A user class may override this property to disable/enable csrf token
      * verification.
      */
-    protected $enableCSRFToken = true;
+    protected $enableCSRFToken = false;
 
 
     /**
