@@ -6,7 +6,6 @@
     "require": {
         "corneltek/cascading-attribute": "^1",
         "corneltek/fileutil": "^1.7",
-        "corneltek/locale": "^3.0.0",
         "corneltek/universal": "^1.8",
         "corneltek/imagekit": "^1",
         "corneltek/class-template": "^3.0.0",
