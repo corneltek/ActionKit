@@ -1286,6 +1286,8 @@ class Action implements IteratorAggregate
      *
      * @param string $message Success message
      * @param mixed  $data
+     *
+     * @return true
      */
     public function success($message, array $data = null )
     {
@@ -1300,6 +1302,8 @@ class Action implements IteratorAggregate
      * Report error
      *
      * @param string $message Error message
+     *
+     * @return false
      */
     public function error($message, array $data = null)
     {
