@@ -7,6 +7,7 @@
         "corneltek/cascading-attribute": "^1",
         "corneltek/fileutil": "^1.7",
         "corneltek/universal": "^1.8",
+        "corneltek/lazyrecord": "^3.3.2",
         "corneltek/imagekit": "^1",
         "corneltek/class-template": "^3.0.0",
         "corneltek/formkit": "^1",
@@ -19,7 +20,6 @@
     },
     "require-dev": {
         "corneltek/phpunit-testmore": "dev-master",
-        "corneltek/lazyrecord": "^3.0.0",
         "corneltek/webserver-runner": "dev-master",
         "corneltek/kendo": "dev-master"
     },
