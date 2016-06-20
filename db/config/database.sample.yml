@@ -4,10 +4,13 @@ schema:
   auto_id: true
   paths:
    - tests
-data_sources:
-  default:
-    # dsn: "mysql:host=localhost;dbname=actionkit_test"
-    dsn: "sqlite:tests.db"
-    # database: actionkit_test
-    # user: root
-    # pass:
+data_source:
+  default: sqlite
+  nodes:
+    mysql:
+      dsn: "mysql:host=localhost;dbname=actionkit_test"
+      # database: actionkit_test
+      # user: root
+      # pass:
+    sqlite:
+      dsn: "sqlite:tests.db"
