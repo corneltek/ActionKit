@@ -7,7 +7,7 @@ use ActionKit\Exception\RequiredConfigKeyException;
 use ActionKit\ActionTemplate\RecordActionTemplate;
 use ActionKit\RecordAction\CreateRecordAction;
 use LazyRecord\Schema\DeclareSchema;
-use LazyRecord\Schema\Relationship;
+use LazyRecord\Schema\Relationship\Relationship;
 use LazyRecord\BaseModel;
 use LazyRecord\Result;
 use Exception;
