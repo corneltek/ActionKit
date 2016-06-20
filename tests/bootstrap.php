@@ -15,11 +15,14 @@ $config->loadFromArray(array(
         'auto_id' => 1,
         'paths' => ['tests'],
     ],
-    'data_sources' => [
-        'default' => [
+    'data_source' => [
+        'default' => 'sqlite',
+        'nodes' => [
+            'sqlite' => [
                 'dsn' => 'sqlite::memory:',
                 'user' => NULL,
                 'pass' => NULL,
+            ],
         ],
     ],
 ));

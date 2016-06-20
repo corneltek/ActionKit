@@ -10,6 +10,7 @@ use LazyRecord\BaseModel;
 class UserBase
     extends BaseModel
 {
+    const SCHEMA_CLASS = 'User\\Model\\UserSchema';
     const SCHEMA_PROXY_CLASS = 'User\\Model\\UserSchemaProxy';
     const COLLECTION_CLASS = 'User\\Model\\UserCollection';
     const MODEL_CLASS = 'User\\Model\\User';

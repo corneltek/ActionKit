@@ -10,7 +10,7 @@ use FormKit\Widget\SubmitInput;
 use FormKit\Widget\CheckboxInput;
 use FormKit\Layout\GenericLayout;
 use LazyRecord\Schema\DeclareSchema;
-use LazyRecord\Schema\Relationship;
+use LazyRecord\Schema\Relationship\Relationship;
 use LazyRecord\BaseModel;
 use LazyRecord\BaseCollection;
 
@@ -145,10 +145,10 @@ SCRIPT;
         $container = $this->getContainer();
 
         // handle HAS_MANY records
-        if ( Relationship::HAS_MANY === $relation['type'] ) {
+        if (Relationship::HAS_MANY === $relation['type']) {
             $contentContainer = $this->buildOneToManyRelationalActionViewForExistingRecords($record, $relationId, $relation );
             $contentContainer->appendTo($container);
-        } elseif ( Relationship::MANY_TO_MANY === $relation['type'] ) {
+        } else if (Relationship::MANY_TO_MANY === $relation['type']) {
             $contentContainer = $this->buildManyToManyRelationalActionViewForExistingRecords($record, $relationId, $relation  /* $subset, $collection */ );
             $contentContainer->appendTo($container);
         }

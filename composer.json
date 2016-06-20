@@ -11,6 +11,7 @@
         "corneltek/imagekit": "^1",
         "corneltek/class-template": "^3.0.0",
         "corneltek/formkit": "^1",
+        "phifty/locale": "^3",
         "twig/twig": "^1",
         "pekkis/mime-types": "^1",
         "pimple/pimple": "^3.0"

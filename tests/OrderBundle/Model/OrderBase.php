@@ -10,6 +10,7 @@ use LazyRecord\BaseModel;
 class OrderBase
     extends BaseModel
 {
+    const SCHEMA_CLASS = 'OrderBundle\\Model\\OrderSchema';
     const SCHEMA_PROXY_CLASS = 'OrderBundle\\Model\\OrderSchemaProxy';
     const COLLECTION_CLASS = 'OrderBundle\\Model\\OrderCollection';
     const MODEL_CLASS = 'OrderBundle\\Model\\Order';

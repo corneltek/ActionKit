@@ -10,6 +10,7 @@ use LazyRecord\BaseModel;
 class ResourceBase
     extends BaseModel
 {
+    const SCHEMA_CLASS = 'ProductBundle\\Model\\ResourceSchema';
     const SCHEMA_PROXY_CLASS = 'ProductBundle\\Model\\ResourceSchemaProxy';
     const COLLECTION_CLASS = 'ProductBundle\\Model\\ResourceCollection';
     const MODEL_CLASS = 'ProductBundle\\Model\\Resource';

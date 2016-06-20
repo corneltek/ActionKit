@@ -10,6 +10,7 @@ use LazyRecord\BaseModel;
 class ProductFileBase
     extends BaseModel
 {
+    const SCHEMA_CLASS = 'ProductBundle\\Model\\ProductFileSchema';
     const SCHEMA_PROXY_CLASS = 'ProductBundle\\Model\\ProductFileSchemaProxy';
     const COLLECTION_CLASS = 'ProductBundle\\Model\\ProductFileCollection';
     const MODEL_CLASS = 'ProductBundle\\Model\\ProductFile';

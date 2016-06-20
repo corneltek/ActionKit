@@ -10,6 +10,7 @@ use LazyRecord\BaseModel;
 class ProductPropertyBase
     extends BaseModel
 {
+    const SCHEMA_CLASS = 'ProductBundle\\Model\\ProductPropertySchema';
     const SCHEMA_PROXY_CLASS = 'ProductBundle\\Model\\ProductPropertySchemaProxy';
     const COLLECTION_CLASS = 'ProductBundle\\Model\\ProductPropertyCollection';
     const MODEL_CLASS = 'ProductBundle\\Model\\ProductProperty';
