@@ -9,6 +9,7 @@ use InvalidArgumentException;
 use Exception;
 use LogicException;
 use LazyRecord\BaseModel;
+use SQLBuilder\Raw;
 
 class Param extends CascadingAttribute
 {
@@ -259,7 +260,7 @@ class Param extends CascadingAttribute
 
     public function getDefaultValue()
     {
-        if ( is_callable($this->default) ) {
+        if (is_callable($this->default)) {
             return call_user_func($this->default);
         }
 
@@ -347,7 +348,13 @@ class Param extends CascadingAttribute
     public function getRenderableCurrentValue()
     {
         // XXX: we should handle "false", "true", and "NULL"
-        return $this->value instanceof BaseModel ? $this->value->dataKeyValue() : $this->value;
+        if ($this->value instanceof BaseModel) {
+            return $this->value->dataKeyValue();
+        }
+        if ($this->value instanceof Raw) {
+            return null;
+        }
+        return $this->value;
     }
 
     /**
@@ -380,9 +387,14 @@ class Param extends CascadingAttribute
         if (false === stripos($class , 'Password')) {
             // The Param class should respect the data type
             if ($this->value !== NULL) {
-                $newAttributes['value'] = $this->getRenderableCurrentValue();
-            } elseif ($this->default) {
-                $newAttributes['value'] = $this->getDefaultValue();
+                if ($val = $this->getRenderableCurrentValue()) {
+                    $newAttributes['value'] = $val;
+                }
+            } else if ($this->default) {
+                $default = $this->getDefaultValue();
+                if (!$default instanceof Raw) {
+                    $newAttributes['value'] = $default;
+                }
             }
         }
 

@@ -10,6 +10,7 @@ use LazyRecord\BaseModel;
 use LazyRecord\Schema\DeclareSchema;
 use LazyRecord\Schema\SchemaInterface;
 use LazyRecord\Schema\RuntimeColumn;
+use SQLBuilder\Raw;
 use Exception;
 
 /**
@@ -78,7 +79,7 @@ class ColumnConvert
 
         foreach ($column->attributes as $k => $v) {
             // if the model column validator is not compatible with action validator
-            if ( $k === 'validator' ) {
+            if ($k === 'validator' || $v instanceof Raw) {
                 continue;
             }
             $param->$k = $v;
@@ -94,7 +95,10 @@ class ColumnConvert
             // XXX: should get default value (from column definition)
             //      default value is only used in create action.
         } else {
-            $param->value = $column->getDefaultValue();
+            $default = $column->getDefaultValue();
+            if (!$default instanceof Raw) {
+                $param->value = $default;
+            }
         }
 
 
