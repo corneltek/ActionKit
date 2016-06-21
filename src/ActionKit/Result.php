@@ -1,8 +1,9 @@
 <?php
 namespace ActionKit;
-use Exception;
 use ActionKit\Messages;
 use ArrayAccess;
+use Exception;
+use InvalidArgumentException;
 
 
 /**
@@ -294,12 +295,17 @@ class Result implements ArrayAccess
      */
     public function data( $data , $val = null )
     {
-        if ( is_array($data) ) {
+        if (is_array($data)) {
             $this->data = $data;
-        } elseif ($val) {
-            $this->data[ $data ] = $val;
+        } else if ($data && $val) {
+            if (is_string($val) || is_numeric($data)) {
+                $this->data[ $data ] = $val;
+            } else {
+                throw new InvalidArgumentException("data key can only be integer or string");
+            }
+        } else {
+            throw new InvalidArgumentException("Unsupported data type.");
         }
-
         return $this;
     }
 
