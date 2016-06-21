@@ -293,13 +293,13 @@ class Result implements ArrayAccess
     /**
      * Set result data
      */
-    public function data( $data , $val = null )
+    public function data($data , $val = null)
     {
         if (is_array($data)) {
             $this->data = $data;
-        } else if ($data && $val) {
-            if (is_string($val) || is_numeric($data)) {
-                $this->data[ $data ] = $val;
+        } else if ($val !== null) {
+            if (is_string($data) || is_numeric($data)) {
+                $this->data[$data] = $val;
             } else {
                 throw new InvalidArgumentException("data key can only be integer or string");
             }
