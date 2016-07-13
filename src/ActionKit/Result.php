@@ -297,11 +297,11 @@ class Result implements ArrayAccess
     {
         if (is_array($data)) {
             $this->data = $data;
-        } else if ($val !== null) {
-            if (is_string($data) || is_numeric($data)) {
-                $this->data[$data] = $val;
+        } else if (is_string($data) || is_numeric($data)) {
+            if ($val === null) {
+                return $this->data[$data];
             } else {
-                throw new InvalidArgumentException("data key can only be integer or string");
+                $this->data[$data] = $val;
             }
         } else {
             throw new InvalidArgumentException("Unsupported data type.");
@@ -407,11 +407,8 @@ class Result implements ArrayAccess
                 $ret['delay'] = $this->redirectDelay;
             }
         }
-
         return $ret;
     }
-
-
 
     public function offsetSet($name,$value)
     {

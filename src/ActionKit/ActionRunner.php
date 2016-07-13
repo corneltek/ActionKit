@@ -193,7 +193,7 @@ class ActionRunner
         } catch (Exception $e) {
             @header('HTTP/1.1 403 Action API Error');
             if ($request->isAjax()) {
-                if ($this->debug) {
+                if (1 || $this->debug) {
                     // $trace = debug_backtrace();
                     fwrite($stream, json_encode(array(
                         'error'     => 1,
