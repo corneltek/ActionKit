@@ -41,7 +41,7 @@ class TwigActionTemplateTest extends ActionTestCase
     public function testTwigActionTemplateWithTwigEnvironmentAndLoader()
     {
         $loader = new Twig_Loader_Filesystem([]);
-        $loader->addPath('src/ActionKit/Templates', 'ActionKit');
+        $loader->addPath('src/Templates', 'ActionKit');
 
         $env = new Twig_Environment($loader, array(
             'cache' => false,
@@ -74,7 +74,7 @@ class TwigActionTemplateTest extends ActionTestCase
     public function testTwigActionTemplateWithTwigLoader()
     {
         $loader = new Twig_Loader_Filesystem([]);
-        $loader->addPath('src/ActionKit/Templates', 'ActionKit');
+        $loader->addPath('src/Templates', 'ActionKit');
         $actionTemplate = new TwigActionTemplate($loader);
 
         $runner = new ActionRunner;
