@@ -21,6 +21,7 @@ use FormKit\Widget\HiddenInput;
 
 class Action implements IteratorAggregate
 {
+    const moniker = 0;
 
     public static $defaultFieldView = 'ActionKit\FieldView\DivFieldView';
 
@@ -1281,6 +1282,11 @@ class Action implements IteratorAggregate
         return new ArrayIterator($this->params);
     }
 
+    public function getMoniker()
+    {
+        return static::moniker;
+    }
+
     /**
      * Report success
      *
@@ -1289,7 +1295,7 @@ class Action implements IteratorAggregate
      *
      * @return true
      */
-    public function success($message, array $data = null )
+    protected function success($message, array $data = null )
     {
         $this->result->success( $message );
         if ($data) {
@@ -1305,7 +1311,7 @@ class Action implements IteratorAggregate
      *
      * @return false
      */
-    public function error($message, array $data = null)
+    protected function error($message, array $data = null)
     {
         $this->result->error( $message );
         if ($data) {

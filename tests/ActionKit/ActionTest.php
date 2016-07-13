@@ -11,9 +11,6 @@ class FakeMixin extends MixinAction {
 }
 
 
-
-
-
 class ImageParamTestAction extends Action {
 
     public function mixins() {
@@ -150,12 +147,11 @@ class ActionTest extends PHPUnit_Framework_TestCase
     public function testParams()
     {
         $login = new LoginTestAction;
-        is($login->getName(), 'LoginTestAction');
+        $this->assertEquals($login->getName(), 'LoginTestAction');
 
         $result = $login->getWidgetsByNames(['username', 'password']);
-        is(2, count($result));
-
-        is('Foo', $login->arg('username', 'Foo'));
+        $this->assertCount(2, $result);
+        $this->assertEquals('Foo', $login->arg('username', 'Foo'));
 
         $this->assertNotEmpty($login->params());
         $this->assertNotEmpty($login->params(true));

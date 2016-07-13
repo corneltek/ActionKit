@@ -3,6 +3,17 @@ use ActionKit\ActionTemplate\TwigActionTemplate;
 use ActionKit\ActionTemplate\RecordActionTemplate;
 use ActionKit\ServiceContainer;
 use ActionKit\ActionRunner;
+use ActionKit\Action;
+
+class CreateUserWithMoniker extends Action
+{
+    const moniker = 'create-user';
+
+    public function run()
+    {
+        return $this->success('test', ["name" => "foo"]);
+    }
+}
 
 /**
  * @group lazyrecord
@@ -15,6 +26,16 @@ class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
         return array( 
             'User\Model\UserSchema'
         );
+    }
+
+    public function testMonikerAction()
+    {
+        $container = new ServiceContainer;
+        $runner = new ActionRunner($container);
+        $runner->run('CreateUserWithMoniker', []);
+        $result = $runner->getResult('create-user');
+        $this->assertNotNull($result);
+        $this->assertEquals("foo", $result->data('name'));
     }
 
     public function testRegisterAction()

@@ -144,6 +144,9 @@ class ActionRunner
                 $logger->log($action);
             }
         }
+        if ($moniker = $action->getMoniker()) {
+            return $this->results[$moniker] = $action->getResult();
+        }
         return $this->results[ $actionName ] = $action->getResult();
     }
 
