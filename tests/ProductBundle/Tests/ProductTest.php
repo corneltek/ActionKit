@@ -53,7 +53,7 @@ function CreateFileArray($filename, $type, $tmpname) {
 
 
 /**
- * @group lazyrecord
+ * @group maghead
  */
 class ProductBundleTest extends ModelTestCase
 {

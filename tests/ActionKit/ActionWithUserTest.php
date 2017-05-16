@@ -14,7 +14,7 @@ class TestUser implements \Kendo\Acl\MultiRoleInterface
 }
 
 /**
- * @group lazyrecord
+ * @group maghead
  */
 class ActionWithUserTest extends \Maghead\Testing\ModelTestCase
 {

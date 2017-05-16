@@ -223,14 +223,14 @@
                  <arg value="--configuration"/>
                  <arg path="${basedir}/phpunit.xml.dist"/>
                  <arg value="--exclude-group"/>
-                 <arg value="lazyrecord"/>
+                 <arg value="maghead"/>
              </exec>
          </then>
          <else>
              <exec executable="phpunit" failonerror="true">
                  <arg value="--debug"/>
                  <arg value="--exclude-group"/>
-                 <arg value="lazyrecord"/>
+                 <arg value="maghead"/>
              </exec>
          </else>
      </if>

@@ -20,7 +20,7 @@ use ActionKit\RecordAction\UpdateRecordAction;
 use ActionKit\RecordAction\DeleteRecordAction;
 
 /**
- * @group lazyrecord
+ * @group maghead
  */
 class OrderItemTest extends ModelTestCase
 {

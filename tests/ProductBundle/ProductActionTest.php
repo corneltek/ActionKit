@@ -11,7 +11,7 @@ use ProductBundle\Model\ProductSchema;
 /**
  * RecordAction
  *
- * @group lazyrecord
+ * @group maghead
  */
 class ProductActionTest extends ModelTestCase
 {

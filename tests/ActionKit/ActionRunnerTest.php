@@ -4,6 +4,7 @@ use ActionKit\ActionTemplate\RecordActionTemplate;
 use ActionKit\ServiceContainer;
 use ActionKit\ActionRunner;
 use ActionKit\Action;
+use User\Model\UserSchema;
 
 class CreateUserWithMoniker extends Action
 {
@@ -16,16 +17,14 @@ class CreateUserWithMoniker extends Action
 }
 
 /**
- * @group lazyrecord
+ * @group maghead
  */
 class ActionRunnerTest extends \Maghead\Testing\ModelTestCase
 {
 
     public function models()
     {
-        return array( 
-            new \User\Model\UserSchema
-        );
+        return [new UserSchema];
     }
 
     public function testMonikerAction()

@@ -5,7 +5,7 @@ use ActionKit\ActionRunner;
 use ActionKit\GeneratedAction;
 
 /**
- * @group lazyrecord
+ * @group maghead
  */
 class UpdateOrderingRecordActionTemplateTest extends ActionTestCase
 {

@@ -360,16 +360,16 @@ class ActionRunner
             $this->loadActionClass($class);
 
             // Check the action class existence
-            if ( ! class_exists($class,true) ) {
+            if (! class_exists($class,true)) {
                 throw new ActionNotFoundException( "Action class not found: $class, you might need to setup action autoloader" );
             }
         }
-        $action = new $class($args, array(
+        $a = new $class($args, [
             'request'  => $request,
             'services' => $this->serviceContainer,
-        ));
-        $action->setCurrentUser($this->currentUser);
-        return $action;
+        ]);
+        $a->setCurrentUser($this->currentUser);
+        return $a;
     }
 
     public function setCurrentUser($user)
