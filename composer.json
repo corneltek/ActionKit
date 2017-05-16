@@ -1,7 +1,7 @@
 {
     "name": "corneltek/actionkit",
     "authors": [
-        { "name": "c9s", "email": "yoanlin93+composer@gmail.com" }
+        { "name": "Yo-An Lin", "email": "yoanlin93+composer@gmail.com" }
     ],
     "require": {
         "corneltek/cascading-attribute": "^1",
@@ -15,13 +15,13 @@
         "pekkis/mime-types": "^1",
         "pimple/pimple": "^3.0"
     },
-    "suggest": {
-        "corneltek/lazyrecord": "Support Record-based Action"
-    },
     "require-dev": {
-        "corneltek/phpunit-testmore": "dev-master",
         "corneltek/webserver-runner": "dev-master",
-        "corneltek/lazyrecord": "3.4.x-dev",
+        "maghead/maghead": "4.0.x-dev",
+        "maghead/sqlite-parser": "4.0.x-dev",
+        "corneltek/sqlbuilder": "4.0.x-dev",
+        "corneltek/cliframework": "4.0.x-dev",
+        "corneltek/codegen": "3.1.x-dev",
         "corneltek/kendo": "dev-master"
     },
     "autoload": {
@@ -29,6 +29,6 @@
             "ActionKit\\": "src/"
         }
     },
-    "extra": { "branch-alias": { "dev-master": "3.1.x-dev" } },
+    "extra": { "branch-alias": { "dev-master": "4.0.x-dev" } },
     "license": "MIT"
 }
