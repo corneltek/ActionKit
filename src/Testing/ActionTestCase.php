@@ -22,17 +22,6 @@ abstract class ActionTestCase extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public static function assertFileEquals($expectedFile, $actualFile, $message = '', $canonicalize = false, $ignoreCase = false)
-    {
-        if (!file_exists($expectedFile)) {
-            copy($actualFile, $expectedFile);
-            echo PHP_EOL, "Added expected file: ", $expectedFile, PHP_EOL;
-            echo "=========================================", PHP_EOL;
-            echo file_get_contents($expectedFile), PHP_EOL;
-            echo "=========================================", PHP_EOL;
-        }
-        parent::assertFileEquals($expectedFile, $actualFile, $message, $canonicalize, $ignoreCase);
-    }
 }
 
 

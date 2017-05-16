@@ -1,0 +1,1 @@
+{"code":200,"args":{"email":"foo@foo"},"success":true,"message":"User record is created successfully.","data":{"id":"1","name":null,"email":"foo@foo","password":null}}

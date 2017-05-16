@@ -10,11 +10,13 @@ abstract class CreateRecordAction
 
     protected function create(array $args)
     {
-        $this->recordResult = $ret = $this->record->create($args);
+        $model = $this->recordClass;
+        $this->recordResult = $ret = $model::create($args);
         if ($ret->error) {
             $this->convertRecordValidation($ret);
             return $this->createError($ret);
         }
+        $this->record = $model::load($ret->key);
         $this->result->data($this->record->getData());
         return $this->createSuccess($ret);
     }
@@ -71,5 +73,4 @@ abstract class CreateRecordAction
     {
         return $this->error($this->errorMessage($ret));
     }
-
 }

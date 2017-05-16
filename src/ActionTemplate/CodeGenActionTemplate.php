@@ -4,7 +4,7 @@ use ActionKit\ActionRunner;
 use ActionKit\GeneratedAction;
 use ActionKit\Exception\RequiredConfigKeyException;
 use Exception;
-use ClassTemplate\TemplateClassFile;
+use ClassTemplate\ClassFile;
 
 /**
  *  CodeGen-Based Action Template Synopsis
@@ -51,39 +51,41 @@ class CodeGenActionTemplate implements ActionTemplate
         $runner->register($options['action_class'], $asTemplate, $options);
     }
 
-    public function initGenericClassWithOptions(TemplateClassFile $templateClassFile, array $options = array()) 
+    public function createActionClassFile($actionClass, array $options = array()) 
     {
+        $class = new ClassFile($actionClass);
         if (isset($options['use'])) {
             foreach( $options['use'] as $use ) {
-                $templateClassFile->useClass($use);
+                $class->useClass($use);
             }
         }
         if (isset($options['extends'])) {
-            $templateClassFile->extendClass($options['extends']);
+            $class->extendClass($options['extends']);
         }
         if (isset($options['properties'])) {
             foreach( $options['properties'] as $name => $value ) {
-                $templateClassFile->addProperty($name, $value);
+                $class->addProperty($name, $value);
             }
         }
         if (isset($options['constants'])) {
             foreach( $options['constants'] as $name => $value ) {
-                $templateClassFile->addConst($name, $value);
+                $class->addConst($name, $value);
             }
         }
         if (isset($options['traits'])) {
             foreach( $options['traits'] as $traitClass ) {
-                $templateClassFile->useTrait($traitClass);
+                $class->useTrait($traitClass);
             }
         }
+
+        return $class;
     }
 
     public function generate($actionClass, array $options = array())
     {
-        $templateClassFile = new TemplateClassFile($actionClass);
-        $this->initGenericClassWithOptions($templateClassFile, $options);
-        $code = $templateClassFile->render();
-        return new GeneratedAction($actionClass, $code, $templateClassFile);
+        $class = $this->createActionClassFile($actionClass, $options);
+        $code = $class->render();
+        return new GeneratedAction($actionClass, $code, $class);
     }
     
 }

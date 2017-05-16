@@ -1,7 +1,7 @@
 <?php
 namespace ActionKit\ActionTemplate;
 use ActionKit\GeneratedAction;
-use ClassTemplate\TemplateClassFile;
+use ClassTemplate\ClassFile;
 use ActionKit\Exception\RequiredConfigKeyException;
 
 /**
@@ -31,21 +31,19 @@ class SampleActionTemplate extends CodeGenActionTemplate
         $actionName = $options['action_name'];
 
         $actionClass = "$namespace\\Action\\$actionName";
-        $options = [ 
-            'extends' => 'Action',
-        ];
-        $templateClassFile = new TemplateClassFile($actionClass);
+        $options = [ 'extends' => 'Action', ];
+
+        $class = $this->createActionClassFile($actionClass, $options);
 
         // General use statement
-        $templateClassFile->useClass('\\ActionKit\\Action');
-        $templateClassFile->useClass('\\ActionKit\\RecordAction\\BaseRecordAction');
+        $class->useClass('\\ActionKit\\Action');
+        $class->useClass('\\ActionKit\\RecordAction\\BaseRecordAction');
 
-        $this->initGenericClassWithOptions($templateClassFile, $options);
 
-        $templateClassFile->addMethod('public','schema', [] , '');
-        $templateClassFile->addMethod('public','run', [] , 'return $this->success("Success!");');
+        $class->addMethod('public','schema', [] , '');
+        $class->addMethod('public','run', [] , 'return $this->success("Success!");');
         
-        $code = $templateClassFile->render();
-        return new GeneratedAction($actionClass, $code, $templateClassFile);
+        $code = $class->render();
+        return new GeneratedAction($actionClass, $code, $class);
     }
 }

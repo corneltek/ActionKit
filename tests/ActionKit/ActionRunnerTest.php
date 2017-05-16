@@ -1,7 +1,9 @@
 <?php
 use ActionKit\ActionTemplate\TwigActionTemplate;
 use ActionKit\ActionTemplate\RecordActionTemplate;
+use ActionKit\ActionTemplate\CodeGenActionTemplate;
 use ActionKit\ServiceContainer;
+use ActionKit\Testing\ActionTestAssertions;
 use ActionKit\ActionRunner;
 use ActionKit\Action;
 use User\Model\UserSchema;
@@ -21,6 +23,7 @@ class CreateUserWithMoniker extends Action
  */
 class ActionRunnerTest extends \Maghead\Testing\ModelTestCase
 {
+    use ActionTestAssertions;
 
     public function models()
     {
@@ -40,22 +43,23 @@ class ActionRunnerTest extends \Maghead\Testing\ModelTestCase
     public function testRegisterAction()
     {
         $container = new ServiceContainer;
+
         $generator = $container['generator'];
         $generator->registerTemplate('TwigActionTemplate', new TwigActionTemplate);
         $runner = new ActionRunner($container);
         $runner->registerAutoloader();
-        $runner->registerAction('TwigActionTemplate', array(
+        $runner->registerAction('TwigActionTemplate', [
             'template' => '@ActionKit/RecordAction.html.twig',
             'action_class' => 'User\\Action\\BulkCreateUser',
-            'variables' => array(
+            'variables' => [
                 'record_class' => 'User\\Model\\User',
-                'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction'
-            )
-        ));
+                'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction',
+            ]
+        ]);
 
-        $result = $runner->run('User::Action::BulkCreateUser',array(
+        $result = $runner->run('User::Action::BulkCreateUser', [
             'email' => 'foo@foo'
-        ));
+        ]);
         $this->assertNotNull($result);
     }
 
@@ -86,22 +90,23 @@ class ActionRunnerTest extends \Maghead\Testing\ModelTestCase
         $container = new ServiceContainer;
         $generator = $container['generator'];
         $generator->registerTemplate('RecordActionTemplate', new RecordActionTemplate);
+
         $runner = new ActionRunner($container);
         $runner->registerAutoloader();
         $runner->registerAction('RecordActionTemplate', array(
             'namespace' => 'User',
             'model' => 'User',
-            'types' => array(
+            'types' => [
                 [ 'prefix' => 'Create'],
                 [ 'prefix' => 'Update'],
                 [ 'prefix' => 'Delete'],
-            )
+            ]
         ));
 
         $result = $runner->run('User::Action::CreateUser',[ 
             'email' => 'foo@foo'
         ]);
-        $this->assertNotNull($result);
+        $this->assertInstanceOf('ActionKit\\Result', $result);
 
         $json = $result->__toString();
         $this->assertNotNull($json, 'json output');
@@ -136,8 +141,7 @@ class ActionRunnerTest extends \Maghead\Testing\ModelTestCase
         $this->assertEquals(true, $result);
         fseek($stream, 0);
         $output = stream_get_contents($stream);
-        $expected_output = '{"code":200,"args":{"email":"foo@foo"},"success":true,"message":"User record is created successfully.","data":{"email":"foo@foo","id":1}}';
-        $this->assertEquals($expected_output, $output);
+        $this->assertStringEqualsFile('tests/fixture/handle_with_result.json', $output);
     }
 
 

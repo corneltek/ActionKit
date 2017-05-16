@@ -54,7 +54,7 @@ class RecordActionTemplate extends CodeGenActionTemplate
             $traits = array();
             if (isset($options['allowed_roles']) || isset($type['allowed_roles'])) {
                 $properties['allowedRoles'] = isset($type['allowed_roles']) ? $type['allowed_roles'] : $options['allowed_roles'];
-                $traits = ['ActionKit\ActionTrait\RoleChecker'];
+                $traits = ['ActionKit\\ActionTrait\\RoleChecker'];
             }
             $configs = [
                 'extends' => "\\ActionKit\\RecordAction\\{$type['prefix']}RecordAction",
