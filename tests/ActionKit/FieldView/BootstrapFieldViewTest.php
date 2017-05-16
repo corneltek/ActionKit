@@ -22,18 +22,18 @@ class BootstrapFieldViewTest extends \PHPUnit\Framework\TestCase
 
         $xml = simplexml_load_string($html);
         
-        is('form-group formkit-widget-textinput', (string)$xml->attributes()['class']);
+        $this->assertEquals('form-group formkit-widget-textinput', (string)$xml->attributes()['class']);
         $label = $xml->label;
-        is('col-lg-2', (string)$label->attributes()['class']);
-        is('* Account', (string)$label[0]);
+        $this->assertEquals('col-lg-2', (string)$label->attributes()['class']);
+        $this->assertEquals('* Account', (string)$label[0]);
 
         $div = $xml->div;
-        is('col-lg-10', (string)$div->attributes()['class']);
+        $this->assertEquals('col-lg-10', (string)$div->attributes()['class']);
         $input = $div->input->attributes();
-        is('formkit-widget formkit-widget-text form-control', $input->class);
-        is('account', $input->name);
-        is('ariel123', $input->placeholder);
-        is('off', $input->autocomplete);
+        $this->assertEquals('formkit-widget formkit-widget-text form-control', $input->class);
+        $this->assertEquals('account', $input->name);
+        $this->assertEquals('ariel123', $input->placeholder);
+        $this->assertEquals('off', $input->autocomplete);
     }
 }
 

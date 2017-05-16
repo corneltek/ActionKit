@@ -48,7 +48,7 @@ class ManyToManyCheckboxView
      * Render list item
      *
      * @param string $relationId   The relationship identity
-     * @param BaseModel $item      Record object.
+     * @param Model $item      Record object.
      * @return Element('li')
      */
     public function renderItem($relationId, $subset, $item, $on = false) 

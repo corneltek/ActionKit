@@ -123,7 +123,7 @@ class Result implements ArrayAccess
         return 'completion' === $this->type;
     }
 
-    public function getStashedData()
+    public function getData()
     {
         return $this->data;
     }

@@ -103,7 +103,7 @@ class BulkCopyRecordAction extends BulkRecordAction
         $newRecords = array();
         $records = $this->loadRecords();
         foreach($records as $record) {
-            $newData = $record->getStashedData();
+            $newData = $record->getData();
             $newData = $this->prepareData($newData);
 
             $this->beforeCopy($record, $newData);
@@ -123,7 +123,7 @@ class BulkCopyRecordAction extends BulkRecordAction
     }
 
     public function duplicateRecord($record, $schema, $data = null) {
-        $data = $data ?: $record->getStashedData();
+        $data = $data ?: $record->getData();
         $newData = duplicate_data($data, $schema);
 
         $newRecord = $schema->newModel();
@@ -150,7 +150,7 @@ class BulkCopyRecordAction extends BulkRecordAction
                 $relatedRecords->fetch();
 
                 foreach( $relatedRecords as $relatedRecord ) {
-                    $relatedRecordData = duplicate_data( $relatedRecord->getStashedData() , $relatedRecord->getSchema() );
+                    $relatedRecordData = duplicate_data( $relatedRecord->getData() , $relatedRecord->getSchema() );
                     $relatedRecordData[ $foreignColumnName ] = $newRecord->id; // override the foreign column to the new record primary key
                     $ret = $foreignRecord->create($relatedRecordData);
                     if (! $ret->success) {

@@ -18,7 +18,7 @@ class TestUser implements \Kendo\Acl\MultiRoleInterface
  */
 class ActionWithUserTest extends \Maghead\Testing\ModelTestCase
 {
-    public function getModels()
+    public function models()
     {
         return array( 
             'OrderBundle\\Model\OrderSchema'
@@ -60,8 +60,8 @@ class ActionWithUserTest extends \Maghead\Testing\ModelTestCase
         $result = $runner->run('OrderBundle::Action::CreateOrder',[
             'qty' => '1'
         ]);
-        ok($result);
-        is($resultType, $result->type);
+        $this->assertNotNull($result);
+        $this->assertEquals($resultType, $result->type);
     }
 
 
@@ -98,7 +98,7 @@ class ActionWithUserTest extends \Maghead\Testing\ModelTestCase
         $result = $runner->run('OrderBundle::Action::CreateOrder',[
             'qty' => '1'
         ]);
-        ok($result);
-        is($resultType, $result->type);
+        $this->assertNotNull($result);
+        $this->assertEquals($resultType, $result->type);
     }
 }

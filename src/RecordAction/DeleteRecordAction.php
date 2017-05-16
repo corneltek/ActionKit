@@ -14,7 +14,7 @@ abstract class DeleteRecordAction
         /* default run method , to run create action */
         $record = $this->record;
         $schema = $record->getSchema();
-        $data = $record->getStashedData();
+        $data = $record->getData();
         foreach( $data as $name => $val ) {
             if ( $val == null ) {
                 continue;

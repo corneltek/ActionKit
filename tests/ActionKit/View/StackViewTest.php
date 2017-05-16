@@ -34,7 +34,7 @@ use ProductBundle\Action\CreateProduct;
 class StackViewTest extends ModelTestCase
 {
 
-    public function getModels()
+    public function models()
     {
         return array(new ProductSchema);
     }
@@ -54,7 +54,7 @@ class StackViewTest extends ModelTestCase
 
         $view->buildRelationalActionViewForExistingRecords('categories');
         $html = $view->getContainer()->render();
-        ok( $html );
+        $this->assertNotNull( $html );
 
 #          $dom = new DOMDocument;
 #          $dom->load($html);
@@ -65,13 +65,13 @@ class StackViewTest extends ModelTestCase
     public function testBasicView()
     {
         $action = new CreateUserAction;
-        ok($action);
+        $this->assertNotNull($action);
 
         $view = new ActionKit\View\StackView($action);
-        ok($view);
+        $this->assertNotNull($view);
 
         $html = $view->render();
-        ok($html);
+        $this->assertNotNull($html);
 
         $resultDom = new DOMDocument;
         $resultDom->loadXML($html);
@@ -79,25 +79,25 @@ class StackViewTest extends ModelTestCase
         $finder = new DomXPath($resultDom);
 
         $nodes = $finder->query("//form");
-        is(1, $nodes->length);
+        $this->assertEquals(1, $nodes->length);
 
         $nodes = $finder->query("//input");
-        is(4, $nodes->length);
+        $this->assertEquals(4, $nodes->length);
 
         $nodes = $finder->query("//*[contains(@class, 'formkit-widget')]");
-        is(8, $nodes->length);
+        $this->assertEquals(8, $nodes->length);
 
         $nodes = $finder->query("//*[contains(@class, 'formkit-widget-text')]");
-        is(2, $nodes->length);
+        $this->assertEquals(2, $nodes->length);
 
         $nodes = $finder->query("//*[contains(@class, 'formkit-label')]");
-        is(3, $nodes->length);
+        $this->assertEquals(3, $nodes->length);
 
         $nodes = $finder->query("//input[@name='last_name']");
-        is(1, $nodes->length);
+        $this->assertEquals(1, $nodes->length);
 
         $nodes = $finder->query("//input[@name='first_name']");
-        is(1, $nodes->length);
+        $this->assertEquals(1, $nodes->length);
     }
 }
 

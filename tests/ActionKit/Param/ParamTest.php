@@ -8,17 +8,17 @@ class ParamTest extends \PHPUnit\Framework\TestCase
     {
         $column = new Param('name');
         $column->required(1);
-        ok($column->required);
+        $this->assertNotNull($column->required);
         $column->default('John');
-        is('John',$column->default);
+        $this->assertEquals('John',$column->default);
     }
 
     public function testImageParam()
     {
         $image = new ImageParam('photo');
-        ok($image->size(['width' => 100, 'height' => 200]));
-        ok($image->autoResize(false));
-        ok($image->autoResize(true));
+        $this->assertNotNull($image->size(['width' => 100, 'height' => 200]));
+        $this->assertNotNull($image->autoResize(false));
+        $this->assertNotNull($image->autoResize(true));
     }
 }
 

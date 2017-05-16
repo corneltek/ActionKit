@@ -21,7 +21,7 @@ class CreateUserWithMoniker extends Action
 class ActionRunnerTest extends \Maghead\Testing\ModelTestCase
 {
 
-    public function getModels()
+    public function models()
     {
         return array( 
             new \User\Model\UserSchema
@@ -108,8 +108,8 @@ class ActionRunnerTest extends \Maghead\Testing\ModelTestCase
         $this->assertNotNull($json, 'json output');
         $data = json_decode($json);
         $this->assertTrue($data->success);
-        ok($data->data);
-        ok($data->data->id);
+        $this->assertNotNull($data->data);
+        $this->assertNotNull($data->data->id);
 
         $results = $runner->getResults();
         $this->assertNotEmpty($results);
@@ -118,9 +118,9 @@ class ActionRunnerTest extends \Maghead\Testing\ModelTestCase
 
 
         $runner->setResult('test', 'test message');
-        is(true, $runner->hasResult('test'));
+        $this->assertEquals(true, $runner->hasResult('test'));
         $runner->removeResult('test');
-        is(false, $runner->hasResult('test'));
+        $this->assertEquals(false, $runner->hasResult('test'));
     }
 
     public function testHandleWith()
@@ -134,11 +134,11 @@ class ActionRunnerTest extends \Maghead\Testing\ModelTestCase
             '__ajax_request' => 1,
             'email' => 'foo@foo'
         ));
-        is(true, $result);
+        $this->assertEquals(true, $result);
         fseek($stream, 0);
         $output = stream_get_contents($stream);
         $expected_output = '{"code":200,"args":{"email":"foo@foo"},"success":true,"message":"User record is created successfully.","data":{"email":"foo@foo","id":1}}';
-        is($expected_output, $output);
+        $this->assertEquals($expected_output, $output);
     }
 
 

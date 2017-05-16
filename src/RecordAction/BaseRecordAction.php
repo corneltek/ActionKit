@@ -59,7 +59,7 @@ class BaseRecordAction extends Action
 
         if (isset($options['record'])) {
             $record = $options['record'];
-        } else if ($options instanceof BaseModel) {
+        } else if ($options instanceof Model) {
             $record = $options;
             $options = array(); // reassign $options as array
         }
@@ -173,7 +173,7 @@ class BaseRecordAction extends Action
         $this->params = array();
     }
 
-    public function initParamsFromColumns(array $columns, BaseModel $record = null)
+    public function initParamsFromColumns(array $columns, Model $record = null)
     {
         foreach ($columns as $column) {
             if (! isset($this->params[$column->name] ) ) {
@@ -211,7 +211,7 @@ class BaseRecordAction extends Action
      *
      * @param Phifty\Model $record
      */
-    public function setRecord(BaseModel $record)
+    public function setRecord(Model $record)
     {
         $this->record = $record;
 

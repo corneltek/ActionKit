@@ -28,7 +28,7 @@ class OrderItemTest extends ModelTestCase
 
     public $driver = 'sqlite';
 
-    public function getModels()
+    public function models()
     {
         return [new OrderSchema, new OrderItemSchema];
     }

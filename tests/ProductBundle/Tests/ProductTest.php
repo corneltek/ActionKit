@@ -82,7 +82,7 @@ class ProductBundleTest extends ModelTestCase
 
     public $driver = 'sqlite';
 
-    public function getModels()
+    public function models()
     {
         return array( new ProductSchema );
     }

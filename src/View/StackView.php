@@ -88,7 +88,7 @@ SCRIPT;
     /**
      * build ManyToMany RelationalActionView For existing junctional records
      *
-     * @param $record     BaseModel         the main record
+     * @param $record     Model         the main record
      * @param $relationId string            the relationship id
      * @param $relation   array             the relationship data.
      * @param $subset     BaseCollection    the subset collection (junction data, for rendering the checked items)

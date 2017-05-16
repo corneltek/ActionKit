@@ -6,11 +6,11 @@ class TemplateViewTest extends \PHPUnit\Framework\TestCase
     {
         $actionClass = ActionKit\RecordAction\BaseRecordAction::createCRUDClass('User\Model\User','Create');
         $action = new $actionClass;
-        ok($action);
+        $this->assertNotNull($action);
 
         $view = new FooTemplateView($action);
-        ok($view);
-        ok($view->render());
+        $this->assertNotNull($view);
+        $this->assertNotNull($view->render());
     }
 }
 

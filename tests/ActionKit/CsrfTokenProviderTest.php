@@ -31,7 +31,7 @@ class CsrfTokenProviderTest extends \PHPUnit\Framework\TestCase
         $token = $this->token;
         $this->assertNotNull($token); 
         $this->assertEquals(1800, $token->ttl);
-        ok($token->hash);
+        $this->assertNotNull($token->hash);
         $this->assertNotNull($this->provider->loadCurrentToken());
     }
 

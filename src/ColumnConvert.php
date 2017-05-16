@@ -26,7 +26,7 @@ class ColumnConvert
      *
      * This is used for generating an Action View without CRUD type.
      */
-    public static function convertSchemaToAction(SchemaInterface $schema, BaseModel $record = null)
+    public static function convertSchemaToAction(SchemaInterface $schema, Model $record = null)
     {
         $columns = $schema->getColumns(true);
         $action = new BaseRecordAction(array(), $record);
@@ -41,10 +41,10 @@ class ColumnConvert
      * Translate Maghead RuntimeColumn to ActionKit param object.
      *
      * @param RuntimeColumn $column
-     * @param BaseModel $record
+     * @param Model $record
      * @return Param;
      */
-    public static function toParam(RuntimeColumn $column , BaseModel $record = null, Action $action = null)
+    public static function toParam(RuntimeColumn $column , Model $record = null, Action $action = null)
     {
         $name = $column->name;
         $param = new Param($name, $action);
@@ -88,7 +88,7 @@ class ColumnConvert
         // if we got record, load the value from it.
         if ($record) {
             // $val = $record->{$name};
-            // $val = $val instanceof BaseModel ? $val->dataKeyValue() : $val;
+            // $val = $val instanceof Model ? $val->dataKeyValue() : $val;
             $val = $record->getValue($name);
             $param->value   = $val;
 
@@ -119,7 +119,7 @@ class ColumnConvert
                         $options[ $label ] = $item->dataKeyValue();
                     }
                     $param->validValues = $options;
-                } elseif ( is_subclass_of($referClass,'Maghead\\BaseModel', true) ) {
+                } elseif ( is_subclass_of($referClass,'Maghead\\Model', true) ) {
                     // it's a `belongs-to`-like relationship
                     $class = $referClass . 'Collection';
                     $collection = new $class;

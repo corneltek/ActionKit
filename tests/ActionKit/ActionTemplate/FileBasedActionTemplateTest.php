@@ -113,7 +113,7 @@ class TwigActionTemplateTest extends ActionTestCase
         $generatedAction = $actionTemplate->generate($className, $pretreatment['arguments']);
         $this->assertNotNull($generatedAction);
         $generatedAction->load();
-        ok(class_exists($className));
+        $this->assertNotNull(class_exists($className));
     }
 }
 

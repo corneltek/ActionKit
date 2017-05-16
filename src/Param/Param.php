@@ -348,7 +348,7 @@ class Param extends CascadingAttribute
     public function getRenderableCurrentValue()
     {
         // XXX: we should handle "false", "true", and "NULL"
-        if ($this->value instanceof BaseModel) {
+        if ($this->value instanceof Model) {
             return $this->value->dataKeyValue();
         }
         if ($this->value instanceof Raw) {

@@ -15,7 +15,7 @@ abstract class CreateRecordAction
             $this->convertRecordValidation($ret);
             return $this->createError($ret);
         }
-        $this->result->data($this->record->getStashedData());
+        $this->result->data($this->record->getData());
         return $this->createSuccess($ret);
     }
 

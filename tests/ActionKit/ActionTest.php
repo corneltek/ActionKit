@@ -68,15 +68,15 @@ class ActionTest extends \PHPUnit\Framework\TestCase
     {
         $take = new TestTakeFilterAction;
         $params = $take->getParams();
-        ok($params,'get params');
+        $this->assertNotNull($params,'get params');
 
         $keys = $take->takeFields;
         foreach( $keys as $k ) {
-            ok( isset($params[$k]), "has key $k");
+            $this->assertNotNull( isset($params[$k]), "has key $k");
         }
-        ok( ! isset($params['extra1']) );
-        ok( ! isset($params['extra2']) );
-        ok( ! isset($params['extra3']) );
+        $this->assertNotNull( ! isset($params['extra1']) );
+        $this->assertNotNull( ! isset($params['extra2']) );
+        $this->assertNotNull( ! isset($params['extra3']) );
     }
 
     public function testActionArrayOptions() {
@@ -93,15 +93,15 @@ class ActionTest extends \PHPUnit\Framework\TestCase
     public function testRender()
     {
         $login = new LoginTestAction;
-        ok($login->render());
-        ok($login->render('username'));
-        ok($login->renderWidget('username'));
-        ok($login->renderField('username'));
-        ok($login->renderLabel('password'));
-        ok($login->renderWidgets(['username', 'password']));
-        ok($login->renderSubmitWidget());
-        ok($login->renderButtonWidget());
-        ok($login->renderSignatureWidget());
+        $this->assertNotNull($login->render());
+        $this->assertNotNull($login->render('username'));
+        $this->assertNotNull($login->renderWidget('username'));
+        $this->assertNotNull($login->renderField('username'));
+        $this->assertNotNull($login->renderLabel('password'));
+        $this->assertNotNull($login->renderWidgets(['username', 'password']));
+        $this->assertNotNull($login->renderSubmitWidget());
+        $this->assertNotNull($login->renderButtonWidget());
+        $this->assertNotNull($login->renderSignatureWidget());
     }
 
     public function testGetParamsWithFilterOut() 
@@ -110,9 +110,9 @@ class ActionTest extends \PHPUnit\Framework\TestCase
         $params = $login->getParams(); // get params with param filter
         $this->assertNotEmpty($params);
         $this->assertCount(2, array_keys($params));
-        ok( !isset($params['token']) , 'Should not include token param.' );
-        ok( isset($params['username']) , 'Should have username param' );
-        ok( isset($params['password']) , 'Should have password param' );
+        $this->assertNotNull( !isset($params['token']) , 'Should not include token param.' );
+        $this->assertNotNull( isset($params['username']) , 'Should have username param' );
+        $this->assertNotNull( isset($params['password']) , 'Should have password param' );
     }
 
     /*
@@ -121,7 +121,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
         $action = new ImageParamTestAction(array(
             'image' => 1,
         ));
-        ok($action);
+        $this->assertNotNull($action);
     }
      */
 

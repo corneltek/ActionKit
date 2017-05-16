@@ -14,21 +14,21 @@ class DivFieldViewTest extends \PHPUnit\Framework\TestCase
         $html = $field->render();
 
         $xml = simplexml_load_string($html);
-        is('v-field formkit-widget-textinput', (string)$xml->attributes()['class']);
+        $this->assertEquals('v-field formkit-widget-textinput', (string)$xml->attributes()['class']);
         $div = $xml->div[0];
-        is('label', (string)$div->attributes()['class']);
-        is('* Name', (string)$div->label);
+        $this->assertEquals('label', (string)$div->attributes()['class']);
+        $this->assertEquals('* Name', (string)$div->label);
 
         $label = $div->label;
-        is('formkit-widget formkit-label formkit-widget-label', (string)$label->attributes()['class']);
+        $this->assertEquals('formkit-widget formkit-label formkit-widget-label', (string)$label->attributes()['class']);
 
         $div = $xml->div[1];
-        is('input', (string)$div->attributes()['class']);
+        $this->assertEquals('input', (string)$div->attributes()['class']);
         $input = $div->input->attributes();
-        is('formkit-widget formkit-widget-text', $input->class);
-        is('name', $input->name);
-        is('text', $input->type);
-        is('John', $input->value);
+        $this->assertEquals('formkit-widget formkit-widget-text', $input->class);
+        $this->assertEquals('name', $input->name);
+        $this->assertEquals('text', $input->type);
+        $this->assertEquals('John', $input->value);
     }
 }
 
