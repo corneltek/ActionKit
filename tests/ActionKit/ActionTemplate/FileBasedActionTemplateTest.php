@@ -57,16 +57,19 @@ class TwigActionTemplateTest extends ActionTestCase
         $actionTemplate->register($runner, 'TwigActionTemplate', array(
             'action_class' => $className,
             'template' => '@ActionKit/RecordAction.html.twig',
-            'variables' => array(
+            'variables' => [
                 'record_class' => 'User\\Model\\User',
                 'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction'
-            )
+            ]
         ));
         $this->assertCount(1, $runner->getPretreatments());
         $this->assertNotNull($pretreatment = $runner->getActionPretreatment($className));
 
         $generatedAction = $actionTemplate->generate($className, $pretreatment['arguments']);
+
         $this->assertRequireGeneratedAction($className, $generatedAction);
+
+        $this->assertFileEquals('tests/fixture/bulk_update_user4.php', $generatedAction->getRequiredPath());
     }
 
 
@@ -75,6 +78,7 @@ class TwigActionTemplateTest extends ActionTestCase
     {
         $loader = new Twig_Loader_Filesystem([]);
         $loader->addPath('src/Templates', 'ActionKit');
+
         $actionTemplate = new TwigActionTemplate($loader);
 
         $runner = new ActionRunner;
