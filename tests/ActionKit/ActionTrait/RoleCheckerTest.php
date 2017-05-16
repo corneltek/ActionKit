@@ -31,7 +31,7 @@ class MyRoleChecker
 
 }
 
-class RoleCheckerTest extends PHPUnit_Framework_TestCase
+class RoleCheckerTest extends \PHPUnit\Framework\TestCase
 {
     public function testRoleAllowedRoleByString()
     {

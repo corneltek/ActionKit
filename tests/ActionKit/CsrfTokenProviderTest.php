@@ -3,7 +3,7 @@ use ActionKit\Csrf\CsrfTokenProvider;
 use ActionKit\Csrf\CsrfSessionStorage;
 use ActionKit\Csrf\CsrfArrayStorage;
 
-class CsrfTokenProviderTest extends PHPUnit_Framework_TestCase 
+class CsrfTokenProviderTest extends \PHPUnit\Framework\TestCase 
 {
     protected $token;
 

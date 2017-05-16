@@ -2,7 +2,7 @@
 use ActionKit\Param\Param;
 use ActionKit\FieldView\DivFieldView;
 
-class DivFieldViewTest extends PHPUnit_Framework_TestCase
+class DivFieldViewTest extends \PHPUnit\Framework\TestCase
 {
     public function testText()
     {

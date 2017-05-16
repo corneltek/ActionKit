@@ -1,7 +1,7 @@
 <?php
 use ActionKit\ColumnConvert;
 
-class ColumnConvertTest extends PHPUnit_Framework_TestCase
+class ColumnConvertTest extends \PHPUnit\Framework\TestCase
 {
     public function testColumnConvert()
     {

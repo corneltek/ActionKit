@@ -3,7 +3,7 @@ use ActionKit\RecordAction\BaseRecordAction;
 use ActionKit\ActionTemplate\UpdateOrderingRecordActionTemplate;
 use ActionKit\ActionRunner;
 use ActionKit\ActionGenerator;
-use LazyRecord\Testing\ModelTestCase;
+use Maghead\Testing\ModelTestCase;
 use ProductBundle\Model\Product;
 use ProductBundle\Model\ProductCollection;
 use ProductBundle\Model\ProductSchema;

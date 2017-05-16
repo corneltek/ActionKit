@@ -96,9 +96,9 @@ class ManyToManyCheckboxView
 
     /**
      * @param string                    $relationId the relationship id of the record.
-     * @param LazyRecord\BaseModel      $record     the record object.
-     * @param LazyRecord\BaseCollection $subset     the subset colletion object.
-     * @param LazyRecord\BaseCollection $collection the superset colletion object.
+     * @param Maghead\Runtime\Model      $record     the record object.
+     * @param Maghead\Runtime\Collection $subset     the subset colletion object.
+     * @param Maghead\Runtime\Collection $collection the superset colletion object.
      */
     public function render($relationId, $record, $subset = null, $collection = null)
     {

@@ -2,7 +2,7 @@
 use ActionKit\Param\Param;
 use ActionKit\FieldView\BootstrapFieldView;
 
-class BootstrapFieldViewTest extends PHPUnit_Framework_TestCase
+class BootstrapFieldViewTest extends \PHPUnit\Framework\TestCase
 {
     public function testText()
     {

@@ -6,10 +6,10 @@ use ActionKit\Exception\ActionException;
 use ActionKit\Exception\RequiredConfigKeyException;
 use ActionKit\ActionTemplate\RecordActionTemplate;
 use ActionKit\RecordAction\CreateRecordAction;
-use LazyRecord\Schema\DeclareSchema;
-use LazyRecord\Schema\Relationship\Relationship;
-use LazyRecord\BaseModel;
-use LazyRecord\Result;
+use Maghead\Schema\DeclareSchema;
+use Maghead\Schema\Relationship\Relationship;
+use Maghead\Runtime\Model;
+use Maghead\Result;
 use Exception;
 
 class BaseRecordAction extends Action
@@ -51,7 +51,7 @@ class BaseRecordAction extends Action
      *
      *
      * @param array                $args
-     * @param LazyRecord\BaseModel $record
+     * @param Maghead\Runtime\Model $record
      */
     public function __construct(array $args = array(), $options = array())
     {
@@ -254,7 +254,7 @@ class BaseRecordAction extends Action
      * Convert record validation object to action validation
      * result.
      *
-     * @param LazyRecord\Result $ret
+     * @param Maghead\Result $ret
      */
     public function convertRecordValidation(Result $ret)
     {
@@ -279,7 +279,7 @@ class BaseRecordAction extends Action
 
 
     /**
-     * @return LazyRecord\Schema\Relationship relationship object
+     * @return Maghead\Schema\Relationship relationship object
      */
     public function getRelation($relationId)
     {
@@ -367,7 +367,7 @@ class BaseRecordAction extends Action
      * The subaction will create its own ActionRequest object to maintain the
      * sub-parameters.
      *
-     * @param LazyRecord\Schema\Relationship $relation
+     * @param Maghead\Schema\Relationship $relation
      * @param array $args
      * @param array $files
      * @return ActionKit\Action

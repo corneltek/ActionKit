@@ -4,7 +4,7 @@ use ProductBundle\Model\ProductCollection;
 use ProductBundle\Model\ProductTypeCollection;
 use ProductBundle\Model\ProductImageCollection;
 use ProductBundle\Model\ResourceCollection;
-use LazyRecord\Schema\DeclareSchema;
+use Maghead\Schema\DeclareSchema;
 
 class ProductSchema extends DeclareSchema
 {

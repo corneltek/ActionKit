@@ -14,7 +14,7 @@ class IntFieldTestAction extends Action
 }
 
 
-class IntFieldActionTest extends PHPUnit_Framework_TestCase
+class IntFieldActionTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testIntFieldAction()

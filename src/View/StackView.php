@@ -9,10 +9,10 @@ use FormKit\Widget\ButtonInput;
 use FormKit\Widget\SubmitInput;
 use FormKit\Widget\CheckboxInput;
 use FormKit\Layout\GenericLayout;
-use LazyRecord\Schema\DeclareSchema;
-use LazyRecord\Schema\Relationship\Relationship;
-use LazyRecord\BaseModel;
-use LazyRecord\BaseCollection;
+use Maghead\Schema\DeclareSchema;
+use Maghead\Schema\Relationship\Relationship;
+use Maghead\Runtime\Model;
+use Maghead\Runtime\Collection;
 
 /**
  *  $view = new StackView( $action, array(

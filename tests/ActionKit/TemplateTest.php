@@ -2,7 +2,7 @@
 use ActionKit\Template;
 use ActionKit\StringTemplate;
 
-class TemplateTest extends PHPUnit_Framework_TestCase
+class TemplateTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testStringTemplate() {

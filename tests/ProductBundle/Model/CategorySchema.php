@@ -3,7 +3,7 @@ namespace ProductBundle\Model;
 use ProductBundle\Model\ProductBundle;
 use ProductBundle\Model\ProductCollection;
 use ProductBundle\Model\CategoryCollection;
-use LazyRecord\Schema\DeclareSchema;
+use Maghead\Schema\DeclareSchema;
 
 class CategorySchema extends DeclareSchema
 {

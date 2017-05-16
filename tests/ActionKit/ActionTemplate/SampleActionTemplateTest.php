@@ -6,7 +6,7 @@ use ActionKit\ActionTemplate\RecordActionTemplate;
 use ActionKit\ActionTemplate\TwigActionTemplate;
 use ActionKit\ActionTemplate\SampleActionTemplate;
 
-class SampleActionTemplateTest extends PHPUnit_Framework_TestCase
+class SampleActionTemplateTest extends \PHPUnit\Framework\TestCase
 {
 
     public function failingArgumentProvider()

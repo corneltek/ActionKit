@@ -1,7 +1,7 @@
 <?php
 use Maghead\Generator\Schema\SchemaGenerator;
-use Maghead\Schema\DeclareSchema\Loader\ComposerSchemaLoader;
-use Maghead\Schema\DeclareSchema\SchemaLoader;
+use Maghead\Schema\Loader\ComposerSchemaLoader;
+use Maghead\Schema\SchemaLoader;
 use Maghead\Runtime\Config\FileConfigLoader;
 use Maghead\Runtime\Config\ArrayConfigLoader;
 use Maghead\Runtime\Bootstrap;

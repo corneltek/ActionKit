@@ -1,56 +1,150 @@
 <?php
 namespace ProductBundle\Model;
-use LazyRecord\Schema\SchemaLoader;
-use LazyRecord\Result;
+
+use Maghead\Runtime\Model;
+use Maghead\Schema\SchemaLoader;
+use Maghead\Runtime\Result;
+use Maghead\Runtime\Inflator;
 use SQLBuilder\Bind;
 use SQLBuilder\ArgumentArray;
-use PDO;
-use SQLBuilder\Universal\Query\InsertQuery;
-use LazyRecord\BaseModel;
+use DateTime;
+
 class ProductCategoryBase
-    extends BaseModel
+    extends Model
 {
-    const SCHEMA_CLASS = 'ProductBundle\\Model\\ProductCategorySchema';
+
     const SCHEMA_PROXY_CLASS = 'ProductBundle\\Model\\ProductCategorySchemaProxy';
-    const COLLECTION_CLASS = 'ProductBundle\\Model\\ProductCategoryCollection';
+
+    const READ_SOURCE_ID = 'master';
+
+    const WRITE_SOURCE_ID = 'master';
+
+    const TABLE_ALIAS = 'm';
+
+    const SCHEMA_CLASS = 'ProductBundle\\Model\\ProductCategorySchema';
+
+    const LABEL = 'ProductCategory';
+
+    const MODEL_NAME = 'ProductCategory';
+
+    const MODEL_NAMESPACE = 'ProductBundle\\Model';
+
     const MODEL_CLASS = 'ProductBundle\\Model\\ProductCategory';
+
+    const REPO_CLASS = 'ProductBundle\\Model\\ProductCategoryRepoBase';
+
+    const COLLECTION_CLASS = 'ProductBundle\\Model\\ProductCategoryCollection';
+
     const TABLE = 'product_category_junction';
-    const READ_SOURCE_ID = 'default';
-    const WRITE_SOURCE_ID = 'default';
+
     const PRIMARY_KEY = 'id';
-    const FIND_BY_PRIMARY_KEY_SQL = 'SELECT * FROM product_category_junction WHERE id = :id LIMIT 1';
+
+    const GLOBAL_PRIMARY_KEY = NULL;
+
+    const LOCAL_PRIMARY_KEY = 'id';
+
     public static $column_names = array (
       0 => 'id',
       1 => 'product_id',
       2 => 'category_id',
     );
-    public static $column_hash = array (
-      'id' => 1,
-      'product_id' => 1,
-      'category_id' => 1,
-    );
+
     public static $mixin_classes = array (
     );
+
     protected $table = 'product_category_junction';
-    public $readSourceId = 'default';
-    public $writeSourceId = 'default';
-    public function getSchema()
+
+    public $id;
+
+    public $product_id;
+
+    public $category_id;
+
+    public static function getSchema()
     {
-        if ($this->_schema) {
-           return $this->_schema;
+        static $schema;
+        if ($schema) {
+           return $schema;
         }
-        return $this->_schema = SchemaLoader::load('ProductBundle\\Model\\ProductCategorySchemaProxy');
+        return $schema = new \ProductBundle\Model\ProductCategorySchemaProxy;
     }
+
+    public static function createRepo($write, $read)
+    {
+        return new \ProductBundle\Model\ProductCategoryRepoBase($write, $read);
+    }
+
+    public function getKeyName()
+    {
+        return 'id';
+    }
+
+    public function getKey()
+    {
+        return $this->id;
+    }
+
+    public function hasKey()
+    {
+        return isset($this->id);
+    }
+
+    public function setKey($key)
+    {
+        return $this->id = $key;
+    }
+
+    public function removeLocalPrimaryKey()
+    {
+        $this->id = null;
+    }
+
     public function getId()
     {
-            return $this->get('id');
+        return intval($this->id);
     }
+
     public function getProductId()
     {
-            return $this->get('product_id');
+        return intval($this->product_id);
     }
+
     public function getCategoryId()
     {
-            return $this->get('category_id');
+        return intval($this->category_id);
+    }
+
+    public function getAlterableData()
+    {
+        return ["id" => $this->id, "product_id" => $this->product_id, "category_id" => $this->category_id];
+    }
+
+    public function getData()
+    {
+        return ["id" => $this->id, "product_id" => $this->product_id, "category_id" => $this->category_id];
+    }
+
+    public function setData(array $data)
+    {
+        if (array_key_exists("id", $data)) { $this->id = $data["id"]; }
+        if (array_key_exists("product_id", $data)) { $this->product_id = $data["product_id"]; }
+        if (array_key_exists("category_id", $data)) { $this->category_id = $data["category_id"]; }
+    }
+
+    public function clear()
+    {
+        $this->id = NULL;
+        $this->product_id = NULL;
+        $this->category_id = NULL;
+    }
+
+    public function fetchCategory()
+    {
+        return static::masterRepo()->fetchCategoryOf($this);
+    }
+
+    public function fetchProduct()
+    {
+        return static::masterRepo()->fetchProductOf($this);
     }
 }

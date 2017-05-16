@@ -61,7 +61,7 @@ class LoginTestAction extends Action
     }
 }
 
-class ActionTest extends PHPUnit_Framework_TestCase
+class ActionTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testGetParamsWithTakeFilter()

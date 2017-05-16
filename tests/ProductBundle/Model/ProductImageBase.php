@@ -1,24 +1,48 @@
 <?php
 namespace ProductBundle\Model;
-use LazyRecord\Schema\SchemaLoader;
-use LazyRecord\Result;
+
+use Maghead\Runtime\Model;
+use Maghead\Schema\SchemaLoader;
+use Maghead\Runtime\Result;
+use Maghead\Runtime\Inflator;
 use SQLBuilder\Bind;
 use SQLBuilder\ArgumentArray;
-use PDO;
-use SQLBuilder\Universal\Query\InsertQuery;
-use LazyRecord\BaseModel;
+use DateTime;
+
 class ProductImageBase
-    extends BaseModel
+    extends Model
 {
-    const SCHEMA_CLASS = 'ProductBundle\\Model\\ProductImageSchema';
+
     const SCHEMA_PROXY_CLASS = 'ProductBundle\\Model\\ProductImageSchemaProxy';
-    const COLLECTION_CLASS = 'ProductBundle\\Model\\ProductImageCollection';
+
+    const READ_SOURCE_ID = 'master';
+
+    const WRITE_SOURCE_ID = 'master';
+
+    const TABLE_ALIAS = 'm';
+
+    const SCHEMA_CLASS = 'ProductBundle\\Model\\ProductImageSchema';
+
+    const LABEL = '產品圖';
+
+    const MODEL_NAME = 'ProductImage';
+
+    const MODEL_NAMESPACE = 'ProductBundle\\Model';
+
     const MODEL_CLASS = 'ProductBundle\\Model\\ProductImage';
+
+    const REPO_CLASS = 'ProductBundle\\Model\\ProductImageRepoBase';
+
+    const COLLECTION_CLASS = 'ProductBundle\\Model\\ProductImageCollection';
+
     const TABLE = 'product_images';
-    const READ_SOURCE_ID = 'default';
-    const WRITE_SOURCE_ID = 'default';
+
     const PRIMARY_KEY = 'id';
-    const FIND_BY_PRIMARY_KEY_SQL = 'SELECT * FROM product_images WHERE id = :id LIMIT 1';
+
+    const GLOBAL_PRIMARY_KEY = NULL;
+
+    const LOCAL_PRIMARY_KEY = 'id';
+
     public static $column_names = array (
       0 => 'id',
       1 => 'product_id',
@@ -26,43 +50,116 @@ class ProductImageBase
       3 => 'image',
       4 => 'large',
     );
-    public static $column_hash = array (
-      'id' => 1,
-      'product_id' => 1,
-      'title' => 1,
-      'image' => 1,
-      'large' => 1,
-    );
+
     public static $mixin_classes = array (
     );
+
     protected $table = 'product_images';
-    public $readSourceId = 'default';
-    public $writeSourceId = 'default';
-    public function getSchema()
+
+    public $id;
+
+    public $product_id;
+
+    public $title;
+
+    public $image;
+
+    public $large;
+
+    public static function getSchema()
     {
-        if ($this->_schema) {
-           return $this->_schema;
+        static $schema;
+        if ($schema) {
+           return $schema;
         }
-        return $this->_schema = SchemaLoader::load('ProductBundle\\Model\\ProductImageSchemaProxy');
+        return $schema = new \ProductBundle\Model\ProductImageSchemaProxy;
     }
+
+    public static function createRepo($write, $read)
+    {
+        return new \ProductBundle\Model\ProductImageRepoBase($write, $read);
+    }
+
+    public function getKeyName()
+    {
+        return 'id';
+    }
+
+    public function getKey()
+    {
+        return $this->id;
+    }
+
+    public function hasKey()
+    {
+        return isset($this->id);
+    }
+
+    public function setKey($key)
+    {
+        return $this->id = $key;
+    }
+
+    public function removeLocalPrimaryKey()
+    {
+        $this->id = null;
+    }
+
     public function getId()
     {
-            return $this->get('id');
+        return intval($this->id);
     }
+
     public function getProductId()
     {
-            return $this->get('product_id');
+        return intval($this->product_id);
     }
+
     public function getTitle()
     {
-            return $this->get('title');
+        return $this->title;
     }
+
     public function getImage()
     {
-            return $this->get('image');
+        return $this->image;
     }
+
     public function getLarge()
     {
-            return $this->get('large');
+        return $this->large;
+    }
+
+    public function getAlterableData()
+    {
+        return ["id" => $this->id, "product_id" => $this->product_id, "title" => $this->title, "image" => $this->image, "large" => $this->large];
+    }
+
+    public function getData()
+    {
+        return ["id" => $this->id, "product_id" => $this->product_id, "title" => $this->title, "image" => $this->image, "large" => $this->large];
+    }
+
+    public function setData(array $data)
+    {
+        if (array_key_exists("id", $data)) { $this->id = $data["id"]; }
+        if (array_key_exists("product_id", $data)) { $this->product_id = $data["product_id"]; }
+        if (array_key_exists("title", $data)) { $this->title = $data["title"]; }
+        if (array_key_exists("image", $data)) { $this->image = $data["image"]; }
+        if (array_key_exists("large", $data)) { $this->large = $data["large"]; }
+    }
+
+    public function clear()
+    {
+        $this->id = NULL;
+        $this->product_id = NULL;
+        $this->title = NULL;
+        $this->image = NULL;
+        $this->large = NULL;
+    }
+
+    public function fetchProduct()
+    {
+        return static::masterRepo()->fetchProductOf($this);
     }
 }

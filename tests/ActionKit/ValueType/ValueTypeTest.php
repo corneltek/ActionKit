@@ -10,7 +10,7 @@ use ActionKit\ValueType\Ipv6Type;
 use ActionKit\ValueType\EmailType;
 use ActionKit\ValueType\PathType;
 
-class ValueTypeTest extends PHPUnit_Framework_TestCase
+class ValueTypeTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testTypeClass() 

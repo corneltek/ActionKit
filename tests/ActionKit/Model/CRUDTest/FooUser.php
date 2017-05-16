@@ -1,7 +1,7 @@
 <?php
 namespace ActionKit\Model\CRUDTest;
 
-class FooUser extends \LazyRecord\BaseModel {
+class FooUser extends \Maghead\Runtime\Model {
     public function schema($schema) 
     {
         $schema->column('username')->varchar(12);

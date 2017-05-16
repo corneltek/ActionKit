@@ -1,24 +1,48 @@
 <?php
 namespace ProductBundle\Model;
-use LazyRecord\Schema\SchemaLoader;
-use LazyRecord\Result;
+
+use Maghead\Runtime\Model;
+use Maghead\Schema\SchemaLoader;
+use Maghead\Runtime\Result;
+use Maghead\Runtime\Inflator;
 use SQLBuilder\Bind;
 use SQLBuilder\ArgumentArray;
-use PDO;
-use SQLBuilder\Universal\Query\InsertQuery;
-use LazyRecord\BaseModel;
+use DateTime;
+
 class ProductSubsectionBase
-    extends BaseModel
+    extends Model
 {
-    const SCHEMA_CLASS = 'ProductBundle\\Model\\ProductSubsectionSchema';
+
     const SCHEMA_PROXY_CLASS = 'ProductBundle\\Model\\ProductSubsectionSchemaProxy';
-    const COLLECTION_CLASS = 'ProductBundle\\Model\\ProductSubsectionCollection';
+
+    const READ_SOURCE_ID = 'master';
+
+    const WRITE_SOURCE_ID = 'master';
+
+    const TABLE_ALIAS = 'm';
+
+    const SCHEMA_CLASS = 'ProductBundle\\Model\\ProductSubsectionSchema';
+
+    const LABEL = 'ProductSubsection';
+
+    const MODEL_NAME = 'ProductSubsection';
+
+    const MODEL_NAMESPACE = 'ProductBundle\\Model';
+
     const MODEL_CLASS = 'ProductBundle\\Model\\ProductSubsection';
+
+    const REPO_CLASS = 'ProductBundle\\Model\\ProductSubsectionRepoBase';
+
+    const COLLECTION_CLASS = 'ProductBundle\\Model\\ProductSubsectionCollection';
+
     const TABLE = 'product_subsections';
-    const READ_SOURCE_ID = 'default';
-    const WRITE_SOURCE_ID = 'default';
+
     const PRIMARY_KEY = 'id';
-    const FIND_BY_PRIMARY_KEY_SQL = 'SELECT * FROM product_subsections WHERE id = :id LIMIT 1';
+
+    const GLOBAL_PRIMARY_KEY = NULL;
+
+    const LOCAL_PRIMARY_KEY = 'id';
+
     public static $column_names = array (
       0 => 'id',
       1 => 'title',
@@ -26,43 +50,116 @@ class ProductSubsectionBase
       3 => 'content',
       4 => 'product_id',
     );
-    public static $column_hash = array (
-      'id' => 1,
-      'title' => 1,
-      'cover_image' => 1,
-      'content' => 1,
-      'product_id' => 1,
-    );
+
     public static $mixin_classes = array (
     );
+
     protected $table = 'product_subsections';
-    public $readSourceId = 'default';
-    public $writeSourceId = 'default';
-    public function getSchema()
+
+    public $id;
+
+    public $title;
+
+    public $cover_image;
+
+    public $content;
+
+    public $product_id;
+
+    public static function getSchema()
     {
-        if ($this->_schema) {
-           return $this->_schema;
+        static $schema;
+        if ($schema) {
+           return $schema;
         }
-        return $this->_schema = SchemaLoader::load('ProductBundle\\Model\\ProductSubsectionSchemaProxy');
+        return $schema = new \ProductBundle\Model\ProductSubsectionSchemaProxy;
     }
+
+    public static function createRepo($write, $read)
+    {
+        return new \ProductBundle\Model\ProductSubsectionRepoBase($write, $read);
+    }
+
+    public function getKeyName()
+    {
+        return 'id';
+    }
+
+    public function getKey()
+    {
+        return $this->id;
+    }
+
+    public function hasKey()
+    {
+        return isset($this->id);
+    }
+
+    public function setKey($key)
+    {
+        return $this->id = $key;
+    }
+
+    public function removeLocalPrimaryKey()
+    {
+        $this->id = null;
+    }
+
     public function getId()
     {
-            return $this->get('id');
+        return intval($this->id);
     }
+
     public function getTitle()
     {
-            return $this->get('title');
+        return $this->title;
     }
+
     public function getCoverImage()
     {
-            return $this->get('cover_image');
+        return $this->cover_image;
     }
+
     public function getContent()
     {
-            return $this->get('content');
+        return $this->content;
     }
+
     public function getProductId()
     {
-            return $this->get('product_id');
+        return intval($this->product_id);
+    }
+
+    public function getAlterableData()
+    {
+        return ["id" => $this->id, "title" => $this->title, "cover_image" => $this->cover_image, "content" => $this->content, "product_id" => $this->product_id];
+    }
+
+    public function getData()
+    {
+        return ["id" => $this->id, "title" => $this->title, "cover_image" => $this->cover_image, "content" => $this->content, "product_id" => $this->product_id];
+    }
+
+    public function setData(array $data)
+    {
+        if (array_key_exists("id", $data)) { $this->id = $data["id"]; }
+        if (array_key_exists("title", $data)) { $this->title = $data["title"]; }
+        if (array_key_exists("cover_image", $data)) { $this->cover_image = $data["cover_image"]; }
+        if (array_key_exists("content", $data)) { $this->content = $data["content"]; }
+        if (array_key_exists("product_id", $data)) { $this->product_id = $data["product_id"]; }
+    }
+
+    public function clear()
+    {
+        $this->id = NULL;
+        $this->title = NULL;
+        $this->cover_image = NULL;
+        $this->content = NULL;
+        $this->product_id = NULL;
+    }
+
+    public function fetchProduct()
+    {
+        return static::masterRepo()->fetchProductOf($this);
     }
 }

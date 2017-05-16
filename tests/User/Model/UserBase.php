@@ -1,12 +1,12 @@
 <?php
 namespace User\Model;
-use LazyRecord\Schema\SchemaLoader;
-use LazyRecord\Result;
+use Maghead\Schema\SchemaLoader;
+use Maghead\Result;
 use SQLBuilder\Bind;
 use SQLBuilder\ArgumentArray;
 use PDO;
 use SQLBuilder\Universal\Query\InsertQuery;
-use LazyRecord\BaseModel;
+use Maghead\Runtime\Model;
 class UserBase
     extends BaseModel
 {

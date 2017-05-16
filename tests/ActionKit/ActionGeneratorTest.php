@@ -6,7 +6,7 @@ use ActionKit\ActionTemplate\RecordActionTemplate;
 use ActionKit\ActionTemplate\TwigActionTemplate;
 use ActionKit\ActionTemplate\SampleActionTemplate;
 
-class ActionGeneratorTest extends PHPUnit_Framework_TestCase
+class ActionGeneratorTest extends \PHPUnit\Framework\TestCase
 {
 
 

@@ -6,10 +6,10 @@ use ActionKit\RecordAction\BaseRecordAction;
 use ActionKit\RecordAction\CreateRecordAction;
 use ActionKit\RecordAction\UpdateRecordAction;
 use ActionKit\RecordAction\DeleteRecordAction;
-use LazyRecord\BaseModel;
-use LazyRecord\Schema\DeclareSchema;
-use LazyRecord\Schema\SchemaInterface;
-use LazyRecord\Schema\RuntimeColumn;
+use Maghead\Runtime\Model;
+use Maghead\Schema\DeclareSchema;
+use Maghead\Schema\SchemaInterface;
+use Maghead\Schema\RuntimeColumn;
 use SQLBuilder\Raw;
 use Exception;
 
@@ -22,7 +22,7 @@ use Exception;
 class ColumnConvert
 {
     /**
-     * Convert a LazyRecord schema to action.
+     * Convert a Maghead schema to action.
      *
      * This is used for generating an Action View without CRUD type.
      */
@@ -38,7 +38,7 @@ class ColumnConvert
 
 
     /**
-     * Translate LazyRecord RuntimeColumn to ActionKit param object.
+     * Translate Maghead RuntimeColumn to ActionKit param object.
      *
      * @param RuntimeColumn $column
      * @param BaseModel $record
@@ -109,7 +109,7 @@ class ColumnConvert
                 $referClass = $param->refer;
 
                 // it's a `has many`-like relationship
-                if ( is_subclass_of($referClass,'LazyRecord\\BaseCollection', true) ) {
+                if ( is_subclass_of($referClass,'Maghead\\BaseCollection', true) ) {
                     $collection = new $referClass;
                     $options = array();
                     foreach ($collection as $item) {
@@ -119,7 +119,7 @@ class ColumnConvert
                         $options[ $label ] = $item->dataKeyValue();
                     }
                     $param->validValues = $options;
-                } elseif ( is_subclass_of($referClass,'LazyRecord\\BaseModel', true) ) {
+                } elseif ( is_subclass_of($referClass,'Maghead\\BaseModel', true) ) {
                     // it's a `belongs-to`-like relationship
                     $class = $referClass . 'Collection';
                     $collection = new $class;
@@ -131,7 +131,7 @@ class ColumnConvert
                         $options[ $label ] = $item->dataKeyValue();
                     }
                     $param->validValues = $options;
-                } elseif ( is_subclass_of($referClass, 'LazyRecord\\Schema\\DeclareSchema', true) ) {
+                } elseif ( is_subclass_of($referClass, 'Maghead\\Schema\\DeclareSchema', true) ) {
                     $schema = new $referClass;
                     $collection = $schema->newCollection();
 

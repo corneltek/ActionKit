@@ -1,7 +1,7 @@
 <?php
 require 'bootstrap.php';
 
-$config = new LazyRecord\ConfigLoader;
+$config = new Maghead\ConfigLoader;
 $config->load('../.lazy.yml');
 $config->init();
 

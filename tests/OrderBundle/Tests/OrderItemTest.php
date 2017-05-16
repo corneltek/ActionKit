@@ -14,7 +14,7 @@ use OrderBundle\Model\OrderItem;
 use OrderBundle\Model\OrderItemCollection;
 use OrderBundle\Model\OrderItemSchema;
 
-use LazyRecord\Testing\ModelTestCase;
+use Maghead\Testing\ModelTestCase;
 use ActionKit\RecordAction\CreateRecordAction;
 use ActionKit\RecordAction\UpdateRecordAction;
 use ActionKit\RecordAction\DeleteRecordAction;

@@ -1,7 +1,7 @@
 <?php
 use ActionKit\ValueType\DateTimeType;
 
-class DateTimeTypeTest extends PHPUnit_Framework_TestCase
+class DateTimeTypeTest extends \PHPUnit\Framework\TestCase
 {
     public function testDateTimeTypeTest()
     {

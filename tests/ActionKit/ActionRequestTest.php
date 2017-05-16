@@ -1,7 +1,7 @@
 <?php
 use ActionKit\ActionRequest;
 
-class ActionRequestTest extends PHPUnit_Framework_TestCase
+class ActionRequestTest extends \PHPUnit\Framework\TestCase
 {
     public function testActionRequest()
     {

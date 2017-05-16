@@ -3,7 +3,7 @@ use ActionKit\ValueType\IpType;
 use ActionKit\ValueType\Ipv4Type;
 use ActionKit\ValueType\Ipv6Type;
 
-class IpTypeTest extends PHPUnit_Framework_TestCase
+class IpTypeTest extends \PHPUnit\Framework\TestCase
 {
     public function testTypeClass() 
     {

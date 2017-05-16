@@ -1,7 +1,7 @@
 <?php
 namespace User\Model;
 
-class UserSchema extends \LazyRecord\Schema\DeclareSchema
+class UserSchema extends \Maghead\Schema\DeclareSchema
 {
     public function schema()
     {

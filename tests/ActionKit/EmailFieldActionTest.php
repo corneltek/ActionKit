@@ -13,7 +13,7 @@ class EmailFieldTestAction extends Action
 
 
 
-class EmailFieldActionTest extends PHPUnit_Framework_TestCase
+class EmailFieldActionTest extends \PHPUnit\Framework\TestCase
 {
 
 

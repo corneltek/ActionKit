@@ -1,6 +1,6 @@
 <?php
 namespace ProductBundle\Model;
-use LazyRecord\Schema\DeclareSchema;
+use Maghead\Schema\DeclareSchema;
 
 class ProductTypeSchema extends DeclareSchema
 {

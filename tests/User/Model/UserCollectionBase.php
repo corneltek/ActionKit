@@ -1,6 +1,6 @@
 <?php
 namespace User\Model;
-use LazyRecord\BaseCollection;
+use Maghead\Runtime\Collection;
 class UserCollectionBase
     extends BaseCollection
 {

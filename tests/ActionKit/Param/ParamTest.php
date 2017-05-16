@@ -2,7 +2,7 @@
 use ActionKit\Param\Param;
 use ActionKit\Param\ImageParam;
 
-class ParamTest extends PHPUnit_Framework_TestCase
+class ParamTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {

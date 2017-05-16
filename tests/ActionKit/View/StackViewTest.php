@@ -26,7 +26,7 @@ class CreateUserAction extends ActionKit\Action
 /**
  * @group lazyrecord
  */
-use LazyRecord\Testing\ModelTestCase;
+use Maghead\Testing\ModelTestCase;
 use ProductBundle\Model\ProductSchema;
 use ProductBundle\Model\Category;
 use ProductBundle\Action\CreateProduct;

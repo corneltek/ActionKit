@@ -8,7 +8,7 @@ use DateTime;
 use InvalidArgumentException;
 use Exception;
 use LogicException;
-use LazyRecord\BaseModel;
+use Maghead\Runtime\Model;
 use SQLBuilder\Raw;
 
 class Param extends CascadingAttribute

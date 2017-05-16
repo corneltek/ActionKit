@@ -1,7 +1,7 @@
 <?php
 use ActionKit\ValueType\BoolType;
 
-class BoolTypeTest extends PHPUnit_Framework_TestCase
+class BoolTypeTest extends \PHPUnit\Framework\TestCase
 {
     public function testBoolTypeValidator()
     {

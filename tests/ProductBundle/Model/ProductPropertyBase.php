@@ -1,62 +1,155 @@
 <?php
 namespace ProductBundle\Model;
-use LazyRecord\Schema\SchemaLoader;
-use LazyRecord\Result;
+
+use Maghead\Runtime\Model;
+use Maghead\Schema\SchemaLoader;
+use Maghead\Runtime\Result;
+use Maghead\Runtime\Inflator;
 use SQLBuilder\Bind;
 use SQLBuilder\ArgumentArray;
-use PDO;
-use SQLBuilder\Universal\Query\InsertQuery;
-use LazyRecord\BaseModel;
+use DateTime;
+
 class ProductPropertyBase
-    extends BaseModel
+    extends Model
 {
-    const SCHEMA_CLASS = 'ProductBundle\\Model\\ProductPropertySchema';
+
     const SCHEMA_PROXY_CLASS = 'ProductBundle\\Model\\ProductPropertySchemaProxy';
-    const COLLECTION_CLASS = 'ProductBundle\\Model\\ProductPropertyCollection';
+
+    const READ_SOURCE_ID = 'master';
+
+    const WRITE_SOURCE_ID = 'master';
+
+    const TABLE_ALIAS = 'm';
+
+    const SCHEMA_CLASS = 'ProductBundle\\Model\\ProductPropertySchema';
+
+    const LABEL = 'ProductProperty';
+
+    const MODEL_NAME = 'ProductProperty';
+
+    const MODEL_NAMESPACE = 'ProductBundle\\Model';
+
     const MODEL_CLASS = 'ProductBundle\\Model\\ProductProperty';
+
+    const REPO_CLASS = 'ProductBundle\\Model\\ProductPropertyRepoBase';
+
+    const COLLECTION_CLASS = 'ProductBundle\\Model\\ProductPropertyCollection';
+
     const TABLE = 'product_properties';
-    const READ_SOURCE_ID = 'default';
-    const WRITE_SOURCE_ID = 'default';
+
     const PRIMARY_KEY = 'id';
-    const FIND_BY_PRIMARY_KEY_SQL = 'SELECT * FROM product_properties WHERE id = :id LIMIT 1';
+
+    const GLOBAL_PRIMARY_KEY = NULL;
+
+    const LOCAL_PRIMARY_KEY = 'id';
+
     public static $column_names = array (
       0 => 'id',
       1 => 'name',
       2 => 'val',
       3 => 'product_id',
     );
-    public static $column_hash = array (
-      'id' => 1,
-      'name' => 1,
-      'val' => 1,
-      'product_id' => 1,
-    );
+
     public static $mixin_classes = array (
     );
+
     protected $table = 'product_properties';
-    public $readSourceId = 'default';
-    public $writeSourceId = 'default';
-    public function getSchema()
+
+    public $id;
+
+    public $name;
+
+    public $val;
+
+    public $product_id;
+
+    public static function getSchema()
     {
-        if ($this->_schema) {
-           return $this->_schema;
+        static $schema;
+        if ($schema) {
+           return $schema;
         }
-        return $this->_schema = SchemaLoader::load('ProductBundle\\Model\\ProductPropertySchemaProxy');
+        return $schema = new \ProductBundle\Model\ProductPropertySchemaProxy;
     }
+
+    public static function createRepo($write, $read)
+    {
+        return new \ProductBundle\Model\ProductPropertyRepoBase($write, $read);
+    }
+
+    public function getKeyName()
+    {
+        return 'id';
+    }
+
+    public function getKey()
+    {
+        return $this->id;
+    }
+
+    public function hasKey()
+    {
+        return isset($this->id);
+    }
+
+    public function setKey($key)
+    {
+        return $this->id = $key;
+    }
+
+    public function removeLocalPrimaryKey()
+    {
+        $this->id = null;
+    }
+
     public function getId()
     {
-            return $this->get('id');
+        return intval($this->id);
     }
+
     public function getName()
     {
-            return $this->get('name');
+        return $this->name;
     }
+
     public function getVal()
     {
-            return $this->get('val');
+        return $this->val;
     }
+
     public function getProductId()
     {
-            return $this->get('product_id');
+        return intval($this->product_id);
+    }
+
+    public function getAlterableData()
+    {
+        return ["id" => $this->id, "name" => $this->name, "val" => $this->val, "product_id" => $this->product_id];
+    }
+
+    public function getData()
+    {
+        return ["id" => $this->id, "name" => $this->name, "val" => $this->val, "product_id" => $this->product_id];
+    }
+
+    public function setData(array $data)
+    {
+        if (array_key_exists("id", $data)) { $this->id = $data["id"]; }
+        if (array_key_exists("name", $data)) { $this->name = $data["name"]; }
+        if (array_key_exists("val", $data)) { $this->val = $data["val"]; }
+        if (array_key_exists("product_id", $data)) { $this->product_id = $data["product_id"]; }
+    }
+
+    public function clear()
+    {
+        $this->id = NULL;
+        $this->name = NULL;
+        $this->val = NULL;
+        $this->product_id = NULL;
+    }
+
+    public function fetchProduct()
+    {
+        return static::masterRepo()->fetchProductOf($this);
     }
 }

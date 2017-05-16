@@ -15,7 +15,7 @@ use ProductBundle\Action\CreateProduct;
 use ProductBundle\Action\UpdateProduct;
 use ProductBundle\Action\CreateProductFile;
 use ProductBundle\Action\CreateProductImage;
-use LazyRecord\Testing\ModelTestCase;
+use Maghead\Testing\ModelTestCase;
 
 class CustomCreateProductImageAction extends CreateProductImage {
 

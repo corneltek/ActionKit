@@ -1,8 +1,8 @@
 <?php
 namespace ProductBundle\Model;
-use LazyRecord\Schema;
+use Maghead\Schema\DeclareSchema;
 
-class ProductProductSchema extends Schema
+class ProductProductSchema extends DeclareSchema
 {
     public function schema() {
         $this->column('product_id')

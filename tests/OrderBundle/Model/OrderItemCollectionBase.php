@@ -1,6 +1,6 @@
 <?php
 namespace OrderBundle\Model;
-use LazyRecord\BaseCollection;
+use Maghead\Runtime\Collection;
 class OrderItemCollectionBase
     extends BaseCollection
 {

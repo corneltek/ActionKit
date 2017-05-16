@@ -1,6 +1,6 @@
 <?php
 
-class TemplateViewTest extends PHPUnit_Framework_TestCase
+class TemplateViewTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {

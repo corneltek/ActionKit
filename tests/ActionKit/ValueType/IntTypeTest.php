@@ -1,7 +1,7 @@
 <?php
 use ActionKit\ValueType\IntType;
 
-class IntTypeTest extends PHPUnit_Framework_TestCase
+class IntTypeTest extends \PHPUnit\Framework\TestCase
 {
     public function testIntType()
     {

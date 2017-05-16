@@ -18,7 +18,7 @@ class CreateUserWithMoniker extends Action
 /**
  * @group lazyrecord
  */
-class ActionRunnerTest extends \LazyRecord\Testing\ModelTestCase
+class ActionRunnerTest extends \Maghead\Testing\ModelTestCase
 {
 
     public function getModels()

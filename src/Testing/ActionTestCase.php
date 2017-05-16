@@ -1,6 +1,6 @@
 <?php
 namespace ActionKit\Testing;
-use PHPUnit_Framework_TestCase;
+use \PHPUnit\Framework\TestCase;
 use ActionKit\ActionTemplate\CodeGenActionTemplate;
 use ActionKit\ActionTemplate\RecordActionTemplate;
 use ActionKit\ActionRunner;
@@ -8,7 +8,7 @@ use ActionKit\Action;
 use ActionKit\GeneratedAction;
 use ActionKit\Testing\ActionTestCase;
 
-abstract class ActionTestCase extends PHPUnit_Framework_TestCase
+abstract class ActionTestCase extends \PHPUnit\Framework\TestCase
 {
     use ActionTestAssertions;
 
