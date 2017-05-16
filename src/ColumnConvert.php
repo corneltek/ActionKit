@@ -8,7 +8,7 @@ use ActionKit\RecordAction\UpdateRecordAction;
 use ActionKit\RecordAction\DeleteRecordAction;
 use Maghead\Runtime\Model;
 use Maghead\Schema\DeclareSchema;
-use Maghead\Schema\SchemaInterface;
+use Maghead\Schema\Schema;
 use Maghead\Schema\RuntimeColumn;
 use SQLBuilder\Raw;
 use Exception;
@@ -26,7 +26,7 @@ class ColumnConvert
      *
      * This is used for generating an Action View without CRUD type.
      */
-    public static function convertSchemaToAction(SchemaInterface $schema, Model $record = null)
+    public static function convertSchemaToAction(Schema $schema, Model $record = null)
     {
         $columns = $schema->getColumns(true);
         $action = new BaseRecordAction(array(), $record);
