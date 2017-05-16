@@ -29,6 +29,13 @@
             "ActionKit\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "ProductBundle\\": "tests/ProductBundle/",
+            "OrderBundle\\": "tests/OrderBundle/",
+            "User\\": "tests/User/"
+        }
+    },
     "extra": { "branch-alias": { "dev-master": "4.0.x-dev" } },
     "license": "MIT"
 }
