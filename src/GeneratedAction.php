@@ -5,8 +5,12 @@ use ActionKit\Exception\UnableToWriteCacheException;
 class GeneratedAction
 {
     public $className; 
+
     public $code; 
+
     public $object;
+
+    protected $requiredPath;
 
     public function __construct($className, $code, $object = null)
     {
@@ -28,9 +32,14 @@ class GeneratedAction
         }
     }
 
+    public function getRequiredPath()
+    {
+        return $this->requiredPath;
+    }
+
     public function load()
     {
-        $tmpname = tempnam('/tmp', md5($this->className));
+        $this->requiredPath = $tmpname = tempnam('/tmp', md5($this->className));
         $this->requireAt($tmpname);
         return $tmpname;
     }
