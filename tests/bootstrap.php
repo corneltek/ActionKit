@@ -1,54 +1,47 @@
 <?php
-use LazyRecord\Schema\SchemaGenerator;
-use LazyRecord\Schema\SchemaLoader;
-use LazyRecord\ConfigLoader;
-use LazyRecord\ConnectionManager;
+use Maghead\Generator\Schema\SchemaGenerator;
+use Maghead\Schema\DeclareSchema\Loader\ComposerSchemaLoader;
+use Maghead\Schema\DeclareSchema\SchemaLoader;
+use Maghead\Runtime\Config\FileConfigLoader;
+use Maghead\Runtime\Config\ArrayConfigLoader;
+use Maghead\Runtime\Bootstrap;
 
 define('ROOT' , dirname(__DIR__) );
 $loader = require ROOT . '/vendor/autoload.php';
 $loader->add(null, ROOT . '/tests');
 
-$config = ConfigLoader::getInstance();
-$config->loadFromArray(array(
-    'bootstrap' => ['tests/bootstrap.php'],
+$config = ArrayConfigLoader::load([
+    'cli' => [ 'bootstrap' => ['tests/bootstrap.php'] ],
     'schema' => [
         'auto_id' => 1,
         'paths' => ['tests'],
     ],
-    'data_source' => [
-        'default' => 'sqlite',
-        'nodes' => [
-            'sqlite' => [
-                'dsn' => 'sqlite::memory:',
-                'user' => NULL,
-                'pass' => NULL,
-            ],
+    'databases' => [
+        'master' => [
+            'dsn' => 'sqlite::memory:',
+            'user' => NULL,
+            'password' => NULL,
         ],
-    ],
-));
-$connectionManager = ConnectionManager::getInstance();
-$connectionManager->init($config);
+    ]
+]);
+Bootstrap::setup($config);
 
 
+$loader = ComposerSchemaLoader::from('composer.json');
+$loader->load();
 
 $logger = new CLIFramework\Logger;
 // $logger->setQuiet();
 $logger->info("Updating schema class files...");
-$schemas = array(
-    new \User\Model\UserSchema,
-    new \OrderBundle\Model\OrderSchema,
-    new \OrderBundle\Model\OrderItemSchema,
-);
-$g = new \LazyRecord\Schema\SchemaGenerator($config, $logger);
+$schemas = SchemaLoader::loadDeclaredSchemas();
+$g = new SchemaGenerator($config, $logger);
 $g->setForceUpdate(true);
 $g->generate($schemas);
-
-
 
 /**
  * Clean up cache files
  */
-const CACHE_DIR = 'src/ActionKit/Cache';
+const CACHE_DIR = 'src/Cache';
 const UPLOAD_DIR = 'tests/upload';
 if (file_exists(CACHE_DIR)) {
     futil_rmtree(CACHE_DIR);
