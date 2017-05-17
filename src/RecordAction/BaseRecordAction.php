@@ -83,8 +83,8 @@ class BaseRecordAction extends Action
         // CreateRecordAction doesn't require primary key to be existed.
         if ( ! $record->id && ! $this instanceof CreateRecordAction && $this->enableLoadRecord ) {
             // for create action, we don't need to create record
-            if (! $this->loadRecordFromArguments( $args )) {
-                throw new ActionException( get_class($this) . " Record action can not load record from {$this->recordClass}", $this );
+            if (! $this->loadRecordFromArguments($args)) {
+                throw new ActionException(get_class($this). " Record action can not load record from {$this->recordClass}", $this );
             }
         }
 
@@ -152,10 +152,11 @@ class BaseRecordAction extends Action
      */
     public function loadRecordFromArguments(array $args)
     {
-        if ($primaryKey = $this->record->getSchema()->primaryKey) {
-            if (isset($args[$primaryKey])) {
-                return $this->record->find($args[$primaryKey])->success;
+        if ($primaryKey = $this->recordClass::getSchema()->primaryKey) {
+            if (!isset($args[$primaryKey])) {
+                throw new \RuntimeException("primary key '{$primaryKey}' missing in the arguments: " . var_export($args, true) );
             }
+            return $this->record = $this->recordClass::load($args[$primaryKey]);
         }
         return false;
     }
