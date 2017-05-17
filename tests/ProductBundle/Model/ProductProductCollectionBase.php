@@ -1,5 +1,7 @@
 <?php
+
 namespace ProductBundle\Model;
+
 
 use Maghead\Runtime\Collection;
 

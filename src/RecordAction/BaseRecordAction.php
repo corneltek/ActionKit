@@ -57,11 +57,11 @@ class BaseRecordAction extends Action
     {
         $record = null;
 
-        if (isset($options['record'])) {
-            $record = $options['record'];
-        } else if ($options instanceof Model) {
+        if ($options instanceof Model) {
             $record = $options;
             $options = array(); // reassign $options as array
+        } else if (is_array($options['record']) && isset($options['record'])) {
+            $record = $options['record'];
         }
 
         if (isset($options['record_class'])) {

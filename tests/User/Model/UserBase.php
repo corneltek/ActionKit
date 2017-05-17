@@ -1,5 +1,7 @@
 <?php
+
 namespace User\Model;
+
 
 use Maghead\Runtime\Model;
 use Maghead\Schema\SchemaLoader;

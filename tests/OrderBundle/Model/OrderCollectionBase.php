@@ -1,5 +1,7 @@
 <?php
+
 namespace OrderBundle\Model;
+
 
 use Maghead\Runtime\Collection;
 

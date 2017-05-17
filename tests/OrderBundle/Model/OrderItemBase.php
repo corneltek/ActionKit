@@ -1,56 +1,142 @@
 <?php
+
 namespace OrderBundle\Model;
+
+
+use Maghead\Runtime\Model;
 use Maghead\Schema\SchemaLoader;
-use Maghead\Result;
+use Maghead\Runtime\Result;
+use Maghead\Runtime\Inflator;
 use SQLBuilder\Bind;
 use SQLBuilder\ArgumentArray;
-use PDO;
-use SQLBuilder\Universal\Query\InsertQuery;
-use Maghead\Runtime\Model;
+use DateTime;
+
 class OrderItemBase
-    extends BaseModel
+    extends Model
 {
-    const SCHEMA_CLASS = 'OrderBundle\\Model\\OrderItemSchema';
+
     const SCHEMA_PROXY_CLASS = 'OrderBundle\\Model\\OrderItemSchemaProxy';
-    const COLLECTION_CLASS = 'OrderBundle\\Model\\OrderItemCollection';
+
+    const READ_SOURCE_ID = 'master';
+
+    const WRITE_SOURCE_ID = 'master';
+
+    const TABLE_ALIAS = 'm';
+
+    const SCHEMA_CLASS = 'OrderBundle\\Model\\OrderItemSchema';
+
+    const LABEL = 'OrderItem';
+
+    const MODEL_NAME = 'OrderItem';
+
+    const MODEL_NAMESPACE = 'OrderBundle\\Model';
+
     const MODEL_CLASS = 'OrderBundle\\Model\\OrderItem';
+
+    const REPO_CLASS = 'OrderBundle\\Model\\OrderItemRepoBase';
+
+    const COLLECTION_CLASS = 'OrderBundle\\Model\\OrderItemCollection';
+
     const TABLE = 'order_items';
-    const READ_SOURCE_ID = 'default';
-    const WRITE_SOURCE_ID = 'default';
+
     const PRIMARY_KEY = 'id';
-    const FIND_BY_PRIMARY_KEY_SQL = 'SELECT * FROM order_items WHERE id = :id LIMIT 1';
+
+    const GLOBAL_PRIMARY_KEY = NULL;
+
+    const LOCAL_PRIMARY_KEY = 'id';
+
     public static $column_names = array (
       0 => 'id',
       1 => 'quantity',
       2 => 'subtotal',
     );
-    public static $column_hash = array (
-      'id' => 1,
-      'quantity' => 1,
-      'subtotal' => 1,
-    );
+
     public static $mixin_classes = array (
     );
+
     protected $table = 'order_items';
-    public $readSourceId = 'default';
-    public $writeSourceId = 'default';
-    public function getSchema()
+
+    public $id;
+
+    public $quantity;
+
+    public $subtotal;
+
+    public static function getSchema()
     {
-        if ($this->_schema) {
-           return $this->_schema;
+        static $schema;
+        if ($schema) {
+           return $schema;
         }
-        return $this->_schema = SchemaLoader::load('OrderBundle\\Model\\OrderItemSchemaProxy');
+        return $schema = new \OrderBundle\Model\OrderItemSchemaProxy;
     }
+
+    public static function createRepo($write, $read)
+    {
+        return new \OrderBundle\Model\OrderItemRepoBase($write, $read);
+    }
+
+    public function getKeyName()
+    {
+        return 'id';
+    }
+
+    public function getKey()
+    {
+        return $this->id;
+    }
+
+    public function hasKey()
+    {
+        return isset($this->id);
+    }
+
+    public function setKey($key)
+    {
+        return $this->id = $key;
+    }
+
+    public function removeLocalPrimaryKey()
+    {
+        $this->id = null;
+    }
+
     public function getId()
     {
-            return $this->get('id');
+        return intval($this->id);
     }
+
     public function getQuantity()
     {
-            return $this->get('quantity');
+        return intval($this->quantity);
     }
+
     public function getSubtotal()
     {
-            return $this->get('subtotal');
+        return intval($this->subtotal);
+    }
+
+    public function getAlterableData()
+    {
+        return ["id" => $this->id, "quantity" => $this->quantity, "subtotal" => $this->subtotal];
+    }
+
+    public function getData()
+    {
+        return ["id" => $this->id, "quantity" => $this->quantity, "subtotal" => $this->subtotal];
+    }
+
+    public function setData(array $data)
+    {
+        if (array_key_exists("id", $data)) { $this->id = $data["id"]; }
+        if (array_key_exists("quantity", $data)) { $this->quantity = $data["quantity"]; }
+        if (array_key_exists("subtotal", $data)) { $this->subtotal = $data["subtotal"]; }
+    }
+
+    public function clear()
+    {
+        $this->id = NULL;
+        $this->quantity = NULL;
+        $this->subtotal = NULL;
     }
 }
