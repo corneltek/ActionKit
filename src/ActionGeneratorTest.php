@@ -1,19 +1,19 @@
 <?php
-use ActionKit\ActionRunner;
-use ActionKit\ActionGenerator;
+
+namespace ActionKit;
+
 use ActionKit\RecordAction\BaseRecordAction;
 use ActionKit\ActionTemplate\RecordActionTemplate;
 use ActionKit\ActionTemplate\TwigActionTemplate;
 use ActionKit\ActionTemplate\SampleActionTemplate;
+use ActionKit\ActionTemplate\ActionTemplate;
 
 class ActionGeneratorTest extends \PHPUnit\Framework\TestCase
 {
-
-
     // TODO: should be moved to BaseRecordActionTest
     public function testCRUDClassFromBaseRecordAction()
     {
-        $class = BaseRecordAction::createCRUDClass( 'App\Model\Post' , 'Create' );
+        $class = BaseRecordAction::createCRUDClass('App\Model\Post', 'Create' );
         $this->assertNotNull($class);
         $this->assertEquals('App\Action\CreatePost', $class);
     }
@@ -44,7 +44,7 @@ class ActionGeneratorTest extends \PHPUnit\Framework\TestCase
         $generator = new ActionGenerator();
         $generator->registerTemplate('RecordActionTemplate', new RecordActionTemplate());
         $template = $generator->getTemplate('RecordActionTemplate');
-        $this->assertInstanceOf('ActionKit\ActionTemplate\ActionTemplate', $template);
+        $this->assertInstanceOf(ActionTemplate::class, $template);
     }
 
     public function testGeneratedUnderDirectory()
