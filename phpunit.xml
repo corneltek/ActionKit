@@ -30,7 +30,7 @@
   <testsuites>
     <testsuite name="ActionKit">
       <directory suffix="Test.php">src</directory>
-      <directory suffix="Test.php">tests/ActionKit</directory>
+      <directory suffix="Test.php">tests</directory>
     </testsuite>
     <testsuite name="ProductBundle">
       <directory suffix="Test.php">tests/ProductBundle</directory>
