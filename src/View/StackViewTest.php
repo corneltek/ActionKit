@@ -1,5 +1,10 @@
 <?php
-class CreateUserAction extends ActionKit\Action
+
+namespace ActionKit\View;
+
+use ActionKit\Action;
+
+class CreateUserAction extends Action
 {
     public function schema() 
     {
@@ -29,6 +34,7 @@ class CreateUserAction extends ActionKit\Action
 use Maghead\Testing\ModelTestCase;
 use ProductBundle\Model\ProductSchema;
 use ProductBundle\Model\Category;
+use ProductBundle\Model\CategorySchema;
 use ProductBundle\Action\CreateProduct;
 
 class StackViewTest extends ModelTestCase
@@ -36,14 +42,13 @@ class StackViewTest extends ModelTestCase
 
     public function models()
     {
-        return array(new ProductSchema);
+        return [new ProductSchema, new CategorySchema];
     }
 
     public function testNestedView()
     {
         $c = new Category;
         $c->create(array( 'name' => 'Foo' ));
-
 
         $action = new CreateProduct;
         $view = $action->asView('ActionKit\View\StackView',array(
