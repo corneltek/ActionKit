@@ -3,6 +3,8 @@
 namespace ActionKit\View;
 
 use ActionKit\Action;
+use DOMDocument;
+use DomXPath;
 
 class CreateUserAction extends Action
 {
@@ -51,7 +53,7 @@ class StackViewTest extends ModelTestCase
         $c->create(array( 'name' => 'Foo' ));
 
         $action = new CreateProduct;
-        $view = $action->asView('ActionKit\View\StackView',array(
+        $view = $action->asView(StackView::class,array(
             'no_form' => true,
             'no_layout' => true,
         ));
@@ -72,7 +74,7 @@ class StackViewTest extends ModelTestCase
         $action = new CreateUserAction;
         $this->assertNotNull($action);
 
-        $view = new ActionKit\View\StackView($action);
+        $view = new StackView($action);
         $this->assertNotNull($view);
 
         $html = $view->render();

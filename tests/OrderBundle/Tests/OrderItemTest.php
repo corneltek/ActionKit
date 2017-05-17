@@ -103,8 +103,7 @@ class OrderItemTest extends ModelTestCase
         $this->assertTrue($success, 'Should be able to create without primary key value.');
 
 
-        $orderItem2 = new OrderItem;
-        $update = $orderItem2->asUpdateAction(['id' => $orderItem->id, 'quantity' => null]);
+        $update = $orderItem->asUpdateAction(['id' => $orderItem->id, 'quantity' => null]);
         $this->assertNotNull($update);
         $this->assertInstanceOf('ActionKit\\RecordAction\\BaseRecordAction', $update);
         $this->assertInstanceOf('ActionKit\\RecordAction\\UpdateRecordAction', $update);
