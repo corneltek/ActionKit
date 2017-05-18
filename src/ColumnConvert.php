@@ -7,9 +7,14 @@ use ActionKit\RecordAction\CreateRecordAction;
 use ActionKit\RecordAction\UpdateRecordAction;
 use ActionKit\RecordAction\DeleteRecordAction;
 use Maghead\Runtime\Model;
+use Maghead\Runtime\Collection;
+
 use Maghead\Schema\DeclareSchema;
 use Maghead\Schema\Schema;
 use Maghead\Schema\RuntimeColumn;
+
+
+
 use SQLBuilder\Raw;
 use Exception;
 
@@ -109,7 +114,7 @@ class ColumnConvert
                 $referClass = $param->refer;
 
                 // it's a `has many`-like relationship
-                if ( is_subclass_of($referClass,'Maghead\\BaseCollection', true) ) {
+                if (is_subclass_of($referClass, Collection::class, true) ) {
                     $collection = new $referClass;
                     $options = array();
                     foreach ($collection as $item) {
@@ -119,7 +124,7 @@ class ColumnConvert
                         $options[ $label ] = $item->dataKeyValue();
                     }
                     $param->validValues = $options;
-                } elseif ( is_subclass_of($referClass,'Maghead\\Model', true) ) {
+                } else if (is_subclass_of($referClass, Model::class, true) ) {
                     // it's a `belongs-to`-like relationship
                     $class = $referClass . 'Collection';
                     $collection = new $class;
@@ -131,7 +136,7 @@ class ColumnConvert
                         $options[ $label ] = $item->dataKeyValue();
                     }
                     $param->validValues = $options;
-                } elseif ( is_subclass_of($referClass, 'Maghead\\Schema\\DeclareSchema', true) ) {
+                } else if ( is_subclass_of($referClass, DeclareSchema::class, true) ) {
                     $schema = new $referClass;
                     $collection = $schema->newCollection();
 
@@ -146,7 +151,7 @@ class ColumnConvert
                 } else {
                     throw new Exception('Unsupported refer type');
                 }
-            } elseif ( $relation = $record->getSchema()->getRelation($param->refer) ) {
+            } else if ( $relation = $record->getSchema()->getRelation($param->refer) ) {
                 // so it's a relationship reference
                 // TODO: implement this
                 throw new Exception('Unsupported refer type');
