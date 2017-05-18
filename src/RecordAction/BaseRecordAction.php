@@ -67,8 +67,10 @@ class BaseRecordAction extends Action
 
         if ($options instanceof Model) {
             $record = $options;
-            $options = array(); // reassign $options as array
-        } elseif (is_array($options) && isset($options['record'])) {
+            $options = [ 'record' => $record ] ; // reassign $options as array
+        }
+
+        if (is_array($options) && isset($options['record'])) {
             $record = $options['record'];
         }
 
@@ -82,7 +84,7 @@ class BaseRecordAction extends Action
             throw new ActionException('recordClass is not defined.', $this);
         }
 
-        if ($record === null) {
+        if (!$record) {
             $record = new $this->recordClass;
         }
 
