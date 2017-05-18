@@ -128,18 +128,17 @@ class ActionTest extends \PHPUnit\Framework\TestCase
 
     public function testFilterOut()
     {
-        $action = new LoginTestAction(array(
+        $action = new LoginTestAction([
             'username' => 'admin',
             'password' => 's3cr3t',
             'token' => 'blah',
-        ));
+        ]);
 
         $success = $action->invoke();
         $result = $action->getResult();
-        
         $this->assertTrue($success, $result->message);
 
-        $result = $action->result;
+        $result = $action->getResult();
         $this->assertNotNull($result,'Got Result');
         $this->assertEquals('Login', $result->message);
         $this->assertTrue($result->isSuccess());
@@ -148,7 +147,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
     public function testParams()
     {
         $login = new LoginTestAction;
-        $this->assertEquals($login->getName(), 'LoginTestAction');
+        $this->assertEquals('ActionKit::LoginTestAction', $login->getName());
 
         $result = $login->getWidgetsByNames(['username', 'password']);
         $this->assertCount(2, $result);

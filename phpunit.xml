@@ -20,8 +20,9 @@
 
   <filter>
     <whitelist>
-      <directory suffix=".php">src/</directory>
+      <directory suffix=".php">src</directory>
       <exclude>
+        <directory suffix="Test.php">src</directory>
         <directory suffix=".php">src/Cache</directory>
       </exclude>
     </whitelist>
