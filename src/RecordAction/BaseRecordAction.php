@@ -154,14 +154,14 @@ class BaseRecordAction extends Action
      * Load record values into params
      *
      */
-    public function loadRecordValuesToParams()
+    protected function loadRecordValuesToParams()
     {
-        /* load record value */
-        foreach ( $this->record->getColumns(true) as $column) {
+        foreach ($this->record->getColumns(true) as $column) {
+            if (!isset($this->params[$column->name]) ) {
+                continue;
+            }
             if ($val = $this->record->{ $column->name }) {
-                if ( isset($this->params[ $column->name ]) ) {
-                    $this->params[ $column->name ]->value = $val;
-                }
+                $this->params[ $column->name ]->value($val);
             }
         }
     }
