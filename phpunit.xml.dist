@@ -19,17 +19,18 @@
 
   <filter>
     <whitelist>
-        <directory suffix=".php">src/</directory>
+        <directory suffix=".php">src</directory>
         <exclude>
-            <directory suffix=".php">src/ActionKit/Cache</directory>
-            <directory suffix=".php">src/ActionKit/Testing</directory>
+          <directory suffix=".php">src/Cache</directory>
+          <directory suffix="Test.php">src</directory>
         </exclude>
     </whitelist>
   </filter>
 
   <testsuites>
-    <testsuite name="ActionKit">
-      <directory suffix="Test.php">tests/ActionKit</directory>
+    <testsuite name="All">
+      <directory suffix="Test.php">src</directory>
+      <directory suffix="Test.php">tests</directory>
     </testsuite>
     <testsuite name="ProductBundle">
       <directory suffix="Test.php">tests/ProductBundle</directory>
