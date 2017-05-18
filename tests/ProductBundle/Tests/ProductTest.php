@@ -90,8 +90,6 @@ class ProductBundleTest extends ModelTestCase
         ];
     }
 
-    public $driver = 'sqlite';
-
     public function models()
     {
         return [
@@ -105,17 +103,6 @@ class ProductBundleTest extends ModelTestCase
             new ProductFileSchema,
         ];
     }
-
-    public function setUp()
-    {
-        parent::setUp();
-        $records = new ProductCollection;
-        $records->delete();
-
-        $records = new ProductImageCollection;
-        $records->delete();
-    }
-
 
     /**
      * @dataProvider orderingActionMapProvider
