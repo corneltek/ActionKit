@@ -27,5 +27,4 @@ cache.properties
 *SchemaProxy.php
 # *CollectionBase.php
 *.swp
-composer.lock
 /build/
