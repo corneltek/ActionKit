@@ -1,26 +1,29 @@
 <?php
 namespace ActionKit\RecordAction;
+
 use Exception;
 use ActionKit\Utils;
 
-function duplicate_file($from) {
+function duplicate_file($from)
+{
     $to = Utils::filename_increase_suffix_number($from);
-    copy($from , $to);
+    copy($from, $to);
     return $to;
 }
 
 /**
  * Duplicate data based on the schema
  */
-function duplicate_data($data, $schema) {
+function duplicate_data($data, $schema)
+{
     $newData = [];
-    foreach( $data as $name => $val ) {
-        if ( $val == null ) {
+    foreach ($data as $name => $val) {
+        if ($val == null) {
             continue;
         }
         $column = $schema->getColumn($name);
 
-        switch( $column->contentType ) {
+        switch ($column->contentType) {
         case "File":
         case "ImageFile":
             $newData[ $name ] = duplicate_file($val);
@@ -29,7 +32,7 @@ function duplicate_data($data, $schema) {
             $newData[ $name ] = $val;
         }
     }
-    if ( $pk = $schema->primaryKey ) {
+    if ($pk = $schema->primaryKey) {
         unset($newData[$pk]);
     }
     return $newData;
@@ -53,7 +56,7 @@ class BulkCopyRecordAction extends BulkRecordAction
 
     public function schema()
     {
-        foreach( $this->newFields as $field ) {
+        foreach ($this->newFields as $field) {
             // XXX: initialize the label from schema
             $this->param($field);
         }
@@ -61,17 +64,17 @@ class BulkCopyRecordAction extends BulkRecordAction
     }
 
 
-    public function prepareData($data) 
+    public function prepareData($data)
     {
-        if ( ! empty($this->unsetFields) ) {
-            foreach( $this->unsetFields as $field ) {
+        if (! empty($this->unsetFields)) {
+            foreach ($this->unsetFields as $field) {
                 unset($data[$field]);
             }
         }
 
-        if ( ! empty($this->newFields) ) {
-            foreach( $this->newFields as $field ) {
-                if ( $newValue = $this->arg($field) ) {
+        if (! empty($this->newFields)) {
+            foreach ($this->newFields as $field) {
+                if ($newValue = $this->arg($field)) {
                     $data[$field] = $newValue;
                 } else {
                     unset($data[$field]);
@@ -81,18 +84,16 @@ class BulkCopyRecordAction extends BulkRecordAction
         return $data;
     }
 
-    public function beforeCopy($record, $data) 
+    public function beforeCopy($record, $data)
     {
     }
 
-    public function afterCopy($record, $data, $newRecord) 
+    public function afterCopy($record, $data, $newRecord)
     {
-
     }
 
     public function finalize($records, $newRecords)
     {
-
     }
 
     public function run()
@@ -102,7 +103,7 @@ class BulkCopyRecordAction extends BulkRecordAction
 
         $newRecords = array();
         $records = $this->loadRecords();
-        foreach($records as $record) {
+        foreach ($records as $record) {
             $newData = $record->getData();
             $newData = $this->prepareData($newData);
 
@@ -110,19 +111,20 @@ class BulkCopyRecordAction extends BulkRecordAction
 
             try {
                 $newRecord = $this->duplicateRecord($record, $schema, $newData);
-                if ( $result = $this->afterCopy($record, $newData, $newRecord) ) {
+                if ($result = $this->afterCopy($record, $newData, $newRecord)) {
                     return $result;
                 }
                 $newRecords[] = $newRecord;
-            } catch ( Exception $e ) {
-                return $this->error( $e->message );
+            } catch (Exception $e) {
+                return $this->error($e->message);
             }
         }
-        $this->finalize( $records, $newRecords );
-        return $this->success( count($newRecords) . ' 個項目複製成功。');
+        $this->finalize($records, $newRecords);
+        return $this->success(count($newRecords) . ' 個項目複製成功。');
     }
 
-    public function duplicateRecord($record, $schema, $data = null) {
+    public function duplicateRecord($record, $schema, $data = null)
+    {
         $data = $data ?: $record->getData();
         $newData = duplicate_data($data, $schema);
 
@@ -134,23 +136,23 @@ class BulkCopyRecordAction extends BulkRecordAction
         // XXX: check error
 
         $relations = $schema->getRelations();
-        foreach( $relations as $rId => $relation ) {
-            if ( ! $relation->isHasMany() ) {
+        foreach ($relations as $rId => $relation) {
+            if (! $relation->isHasMany()) {
                 continue;
             }
 
-            // var_dump( $relation ); 
+            // var_dump( $relation );
 
             $foreignRecord = $relation->newForeignModel();
             $foreignColumnName = $relation['foreign_column'];
 
             // fetch the related records
-            if ( isset($record->{ $rId }) ) {
+            if (isset($record->{ $rId })) {
                 $relatedRecords = $record->{ $rId };
                 $relatedRecords->fetch();
 
-                foreach( $relatedRecords as $relatedRecord ) {
-                    $relatedRecordData = duplicate_data( $relatedRecord->getData() , $relatedRecord->getSchema() );
+                foreach ($relatedRecords as $relatedRecord) {
+                    $relatedRecordData = duplicate_data($relatedRecord->getData(), $relatedRecord->getSchema());
                     $relatedRecordData[ $foreignColumnName ] = $newRecord->id; // override the foreign column to the new record primary key
                     $ret = $foreignRecord->create($relatedRecordData);
                     if (! $ret->success) {
@@ -158,14 +160,8 @@ class BulkCopyRecordAction extends BulkRecordAction
                     }
                     // XXX: check error
                 }
-
             }
         }
         return $newRecord;
     }
-
-
-
 }
-
-

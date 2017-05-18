@@ -19,5 +19,4 @@ abstract class BaseType
     abstract public function parse($value);
 
     abstract public function deflate($value);
-
 }

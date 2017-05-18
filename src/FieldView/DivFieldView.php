@@ -1,5 +1,6 @@
 <?php
 namespace ActionKit\FieldView;
+
 use FormKit;
 use FormKit\Element\Div;
 use FormKit\Element\Span;
@@ -60,23 +61,23 @@ class DivFieldView
         $widget = $this->column->createWidget(null, $this->widgetAttributes);
         $wrapper->addClass($widget->convertClassToCssClassName());
 
-        if ( $widget instanceof CheckboxInput ) {
+        if ($widget instanceof CheckboxInput) {
             $label = $this->column->createLabelWidget();
             $label->prepend($widget);
             $wrapper->append($label);
-        } elseif ( $widget instanceof HiddenInput) {
-            $wrapper->append( $widget );
+        } elseif ($widget instanceof HiddenInput) {
+            $wrapper->append($widget);
         } else {
             $labelDiv = new Div(array( 'class' => $this->labelClass ));
             $inputDiv = new Div(array( 'class' => $this->inputClass ));
-            $inputDiv->append( $widget );
+            $inputDiv->append($widget);
             $label = $this->column->createLabelWidget();
-            $labelDiv->append( $label );
+            $labelDiv->append($label);
             $wrapper->append($labelDiv);
             $wrapper->append($inputDiv);
             if ($this->column->hint) {
                 $hintEl  = new Span(array( 'class' => $this->hintClass ));
-                $hintEl->append( $this->column->hint );
+                $hintEl->append($this->column->hint);
                 $wrapper->append($hintEl);
             }
         }

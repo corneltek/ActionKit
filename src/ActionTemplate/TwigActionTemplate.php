@@ -1,5 +1,6 @@
 <?php
-namespace ActionKit\ActionTemplate; 
+namespace ActionKit\ActionTemplate;
+
 use ActionKit\ActionRunner;
 use ActionKit\GeneratedAction;
 use ActionKit\Exception\RequiredConfigKeyException;
@@ -93,7 +94,7 @@ class TwigActionTemplate implements ActionTemplate
         }
         $variables = $options['variables'];
 
-        $runner->register( $class, $asTemplate, [
+        $runner->register($class, $asTemplate, [
             'template' => $template,
             'variables' => $variables
         ]);
@@ -122,7 +123,7 @@ class TwigActionTemplate implements ActionTemplate
         }
         $variables = $options['variables'];
 
-        $parts = explode("\\",$action_class);
+        $parts = explode("\\", $action_class);
         $variables['target'] = array();
         $variables['target']['classname'] = array_pop($parts);
         $variables['target']['namespace'] = join("\\", $parts);
@@ -130,12 +131,12 @@ class TwigActionTemplate implements ActionTemplate
         return new GeneratedAction($action_class, $code);
     }
 
-    public function getTwigEnvironment() 
+    public function getTwigEnvironment()
     {
         return $this->env;
     }
 
-    public function getTwigLoader() 
+    public function getTwigLoader()
     {
         return $this->loader;
     }

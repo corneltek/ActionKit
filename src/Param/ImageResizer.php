@@ -1,6 +1,8 @@
 <?php
 namespace ActionKit\Param;
+
 use ActionKit\Param\Param;
+
 /**
  * Preprocess image data fields
  *
@@ -23,20 +25,19 @@ use ActionKit\Param\Param;
 
 class ImageResizer
 {
-    static public $classes = array(
+    public static $classes = array(
         'max_width'      => 'ActionKit\\Param\\Image\\MaxWidthResize',
         'max_height'     => 'ActionKit\\Param\\Image\\MaxHeightResize',
         'scale'          => 'ActionKit\\Param\\Image\\ScaleResize',
         'crop_and_scale' => 'ActionKit\\Param\\Image\\CropAndScaleResize',
     );
 
-    static public function create($type, Param $param)
+    public static function create($type, Param $param)
     {
-        if (!isset(self::$classes[$type]) ) {
+        if (!isset(self::$classes[$type])) {
             throw new Exception("Image Resize Type '$type' is undefined.");
         }
         $c = self::$classes[$type];
         return new $c($param);
     }
-
 }

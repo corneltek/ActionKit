@@ -1,5 +1,6 @@
 <?php
 namespace ActionKit\Param\Image;
+
 use ImageKit\ImageProcessor;
 
 class CropAndScaleResize
@@ -19,18 +20,17 @@ class CropAndScaleResize
     public function resize($targetPath)
     {
         if (isset($this->param->size['height'])
-            && isset($this->param->size['width']) )
-        {
+            && isset($this->param->size['width'])) {
             $h = intval($this->param->size['height']);
             $w = intval($this->param->size['width']);
             $image = new ImageProcessor;
-            $image->load( $targetPath );
+            $image->load($targetPath);
 
             $size = getimagesize($targetPath);
-            if ( $size[0] > $w || $size[1] > $h ) {
-                $image->cropOuterAndScale($w,$h);
+            if ($size[0] > $w || $size[1] > $h) {
+                $image->cropOuterAndScale($w, $h);
             }
-            $image->save( $targetPath , null , $this->param->compression );
+            $image->save($targetPath, null, $this->param->compression);
         }
     }
 }

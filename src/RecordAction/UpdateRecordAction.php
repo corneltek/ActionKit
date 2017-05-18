@@ -1,8 +1,7 @@
 <?php
 namespace ActionKit\RecordAction;
 
-abstract class UpdateRecordAction
-    extends BaseRecordAction
+abstract class UpdateRecordAction extends BaseRecordAction
 {
     const TYPE = 'update';
 
@@ -21,21 +20,16 @@ abstract class UpdateRecordAction
         $schema = $this->recordClass::getSchema();
         $primaryKey = $schema->getPrimaryKey();
 
-        if (! isset($args[$primaryKey]) && ! $this->loadByArray ) {
+        if (! isset($args[$primaryKey]) && ! $this->loadByArray) {
             $msg = $this->messagePool->translate('record_action.primary_key_is_required');
             return $this->error($msg);
         }
 
         if ($this->loadByArray) {
-
             $this->record = $this->recordClass::load($args);
-
-        } else if (isset($args[$primaryKey])) {
-
-            $this->record = $this->recordClass::findByPrimaryKey( $args[$primaryKey] );
-
+        } elseif (isset($args[$primaryKey])) {
+            $this->record = $this->recordClass::findByPrimaryKey($args[$primaryKey]);
         } else {
-
             $msg = $this->messagePool->translate('record_action.primary_key_is_required');
 
             return $this->error($msg);
@@ -57,10 +51,10 @@ abstract class UpdateRecordAction
             }
         }
 
-        $ret = $this->record->update( $args );
+        $ret = $this->record->update($args);
         if (! $ret->success) {
-            $this->convertRecordValidation( $ret );
-            return $this->updateError( $ret );
+            $this->convertRecordValidation($ret);
+            return $this->updateError($ret);
         }
 
         return $this->updateSuccess($ret);
@@ -69,7 +63,7 @@ abstract class UpdateRecordAction
     public function run()
     {
         $ret = $this->update($this->args);
-        if ( $this->nested && ! empty($this->relationships) ) {
+        if ($this->nested && ! empty($this->relationships)) {
             $ret = $this->processSubActions();
         }
 
@@ -85,10 +79,10 @@ abstract class UpdateRecordAction
         $error = false;
         foreach ($this->args as $key => $value) {
             /* skip action column */
-            if ( $key === 'action' || $key === '__ajax_request' ) {
+            if ($key === 'action' || $key === '__ajax_request') {
                 continue;
             }
-            if ( false === $this->validateparam( $key ) ) {
+            if (false === $this->validateparam($key)) {
                 $error = true;
             }
         }
@@ -121,7 +115,7 @@ abstract class UpdateRecordAction
 
     public function updateSuccess($ret)
     {
-        return $this->success($this->successMessage($ret) , array( 'id' => $this->record->id ));
+        return $this->success($this->successMessage($ret), array( 'id' => $this->record->id ));
     }
 
     public function updateError($ret)

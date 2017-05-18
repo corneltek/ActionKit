@@ -1,5 +1,6 @@
 <?php
 namespace ActionKit;
+
 use FormKit;
 use ActionKit\Param\Param;
 use ActionKit\Param\ImageParam;
@@ -142,20 +143,20 @@ class Action implements IteratorAggregate
 
         if (isset($options['current_user'])) {
             $this->currentUser = $options['current_user'];
-        } else if (isset($this->services['current_user'])) {
+        } elseif (isset($this->services['current_user'])) {
             $this->currentUser = $this->services['current_user'];
         }
 
         if (isset($options['csrf'])) {
             $this->csrf = $options['csrf'];
-        } else if (isset($this->services['csrf'])) {
+        } elseif (isset($this->services['csrf'])) {
             $this->csrf = $this->services['csrf'];
         }
 
 
         if (isset($options['message_pool'])) {
             $this->messagePool = $options['message_pool'];
-        } else if (isset($this->services['message_pool'])) {
+        } elseif (isset($this->services['message_pool'])) {
             $this->messagePool = $this->services['message_pool'];
         }
 
@@ -167,37 +168,30 @@ class Action implements IteratorAggregate
         // backward compatible request object
         // ActionRequest
         if (isset($options['request'])) {
-
             $this->request = $options['request'];
 
             if (isset($options['files'])) {
                 trigger_error('"files" is ignored because you passed action request object');
             }
-
         } else {
 
             // Create request object manually
             if (isset($options['files'])) {
-
                 $files = FilesParameter::fix_files_array($options['files']);
                 $this->request = new ActionRequest($args, $files);
-
-            } else if (isset($this->services['action_request'])) {
+            } elseif (isset($this->services['action_request'])) {
 
                 // fallback to action_request defiend in service
                 $this->request = $this->services['action_request'];
-
-            } else if (isset($_FILES)) {
+            } elseif (isset($_FILES)) {
 
                 // if not, always fix $_FILES
                 $files = FilesParameter::fix_files_array($_FILES);
                 $this->request = new ActionRequest($args, $files);
-
             } else {
 
                 // When rendering Action with view, we probably won't have this request object.
                 $this->request = new ActionRequest($args, []);
-
             }
         }
 
@@ -207,16 +201,16 @@ class Action implements IteratorAggregate
         $this->mixins = $this->mixins();
 
         $this->preinit();
-        foreach( $this->mixins as $mixin ) {
+        foreach ($this->mixins as $mixin) {
             $mixin->preinit();
         }
 
         // initialize parameter objects
         $this->schema();
 
-        // intiailize schema from mixin classes later, 
+        // intiailize schema from mixin classes later,
         // so that we can use mixin to override the default options.
-        foreach( $this->mixins as $mixin ) {
+        foreach ($this->mixins as $mixin) {
             $mixin->schema();
         }
 
@@ -225,7 +219,7 @@ class Action implements IteratorAggregate
 
         // See if we need to render the input names with relationship ID and
         // index?
-        if ( $relationId = $this->arg('__nested') ) {
+        if ($relationId = $this->arg('__nested')) {
             $this->setParamNamesWithIndex($relationId);
         }
 
@@ -237,13 +231,13 @@ class Action implements IteratorAggregate
         // call the parameter preinit method to initialize
         // foreach is always faster than array_map
         foreach ($this->params as $param) {
-            $param->preinit( $this->args );
+            $param->preinit($this->args);
         }
 
 
         // call the parameter init method
         foreach ($this->params as $param) {
-            $param->init( $this->args );
+            $param->init($this->args);
         }
         // user-defined init script
         $this->init();
@@ -251,23 +245,24 @@ class Action implements IteratorAggregate
 
         // call the parameter init method
         foreach ($this->params as $param) {
-            $param->postinit( $this->args );
+            $param->postinit($this->args);
         }
 
 
 
         $this->postinit();
-        foreach( $this->mixins as $mixin ) {
+        foreach ($this->mixins as $mixin) {
             $mixin->postinit();
         }
 
         // save request arguments
-        $this->result->args( $this->args );
+        $this->result->args($this->args);
     }
 
 
-    public function mixins() {
-        return array( 
+    public function mixins()
+    {
+        return array(
             /* new MixinClass( $this, [params] ) */
         );
     }
@@ -311,7 +306,7 @@ class Action implements IteratorAggregate
         // if the record is loaded, use the primary key as identity.
         // if not, use timestamp simply, hope seconds is enough.
         if (! $index) {
-            $index = ( $this->record && $this->record->id )
+            $index = ($this->record && $this->record->id)
                 ? $this->record->id
                 : md5(microtime());
         }
@@ -330,7 +325,7 @@ class Action implements IteratorAggregate
     public function takes($fields)
     {
         $args = func_get_args();
-        if ( count($args) > 1 ) {
+        if (count($args) > 1) {
             $this->takeFields = (array) $args;
         } else {
             $this->takeFields = (array) $fields;
@@ -351,9 +346,9 @@ class Action implements IteratorAggregate
         }
         if ($this->takeFields) {
             // take these fields only
-            return array_intersect_key( $args , array_fill_keys($this->takeFields,1) );
+            return array_intersect_key($args, array_fill_keys($this->takeFields, 1));
         } elseif ($this->filterOutFields) {
-            return array_diff_key( $args , array_fill_keys($this->filterOutFields,1) );
+            return array_diff_key($args, array_fill_keys($this->filterOutFields, 1));
         }
         return $args;
     }
@@ -369,7 +364,7 @@ class Action implements IteratorAggregate
     public function filterOut($fields)
     {
         $args = func_get_args();
-        if ( count($args) > 1 ) {
+        if (count($args) > 1) {
             $this->filterOutFields = (array) $args;
         } else {
             $this->filterOutFields = (array) $fields;
@@ -378,7 +373,8 @@ class Action implements IteratorAggregate
         return $this;
     }
 
-    public function invalidField($n, $message, $desc = null) {
+    public function invalidField($n, $message, $desc = null)
+    {
         $this->result->addValidation($n, array(
             'valid' => false,
             'message' => $message,
@@ -402,11 +398,12 @@ class Action implements IteratorAggregate
         return true;
     }
 
-    public function requireArgs() {
+    public function requireArgs()
+    {
         $ns = func_get_args();
         $satisfied = true;
-        foreach( $ns as $n ) {
-            if ( false === $this->requireArg($n) ) {
+        foreach ($ns as $n) {
+            if (false === $this->requireArg($n)) {
                 $satisfied = false;
             }
         }
@@ -420,17 +417,18 @@ class Action implements IteratorAggregate
      *
      * @param string $name is a parameter name
      */
-    public function validateParam( $name )
+    public function validateParam($name)
     {
         // skip __ajax_request field
-        if ( $name === '__ajax_request' )
+        if ($name === '__ajax_request') {
             return true;
+        }
 
-        if ( ! isset($this->params[ $name ] ) ) {
+        if (! isset($this->params[ $name ])) {
             return true;
 
             // just skip it.
-            $this->result->addValidation( $name, array(
+            $this->result->addValidation($name, array(
                 'valid' => false,
                 'message' => "Contains invalid arguments: $name",
                 'field' => $name,
@@ -445,16 +443,16 @@ class Action implements IteratorAggregate
          *
          *    [ boolean pass, string message ]
          *
-         * or 
+         * or
          *
          *    [ boolean pass ]
          */
         $ret = (array) $param->validate($this->arg($name));
-        if ( is_array($ret) ) {
+        if (is_array($ret)) {
             if ($ret[0]) { // success
                 # $this->result->addValidation( $name, array( "valid" => $ret[1] ));
             } else {
-                $this->result->addValidation( $name, array(
+                $this->result->addValidation($name, array(
                     'valid' => false,
                     'message' => @$ret[1],
                     'field' => $name,
@@ -462,7 +460,7 @@ class Action implements IteratorAggregate
                 return false;
             }
         } else {
-            throw new \Exception("Unknown validate return value of $name => " . $this->getName() );
+            throw new \Exception("Unknown validate return value of $name => " . $this->getName());
         }
         return true;
     }
@@ -498,7 +496,7 @@ class Action implements IteratorAggregate
 
     public function isAjax()
     {
-        return isset( $_REQUEST['__ajax_request'] );
+        return isset($_REQUEST['__ajax_request']);
     }
 
 
@@ -547,21 +545,21 @@ class Action implements IteratorAggregate
         $result =  $this->currentUserCan($user, 'run', $this->args);
         if (is_array($result)) {
             if (!$result[0]) {
-                $this->result->error( $result[1] );
+                $this->result->error($result[1]);
                 return false;
             }
-        } else if (!$result) {
+        } elseif (!$result) {
             return false;
         }
 
-        if ( $this->enableValidation && false === $this->runValidate() ) {  // if found error, return true;
+        if ($this->enableValidation && false === $this->runValidate()) {  // if found error, return true;
             return false;
         }
 
         /* run column methods */
         // XXX: merge them all...
         $this->beforeRun();
-        foreach( $this->mixins as $mixin ) {
+        foreach ($this->mixins as $mixin) {
             $mixin->beforeRun();
         }
 
@@ -569,17 +567,17 @@ class Action implements IteratorAggregate
             return false;
         }
 
-        foreach( $this->mixins as $mixin ) {
+        foreach ($this->mixins as $mixin) {
             if (false === $mixin->run()) {
                 return false;
             }
         }
 
-        if ( false === $this->afterRun() ) {
+        if (false === $this->afterRun()) {
             return false;
         }
-        foreach( $this->mixins as $mixin ) {
-            if ( false === $mixin->afterRun() ) {
+        foreach ($this->mixins as $mixin) {
+            if (false === $mixin->afterRun()) {
                 return false;
             }
         }
@@ -602,8 +600,8 @@ class Action implements IteratorAggregate
     public function getName()
     {
         $sig = $this->getSignature();
-        $pos = strpos( $sig, '::Action::' );
-        return $pos ? substr( $sig , $pos + strlen('::Action::') ) : $sig;
+        $pos = strpos($sig, '::Action::');
+        return $pos ? substr($sig, $pos + strlen('::Action::')) : $sig;
     }
 
     public function params($all = false)
@@ -611,29 +609,29 @@ class Action implements IteratorAggregate
         return $this->getParams($all);
     }
 
-    public function getParams( $all = false )
+    public function getParams($all = false)
     {
         $self = $this;
         if ($all) {
             return $this->params;
         }
         if ($this->takeFields) {
-            return array_intersect_key($this->params, array_fill_keys($this->takeFields,1) );  // find white list
+            return array_intersect_key($this->params, array_fill_keys($this->takeFields, 1));  // find white list
         } elseif ($this->filterOutFields) {
-            return array_diff_key($this->params, array_fill_keys($this->filterOutFields,1) ); // diff keys by blacklist
+            return array_diff_key($this->params, array_fill_keys($this->filterOutFields, 1)); // diff keys by blacklist
         }
 
         return $this->params;
     }
 
-    public function getParam( $field )
+    public function getParam($field)
     {
         return isset($this->params[ $field ])
                 ? $this->params[ $field ]
                 : null;
     }
 
-    public function hasParam( $field )
+    public function hasParam($field)
     {
         return isset($this->params[ $field ]);
     }
@@ -657,7 +655,7 @@ class Action implements IteratorAggregate
      */
     public function widget($field, $widgetClass = null)
     {
-        return $this->getParam($field)->createWidget( $widgetClass );
+        return $this->getParam($field)->createWidget($widgetClass);
     }
 
 
@@ -669,12 +667,11 @@ class Action implements IteratorAggregate
     public function getWidgets($all = false)
     {
         $widgets = array();
-        foreach ( $this->getParams($all) as $param ) {
+        foreach ($this->getParams($all) as $param) {
             $widgets[] = $param->createWidget();
         }
 
         return $widgets;
-
     }
 
 
@@ -682,7 +679,7 @@ class Action implements IteratorAggregate
     {
         $widgets = array();
         foreach ($names as $name) {
-            if ( $param = $this->getParam($name) ) {
+            if ($param = $this->getParam($name)) {
                 $widgets[] = $param->createWidget();
             }
         }
@@ -717,7 +714,7 @@ class Action implements IteratorAggregate
      */
     public function currentUserCan($user, $right, $args = array())
     {
-        return $this->record ? $this->record->currentUserCan( $this->type , $args , $user ) : true;
+        return $this->record ? $this->record->currentUserCan($this->type, $args, $user) : true;
     }
 
 
@@ -737,7 +734,6 @@ class Action implements IteratorAggregate
 
         // getting values
         if (1 === $nOfArgs) {
-
             if (array_key_exists($name, $this->args)) {
                 $value = $this->args[$name];
                 if ($param = $this->getParam($name)) {
@@ -747,11 +743,9 @@ class Action implements IteratorAggregate
                 return $value;
             }
             return null;
-
-        } else if (2 === $nOfArgs) {
+        } elseif (2 === $nOfArgs) {
             // set value
             return $this->args[ $name ] = $args[1];
-
         } else {
             throw new InvalidArgumentException("arg() method only allows setting value by 2 arguments. getting value by 1 argument.");
         }
@@ -793,7 +787,7 @@ class Action implements IteratorAggregate
      *
      * @return this
      */
-    protected function setArgument($name,$value)
+    protected function setArgument($name, $value)
     {
         $this->args[ $name ] = $value ;
         return $this;
@@ -843,7 +837,7 @@ class Action implements IteratorAggregate
      * Note: when using this method, a param that is already
      * defined will be overrided.
      *
-     * TODO: add 'replaceParam' to replace a param object, 'param' should just 
+     * TODO: add 'replaceParam' to replace a param object, 'param' should just
      * return the original param object.
      *
      * @param string $field      Field name
@@ -881,14 +875,14 @@ class Action implements IteratorAggregate
         if ($paramType) {
             $class = ($paramType[0] !== '+')
                 ? 'ActionKit\\Param\\' . ucfirst($paramType) . 'Param'
-                : substr($paramType,1);
+                : substr($paramType, 1);
         } else {
             $class = 'ActionKit\\Param\\Param';
         }
-        if (! class_exists($class,true)) { // trigger spl class autoloader to load class file.
+        if (! class_exists($class, true)) { // trigger spl class autoloader to load class file.
             throw new Exception("Action param($field): column class $class not found.");
         }
-        return $this->params[$field] = new $class($field , $this);
+        return $this->params[$field] = new $class($field, $this);
     }
 
     /**
@@ -908,13 +902,21 @@ class Action implements IteratorAggregate
     /**
      * Action schema is defined here.
      */
-    public function schema() { }
+    public function schema()
+    {
+    }
 
-    public function preinit() {  }
+    public function preinit()
+    {
+    }
 
-    public function init() { }
+    public function init()
+    {
+    }
 
-    public function postinit() {  }
+    public function postinit()
+    {
+    }
 
 
 
@@ -924,15 +926,19 @@ class Action implements IteratorAggregate
      * @param string $key
      * @param mixed  $val
      */
-    public function addData( $key , $val )
+    public function addData($key, $val)
     {
-        $this->result->addData( $key , $val );
+        $this->result->addData($key, $val);
     }
 
 
-    public function beforeRun() {  }
+    public function beforeRun()
+    {
+    }
 
-    public function afterRun()  {  }
+    public function afterRun()
+    {
+    }
 
     /**
      * Run method, contains the main logics
@@ -949,17 +955,19 @@ class Action implements IteratorAggregate
      *
      * @param string $field field name
      * */
-    public function complete( $field )
+    public function complete($field)
     {
-        $param = $this->getParam( $field );
-        if ( ! $param )
-            die( 'action param not found.' );
+        $param = $this->getParam($field);
+        if (! $param) {
+            die('action param not found.');
+        }
         $ret = $param->complete();
-        if ( ! is_array( $ret ) )
-            throw new Exception( "Completer doesnt return array. [type,list]\n" );
+        if (! is_array($ret)) {
+            throw new Exception("Completer doesnt return array. [type,list]\n");
+        }
 
         // [ type , list ]
-        $this->result->completion( $field , $ret[0], $ret[1] );
+        $this->result->completion($field, $ret[0], $ret[1]);
     }
 
     /**
@@ -978,17 +986,17 @@ class Action implements IteratorAggregate
      *
      * @param string $path
      */
-    public function redirect( $path )
+    public function redirect($path)
     {
 
         /* for ajax request, we should redirect by json result,
          * for normal post, we should redirect directly. */
-        if ( $this->isAjax() ) {
-            $this->result->redirect( $path );
+        if ($this->isAjax()) {
+            $this->result->redirect($path);
 
             return;
         } else {
-            header( 'Location: ' . $path );
+            header('Location: ' . $path);
             exit(0);
         }
     }
@@ -1000,10 +1008,10 @@ class Action implements IteratorAggregate
      * @param string  $path
      * @param integer $secs
      */
-    public function redirectLater( $path , $secs = 1 )
+    public function redirectLater($path, $secs = 1)
     {
-        if ( $this->isAjax() ) {
-            $this->result->redirect( $path, $secs );
+        if ($this->isAjax()) {
+            $this->result->redirect($path, $secs);
             return;
         } else {
             header("Refresh: $secs; url=$path");
@@ -1032,13 +1040,13 @@ class Action implements IteratorAggregate
         $args = func_get_args();
 
         // got one argument
-        if ( count($args) < 2 and isset($args[0]) ) {
-            if ( is_string($args[0]) ) {
+        if (count($args) < 2 and isset($args[0])) {
+            if (is_string($args[0])) {
                 $class = $args[0];
-            } elseif ( is_array($args[0]) ) {
+            } elseif (is_array($args[0])) {
                 $options = $args[0];
             }
-        } elseif ( count($args) == 2 ) {
+        } elseif (count($args) == 2) {
             $class = $args[0];
             $options = $args[1];
         }
@@ -1054,7 +1062,7 @@ class Action implements IteratorAggregate
      */
     public function getSignature()
     {
-        return str_replace( '\\' , '::' , get_class($this) );
+        return str_replace('\\', '::', get_class($this));
     }
 
 
@@ -1066,9 +1074,9 @@ class Action implements IteratorAggregate
      * @param  array  $attrs Attributes
      * @return string HTML string
      */
-    public function renderWidget( $name , $type = null , $attrs = array() )
+    public function renderWidget($name, $type = null, $attrs = array())
     {
-        return $this->getParam( $name )->createWidget($type,$attrs)->render();
+        return $this->getParam($name)->createWidget($type, $attrs)->render();
     }
 
 
@@ -1084,27 +1092,29 @@ class Action implements IteratorAggregate
      * @param string $fieldViewClass
      * @param array  $attrs
      */
-    public function renderField( $name )
+    public function renderField($name)
     {
         // the default field view class.
         $args = func_get_args();
         $fieldViewClass = self::$defaultFieldView;
         $attrs = array();
-        if ( count($args) == 2 ) {
-            if ( is_string($args[1]) ) {
+        if (count($args) == 2) {
+            if (is_string($args[1])) {
                 $fieldViewClass = $args[1];
-            } elseif ( is_array($args[1]) ) {
+            } elseif (is_array($args[1])) {
                 $attrs = $args[1];
             }
-        } elseif ( count($args) == 3 ) {
-            if ( $args[1] )
+        } elseif (count($args) == 3) {
+            if ($args[1]) {
                 $fieldViewClass = $args[1];
-            if ( $args[2] )
+            }
+            if ($args[2]) {
                 $attrs = $args[2];
+            }
         }
         $param = $this->getParam($name);
         if (! $param) {
-            throw new Exception( "Action param '$name' is not defined." );
+            throw new Exception("Action param '$name' is not defined.");
         }
         $view = new $fieldViewClass($param);
         $view->setWidgetAttributes($attrs);
@@ -1119,11 +1129,11 @@ class Action implements IteratorAggregate
      * @param string $name  parameter name
      * @param array  $attrs
      */
-    public function renderLabel($name, $attrs = array() )
+    public function renderLabel($name, $attrs = array())
     {
-        $label = $this->getParam( $name )->createLabelWidget();
+        $label = $this->getParam($name)->createLabelWidget();
 
-        return $label->render( $attrs );
+        return $label->render($attrs);
     }
 
 
@@ -1133,11 +1143,11 @@ class Action implements IteratorAggregate
      * @param  string[] $fields Field names
      * @return string   HTML string
      */
-    public function renderWidgets(array $fields , $type = null, $attributes = array() )
+    public function renderWidgets(array $fields, $type = null, $attributes = array())
     {
         $html = '';
         foreach ($fields as $field) {
-            $html .= $this->getParam($field)->render(null,$attributes) . "\n";
+            $html .= $this->getParam($field)->render(null, $attributes) . "\n";
         }
 
         return $html;
@@ -1149,7 +1159,7 @@ class Action implements IteratorAggregate
      * @param  array  $attrs Attributes
      * @return string HTML string
      */
-    public function renderSubmitWidget(array $attrs = array() )
+    public function renderSubmitWidget(array $attrs = array())
     {
         $submit = new FormKit\Widget\SubmitInput;
 
@@ -1164,7 +1174,7 @@ class Action implements IteratorAggregate
      * @param  array  $attrs Attributes
      * @return string HTML string
      */
-    public function renderButtonWidget(array $attrs = array() )
+    public function renderButtonWidget(array $attrs = array())
     {
         $button = new FormKit\Widget\ButtonInput;
         return $button->render($attrs);
@@ -1187,10 +1197,10 @@ class Action implements IteratorAggregate
      *
      * @return string Hidden input HTML
      */
-    public function renderSignatureWidget(array $attrs = array() )
+    public function renderSignatureWidget(array $attrs = array())
     {
         $hidden = $this->createSignatureWidget();
-        return $hidden->render( $attrs );
+        return $hidden->render($attrs);
     }
 
     /**
@@ -1242,11 +1252,11 @@ class Action implements IteratorAggregate
      * @param  array  $attrs field attributes
      * @return string HTML string
      */
-    public function render($name = null, $attrs = array() )
+    public function render($name = null, $attrs = array())
     {
         if ($name) {
-            if ( $widget = $this->widget( $name ) ) {
-                return $widget->render( $attrs );
+            if ($widget = $this->widget($name)) {
+                return $widget->render($attrs);
             } else {
                 throw new Exception("parameter $name is not defined.");
             }
@@ -1254,16 +1264,16 @@ class Action implements IteratorAggregate
             /* Render all widgets */
             $html = '';
             foreach ($this->params as $param) {
-                $html .= $param->render( $attrs );
+                $html .= $param->render($attrs);
             }
 
             return $html;
         }
     }
 
-    public function __set($name,$value)
+    public function __set($name, $value)
     {
-        if ( $param = $this->getParam( $name ) ) {
+        if ($param = $this->getParam($name)) {
             $param->value = $value;
         } else {
             throw new InvalidArgumentException("Parameter $name not found.");
@@ -1298,11 +1308,11 @@ class Action implements IteratorAggregate
      *
      * @return true
      */
-    protected function success($message, array $data = null )
+    protected function success($message, array $data = null)
     {
-        $this->result->success( $message );
+        $this->result->success($message);
         if ($data) {
-            $this->result->mergeData( $data );
+            $this->result->mergeData($data);
         }
         return true;
     }
@@ -1316,17 +1326,17 @@ class Action implements IteratorAggregate
      */
     protected function error($message, array $data = null)
     {
-        $this->result->error( $message );
+        $this->result->error($message);
         if ($data) {
-            $this->result->mergeData( $data );
+            $this->result->mergeData($data);
         }
         return false;
     }
 
-    public function __call($m , $args )
+    public function __call($m, $args)
     {
-        foreach( $this->mixins as $mixin ) {
-            if ( method_exists($mixin, $m) ) {
+        foreach ($this->mixins as $mixin) {
+            if (method_exists($mixin, $m)) {
                 return call_user_func_array(array($mixin,$m), $args);
             }
         }
@@ -1346,7 +1356,4 @@ class Action implements IteratorAggregate
     {
         return $this->uploadedFiles[$fieldName][$index] = $file;
     }
-
-
-
 }

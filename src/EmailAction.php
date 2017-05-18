@@ -48,40 +48,41 @@ class EmailAction extends Action
         $this->email = new Email;
         if ($this->template) {
             # XXX: check template file
-            $this->email->template( $this->template );
-
+            $this->email->template($this->template);
         }
         return parent::__construct($args, $options);
     }
 
     public function getContent()
     {
-        if ( $this->message )
-
+        if ($this->message) {
             return $this->message;
+        }
         return null;
     }
 
     public function extractFieldsFromThis()
     {
-        if ( $this->to )
-            $this->email->to( $this->to );
+        if ($this->to) {
+            $this->email->to($this->to);
+        }
 
-        if ( $this->subject )
-            $this->email->subject( $this->subject );
+        if ($this->subject) {
+            $this->email->subject($this->subject);
+        }
 
-        if ( $content = $this->getContent() ) {
-            if ( $this->contentType == 'html' )
-                $this->email->html( $content );
-            else
-                $this->email->text( $content );
+        if ($content = $this->getContent()) {
+            if ($this->contentType == 'html') {
+                $this->email->html($content);
+            } else {
+                $this->email->text($content);
+            }
         }
     }
 
     /* the default run method */
     public function run()
     {
-
         if ($this->allowOverride) {
             $to = $this->arg('to');
             $cc = $this->arg('cc');
@@ -89,27 +90,32 @@ class EmailAction extends Action
             $subject = $this->arg('subject');
 
             /* if class vars is defined, dont override it */
-            if ( $to )
-                $this->email->to( $to );
+            if ($to) {
+                $this->email->to($to);
+            }
 
-            if ( $cc )
-                $this->email->cc( $cc );
+            if ($cc) {
+                $this->email->cc($cc);
+            }
 
-            if ( $bcc )
-                $this->email->bcc( $bcc );
+            if ($bcc) {
+                $this->email->bcc($bcc);
+            }
 
-            if ( $subject )
-                $this->email->subject( $subject );
+            if ($subject) {
+                $this->email->subject($subject);
+            }
 
             $content = $this->arg('content');
-            if ( ! $content )
+            if (! $content) {
                 $content = $this->getContent();
+            }
 
-            if ( $this->contentType == "html" )
-                $this->email->html( $content );
-            else
-                $this->email->text( $content );
-
+            if ($this->contentType == "html") {
+                $this->email->html($content);
+            } else {
+                $this->email->text($content);
+            }
         } else {
             $this->extractFieldsFromThis();
         }
@@ -119,23 +125,24 @@ class EmailAction extends Action
 
     public function send()
     {
-        if ( empty($this->email->to) )
-            $this->error( _('Please enter E-mail address. No receiver email address. ') );
+        if (empty($this->email->to)) {
+            $this->error(_('Please enter E-mail address. No receiver email address. '));
+        }
 
-        if ( empty($this->email->from) )
-            $this->error( _('Please enter your E-mail address.') );
+        if (empty($this->email->from)) {
+            $this->error(_('Please enter your E-mail address.'));
+        }
 
-        if ( ! $this->email->getContent() )
-
-            return $this->error( _('Please enter mail content.') );
+        if (! $this->email->getContent()) {
+            return $this->error(_('Please enter mail content.'));
+        }
 
         try {
             $this->email->send();
-        } catch ( Exception $e ) {
-            return $this->error( $e->getMessage() );
+        } catch (Exception $e) {
+            return $this->error($e->getMessage());
         }
 
         return $this->success(_('Email is sent.'));
     }
-
 }

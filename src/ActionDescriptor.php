@@ -20,7 +20,3 @@ interface ActionDescriptor
      */
     public function description();
 }
-
-
-
-

@@ -1,5 +1,6 @@
 <?php
 namespace ActionKit\Testing;
+
 use ActionKit\ActionTemplate\CodeGenActionTemplate;
 use ActionKit\ActionTemplate\RecordActionTemplate;
 use ActionKit\ActionRunner;
@@ -21,7 +22,7 @@ trait ActionTestAssertions
         $ret = $action->invoke();
         $result = $action->getResult();
         $this->assertTrue($ret, $result->message);
-        $this->assertEquals('success',$result->type, $result->message);
+        $this->assertEquals('success', $result->type, $result->message);
         return $result;
     }
 
@@ -30,7 +31,7 @@ trait ActionTestAssertions
         $ret = $action->invoke();
         $result = $action->getResult();
         $this->assertFalse($ret, $result->message);
-        $this->assertEquals('error',$result->type, $result->message);
+        $this->assertEquals('error', $result->type, $result->message);
         return $result;
     }
 

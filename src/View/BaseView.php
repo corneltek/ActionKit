@@ -1,9 +1,9 @@
 <?php
 namespace ActionKit\View;
+
 use FormKit;
 use FormKit\Layout\GenericLayout;
 use ActionKit\Action;
-
 
 /**
  * BaseView create a basic form view for action.
@@ -19,7 +19,6 @@ use ActionKit\Action;
  */
 abstract class BaseView
 {
-
     public $method = 'POST';
 
     public $enctype = 'multipart/form-data';
@@ -47,14 +46,14 @@ abstract class BaseView
      * @param ActionKit\Action $action
      * @param array $options
      */
-    public function __construct(Action $action, array $options = array() )
+    public function __construct(Action $action, array $options = array())
     {
         $this->action = $action;
         $this->options = $options;
-        if ( isset($options['fields']) ) {
+        if (isset($options['fields'])) {
             $this->fields = $options['fields'];
         }
-        if ( isset($options['nested']) ) {
+        if (isset($options['nested'])) {
             $this->renderNested = $options['nested'];
         }
         $this->init();
@@ -88,16 +87,16 @@ abstract class BaseView
     {
         $layout = new GenericLayout;
         // initialize layout object here.
-        if ( $width = $this->option('width') ) {
-            $layout->width( $width );
+        if ($width = $this->option('width')) {
+            $layout->width($width);
         }
-        if ( $padding = $this->option('cellpadding') ) {
-            $layout->cellpadding( $padding );
+        if ($padding = $this->option('cellpadding')) {
+            $layout->cellpadding($padding);
         }
-        if ( $spacing = $this->option('cellspacing') ) {
-            $layout->cellspacing( $spacing );
+        if ($spacing = $this->option('cellspacing')) {
+            $layout->cellspacing($spacing);
         }
-        if ( $border = $this->option('border') ) {
+        if ($border = $this->option('border')) {
             $layout->border(0);
         }
         return $layout;
@@ -107,7 +106,7 @@ abstract class BaseView
 
     public function getLayout()
     {
-        if ( $this->layout ) {
+        if ($this->layout) {
             return $this->layout;
         }
         return $this->layout = $this->createLayout();
@@ -121,24 +120,24 @@ abstract class BaseView
     public function createContainer()
     {
         // create default container
-        if ( $this->option('no_form') ) {
+        if ($this->option('no_form')) {
             $container = new \FormKit\Element\Div;
             return $container;
         } else {
             $container = new \FormKit\Element\Form;
 
-            if ( $this->enctype ) {
+            if ($this->enctype) {
                 $container->enctype($this->enctype);
             }
 
-            if ( $this->method ) {
+            if ($this->method) {
                 $container->method($this->method);
             }
-            if ( $formId = $this->option('form_id') ) {
-                $container->setId( $formId );
+            if ($formId = $this->option('form_id')) {
+                $container->setId($formId);
             }
-            if ( $formClass = $this->option('form_class') ) {
-                $container->addClass( $formClass );
+            if ($formClass = $this->option('form_class')) {
+                $container->addClass($formClass);
             }
             return $container;
         }
@@ -153,17 +152,17 @@ abstract class BaseView
 
     /**
      * As we are getting the container object lazily,
-     * We need to also append the layout object if the container is 
+     * We need to also append the layout object if the container is
      * initialized.
      */
     public function getContainer()
     {
-        if ( $this->container ) {
+        if ($this->container) {
             return $this->container;
         }
         $this->container = $this->createContainer();
-        if ( ! $this->option('no_layout') ) {
-            $this->container->append( $this->getLayout() );
+        if (! $this->option('no_layout')) {
+            $this->container->append($this->getLayout());
         }
         return $this->container;
     }
@@ -210,7 +209,7 @@ abstract class BaseView
 
     public function getRecord()
     {
-        if ( $this->isRecordAction() ) {
+        if ($this->isRecordAction()) {
             return $this->action->getRecord();
         }
     }
@@ -223,14 +222,14 @@ abstract class BaseView
     public function getAvailableWidgets()
     {
         $widgets = array();
-        if ( $fields = $this->option('fields') ) {
+        if ($fields = $this->option('fields')) {
             $widgets = $this->action->getWidgetsByNames($fields);
         } else {
             $widgets = $this->action->getWidgets();
         }
-        if ( $fields = $this->option('skips') ) {
-            $widgets = array_filter($widgets,function($widget) use ($fields) {
-                return ! in_array($widget->name,$fields);
+        if ($fields = $this->option('skips')) {
+            $widgets = array_filter($widgets, function ($widget) use ($fields) {
+                return ! in_array($widget->name, $fields);
             });
         }
 
@@ -291,15 +290,15 @@ abstract class BaseView
      */
     public function option($key)
     {
-        if ( isset($this->options[$key]) ) {
+        if (isset($this->options[$key])) {
             return $this->options[$key];
         }
     }
 
 
-    public function __call($method,$args)
+    public function __call($method, $args)
     {
-        if ( method_exists( $this,'set' . ucfirst($method) ) ) {
+        if (method_exists($this, 'set' . ucfirst($method))) {
             call_user_func_array('set' . ucfirst($method), $args);
 
             return $this;
@@ -311,7 +310,7 @@ abstract class BaseView
     /**
      * A build wrapper method for build().
      *
-     * This call beforeBuild, build, afterBuild methods before rendering the 
+     * This call beforeBuild, build, afterBuild methods before rendering the
      * content.
      *
      * @return Container
@@ -329,18 +328,22 @@ abstract class BaseView
     /**
      * Trigger method before building the content.
      */
-    public function beforeBuild() {  }
+    public function beforeBuild()
+    {
+    }
 
 
     /**
      * Trigger method after building the content.
      */
-    public function afterBuild() {  }
+    public function afterBuild()
+    {
+    }
 
 
     public function render()
     {
-        if (! $this->_built ) {
+        if (! $this->_built) {
             $this->triggerBuild();
         }
         return $this->getContainer()->render();
@@ -351,5 +354,4 @@ abstract class BaseView
         $this->fields = $fields;
         return $this->render();
     }
-
 }

@@ -1,5 +1,6 @@
 <?php
 namespace ActionKit\Param;
+
 use ActionKit\Param\Param;
 use Exception;
 use LogicException;
@@ -9,7 +10,6 @@ use ActionKit\RecordAction\UpdateRecordAction;
 use ActionKit\RecordAction\CreateRecordAction;
 use ActionKit\Utils;
 use Universal\Http\UploadedFile;
-
 
 class ImageParam extends Param
 {
@@ -60,7 +60,7 @@ class ImageParam extends Param
 
     public $argumentPostFilter;
 
-    static $defaultUploadDirectory;
+    public static $defaultUploadDirectory;
 
     public function build()
     {
@@ -71,7 +71,7 @@ class ImageParam extends Param
         $this->supportedAttributes[ 'renameFile'] = self::ATTR_ANY;
         $this->supportedAttributes[ 'compression' ] = self::ATTR_ANY;
         $this->supportedAttributes[ 'argumentPostFilter' ] = self::ATTR_ANY;
-        $this->renameFile = function($filename) {
+        $this->renameFile = function ($filename) {
             return Utils::filename_increase_suffix_number($filename);
         };
 
@@ -79,13 +79,13 @@ class ImageParam extends Param
             $this->putIn(static::$defaultUploadDirectory);
         }
 
-        $this->renderAs('ThumbImageFileInput',array(
+        $this->renderAs('ThumbImageFileInput', array(
             /* prefix path for widget rendering */
             'prefix' => '/',
         ));
     }
 
-    public function autoResize($enable = true) 
+    public function autoResize($enable = true)
     {
         if ($enable) {
             $this->enableAutoResize();
@@ -95,7 +95,7 @@ class ImageParam extends Param
         return $this;
     }
 
-    public function disableAutoResize() 
+    public function disableAutoResize()
     {
         $this->widgetAttributes['autoresize_input'] = false;
         $this->widgetAttributes['autoresize_input_check'] = false;
@@ -106,7 +106,7 @@ class ImageParam extends Param
     public function enableAutoResize()
     {
         // default autoresize options
-        if ( ! empty($this->size) ) {
+        if (! empty($this->size)) {
             $this->widgetAttributes['autoresize'] = true;
             $this->widgetAttributes['autoresize_input'] = true;
             $this->widgetAttributes['autoresize_input_check'] = true;
@@ -166,12 +166,12 @@ class ImageParam extends Param
         if (!empty($file) && $file['name'] && $file['type']) {
             $uploadedFile = UploadedFile::createFromArray($file);
             if ($this->validExtensions) {
-                if (! $uploadedFile->validateExtension($this->validExtensions) ) {
+                if (! $uploadedFile->validateExtension($this->validExtensions)) {
                     return [false, _('Invalid file extension: ') . $uploadedFile->getExtension()];
                 }
             }
             if ($this->sizeLimit) {
-                if ( ! $uploadedFile->validateSize( $this->sizeLimit ) ) {
+                if (! $uploadedFile->validateSize($this->sizeLimit)) {
                     return [false, _("The uploaded file exceeds the size limitation. ") . futil_prettysize($this->sizeLimit * 1024)];
                 }
             }
@@ -205,7 +205,7 @@ class ImageParam extends Param
         if ($this->sizeLimit) {
             $this->hint .= '<br/> 檔案大小限制: ' . futil_prettysize($this->sizeLimit*1024);
         }
-        if ( $this->size && isset($this->size['width']) && isset($this->size['height']) ) {
+        if ($this->size && isset($this->size['width']) && isset($this->size['height'])) {
             $this->hint .= '<br/> 圖片大小: ' . $this->size['width'] . 'x' . $this->size['height'];
         }
         return $this;
@@ -216,7 +216,7 @@ class ImageParam extends Param
      * file uploading issue:
      *
      * When processing sub-actions, the file objects are shared across the
-     * parent action. sometimes the column name will collide with the parent action column names.  
+     * parent action. sometimes the column name will collide with the parent action column names.
      * To solve this issue, we have to separate the namespace.
      *
      *   solutions:
@@ -257,7 +257,7 @@ class ImageParam extends Param
      *
      * @param array $args request arguments ($_REQUEST)
      */
-    public function init( & $args )
+    public function init(& $args)
     {
         // Is the file upload from HTTP
         $requireUploadMove = false;
@@ -302,26 +302,21 @@ class ImageParam extends Param
         // If there is a file uploaded from HTTP
         if ($requireUploadMove) {
 
-            // The file array might be created from file system 
+            // The file array might be created from file system
             if ($savedPath = $uploadedFile->getSavedPath()) {
-
                 copy($savedPath, $targetPath);
-
-            } else if ($uploadedFile->isUploadedFile()) {
+            } elseif ($uploadedFile->isUploadedFile()) {
 
                 // move calls move_uploaded_file, which is only available for files uploaded from HTTP
                 $uploadedFile->move($targetPath);
-
             } else {
                 // is not an uploaded file?
                 // may happen error here
                 $uploadedFile->copy($targetPath);
-
             }
 
             $this->action->saveUploadedFile($this->name, 0, $uploadedFile);
-
-        } else if ($this->sourceField) { // If there is no http upload, copy the file from source field
+        } elseif ($this->sourceField) { // If there is no http upload, copy the file from source field
 
             // source field only works for update record action
             // skip updating from source field if it's a update action
@@ -331,21 +326,14 @@ class ImageParam extends Param
 
             // Copy the file directly from the moved file path
             if ($savedPath = $uploadedFile->getSavedPath()) {
-
                 copy($savedPath, $targetPath);
-
             } else {
-
                 $uploadedFile->copy($targetPath);
-
             }
 
             $this->action->saveUploadedFile($this->name, 0, $uploadedFile);
-
         } else {
-
             return;
-
         }
 
 
@@ -361,7 +349,7 @@ class ImageParam extends Param
             $this->action->args[ $this->name ] = $targetPath; // for source field
         }
 
-        $this->action->addData($this->name , $targetPath);
+        $this->action->addData($this->name, $targetPath);
 
         // Don't resize gif files, gd doesn't support file resize with animation
         if ($uploadedFile->getExtension() != 'gif') {
@@ -369,31 +357,22 @@ class ImageParam extends Param
         }
     }
 
-    public function autoResizeFile($targetPath) 
+    public function autoResizeFile($targetPath)
     {
 
         // if the auto-resize is specified from front-end
-        if ($this->action->request->param($this->name . '_autoresize') && $this->size ) {
-
+        if ($this->action->request->param($this->name . '_autoresize') && $this->size) {
             $t = $this->action->request->param($this->name . '_autoresize');
             $process = ImageResizer::create($t, $this);
-            $process->resize( $targetPath );
-
+            $process->resize($targetPath);
         } else {
-
             if ($rWidth = $this->resizeWidth) {
                 $process = ImageResizer::create('max_width', $this);
                 $process->resize($targetPath);
-            } else if ( $rHeight = $this->resizeHeight ) {
+            } elseif ($rHeight = $this->resizeHeight) {
                 $process = ImageResizer::create('max_height', $this);
                 $process->resize($targetPath);
             }
-
         }
-
     }
-
-
-
-
 }

@@ -1,5 +1,6 @@
 <?php
 namespace ActionKit;
+
 use ActionKit\Param\Param;
 use ActionKit\Action;
 use ActionKit\RecordAction\BaseRecordAction;
@@ -49,7 +50,7 @@ class ColumnConvert
      * @param Model $record presents the current values
      * @return Param
      */
-    public static function toParam(RuntimeColumn $column , Model $record = null, Action $action = null)
+    public static function toParam(RuntimeColumn $column, Model $record = null, Action $action = null)
     {
         $name = $column->name;
         $param = new Param($name, $action);
@@ -72,8 +73,7 @@ class ColumnConvert
                     } else {
                         $param->required = true;
                     }
-
-                } else if ($action instanceof UpdateRecordAction || $action instanceof DeleteRecordAction) {
+                } elseif ($action instanceof UpdateRecordAction || $action instanceof DeleteRecordAction) {
                     // primary key column is required to update/delete records.
                     $param->required = true;
                 }
@@ -110,39 +110,39 @@ class ColumnConvert
 
         // convert related collection model to validValues
         if ($param->refer && ! $param->validValues) {
-            if (class_exists($param->refer,true) ) {
+            if (class_exists($param->refer, true)) {
                 $referClass = $param->refer;
 
                 // it's a `has many`-like relationship
-                if (is_subclass_of($referClass, Collection::class, true) ) {
+                if (is_subclass_of($referClass, Collection::class, true)) {
                     $collection = new $referClass;
                     $options = array();
                     foreach ($collection as $item) {
-                        $label = method_exists($item,'dataLabel')
+                        $label = method_exists($item, 'dataLabel')
                                 ? $item->dataLabel()
                                 : $item->id;
                         $options[ $label ] = $item->dataKeyValue();
                     }
                     $param->validValues = $options;
-                } else if (is_subclass_of($referClass, Model::class, true) ) {
+                } elseif (is_subclass_of($referClass, Model::class, true)) {
                     // it's a `belongs-to`-like relationship
                     $class = $referClass . 'Collection';
                     $collection = new $class;
                     $options = array();
                     foreach ($collection as $item) {
-                        $label = method_exists($item,'dataLabel')
+                        $label = method_exists($item, 'dataLabel')
                                 ? $item->dataLabel()
                                 : $item->id;
                         $options[ $label ] = $item->dataKeyValue();
                     }
                     $param->validValues = $options;
-                } else if ( is_subclass_of($referClass, DeclareSchema::class, true) ) {
+                } elseif (is_subclass_of($referClass, DeclareSchema::class, true)) {
                     $schema = new $referClass;
                     $collection = $schema->newCollection();
 
                     $options = array();
                     foreach ($collection as $item) {
-                        $label = method_exists($item,'dataLabel')
+                        $label = method_exists($item, 'dataLabel')
                                 ? $item->dataLabel()
                                 : $item->id;
                         $options[ $label ] = $item->dataKeyValue();
@@ -151,7 +151,7 @@ class ColumnConvert
                 } else {
                     throw new Exception('Unsupported refer type');
                 }
-            } else if ( $relation = $record->getSchema()->getRelation($param->refer) ) {
+            } elseif ($relation = $record->getSchema()->getRelation($param->refer)) {
                 // so it's a relationship reference
                 // TODO: implement this
                 throw new Exception('Unsupported refer type');
@@ -168,16 +168,16 @@ class ColumnConvert
             $param->widgetAttributes = $column->widgetAttributes;
         }
 
-        if ( $column->immutable ) {
+        if ($column->immutable) {
             $param->widgetAttributes['readonly'] = 'readonly';
         }
 
         if ($column->renderAs) {
-            $param->renderAs( $column->renderAs );
+            $param->renderAs($column->renderAs);
         } elseif ($param->validValues || $param->validPairs || $param->optionValues) {
-            $param->renderAs( 'SelectInput' );
+            $param->renderAs('SelectInput');
         } elseif ($param->name === 'id') {
-            $param->renderAs( 'HiddenInput' );
+            $param->renderAs('HiddenInput');
         } else {
             // guess input widget from data type
             $typeMapping = array(
@@ -185,7 +185,7 @@ class ColumnConvert
                 'datetime' => 'DateTimeInput',
                 'text' => 'TextareaInput',
             );
-            if ( isset($typeMapping[ $param->type ]) ) {
+            if (isset($typeMapping[ $param->type ])) {
                 $param->renderAs($typeMapping[$param->type]);
             } else {
                 $param->renderAs('TextInput');

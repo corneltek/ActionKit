@@ -1,10 +1,10 @@
 <?php
 namespace ActionKit;
+
 use ActionKit\Messages;
 use ArrayAccess;
 use Exception;
 use InvalidArgumentException;
-
 
 /**
  * This class defines the response properties of an action.
@@ -81,7 +81,7 @@ class Result implements ArrayAccess
      *
      * @param string $type Action result type, 'success', 'error', 'valid', 'invalid', 'completion', 'redirect'
      */
-    public function __construct( $type = null )
+    public function __construct($type = null)
     {
         if ($type) {
             $this->type($type);
@@ -93,9 +93,9 @@ class Result implements ArrayAccess
      *
      * @param string $type
      */
-    public function type( $type )
+    public function type($type)
     {
-        if ( in_array($type, array('success','completeion','error','valid','invalid','redirect')) ) {
+        if (in_array($type, array('success','completeion','error','valid','invalid','redirect'))) {
             throw new Exception('Invalid result type.');
         }
         $this->type = $type;
@@ -133,18 +133,18 @@ class Result implements ArrayAccess
         return $this->message;
     }
 
-    public function action( $action )
+    public function action($action)
     {
         $this->action = $action;
 
         return $this;
     }
 
-    public function completion( $field, $type, $list , $style = 'default' )
+    public function completion($field, $type, $list, $style = 'default')
     {
         $this->type = 'completion';
-        $this->checkCompType( $type );
-        $this->checkCompList( $list );
+        $this->checkCompType($type);
+        $this->checkCompList($list);
         $this->completion = array(
             'field' => $field,
             'style' => $style,
@@ -155,29 +155,29 @@ class Result implements ArrayAccess
         return $this;
     }
 
-    private function checkCompType( $type )
+    private function checkCompType($type)
     {
         if ('dict' !== $type
             && 'list' !== $type) {
-            throw new Exception( _('Invalid completion type, should be "dict" or "list".') );
+            throw new Exception(_('Invalid completion type, should be "dict" or "list".'));
         }
     }
 
-    private function checkCompList( $list )
+    private function checkCompList($list)
     {
-        if ( ! is_array( $list ) ) {
-            throw new Exception( _('Invalid completion data type, should be array.') );
+        if (! is_array($list)) {
+            throw new Exception(_('Invalid completion data type, should be array.'));
         }
     }
 
-    public function completer( $field, $func, $args, $style = 'default' )
+    public function completer($field, $func, $args, $style = 'default')
     {
         $this->type = 'completion';
-        $ret = call_user_func_array( $func , $args );
+        $ret = call_user_func_array($func, $args);
         $comp_type = $ret[0];
         $comp_list = $ret[1];
-        $this->checkCompType( $comp_type );
-        $this->checkCompList( $comp_list );
+        $this->checkCompType($comp_type);
+        $this->checkCompList($comp_list);
         $this->completion = array(
             'field' => $field,
             'style' => $style,
@@ -247,7 +247,7 @@ class Result implements ArrayAccess
      *
      * @param string $path
      */
-    public function redirect( $path , $delaySeconds = 0 )
+    public function redirect($path, $delaySeconds = 0)
     {
         $this->redirect = $path;
         $this->redirectDelay = $delaySeconds;
@@ -259,7 +259,7 @@ class Result implements ArrayAccess
      *
      * @param array $args
      */
-    public function args( $args )
+    public function args($args)
     {
         $this->args = $args;
 
@@ -293,11 +293,11 @@ class Result implements ArrayAccess
     /**
      * Set result data
      */
-    public function data($data , $val = null)
+    public function data($data, $val = null)
     {
         if (is_array($data)) {
             $this->data = $data;
-        } else if (is_string($data) || is_numeric($data)) {
+        } elseif (is_string($data) || is_numeric($data)) {
             if ($val === null) {
                 return $this->data[$data];
             } else {
@@ -309,16 +309,16 @@ class Result implements ArrayAccess
         return $this;
     }
 
-    public function addData( $key, $value )
+    public function addData($key, $value)
     {
         $this->data[ $key ] = $value;
 
         return $this;
     }
 
-    public function mergeData( $data )
+    public function mergeData($data)
     {
-        $this->data = array_merge( $this->data , $data );
+        $this->data = array_merge($this->data, $data);
 
         return $this;
     }
@@ -347,7 +347,7 @@ class Result implements ArrayAccess
         return $this;
     }
 
-    public function valid( $message = null )
+    public function valid($message = null)
     {
         $this->type = 'valid';
         if ($message) {
@@ -356,7 +356,7 @@ class Result implements ArrayAccess
         return $this;
     }
 
-    public function invalid($message = null )
+    public function invalid($message = null)
     {
         $this->type = 'invalid';
         if ($message) {
@@ -394,7 +394,7 @@ class Result implements ArrayAccess
         }
 
         if ('completion' === $this->type) {
-            $ret = array_merge( $ret , $this->completion );
+            $ret = array_merge($ret, $this->completion);
         }
 
         if (!empty($this->validations)) {
@@ -403,14 +403,14 @@ class Result implements ArrayAccess
 
         if ($this->redirect) {
             $ret['redirect'] = $this->redirect;
-            if ( $this->redirectDelay ) {
+            if ($this->redirectDelay) {
                 $ret['delay'] = $this->redirectDelay;
             }
         }
         return $ret;
     }
 
-    public function offsetSet($name,$value)
+    public function offsetSet($name, $value)
     {
         $this->stash[ $name ] = $value;
     }
@@ -432,6 +432,6 @@ class Result implements ArrayAccess
 
     public function __toString()
     {
-        return json_encode( $this->toArray(), JSON_HEX_TAG );
+        return json_encode($this->toArray(), JSON_HEX_TAG);
     }
 }

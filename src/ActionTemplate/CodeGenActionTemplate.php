@@ -1,5 +1,6 @@
 <?php
 namespace ActionKit\ActionTemplate;
+
 use ActionKit\ActionRunner;
 use ActionKit\GeneratedAction;
 use ActionKit\Exception\RequiredConfigKeyException;
@@ -51,11 +52,11 @@ class CodeGenActionTemplate implements ActionTemplate
         $runner->register($options['action_class'], $asTemplate, $options);
     }
 
-    public function createActionClassFile($actionClass, array $options = array()) 
+    public function createActionClassFile($actionClass, array $options = array())
     {
         $class = new ClassFile($actionClass);
         if (isset($options['use'])) {
-            foreach( $options['use'] as $use ) {
+            foreach ($options['use'] as $use) {
                 $class->useClass($use);
             }
         }
@@ -63,17 +64,17 @@ class CodeGenActionTemplate implements ActionTemplate
             $class->extendClass($options['extends']);
         }
         if (isset($options['properties'])) {
-            foreach( $options['properties'] as $name => $value ) {
+            foreach ($options['properties'] as $name => $value) {
                 $class->addProperty($name, $value);
             }
         }
         if (isset($options['constants'])) {
-            foreach( $options['constants'] as $name => $value ) {
+            foreach ($options['constants'] as $name => $value) {
                 $class->addConst($name, $value);
             }
         }
         if (isset($options['traits'])) {
-            foreach( $options['traits'] as $traitClass ) {
+            foreach ($options['traits'] as $traitClass) {
                 $class->useTrait($traitClass);
             }
         }
@@ -87,5 +88,4 @@ class CodeGenActionTemplate implements ActionTemplate
         $code = $class->render();
         return new GeneratedAction($actionClass, $code, $class);
     }
-    
 }

@@ -1,5 +1,6 @@
 <?php
 namespace ActionKit\RecordAction;
+
 use ActionKit\Action;
 use Exception;
 
@@ -17,7 +18,7 @@ abstract class UpdateOrderingRecordAction extends Action
 
 
     /**
-     * @var string your model schema must provide the column for 
+     * @var string your model schema must provide the column for
      *             storing ordering data.
      */
     public $targetColumn = 'ordering';
@@ -30,11 +31,11 @@ abstract class UpdateOrderingRecordAction extends Action
     public function runUpdateList()
     {
         $orderingList = json_decode($this->arg('list'));
-        if ( $this->mode == self::MODE_INCREMENTALLY ) {
-            foreach( $orderingList as $ordering ) {
-                $record = $this->loadRecord( (int) $ordering->record );
+        if ($this->mode == self::MODE_INCREMENTALLY) {
+            foreach ($orderingList as $ordering) {
+                $record = $this->loadRecord((int) $ordering->record);
                 $ret = $record->update(array( $this->targetColumn => $ordering->ordering ));
-                if ( ! $ret->success ) {
+                if (! $ret->success) {
                     throw new Exception($ret->message);
                 }
             }
@@ -47,11 +48,9 @@ abstract class UpdateOrderingRecordAction extends Action
     {
         try {
             $this->runUpdateList();
-        } catch ( Exception $e ) {
-            return $this->error( __('Ordering Update Failed: %1', $e->getMessage() ) );
+        } catch (Exception $e) {
+            return $this->error(__('Ordering Update Failed: %1', $e->getMessage()));
         }
         return $this->success('排列順序已更新');
     }
 }
-
-

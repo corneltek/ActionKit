@@ -1,5 +1,6 @@
 <?php
 namespace ActionKit;
+
 use ReflectionObject;
 use Exception;
 use RuntimeException;
@@ -16,14 +17,15 @@ class Template
 
     public $config;
 
-    public function __construct($config = array()) 
+    public function __construct($config = array())
     {
         $this->config = $config;
     }
 
-    public function init() {
+    public function init()
+    {
         $dir = $this->getTemplateDir();
-        if ( ! file_exists($dir) ) {
+        if (! file_exists($dir)) {
             throw RuntimeException("Directory $dir for TemplateView does not exist.");
         }
         $this->loader =  new Twig_Loader_Filesystem($dir);
@@ -38,7 +40,7 @@ class Template
 
     public function getClassDir()
     {
-        if ( $this->_classDir ) {
+        if ($this->_classDir) {
             return $this->_classDir;
         }
         return $this->setClassDirFrom($this);
@@ -51,7 +53,7 @@ class Template
 
 
     /**
-     * $template->render('@ActionKit/index.html', array('the' => 'variables', 'go' => 'here')); 
+     * $template->render('@ActionKit/index.html', array('the' => 'variables', 'go' => 'here'));
      */
     public function render($templateFile, $arguments = array())
     {
@@ -59,4 +61,3 @@ class Template
         return $template->render($arguments);
     }
 }
-

@@ -1,8 +1,8 @@
 <?php
 namespace ActionKit\Csrf;
+
 use ActionKit\Csrf\CsrfToken;
 use ActionKit\Csrf\CsrfStorage;
-
 
 /**
  * CsrfSessionStorage store the csrf token into session
@@ -49,4 +49,3 @@ class CsrfSessionStorage implements CsrfStorage
         unset($_SESSION[$key ?: $this->sessionKey]);
     }
 }
-

@@ -1,5 +1,6 @@
 <?php
 namespace ActionKit\View;
+
 use FormKit;
 use FormKit\Element;
 use FormKit\Widget\Label;
@@ -31,13 +32,12 @@ use FormKit\Layout\GenericLayout;
  */
 class ManyToManyCheckboxView
 {
-
     public $checked = array();
 
-    public function _createCheckedMap($subset) 
+    public function _createCheckedMap($subset)
     {
         $checked = array();
-        foreach( $subset as $item ) {
+        foreach ($subset as $item) {
             $checked[ $item->id ] = $item;
         }
         return $checked;
@@ -51,22 +51,22 @@ class ManyToManyCheckboxView
      * @param Model $item      Record object.
      * @return Element('li')
      */
-    public function renderItem($relationId, $subset, $item, $on = false) 
+    public function renderItem($relationId, $subset, $item, $on = false)
     {
         $id = $item->id;
         $li       = new Element('li');
         $label    = new Label;
-        $hiddenId = new HiddenInput("{$relationId}[{$id}][_foreign_id]", array( 'value' => $id ) );
+        $hiddenId = new HiddenInput("{$relationId}[{$id}][_foreign_id]", array( 'value' => $id ));
         $checkboxValue = $on ? 1 : 0;
-        $checkbox = new CheckboxInput("{$relationId}[{$id}][_connect]",array( 
+        $checkbox = new CheckboxInput("{$relationId}[{$id}][_connect]", array(
             'value' => $checkboxValue,
         ));
-        if ( $on ) {
+        if ($on) {
             $checkbox->check();
         }
-        $label->append( $checkbox );
-        $label->append( $item->dataLabel() );
-        $label->append( $hiddenId );
+        $label->append($checkbox);
+        $label->append($item->dataLabel());
+        $label->append($hiddenId);
         $li->append($label);
         return $li;
     }
@@ -78,15 +78,15 @@ class ManyToManyCheckboxView
      * @param BaseCollection[]   the related collection. (optional)
      * @param BaseCollection[]   the superset collection.
      */
-    public function renderList($relationId, $subset, $superset) 
+    public function renderList($relationId, $subset, $superset)
     {
         $ul = new Element('ul');
         $ul->addClass('actionkit-checkbox-view');
 
-        // now we should render the superset, and set the checkbox to be 
+        // now we should render the superset, and set the checkbox to be
         // connected from the $this->checked array.
-        foreach( $superset as $item ) {
-            $li = $this->renderItem( $relationId, $subset, $item, isset($this->checked[$item->id]) );
+        foreach ($superset as $item) {
+            $li = $this->renderItem($relationId, $subset, $item, isset($this->checked[$item->id]));
             $li->appendTo($ul);
         }
         return $ul;
@@ -102,17 +102,15 @@ class ManyToManyCheckboxView
      */
     public function render($relationId, $record, $subset = null, $collection = null)
     {
-        if ( ! $subset ) {
+        if (! $subset) {
             $subset = ($record->id ? $record->{$relationId} : null);
         }
-        if ( ! $collection  ) {
+        if (! $collection) {
             $collection = $record->fetchManyToManyRelationCollection($relationId);
         }
         $this->checked = $subset ? $this->_createCheckedMap($subset) : array();
-        return $this->renderList( $relationId,
+        return $this->renderList($relationId,
             $subset,
             $collection);
     }
 }
-
-

@@ -1,5 +1,6 @@
 <?php
 namespace ActionKit\Csrf;
+
 use ActionKit\Csrf\CsrfToken;
 use ActionKit\Csrf\CsrfStorage;
 use Exception;

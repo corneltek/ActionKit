@@ -1,5 +1,6 @@
 <?php
 namespace ActionKit\ActionTrait;
+
 use Kendo\Acl\MultiRoleInterface;
 use Exception;
 
@@ -17,9 +18,9 @@ trait RoleChecker
             } else {
                 return $this->deny();
             }
-        } else if ($user instanceof MultiRoleInterface  || method_exists($user,'getRoles')) {
-            foreach ($user->getRoles() as $role ) {
-                if (in_array($role, $this->allowedRoles) ) {
+        } elseif ($user instanceof MultiRoleInterface  || method_exists($user, 'getRoles')) {
+            foreach ($user->getRoles() as $role) {
+                if (in_array($role, $this->allowedRoles)) {
                     return $this->allow();
                 }
             }
@@ -40,7 +41,7 @@ trait RoleChecker
         return array(false, $message ?: $this->permissionDeniedMessage());
     }
 
-    public function getAllowedRoles() 
+    public function getAllowedRoles()
     {
         return $this->allowedRoles;
     }
@@ -50,7 +51,7 @@ trait RoleChecker
         return 'Permission denied.';
     }
 
-    public function permissionAllowedMessage() 
+    public function permissionAllowedMessage()
     {
         return 'Permission allowed.';
     }

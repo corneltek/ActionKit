@@ -1,11 +1,11 @@
 <?php
 namespace ActionKit\ActionTemplate;
+
 use ActionKit\ActionRunner;
 use ActionKit\ActionTemplate\CodeGenActionTemplate;
 use ActionKit\GeneratedAction;
 use ActionKit\Exception\RequiredConfigKeyException;
 use ClassTemplate\TemplateClassFile;
-
 
 class RecordActionTemplate extends CodeGenActionTemplate
 {
@@ -16,7 +16,7 @@ class RecordActionTemplate extends CodeGenActionTemplate
      *    $template->register($runner, array(
      *        'namespace' => 'test',
      *        'model' => 'testModel',   // model's name
-     *        'allowed_roles' => array('admin', 'manager'), 
+     *        'allowed_roles' => array('admin', 'manager'),
      *        'types' => [
      *            ['prefix' => 'Create', 'allowed_roles' => ['user', 'admin'] ],
      *            ['prefix' => 'Update'],
@@ -67,5 +67,3 @@ class RecordActionTemplate extends CodeGenActionTemplate
         }
     }
 }
-
-

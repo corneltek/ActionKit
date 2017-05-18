@@ -3,5 +3,4 @@ namespace ActionKit;
 
 interface Loggable
 {
-
 }

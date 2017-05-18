@@ -1,7 +1,7 @@
 <?php
 namespace ActionKit\RecordAction;
-use ActionKit\Action;
 
+use ActionKit\Action;
 
 /**
  * This action requires 'items' param
@@ -23,7 +23,7 @@ class BulkRecordAction extends Action
 
     public function runValidate()
     {
-        if ( isset( $this->args['items'] ) ) {
+        if (isset($this->args['items'])) {
             return true;  // no error
         }
         return false;
@@ -37,7 +37,7 @@ class BulkRecordAction extends Action
         $records = array();
         foreach ($itemIds as $id) {
             $record = new $this->recordClass;
-            $record->load( (int) $id );
+            $record->load((int) $id);
             if ($record->id) {
                 $records[] = $record;
             }

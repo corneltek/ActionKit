@@ -1,5 +1,6 @@
 <?php
 namespace ActionKit\ActionTemplate;
+
 use ActionKit\ActionRunner;
 
 interface ActionTemplate

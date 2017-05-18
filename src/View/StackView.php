@@ -1,5 +1,6 @@
 <?php
 namespace ActionKit\View;
+
 use ActionKit\View\BaseView;
 use FormKit;
 use FormKit\Element;
@@ -40,12 +41,12 @@ class StackView extends BaseView
     public function createContainer()
     {
         $container = parent::createContainer();
-        if ( $this->option('no_form') ) {
+        if ($this->option('no_form')) {
             return $container;
         } else {
             if ($this->ajax) {
-                $ajaxFlag  = new HiddenInput('__ajax_request',array( 'value' => '1' ));
-                $container->append( $ajaxFlag );
+                $ajaxFlag  = new HiddenInput('__ajax_request', array( 'value' => '1' ));
+                $container->append($ajaxFlag);
                 $container->addClass('ajax-action');
             }
         }
@@ -55,14 +56,14 @@ class StackView extends BaseView
 
 
 
-    public function createRelationalActionViewForNewRecord($relationId,$relation)
+    public function createRelationalActionViewForNewRecord($relationId, $relation)
     {
         // get the record class.
         $foreignSchema = new $relation['foreign_schema'];
         $recordClass = $foreignSchema->getModelClass();
         $record = new $recordClass;
 
-        $subview = $this->createRelationalActionView($relationId,$relation);
+        $subview = $this->createRelationalActionView($relationId, $relation);
         $html    = addslashes($subview->render());
 
         // here we create a button to insert the view from javascript.
@@ -97,7 +98,7 @@ SCRIPT;
     public function buildManyToManyRelationalActionViewForExistingRecords($record, $relationId, $relation = null, $subset = null, $collection = null)
     {
         // Our default view for ManyToMany relationship
-        if ( ! $relation ) {
+        if (! $relation) {
             $relation = $this->action->getRelation($relationId);
         }
         $view  = isset($relation['view']) ? new $relation['view'] : new \ActionKit\View\ManyToManyCheckboxView;
@@ -112,20 +113,20 @@ SCRIPT;
 
 
     /**
-     * For each existing (one-many) records, 
-     * create it's own subaction view for these existing 
+     * For each existing (one-many) records,
+     * create it's own subaction view for these existing
      * records.
      */
     public function buildOneToManyRelationalActionViewForExistingRecords($record, $relationId, $relation = null)
     {
-        if ( ! $relation ) {
+        if (! $relation) {
             $relation = $this->action->getRelation($relationId);
         }
 
         $container = new Element('div');
 
         // If the record is loaded and the relation is defined
-        if ( $collection = $record->fetchOneToManyRelationCollection($relationId) ) {
+        if ($collection = $record->fetchOneToManyRelationCollection($relationId)) {
             foreach ($collection as $subrecord) {
                 $subview = $this->createRelationalActionView($relationId, $relation, $subrecord);
                 $container->append($subview);
@@ -136,7 +137,7 @@ SCRIPT;
 
     public function buildRelationalActionViewForExistingRecords($relationId, $relation = null)
     {
-        if ( ! $relation ) {
+        if (! $relation) {
             $relation = $this->action->getRelation($relationId);
         }
 
@@ -146,10 +147,10 @@ SCRIPT;
 
         // handle HAS_MANY records
         if (Relationship::HAS_MANY === $relation['type']) {
-            $contentContainer = $this->buildOneToManyRelationalActionViewForExistingRecords($record, $relationId, $relation );
+            $contentContainer = $this->buildOneToManyRelationalActionViewForExistingRecords($record, $relationId, $relation);
             $contentContainer->appendTo($container);
-        } else if (Relationship::MANY_TO_MANY === $relation['type']) {
-            $contentContainer = $this->buildManyToManyRelationalActionViewForExistingRecords($record, $relationId, $relation  /* $subset, $collection */ );
+        } elseif (Relationship::MANY_TO_MANY === $relation['type']) {
+            $contentContainer = $this->buildManyToManyRelationalActionViewForExistingRecords($record, $relationId, $relation  /* $subset, $collection */);
             $contentContainer->appendTo($container);
         }
         return $container;
@@ -159,14 +160,14 @@ SCRIPT;
 
     public function buildRelationalActionViewForNewRecord($relationId, $relation = null)
     {
-        if ( ! $relation ) {
+        if (! $relation) {
             $relation = $this->action->getRelation($relationId);
         }
 
         // create another subview for creating new (one-many) record.
         // currently onlly for HAS_MANY relationship
         $container = $this->getContainer();
-        if ( Relationship::HAS_MANY === $relation['type'] ) {
+        if (Relationship::HAS_MANY === $relation['type']) {
             $addButton = $this->createRelationalActionViewForNewRecord($relationId, $relation);
             $container->append($addButton);
         }
@@ -182,18 +183,18 @@ SCRIPT;
     public function buildNestedSection()
     {
 
-        // in current action, find all relationship information, and iterate 
+        // in current action, find all relationship information, and iterate
         // them.
         foreach ($this->action->relationships as $relationId => $relation) {
             // ski$p non-renderable relationship definitions
-            if ( isset($relation['renderable']) && $relation['renderable'] === false ) {
+            if (isset($relation['renderable']) && $relation['renderable'] === false) {
                 continue;
             }
             $this->buildRelationalActionViewForExistingRecords($relationId, $relation);
 
             // currently we only support rendering new record form for "has many"
-            if ( Relationship::HAS_MANY === $relation['type'] ) {
-                $this->buildRelationalActionViewForNewRecord($relationId,$relation);
+            if (Relationship::HAS_MANY === $relation['type']) {
+                $this->buildRelationalActionViewForNewRecord($relationId, $relation);
             }
         }
     }
@@ -217,14 +218,14 @@ SCRIPT;
         $recordId = $record ? $record->id : null;
 
         // if we don't have form, we don't need submit button and action signature.
-        if ( ! $this->option('no_form') ) {
+        if (! $this->option('no_form')) {
 
             // Add control buttons
-            $container->append( new SubmitInput );
+            $container->append(new SubmitInput);
 
             // if we have record and the record has an id, render the id field as hidden field.
-            if ( ! $this->option('no_signature') ) {
-                $container->append( $this->action->createSignatureWidget() );
+            if (! $this->option('no_signature')) {
+                $container->append($this->action->createSignatureWidget());
             }
         }
         return $container;
@@ -261,7 +262,7 @@ SCRIPT;
         //
         //    categories[index][name]...
         //    categories[index][subtitle]...
-        //     
+        //
         $formIndex = $action->setParamNamesWithIndex($relationId);
 
         $viewClass = isset($relation['view']) ? $relation['view'] : 'ActionKit\View\StackView';
@@ -273,17 +274,17 @@ SCRIPT;
 
         $subview->triggerBuild();
         $container = $subview->getContainer();
-        $signature = new HiddenInput(  "{$relationId}[{$formIndex}][__action]",array(
+        $signature = new HiddenInput("{$relationId}[{$formIndex}][__action]", array(
             'value' => $action->getSignature()
         ));
-        $container->append( $signature );
+        $container->append($signature);
 
         $token = $action->getCSRFToken();
         if ($token) {
-            $csrfToken = new HiddenInput(  "{$relationId}[{$formIndex}][_csrf_token]",array(
+            $csrfToken = new HiddenInput("{$relationId}[{$formIndex}][_csrf_token]", array(
                 'value' => $token
             ));
-            $container->append( $csrfToken );
+            $container->append($csrfToken);
         }
         return $subview;
     }

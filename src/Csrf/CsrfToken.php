@@ -1,5 +1,6 @@
 <?php
 namespace ActionKit\Csrf;
+
 use Exception;
 
 class CsrfToken
@@ -76,7 +77,7 @@ class CsrfToken
     }
 
     /**
-     * Output token hash 
+     * Output token hash
      *
      * @return string
      */

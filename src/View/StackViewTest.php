@@ -8,7 +8,7 @@ use DomXPath;
 
 class CreateUserAction extends Action
 {
-    public function schema() 
+    public function schema()
     {
         $this->param('first_name')
             ->label('First name')
@@ -24,7 +24,7 @@ class CreateUserAction extends Action
             ->renderAs('SelectInput');
     }
 
-    public function run() 
+    public function run()
     {
         return $this->success('Created!');
     }
@@ -41,7 +41,6 @@ use ProductBundle\Action\CreateProduct;
 
 class StackViewTest extends ModelTestCase
 {
-
     public function models()
     {
         return [new ProductSchema, new CategorySchema];
@@ -53,7 +52,7 @@ class StackViewTest extends ModelTestCase
         $c->create(array( 'name' => 'Foo' ));
 
         $action = new CreateProduct;
-        $view = $action->asView(StackView::class,array(
+        $view = $action->asView(StackView::class, array(
             'no_form' => true,
             'no_layout' => true,
         ));
@@ -61,7 +60,7 @@ class StackViewTest extends ModelTestCase
 
         $view->buildRelationalActionViewForExistingRecords('categories');
         $html = $view->getContainer()->render();
-        $this->assertNotNull( $html );
+        $this->assertNotNull($html);
 
 #          $dom = new DOMDocument;
 #          $dom->load($html);
@@ -107,4 +106,3 @@ class StackViewTest extends ModelTestCase
         $this->assertEquals(1, $nodes->length);
     }
 }
-

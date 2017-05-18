@@ -1,5 +1,6 @@
 <?php
 namespace ActionKit\Csrf;
+
 use ActionKit\Csrf\CsrfToken;
 use ActionKit\Csrf\CsrfStorage;
 
@@ -51,4 +52,3 @@ class CsrfArrayStorage implements CsrfStorage
         unset($this->array[$key ?: $this->tokenKey]);
     }
 }
-

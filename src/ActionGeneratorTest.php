@@ -13,7 +13,7 @@ class ActionGeneratorTest extends \PHPUnit\Framework\TestCase
     // TODO: should be moved to BaseRecordActionTest
     public function testCRUDClassFromBaseRecordAction()
     {
-        $class = BaseRecordAction::createCRUDClass('App\Model\Post', 'Create' );
+        $class = BaseRecordAction::createCRUDClass('App\Model\Post', 'Create');
         $this->assertNotNull($class);
         $this->assertEquals('App\Action\CreatePost', $class);
     }
@@ -186,8 +186,6 @@ class ActionGeneratorTest extends \PHPUnit\Framework\TestCase
             )
         );
         $generatedAction->load();
-        $this->assertNotNull( class_exists( $className ) );
+        $this->assertNotNull(class_exists($className));
     }
-
 }
-

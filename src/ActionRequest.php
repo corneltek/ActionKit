@@ -1,12 +1,12 @@
 <?php
 namespace ActionKit;
+
 use ActionKit\Utils;
 use Universal\Http\HttpRequest;
 use Universal\Http\FilesParameter;
 
 class ActionRequest extends HttpRequest
 {
-
     protected $ajax = false;
 
     protected $arguments = array();
@@ -59,12 +59,12 @@ class ActionRequest extends HttpRequest
      */
     public function isInvalidActionName()
     {
-        return preg_match( '/[^A-Za-z0-9:]/i' , $this->actionName);
+        return preg_match('/[^A-Za-z0-9:]/i', $this->actionName);
     }
 
     public function isFullQualifiedName()
     {
-        return strpos($this->actionName, '::' ) !== false;
+        return strpos($this->actionName, '::') !== false;
     }
 
 
@@ -78,7 +78,7 @@ class ActionRequest extends HttpRequest
         return $this->actionName;
     }
 
-    public function getArguments() 
+    public function getArguments()
     {
         return $this->arguments;
     }
@@ -106,5 +106,4 @@ class ActionRequest extends HttpRequest
     {
         return $this->uploadedFiles[$fieldName][$index] = $file;
     }
-
 }

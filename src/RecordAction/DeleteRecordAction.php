@@ -1,8 +1,7 @@
 <?php
 namespace ActionKit\RecordAction;
 
-abstract class DeleteRecordAction
-    extends BaseRecordAction
+abstract class DeleteRecordAction extends BaseRecordAction
 {
     const TYPE = 'delete';
 
@@ -15,15 +14,15 @@ abstract class DeleteRecordAction
         $record = $this->record;
         $schema = $record->getSchema();
         $data = $record->getData();
-        foreach( $data as $name => $val ) {
-            if ( $val == null ) {
+        foreach ($data as $name => $val) {
+            if ($val == null) {
                 continue;
             }
-            $column = $schema->getColumn( $name );
-            switch( $column->contentType ) {
+            $column = $schema->getColumn($name);
+            switch ($column->contentType) {
                 case "ImageFile":
                 case "File":
-                    if ( $this->unlink && file_exists($val) ) {
+                    if ($this->unlink && file_exists($val)) {
                         unlink($val);
                     }
                     break;
@@ -45,7 +44,7 @@ abstract class DeleteRecordAction
         }
         */
 
-        return $this->doDelete( $this->args );
+        return $this->doDelete($this->args);
     }
 
     public function doDelete($args)
@@ -83,12 +82,11 @@ abstract class DeleteRecordAction
 
     public function deleteSuccess($ret)
     {
-        return $this->success($this->successMessage($ret), array( 'id' => $this->record->id) );
+        return $this->success($this->successMessage($ret), array( 'id' => $this->record->id));
     }
 
     public function deleteError($ret)
     {
         return $this->error($this->errorMessage($ret));
     }
-
 }

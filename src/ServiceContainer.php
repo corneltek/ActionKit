@@ -1,5 +1,6 @@
 <?php
 namespace ActionKit;
+
 use Pimple\Container;
 use ActionKit\ActionGenerator;
 use ActionKit\Csrf\CsrfTokenProvider;
@@ -43,21 +44,21 @@ class ServiceContainer extends Container
 
         $this['message_directory'] = __DIR__ . DIRECTORY_SEPARATOR . 'Messages';
 
-        $this['message_pool'] = function($c) {
+        $this['message_pool'] = function ($c) {
             return new MessagePool($c['locale'], $c['message_directory']);
         };
 
-        $this['csrf'] = function($c) {
+        $this['csrf'] = function ($c) {
             return new CsrfTokenProvider(new CsrfSessionStorage('__csrf_token'));
         };
 
         // This factory will always generate new csrf token
-        $this['csrf_token_new'] = $this->factory(function($c) {
+        $this['csrf_token_new'] = $this->factory(function ($c) {
             return $c['csrf']->loadCurrentToken($refresh = true);
         });
 
         // Create csrf token on demain
-        $this['csrf_token'] = $this->factory(function($c) {
+        $this['csrf_token'] = $this->factory(function ($c) {
             $provider = $c['csrf'];
             // try to load csrf token in the current session
             $token = $provider->loadCurrentToken();
@@ -69,7 +70,7 @@ class ServiceContainer extends Container
         });
 
         // The default twig loader
-        $this['twig_loader'] = function($c) {
+        $this['twig_loader'] = function ($c) {
             $refClass = new ReflectionClass('ActionKit\\ActionGenerator');
             $templateDirectory = dirname($refClass->getFilename()) . DIRECTORY_SEPARATOR . 'Templates';
 
@@ -79,7 +80,7 @@ class ServiceContainer extends Container
             return $loader;
         };
 
-        $this['generator'] = function($c) {
+        $this['generator'] = function ($c) {
             return new ActionGenerator;
         };
     }

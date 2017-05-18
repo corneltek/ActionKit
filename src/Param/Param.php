@@ -1,5 +1,6 @@
 <?php
 namespace ActionKit\Param;
+
 use CascadingAttribute;
 use FormKit;
 use ActionKit\MessagePool;
@@ -13,7 +14,7 @@ use SQLBuilder\Raw;
 
 class Param extends CascadingAttribute
 {
-    static public $typeClasses = [];
+    public static $typeClasses = [];
 
 
     /**
@@ -80,7 +81,6 @@ class Param extends CascadingAttribute
 
     public function build()
     {
-
     }
 
     public static function getTypeClass($isa)
@@ -136,7 +136,7 @@ class Param extends CascadingAttribute
                         $dateTime = new DateTime();
                         $dateTime->setTimestamp($value);
                         return $dateTime;
-                    } else if (is_string($value)) {
+                    } elseif (is_string($value)) {
                         $dateTime = new DateTime($value);
                         return $dateTime;
                     } else {
@@ -176,12 +176,12 @@ class Param extends CascadingAttribute
                 return floatval($formValue);
             case 'bool':
             case 'boolean':
-                if ($formValue === NULL) {
-                    return NULL;
+                if ($formValue === null) {
+                    return null;
                 }
                 if (is_string($formValue)) {
                     if ($formValue === '') {
-                        return NULL;
+                        return null;
                     } else {
                         return filter_var($formValue, FILTER_VALIDATE_BOOLEAN, array('flags' => FILTER_NULL_ON_FAILURE));
                     }
@@ -218,13 +218,11 @@ class Param extends CascadingAttribute
                     return [false, $this->action->messagePool->translate('param.required', $this->getLabel())];
                 }
             }
-
         }
 
         // isa should only work for non-null values.
         // empty string parameter is equal to null
-        if ($this->isa && $this->action->request->existsParam($this->name))
-        {
+        if ($this->isa && $this->action->request->existsParam($this->name)) {
             if ($value !== '' && $value !== null) {
                 $type = self::getTypeClass($this->isa);
                 if (false === $type->test($value)) {
@@ -235,24 +233,22 @@ class Param extends CascadingAttribute
 
 
         if ($this->validator) {
-            return call_user_func($this->validator,$value);
+            return call_user_func($this->validator, $value);
         }
         return true;
     }
 
-    public function preinit( & $args )
+    public function preinit(& $args)
     {
-
     }
 
-    public function init( & $args )
+    public function init(& $args)
     {
-
     }
 
     public function getLabel()
     {
-        if ( $this->label ) {
+        if ($this->label) {
             return _($this->label);
         }
         return ucfirst($this->name);
@@ -270,7 +266,7 @@ class Param extends CascadingAttribute
 
     public function getValidValues()
     {
-        if ( is_callable($this->validValues) ) {
+        if (is_callable($this->validValues)) {
             return call_user_func($this->validValues);
         }
         return $this->validValues;
@@ -278,7 +274,7 @@ class Param extends CascadingAttribute
 
     public function getOptionValues()
     {
-        if ( is_callable($this->optionValues) ) {
+        if (is_callable($this->optionValues)) {
             return call_user_func($this->optionValues);
         }
         return $this->optionValues;
@@ -301,11 +297,11 @@ class Param extends CascadingAttribute
      *
      * @return self
      */
-    public function renderAs($type , array $attributes = null)
+    public function renderAs($type, array $attributes = null)
     {
         $this->widgetClass = $type;
         if ($attributes) {
-            $this->widgetAttributes = array_merge( $this->widgetAttributes, $attributes );
+            $this->widgetAttributes = array_merge($this->widgetAttributes, $attributes);
         }
 
         return $this;
@@ -320,22 +316,22 @@ class Param extends CascadingAttribute
      */
     public function render($attributes = null)
     {
-        return $this->createWidget( null , $attributes )
+        return $this->createWidget(null, $attributes)
             ->render();
     }
 
-    public function createHintWidget($widgetClass = null , $attributes = array() )
+    public function createHintWidget($widgetClass = null, $attributes = array())
     {
         if ($this->hint) {
             $class = $widgetClass ?: 'FormKit\\Element\\Div';
-            $widget = new $class( $attributes );
+            $widget = new $class($attributes);
             $widget->append($this->hint);
 
             return $widget;
         }
     }
 
-    public function createLabelWidget($widgetClass = null , $attributes = array() )
+    public function createLabelWidget($widgetClass = null, $attributes = array())
     {
         $class = $widgetClass ?: 'FormKit\\Widget\\Label';
         if ($this->required) {
@@ -364,7 +360,7 @@ class Param extends CascadingAttribute
      * @param  array                     $attributes  Widget attributes.
      * @return FormKit\Widget\BaseWidget
      */
-    public function createWidget( $widgetClass = null , $attributes = array() )
+    public function createWidget($widgetClass = null, $attributes = array())
     {
         $class = $widgetClass ?: $this->widgetClass;
 
@@ -384,13 +380,13 @@ class Param extends CascadingAttribute
 
         // for inputs (except password input),
         // we should render the value (or default value)
-        if (false === stripos($class , 'Password')) {
+        if (false === stripos($class, 'Password')) {
             // The Param class should respect the data type
-            if ($this->value !== NULL) {
+            if ($this->value !== null) {
                 if ($val = $this->getRenderableCurrentValue()) {
                     $newAttributes['value'] = $val;
                 }
-            } else if ($this->default) {
+            } elseif ($this->default) {
                 $default = $this->getDefaultValue();
                 if (!$default instanceof Raw) {
                     $newAttributes['value'] = $default;
@@ -411,21 +407,21 @@ class Param extends CascadingAttribute
 
         // merge override attributes
         if ($this->widgetAttributes) {
-            $newAttributes = array_merge($newAttributes , $this->widgetAttributes);
+            $newAttributes = array_merge($newAttributes, $this->widgetAttributes);
         }
         if ($attributes) {
-            $newAttributes = array_merge($newAttributes , $attributes);
+            $newAttributes = array_merge($newAttributes, $attributes);
         }
 
         // if it's not a full-qualified class name
         // we should concat class name with default widget namespace
         if ('+' == $class[0]) {
-            $class = substr($class,1);
+            $class = substr($class, 1);
         } else {
             $class = $this->widgetNamespace . '\\' . $class;
         }
 
         // create new widget object.
-        return new $class($this->name , $newAttributes);
+        return new $class($this->name, $newAttributes);
     }
 }

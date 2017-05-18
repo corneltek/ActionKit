@@ -1,8 +1,8 @@
 <?php
 namespace ActionKit\Csrf;
 
-interface CsrfStorage {
-
+interface CsrfStorage
+{
     public function store(CsrfToken $token, $key = null);
 
     public function load($key = null);

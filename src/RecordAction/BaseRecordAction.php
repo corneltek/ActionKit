@@ -1,5 +1,6 @@
 <?php
 namespace ActionKit\RecordAction;
+
 use ActionKit\Action;
 use ActionKit\ColumnConvert;
 use ActionKit\Exception\ActionException;
@@ -67,17 +68,17 @@ class BaseRecordAction extends Action
         if ($options instanceof Model) {
             $record = $options;
             $options = array(); // reassign $options as array
-        } else if (is_array($options) && isset($options['record'])) {
+        } elseif (is_array($options) && isset($options['record'])) {
             $record = $options['record'];
         }
 
         if (isset($options['record_class'])) {
             $this->recordClass = $options['record_class'];
-        } else if (! $this->recordClass && $record) {
+        } elseif (! $this->recordClass && $record) {
             $this->recordClass = get_class($record);
         }
 
-        if (! $this->recordClass ) {
+        if (! $this->recordClass) {
             throw new ActionException('recordClass is not defined.', $this);
         }
 
@@ -96,7 +97,7 @@ class BaseRecordAction extends Action
         }
 
         // CreateRecordAction doesn't require primary key to be existed.
-        if (! $record->id && ! $this instanceof CreateRecordAction && $this->enableLoadRecord ) {
+        if (! $record->id && ! $this instanceof CreateRecordAction && $this->enableLoadRecord) {
             // for create action, we don't need to create record
             $record = $this->loadRecordFromArguments($args);
             if (!$record) {
@@ -106,8 +107,7 @@ class BaseRecordAction extends Action
         }
 
         // initialize schema , init base action stuff
-        parent::__construct($args , $options);
-
+        parent::__construct($args, $options);
     }
 
     /**
@@ -125,10 +125,10 @@ class BaseRecordAction extends Action
         if ($columns = $this->record->getColumns(true)) {
             foreach ($columns as $column) {
                 $name = $column->name;
-                if (isset($this->params[$name] ) ) {
+                if (isset($this->params[$name])) {
                     $param = $this->params[$name];
                     $value = $this->record->getValue($name);
-                    if ($value !== NULL) {
+                    if ($value !== null) {
                         $param->value($value);
                     } else {
                         $param->value($column->getDefaultValue());
@@ -157,7 +157,7 @@ class BaseRecordAction extends Action
     protected function loadRecordValuesToParams()
     {
         foreach ($this->record->getColumns(true) as $column) {
-            if (!isset($this->params[$column->name]) ) {
+            if (!isset($this->params[$column->name])) {
                 continue;
             }
             if ($val = $this->record->{ $column->name }) {
@@ -178,7 +178,7 @@ class BaseRecordAction extends Action
             return false;
         }
         if (!isset($args[$primaryKey])) {
-            throw new ActionException("primary key '{$primaryKey}' missing in the arguments: " . var_export($args, true) );
+            throw new ActionException("primary key '{$primaryKey}' missing in the arguments: " . var_export($args, true));
         }
         return $this->recordClass::findByPrimaryKey($args[$primaryKey]);
     }
@@ -194,14 +194,14 @@ class BaseRecordAction extends Action
     public function initParamsFromColumns(array $columns, Model $record = null)
     {
         foreach ($columns as $column) {
-            if (isset($this->params[$column->name] )) {
+            if (isset($this->params[$column->name])) {
                 continue;
             }
             // do not render this field if renderable === false
             if (false === $column->get('renderable')) {
                 continue;
             }
-            $this->params[ $column->name ] = ColumnConvert::toParam($column , $record, $this);
+            $this->params[ $column->name ] = ColumnConvert::toParam($column, $record, $this);
         }
     }
 
@@ -240,7 +240,7 @@ class BaseRecordAction extends Action
             return;
         }
         if ($column = $this->schema->getColumn($this->schema->primaryKey)) {
-            $this->params[$column->name] = ColumnConvert::toParam($column , $record, $this);
+            $this->params[$column->name] = ColumnConvert::toParam($column, $record, $this);
         }
     }
 
@@ -253,7 +253,7 @@ class BaseRecordAction extends Action
      *
      * @see Phifty\Model
      */
-    public function currentUserCan( $user, $right, $args = array() )
+    public function currentUserCan($user, $right, $args = array())
     {
         return true;
     }
@@ -268,7 +268,7 @@ class BaseRecordAction extends Action
     {
         if ($ret->validations) {
             foreach ($ret->validations as $vld) {
-                $this->result->addValidation($vld['field'] , array(
+                $this->result->addValidation($vld['field'], array(
                     'valid'   => $vld['valid'],
                     'message' => $vld['message'],
                     'field'   => $vld['field'],
@@ -280,7 +280,7 @@ class BaseRecordAction extends Action
 
     public function hasRelation($relationId)
     {
-        return isset( $this->relationships[$relationId] );
+        return isset($this->relationships[$relationId]);
     }
 
     /**
@@ -288,7 +288,7 @@ class BaseRecordAction extends Action
      */
     public function getRelation($relationId)
     {
-        if (isset($this->relationships[$relationId]) ) {
+        if (isset($this->relationships[$relationId])) {
             return $this->relationships[$relationId];
         }
     }
@@ -330,7 +330,7 @@ class BaseRecordAction extends Action
     public static function createCRUDClass($recordClass, $type)
     {
         list($modelNs, $modelName) = explode('\\Model\\', $recordClass);
-        $modelNs = ltrim($modelNs,'\\');
+        $modelNs = ltrim($modelNs, '\\');
         $actionFullClass = "{$modelNs}\\Action\\{$type}{$modelName}";
         $recordClass  = "{$modelNs}\\Model\\{$modelName}";
         $baseAction   = "\\ActionKit\\RecordAction\\{$type}RecordAction";
@@ -342,7 +342,7 @@ class BaseRecordAction extends Action
                 'recordClass' => $recordClass,
             ],
         ]);
-        if (!class_exists($actionFullClass ,true)) {
+        if (!class_exists($actionFullClass, true)) {
             $generatedAction->load();
         }
 
@@ -380,7 +380,7 @@ class BaseRecordAction extends Action
     public function createSubActionWithRelationship(Relationship $relation, array $args, array $files = null)
     {
         $subrecord = null;
-        if (!isset($relation['foreign_schema']) ) {
+        if (!isset($relation['foreign_schema'])) {
             throw new Exception("Missing relationship foreign_schema");
         }
 
@@ -388,8 +388,8 @@ class BaseRecordAction extends Action
         $recordClass = $schema->getModelClass();
         // create record object, and load it with primary id
         $primaryKey = $schema->primaryKey;
-        if (isset($args[$primaryKey]) && $args[$primaryKey] ) {
-            $subrecord = $recordClass::load( $args[$primaryKey] );
+        if (isset($args[$primaryKey]) && $args[$primaryKey]) {
+            $subrecord = $recordClass::load($args[$primaryKey]);
         } else {
             $subrecord = new $recordClass;
         }
@@ -403,20 +403,17 @@ class BaseRecordAction extends Action
         // for relationships that has defined a custom action class,
         // we should just use it.
         if (isset($relation['action'])) {
-
             $class = $relation['action'];
             return new $class($args, $actionOptions);
-
-        } else if ($subrecord && $subrecord->id) {
+        } elseif ($subrecord && $subrecord->id) {
 
             // if the update_action field is defined,
             // then we should use the customized class to process our data.
-            if (isset($relation['update_action']) ) {
+            if (isset($relation['update_action'])) {
                 $class = $relation['update_action'];
-                return new $class($args,$actionOptions);
+                return new $class($args, $actionOptions);
             }
             return $subrecord->asUpdateAction($args, $actionOptions);
-
         } else {
 
             // we are going to create related records with subactions
@@ -424,21 +421,21 @@ class BaseRecordAction extends Action
             unset($args[$primaryKey]);
             if (isset($relation['create_action'])) {
                 $class = $relation['create_action'];
-                return new $class($args,$actionOptions);
+                return new $class($args, $actionOptions);
             }
             return $subrecord->asCreateAction($args, $actionOptions);
         }
     }
 
-    public function fetchOneToManyRelationCollection($relationId) 
+    public function fetchOneToManyRelationCollection($relationId)
     {
         $record = $this->record;
-        if ( $record->id && isset($record->{ $relationId }) ) {
+        if ($record->id && isset($record->{ $relationId })) {
             return $record->{$relationId};
         }
     }
 
-    public function fetchManyToManyRelationCollection($relationId) 
+    public function fetchManyToManyRelationCollection($relationId)
     {
         $relation = $this->getRelation($relationId);
         return $relation->newForeignForeignCollection(
@@ -477,13 +474,13 @@ class BaseRecordAction extends Action
             }
 
             $allfiles = $this->request->getFiles();
-            $indexList = array_unique(array_merge(array_keys($argsList),  array_keys($allfiles)));
+            $indexList = array_unique(array_merge(array_keys($argsList), array_keys($allfiles)));
             if (empty($indexList)) {
                 continue;
             }
 
             if (Relationship::HAS_MANY === $relation['type']) {
-                // In this behavior, we don't handle the 
+                // In this behavior, we don't handle the
                 // previous created records, only the records from the form submit.
                 //
                 // for each records, we get the action field, and create the subaction
@@ -498,7 +495,7 @@ class BaseRecordAction extends Action
                 // the argument here we expect from form post is:
                 //
                 //     $args[relationId][index][field_name] => value
-                // 
+                //
                 // the input name is layouted like this:
                 //
                 //     <input name="images[1][image]" value="..."
@@ -508,7 +505,6 @@ class BaseRecordAction extends Action
                 //
                 // so let us iterating these fields
                 foreach ($indexList as $index) {
-
                     if (!isset($argsList[$index])) {
                         continue;
                     }
@@ -544,7 +540,7 @@ class BaseRecordAction extends Action
                         return false;
                     }
                 }
-            } else if (Relationship::MANY_TO_MANY === $relation['type']) {
+            } elseif (Relationship::MANY_TO_MANY === $relation['type']) {
                 // Process the junction of many-to-many relationship
                 //
                 // For the many-to-many relationship, we should simply focus on the
@@ -557,14 +553,14 @@ class BaseRecordAction extends Action
                 //
                 //      categories[index][id] = category_id
                 //      categories[index][_connect] = 1 || 0    (should we connect ?)
-                //      
+                //
                 $record = $this->record;
                 $middleRelation    = $record->getSchema()->getRelation($relation['relation_junction']);
                 $middleSchema      = new $middleRelation['foreign_schema'];
                 $middleRecordClass = $middleSchema->getModelClass();
                 $middleRecord      = new $middleRecordClass;
 
-                $foreignRelation = $middleRecord->getSchema()->getRelation( $relation['relation_foreign'] ); // which should be 'belongsTo' relation
+                $foreignRelation = $middleRecord->getSchema()->getRelation($relation['relation_foreign']); // which should be 'belongsTo' relation
                 $foreignSchema   = new $foreignRelation['foreign_schema'];
 
                 $collectionClass = $foreignSchema->getCollectionClass();
@@ -579,7 +575,7 @@ class BaseRecordAction extends Action
 
                 // get existing records
                 $foreignRecords = $record->{$relationId};
-                foreach ( $foreignRecords as $fRecord ) {
+                foreach ($foreignRecords as $fRecord) {
                     $connected[ $fRecord->id ] = $fRecord;
                 }
 
@@ -589,29 +585,27 @@ class BaseRecordAction extends Action
 
                     // find junction record or create a new junction record
                     // create the junction record if it is not connected.
-                    if ( isset($args['_connect']) && $args['_connect'] ) {
-                        $argsCreate = array_merge( $args , array( $middleForeignKey => $fId ));
+                    if (isset($args['_connect']) && $args['_connect']) {
+                        $argsCreate = array_merge($args, array( $middleForeignKey => $fId ));
                         unset($argsCreate['_connect']);
                         unset($argsCreate['_foreign_id']);
 
-                        if ( ! isset($connected[ $fId ]) ) {
+                        if (! isset($connected[ $fId ])) {
                             $newRecord = $junctionRecords->create($argsCreate);
                             // $ret = $newRecord->popResult();
                             // $ret->throwExceptionIfFailed();
                         } else {
                             // update the existing record data.
-                            foreach( $junctionRecords as $r ) {
-                                if ( $r->{ $middleForeignKey } == $fId ) {
+                            foreach ($junctionRecords as $r) {
+                                if ($r->{ $middleForeignKey } == $fId) {
                                     $ret = $r->update($argsCreate);
                                     $ret->throwExceptionIfFailed();
                                 }
                             }
                         }
-
-
                     } else {
                         // not connected, but if the connection exists, we should delete the connection here.
-                        if ( isset($connected[ $fId ]) ) {
+                        if (isset($connected[ $fId ])) {
                             $jrs = clone $junctionRecords;
                             $jrs->where(array( $middleForeignKey => $fId ));
                             // delete the connection
@@ -634,7 +628,8 @@ class BaseRecordAction extends Action
      *
      * @codeCoverageIgnore
      */
-    public function successMessage($ret) { 
+    public function successMessage($ret)
+    {
         return $ret->message;
     }
 
@@ -643,9 +638,8 @@ class BaseRecordAction extends Action
      *
      * @codeCoverageIgnore
      */
-    public function errorMessage($ret) {
+    public function errorMessage($ret)
+    {
         return $ret->message;
     }
-
-
 }

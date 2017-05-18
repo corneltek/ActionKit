@@ -20,5 +20,4 @@ class PathType extends BaseType
     {
         return $value->getPathname();
     }
-
 }

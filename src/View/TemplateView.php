@@ -1,5 +1,6 @@
 <?php
 namespace ActionKit\View;
+
 use ReflectionObject;
 use Exception;
 use Twig_Loader_Filesystem;
@@ -21,16 +22,16 @@ abstract class TemplateView
     }
 
     /**
-     * $twig->render('index.html', array('the' => 'variables', 'go' => 'here')); 
+     * $twig->render('index.html', array('the' => 'variables', 'go' => 'here'));
      * */
-    public function renderTemplateFile($templateFile,$arguments = array())
+    public function renderTemplateFile($templateFile, $arguments = array())
     {
-        $arguments = array_merge( array(
+        $arguments = array_merge(array(
             // the view object.
-            'View' => $this, 
+            'View' => $this,
 
             // the action object.
-            'Action' => $this->action 
+            'Action' => $this->action
         ), $arguments);
         return $this->template->render($templateFile, $arguments);
     }
@@ -39,6 +40,4 @@ abstract class TemplateView
     {
         return $this->render();
     }
-
 }
-

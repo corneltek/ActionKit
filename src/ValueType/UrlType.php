@@ -6,7 +6,7 @@ class UrlType extends BaseType
 {
     public function test($value)
     {
-        return filter_var($value, FILTER_VALIDATE_URL, FILTER_NULL_ON_FAILURE) === NULL ? false : true;
+        return filter_var($value, FILTER_VALIDATE_URL, FILTER_NULL_ON_FAILURE) === null ? false : true;
     }
 
     public function parse($value)

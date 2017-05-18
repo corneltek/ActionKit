@@ -1,5 +1,6 @@
 <?php
 namespace ActionKit\ActionTemplate;
+
 use ActionKit\GeneratedAction;
 use ClassTemplate\ClassFile;
 use ActionKit\Exception\RequiredConfigKeyException;
@@ -40,8 +41,8 @@ class SampleActionTemplate extends CodeGenActionTemplate
         $class->useClass('\\ActionKit\\RecordAction\\BaseRecordAction');
 
 
-        $class->addMethod('public','schema', [] , '');
-        $class->addMethod('public','run', [] , 'return $this->success("Success!");');
+        $class->addMethod('public', 'schema', [], '');
+        $class->addMethod('public', 'run', [], 'return $this->success("Success!");');
         
         $code = $class->render();
         return new GeneratedAction($actionClass, $code, $class);

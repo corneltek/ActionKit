@@ -1,5 +1,6 @@
 <?php
 namespace ActionKit;
+
 use Exception;
 use IteratorAggregate;
 use ArrayAccess;
@@ -40,8 +41,7 @@ use Closure;
  *
  */
 
-class ActionRunner
-    implements IteratorAggregate, ArrayAccess
+class ActionRunner implements IteratorAggregate, ArrayAccess
 {
     protected $pretreatments = array();
 
@@ -65,7 +65,7 @@ class ActionRunner
      *
      * Options:
      *
-     *   'locale': optional, the current locale 
+     *   'locale': optional, the current locale
      *   'cache_dir': optional, the cache directory of generated action classes
      *   'generator': optional, the customized Generator object.
      *
@@ -78,9 +78,7 @@ class ActionRunner
             $this->cacheDir = $options['cache_dir'];
             $this->generator = $options['generator'];
             $this->serviceContainer = $options;
-
         } else {
-
             $this->serviceContainer = new ServiceContainer;
 
             // Default initializor
@@ -121,10 +119,10 @@ class ActionRunner
      * @param array   $arguments
      * @return ActionKit\Result result array if there is such an action.
      * */
-    public function run($actionName, array $arguments = array(), ActionRequest $request = null )
+    public function run($actionName, array $arguments = array(), ActionRequest $request = null)
     {
-        if ( ! Utils::validateActionName( $actionName ) ) {
-            throw new InvalidActionNameException( "Invalid action name: $actionName." );
+        if (! Utils::validateActionName($actionName)) {
+            throw new InvalidActionNameException("Invalid action name: $actionName.");
         }
 
         /* translate :: into php namespace */
@@ -140,7 +138,7 @@ class ActionRunner
             // how do we call the logger?
             if ($logger instanceof Closure) {
                 $logger($action);
-            } else if ($logger instanceof ActionLogger) {
+            } elseif ($logger instanceof ActionLogger) {
                 $logger->log($action);
             }
         }
@@ -156,8 +154,8 @@ class ActionRunner
         if (!$request->getActionName()) {
             throw new InvalidActionNameException("");
         }
-        if ( ! Utils::validateActionName( $request->getActionName() ) ) {
-            throw new InvalidActionNameException( "Invalid action name: " . $request->getActionName() . ".");
+        if (! Utils::validateActionName($request->getActionName())) {
+            throw new InvalidActionNameException("Invalid action name: " . $request->getActionName() . ".");
         }
         return $this->run($request->getActionName(), $request->getArguments(), $request);
     }
@@ -170,7 +168,7 @@ class ActionRunner
      * @param resource $stream STDIN, STDOUT, STDERR, or any resource
      * @param array $arguments Usually $_REQUEST array
      * @param array $files  Usually $_FILES array
-     * @return return true if it's an ajax response 
+     * @return return true if it's an ajax response
      */
     public function handleWith($stream, array $arguments = array(), array $files = array())
     {
@@ -183,7 +181,7 @@ class ActionRunner
                 }
 
                 // Deprecated:
-                // The text/plain seems work for IE8 (IE8 wraps the 
+                // The text/plain seems work for IE8 (IE8 wraps the
                 // content with a '<pre>' tag.
                 @header('Cache-Control: no-cache');
                 @header('Content-Type: text/plain; Charset=utf-8');
@@ -248,14 +246,14 @@ class ActionRunner
      *
      * @param string $class action class
      */
-    public function loadActionClass($class) 
+    public function loadActionClass($class)
     {
         if (!isset($this->pretreatments[$class])) {
             return false;
         }
 
         $pretreatment = $this->pretreatments[$class];
-        if ($this->loadClassCache($class, $pretreatment['arguments']) ) {
+        if ($this->loadClassCache($class, $pretreatment['arguments'])) {
             return true;
         }
 
@@ -274,7 +272,7 @@ class ActionRunner
     protected function getClassCacheFile($className, array $params = array())
     {
         $chk = !empty($params) ? md5(serialize($params)) : '';
-        return $this->cacheDir . DIRECTORY_SEPARATOR . str_replace('\\','_',$className) . $chk . '.php';
+        return $this->cacheDir . DIRECTORY_SEPARATOR . str_replace('\\', '_', $className) . $chk . '.php';
     }
 
     /**
@@ -285,7 +283,7 @@ class ActionRunner
     protected function loadClassCache($className, array $params = array())
     {
         $file = $this->getClassCacheFile($className, $params);
-        if ( file_exists($file) ) {
+        if (file_exists($file)) {
             require $file;
             return true;
         }
@@ -295,7 +293,7 @@ class ActionRunner
     public function registerAutoloader()
     {
         // use throw and not to prepend
-        spl_autoload_register(array($this,'loadActionClass'),true, false);
+        spl_autoload_register(array($this,'loadActionClass'), true, false);
     }
 
 
@@ -341,9 +339,9 @@ class ActionRunner
         }
     }
 
-    public function isInvalidActionName( $actionName )
+    public function isInvalidActionName($actionName)
     {
-        return preg_match( '/[^A-Za-z0-9:]/i' , $actionName  );
+        return preg_match('/[^A-Za-z0-9:]/i', $actionName);
     }
 
     /**
@@ -351,17 +349,17 @@ class ActionRunner
      *
      * @param string $class
      */
-    public function createAction($class , array $args = array(), ActionRequest $request = null)
+    public function createAction($class, array $args = array(), ActionRequest $request = null)
     {
         // Try to load the user-defined action
-        if (!class_exists($class, true) ) {
+        if (!class_exists($class, true)) {
 
             // load the generated action
             $this->loadActionClass($class);
 
             // Check the action class existence
-            if (! class_exists($class,true)) {
-                throw new ActionNotFoundException( "Action class not found: $class, you might need to setup action autoloader" );
+            if (! class_exists($class, true)) {
+                throw new ActionNotFoundException("Action class not found: $class, you might need to setup action autoloader");
             }
         }
         $a = new $class($args, [
@@ -392,11 +390,10 @@ class ActionRunner
      *
      * @param string $name action name (format: App::Action::ActionName)
      */
-    public function getResult( $name )
+    public function getResult($name)
     {
         return isset($this->results[ $name ]) ?
                 $this->results[ $name ] : null;
-
     }
 
     /**
@@ -409,19 +406,20 @@ class ActionRunner
         return isset($this->results[$name]);
     }
 
-    public function setResult($name, $result) {
+    public function setResult($name, $result)
+    {
         $this->results[$name] = $result;
     }
 
     public function removeResult($name)
     {
-        unset( $this->results[$name] );
+        unset($this->results[$name]);
     }
 
     public static function getInstance()
     {
         static $self;
-        if ( $self ) {
+        if ($self) {
             return $self;
         }
         return $self = new static;
@@ -434,7 +432,7 @@ class ActionRunner
     }
 
     // Implement ArrayAccess
-    public function offsetSet($name,$value)
+    public function offsetSet($name, $value)
     {
         $this->results[ $name ] = $value;
     }
@@ -453,5 +451,4 @@ class ActionRunner
     {
         unset($this->results[$name]);
     }
-    
 }

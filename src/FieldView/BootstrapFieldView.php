@@ -1,5 +1,6 @@
 <?php
 namespace ActionKit\FieldView;
+
 use FormKit;
 use FormKit\Element\Div;
 use FormKit\Element\Span;
@@ -30,15 +31,17 @@ class BootstrapFieldView
     {
         $this->column = $column;
 
-        if (isset($options['wrapperClass'])) 
+        if (isset($options['wrapperClass'])) {
             $this->wrapperClass = $options['wrapperClass'];
+        }
 
-        if (isset($options['labelClass'])) 
+        if (isset($options['labelClass'])) {
             $this->labelClass = $options['labelClass'];
+        }
 
-        if (isset($options['inputWrapperClass'])) 
+        if (isset($options['inputWrapperClass'])) {
             $this->inputWrapperClass = $options['inputWrapperClass'];
-
+        }
     }
 
     public function setWidgetAttributes($attrs)
@@ -79,9 +82,7 @@ class BootstrapFieldView
 
             // $wrapper->append( $widget );
             return $widget;
-
         } else {
-
             $inputDiv = new Div(array('class' => $this->inputWrapperClass));
             $inputDiv->append($widget);
 
@@ -93,7 +94,7 @@ class BootstrapFieldView
 
             if ($this->column->hint) {
                 $hintEl  = new Span(array('class' => $this->hintClass ));
-                $hintEl->append( $this->column->hint );
+                $hintEl->append($this->column->hint);
                 $inputDiv->append($hintEl);
             }
         }

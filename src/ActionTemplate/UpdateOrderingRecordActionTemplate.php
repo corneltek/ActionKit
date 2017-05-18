@@ -1,12 +1,13 @@
 <?php
 namespace ActionKit\ActionTemplate;
+
 use ActionKit\Exception\RequiredConfigKeyException;
 use ActionKit\ActionRunner;
 
 /**
  *  Update Ordering Record Action Template Synopsis
  *
- *    $actionTemplate = new UpdateOrderingRecordActionTemplate; 
+ *    $actionTemplate = new UpdateOrderingRecordActionTemplate;
  *    $runner = new ActionKit\ActionRunner;
  *    $actionTemplate->register($runner, 'UpdateOrderingRecordActionTemplate', array(
  *        'namespace' => 'test2',
@@ -32,14 +33,12 @@ class UpdateOrderingRecordActionTemplate extends RecordActionTemplate
 
         if (!isset($options['model'])) {
             if (isset($options['record_class'])) {
-
-                $nslist = explode("\\Model\\",$options['record_class']);
+                $nslist = explode("\\Model\\", $options['record_class']);
                 $options['model'] = $nslist[1];
 
                 if (!isset($options['namespace'])) {
                     $options['namespace'] = $nslist[0];
                 }
-
             } else {
                 throw new RequiredConfigKeyException('model', 'required for creating record actions');
             }

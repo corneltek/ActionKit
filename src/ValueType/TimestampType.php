@@ -1,6 +1,7 @@
 <?php
 
 namespace ActionKit\ValueType;
+
 use DateTime;
 
 class TimestampType extends BaseType

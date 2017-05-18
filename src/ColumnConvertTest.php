@@ -10,7 +10,6 @@ use OrderBundle\Model\OrderItem;
 
 class ColumnConvertTest extends ModelTestCase
 {
-
     public function models()
     {
         return [ new OrderSchema, new OrderItemSchema ];
@@ -32,5 +31,3 @@ class ColumnConvertTest extends ModelTestCase
         $this->assertInstanceOf(View\StackView::class, $view);
     }
 }
-
-

@@ -1,12 +1,13 @@
 <?php
 namespace ActionKit;
+
 use ActionKit\Exception\UnableToWriteCacheException;
 
 class GeneratedAction
 {
-    public $className; 
+    public $className;
 
-    public $code; 
+    public $code;
 
     public $object;
 
@@ -53,6 +54,6 @@ class GeneratedAction
 
     public function getPsrClassPath()
     {
-        return str_replace('\\', DIRECTORY_SEPARATOR, ltrim($this->className,'\\')) . '.php';
+        return str_replace('\\', DIRECTORY_SEPARATOR, ltrim($this->className, '\\')) . '.php';
     }
 }

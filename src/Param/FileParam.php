@@ -1,5 +1,6 @@
 <?php
 namespace ActionKit\Param;
+
 use ActionKit\Param\Param;
 use ActionKit\Utils;
 use Universal\Http\UploadedFile;
@@ -27,7 +28,7 @@ class FileParam extends Param
 
     public $renameFile;
 
-    static $defaultUploadDirectory;
+    public static $defaultUploadDirectory;
 
     public function build()
     {
@@ -50,9 +51,9 @@ class FileParam extends Param
     public function validate($value)
     {
         $ret = (array) parent::validate($value);
-        if ( $ret[0] == false )
-
+        if ($ret[0] == false) {
             return $ret;
+        }
 
         // Consider required and optional situations.
         if ($fileArg = $this->action->request->file($this->name)) {
@@ -60,18 +61,18 @@ class FileParam extends Param
 
             // If valid extensions are specified, pass to uploaded file to check the extension
             if ($this->validExtensions) {
-                if ( ! $file->validateExtension($this->validExtensions) ) {
+                if (! $file->validateExtension($this->validExtensions)) {
                     // return array(false, __('Invalid File Extension: %1' . $this->name ) );
                     return array(
                         false,
                         $this->action->messagePool->translate('Invalid File Extension: %1'),
-                        $this->name 
+                        $this->name
                     );
                 }
             }
 
             if ($this->sizeLimit) {
-                if (! $file->validateSize( $this->sizeLimit )) {
+                if (! $file->validateSize($this->sizeLimit)) {
                     return array(
                         false,
                         $this->action->messagePool->translate("The uploaded file exceeds the size limitation. %1 KB ", futil_prettysize($this->sizeLimit))
@@ -96,7 +97,7 @@ class FileParam extends Param
         return $this;
     }
 
-    public function init( & $args )
+    public function init(& $args)
     {
         /* how do we make sure the file is a real http upload ?
          * if we pass args to model ?
@@ -104,7 +105,7 @@ class FileParam extends Param
          * if POST,GET file column key is set. remove it from ->args
          */
         if (! $this->putIn) {
-            throw new Exception( "putIn attribute is not defined." );
+            throw new Exception("putIn attribute is not defined.");
         }
 
         $file = null;
@@ -118,7 +119,7 @@ class FileParam extends Param
         if ($fileArg = $this->action->request->file($this->name)) {
             $upload = true;
             $file = $fileArg;
-        } else if ($this->sourceField) {
+        } elseif ($this->sourceField) {
             if ($fileArg = $this->action->request->file($this->sourceField)) {
                 $file = $fileArg;
             }
@@ -129,38 +130,30 @@ class FileParam extends Param
 
         // TODO: Move this to a proper place
         if ($this->putIn && ! file_exists($this->putIn)) {
-            mkdir($this->putIn, 0755 , true);
+            mkdir($this->putIn, 0755, true);
         }
 
         $uploadedFile = UploadedFile::createFromArray($file);
 
         $newName = $uploadedFile->getOriginalFileName();
         if ($this->renameFile) {
-            $newName = call_user_func($this->rename,$newName);
+            $newName = call_user_func($this->rename, $newName);
         }
         $targetPath = $this->putIn . DIRECTORY_SEPARATOR . $newName ;
 
 
         // When sourceField enabled, we should either check saved_path or tmp_name
         if ($upload) {
-
             if ($savedPath = $uploadedFile->getSavedPath()) {
-
                 $ret = $uploadedFile->move($targetPath);
-
-            } else if ($uploadedFile->isUploadedFile()) {
+            } elseif ($uploadedFile->isUploadedFile()) {
 
                 // move calls move_uploaded_file, which is only available for files uploaded from HTTP
                 $ret = $uploadedFile->move($targetPath);
-
             } else {
-
                 $uploadedFile->copy($targetPath);
-
             }
-
-
-        } else if ($this->sourceField) {
+        } elseif ($this->sourceField) {
             if ($savedPath = $uploadedFile->getSavedPath()) {
                 copy($savedPath, $targetPath);
             } else {
@@ -171,7 +164,6 @@ class FileParam extends Param
         }
 
         $args[$this->name] = $targetPath;
-        $this->action->addData( $this->name , $targetPath);
+        $this->action->addData($this->name, $targetPath);
     }
-
 }
