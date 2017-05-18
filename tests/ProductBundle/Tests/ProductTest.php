@@ -6,11 +6,21 @@ use ActionKit\ServiceContainer;
 use ActionKit\ActionTemplate\TwigActionTemplate;
 use ActionKit\ActionTemplate\UpdateOrderingRecordActionTemplate;
 use ActionKit\Testing\ActionTestAssertions;
+use ActionKit\RecordAction\UpdateRecordAction;
+
 use ProductBundle\Model\Product;
 use ProductBundle\Model\ProductCollection;
 use ProductBundle\Model\ProductImage;
 use ProductBundle\Model\ProductImageCollection;
 use ProductBundle\Model\ProductSchema;
+use ProductBundle\Model\ProductImageSchema;
+use ProductBundle\Model\ProductFeatureSchema;
+use ProductBundle\Model\ProductCategorySchema;
+use ProductBundle\Model\ProductProductSchema;
+use ProductBundle\Model\ProductFileSchema;
+use ProductBundle\Model\CategorySchema;
+use ProductBundle\Model\FeatureSchema;
+
 use ProductBundle\Action\CreateProduct;
 use ProductBundle\Action\UpdateProduct;
 use ProductBundle\Action\CreateProductFile;
@@ -84,7 +94,16 @@ class ProductBundleTest extends ModelTestCase
 
     public function models()
     {
-        return array( new ProductSchema );
+        return [
+            new ProductSchema,
+            new ProductCategorySchema,
+            new CategorySchema,
+            new ProductImageSchema,
+            new ProductFeatureSchema,
+            new FeatureSchema,
+            new ProductProductSchema,
+            new ProductFileSchema,
+        ];
     }
 
     public function setUp()
@@ -165,7 +184,7 @@ class ProductBundleTest extends ModelTestCase
         ]];
 
         $request = new ActionRequest($args, $files);
-        $create = new CreateProduct($args, [ 'request' => $request ]);
+        $create = new CreateProduct($args, [ 'request' => $request]);
 
 
         $relation = clone $create->getRelation('images');
@@ -222,10 +241,11 @@ class ProductBundleTest extends ModelTestCase
      */
     public function testConvertRecordValidation()
     {
-        $image = new ProductImage;
-        $ret = $image->create([]);
+        $ret = ProductImage::create([]);
+
         $create = new CreateProductImage;
         $create->convertRecordValidation($ret);
+
         $result = $create->getResult();
         $data = $result->data;
     }
@@ -281,12 +301,14 @@ class ProductBundleTest extends ModelTestCase
     {
         $files = [ ];
         $request = new ActionRequest(['name' => 'Test Product'], $files);
-        $product = new Product;
-        $product->create([
+        $ret = Product::create([
             'name' => 'Testing Product',
         ]);
+        $this->assertResultSuccess($ret);
+
+        $product = Product::load($ret->key);
         $this->assertNotNull($product->id);
-        $create = new CreateProduct(['name' => 'Test Product'], [ 'request' => $request, 'record' => $product, ]);
+        $create = new CreateProduct(['name' => 'Test Product'], [ 'request' => $request, 'record' => $product ]);
         $createImage = $create->createSubAction('images', [ ]);
         $this->assertNotNull($createImage);
     }
@@ -332,27 +354,30 @@ class ProductBundleTest extends ModelTestCase
         $this->assertNotNull($image->id);
 
 
-        $product = new Product;
-        $product->create([ 'name' => 'Test Product' ]);
+        $ret = Product::create([ 'name' => 'Test Product' ]);
+        $product = Product::load($ret->key);
 
         $updateProduct = new UpdateProduct(['name' => 'Updated Product'], [ 'record' => $product ]);
 
         $relation = clone $updateProduct->getRelation('images');
 
         $updateImage = $updateProduct->createSubActionWithRelationship($relation, [ 'id' => $image->id ], $files);
-        $this->assertInstanceOf('ActionKit\RecordAction\UpdateRecordAction', $updateImage);
+        $this->assertInstanceOf(UpdateRecordAction::class, $updateImage);
         $this->assertActionInvokeSuccess($updateImage);
 
         $relation = clone $updateProduct->getRelation('images');
         $relation['update_action'] = 'ProductBundle\Action\UpdateProductImage';
         $updateImage = $updateProduct->createSubActionWithRelationship($relation, [ 'id' => $image->id ], $files);
-        $this->assertInstanceOf('ActionKit\RecordAction\UpdateRecordAction', $updateImage);
+        $this->assertInstanceOf(UpdateRecordAction::class, $updateImage);
         $this->assertActionInvokeSuccess($updateImage);
     }
 
 
 
 
+    /**
+     * @requires extension gd
+     */
     public function testCreateProductImageWithActionRequest()
     {
         $tmpfile = tempnam('/tmp', 'test_image_') . '.png';
@@ -370,6 +395,7 @@ class ProductBundleTest extends ModelTestCase
 
     /**
      * @dataProvider resizeTypeProvider
+     * @requires extension gd
      */
     public function testCreateProductImageWithAutoResize($resizeType)
     {

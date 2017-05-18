@@ -9,7 +9,7 @@ use ActionKit\RecordAction\CreateRecordAction;
 use Maghead\Schema\DeclareSchema;
 use Maghead\Schema\Relationship\Relationship;
 use Maghead\Runtime\Model;
-use Maghead\Result;
+use Maghead\Runtime\Result;
 use Exception;
 
 class BaseRecordAction extends Action
@@ -76,7 +76,7 @@ class BaseRecordAction extends Action
         }
 
         if (! $this->recordClass ) {
-            throw new ActionException(sprintf('recordClass is not defined.'), $this);
+            throw new ActionException('recordClass is not defined.', $this);
         }
 
         if ($record === null) {
@@ -86,7 +86,7 @@ class BaseRecordAction extends Action
         $this->setRecord($record);
 
         // CreateRecordAction doesn't require primary key to be existed.
-        if ( ! $record->id && ! $this instanceof CreateRecordAction && $this->enableLoadRecord ) {
+        if (! $record->id && ! $this instanceof CreateRecordAction && $this->enableLoadRecord ) {
             // for create action, we don't need to create record
             if (! $this->loadRecordFromArguments($args)) {
                 throw new ActionException(get_class($this). " Record action can not load record from {$this->recordClass}", $this);
@@ -392,10 +392,11 @@ class BaseRecordAction extends Action
         $schema = new $relation['foreign_schema'];
         $recordClass = $schema->getModelClass();
         // create record object, and load it with primary id
-        $subrecord = new $recordClass;
         $primaryKey = $schema->primaryKey;
         if (isset($args[$primaryKey]) && $args[$primaryKey] ) {
-            $subrecord->load( $args[$primaryKey] );
+            $subrecord = $recordClass::load( $args[$primaryKey] );
+        } else {
+            $subrecord = new $recordClass;
         }
 
         $actionOptions = [
@@ -411,7 +412,7 @@ class BaseRecordAction extends Action
             $class = $relation['action'];
             return new $class($args, $actionOptions);
 
-        } else if ($subrecord->id) {
+        } else if ($subrecord && $subrecord->id) {
 
             // if the update_action field is defined,
             // then we should use the customized class to process our data.
