@@ -18,7 +18,6 @@
     "require-dev": {
         "corneltek/webserver-runner": "dev-master",
         "maghead/maghead": "4.0.x-dev",
-        "maghead/sqlite-parser": "4.0.x-dev",
         "corneltek/sqlbuilder": "4.0.x-dev",
         "corneltek/cliframework": "4.0.x-dev",
         "corneltek/codegen": "3.1.x-dev",
