@@ -1,4 +1,7 @@
 <?php
+
+namespace ActionKit;
+
 use ActionKit\Action;
 use ActionKit\MixinAction;
 
@@ -159,11 +162,9 @@ class ActionTest extends \PHPUnit\Framework\TestCase
         $this->assertFalse($login->hasParam('username'));
     }
 
-
-
     /**
-    *   @expectedException  Exception
-    */
+     * @expectedException Exception
+     */
     public function testWrongType()
     {
         $login = new LoginTestAction;
