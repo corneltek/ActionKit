@@ -6,6 +6,7 @@ use Exception;
 use Twig_Loader_Filesystem;
 use Twig_Environment;
 use ActionKit\Template;
+use ActionKit\Action;
 
 abstract class TemplateView
 {
@@ -13,7 +14,7 @@ abstract class TemplateView
 
     abstract public function render();
 
-    public function __construct($action)
+    public function __construct(Action $action)
     {
         $this->action = $action;
         $this->template = new Template;
