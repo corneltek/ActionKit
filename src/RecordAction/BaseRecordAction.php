@@ -146,7 +146,7 @@ class BaseRecordAction extends Action
      */
     public function useRecordSchema()
     {
-        $this->initRecordColumn();
+        $this->initParamsFromColumns($this->schema->getColumns(true), $this->record);
     }
 
 
@@ -181,14 +181,6 @@ class BaseRecordAction extends Action
             throw new ActionException("primary key '{$primaryKey}' missing in the arguments: " . var_export($args, true) );
         }
         return $this->recordClass::findByPrimaryKey($args[$primaryKey]);
-    }
-
-    /**
-     * Convert model columns to action columns
-     */
-    public function initRecordColumn()
-    {
-        $this->initParamsFromColumns( $this->record->getColumns(true), $this->record );
     }
 
     public function resetParams()
@@ -239,6 +231,9 @@ class BaseRecordAction extends Action
         $this->record = $record;
 
         // Create primary key column from the record schema with the current record value.
+        if (!$this->schema->primaryKey) {
+            return;
+        }
         if ($column = $this->schema->getColumn($this->schema->primaryKey)) {
             $this->params[$column->name] = ColumnConvert::toParam($column , $record, $this);
         }
