@@ -30,6 +30,7 @@
         }
     },
     "autoload-dev": {
+        "classmap": ["tests"],
         "psr-4": {
             "ProductBundle\\": "tests/ProductBundle/",
             "OrderBundle\\": "tests/OrderBundle/",

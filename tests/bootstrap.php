@@ -26,7 +26,6 @@ $config = ArrayConfigLoader::load([
 ]);
 Bootstrap::setup($config);
 
-
 $loader = ComposerSchemaLoader::from('composer.json');
 $loader->load();
 

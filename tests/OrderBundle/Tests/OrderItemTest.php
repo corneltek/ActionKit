@@ -26,8 +26,6 @@ class OrderItemTest extends ModelTestCase
 {
     use ActionTestAssertions;
 
-    public $driver = 'sqlite';
-
     public function models()
     {
         return [new OrderSchema, new OrderItemSchema];
@@ -87,14 +85,15 @@ class OrderItemTest extends ModelTestCase
 
     public function testUpdateRequiredFieldWithNullValue()
     {
-        $orderItem = new OrderItem;
-        $schema = $orderItem->getSchema();
+        $schema = OrderItem::getSchema();
         $this->assertEquals('id',$schema->primaryKey);
 
         $primaryKeyColumn = $schema->getColumn('id');
         $this->assertNotNull($primaryKeyColumn);
         $this->assertTrue($primaryKeyColumn->autoIncrement, 'primary key is a auto-increment column');
 
+
+        $orderItem = new OrderItem;
         $create = $orderItem->asCreateAction([ 'quantity' => 3, 'subtotal' => 120 ]);
         $this->assertNotNull($create);
         $this->assertInstanceOf('ActionKit\\RecordAction\\BaseRecordAction', $create);
@@ -102,8 +101,11 @@ class OrderItemTest extends ModelTestCase
         $success = $create();
         $this->assertTrue($success, 'Should be able to create without primary key value.');
 
+        $record = $create->getRecord();
+        $this->assertNotNull($record);
+        $this->assertNotEmpty($record->getData());
 
-        $update = $orderItem->asUpdateAction(['id' => $orderItem->id, 'quantity' => null]);
+        $update = $record->asUpdateAction(['quantity' => null]);
         $this->assertNotNull($update);
         $this->assertInstanceOf('ActionKit\\RecordAction\\BaseRecordAction', $update);
         $this->assertInstanceOf('ActionKit\\RecordAction\\UpdateRecordAction', $update);
