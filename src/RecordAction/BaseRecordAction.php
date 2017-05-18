@@ -29,6 +29,11 @@ class BaseRecordAction extends Action
 
     public $enableLoadRecord = false;
 
+    /**
+     * The operation result of CRUD
+     *
+     * @var Maghead\Runtime\Result
+     */
     public $recordResult;
 
 

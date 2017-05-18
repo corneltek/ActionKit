@@ -21,12 +21,17 @@ abstract class CreateRecordAction
         return $this->createSuccess($ret);
     }
 
+    /**
+     * Apply arguments whitelist (takeFields) and blacklist (filterOutFields)
+     *
+     * @return args
+     */
     protected function filterArguments(array $args)
     {
         if ($this->takeFields) {
             // take these fields only
             return array_intersect_key($args, array_fill_keys($this->takeFields,1) );
-        } elseif ($this->filterOutFields) {
+        } else if ($this->filterOutFields) {
             return array_diff_key($args, array_fill_keys($this->filterOutFields,1) );
         }
         return $args;

@@ -34,7 +34,7 @@ class OrderItemTest extends ModelTestCase
     public function testCreateWithoutPrimaryKeyValue()
     {
         $orderItem = new OrderItem;
-        $schema = $orderItem->getSchema();
+        $schema = OrderItem::getSchema();
         $this->assertEquals('id',$schema->primaryKey);
 
         $primaryKeyColumn = $schema->getColumn('id');
@@ -52,7 +52,7 @@ class OrderItemTest extends ModelTestCase
     }
 
 
-    public function testUpdate()
+    public function testUpdateQuantityTo3()
     {
         $orderItem = new OrderItem;
         $schema = $orderItem->getSchema();
