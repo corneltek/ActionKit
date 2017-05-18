@@ -4,9 +4,15 @@ use ActionKit\ActionTemplate\UpdateOrderingRecordActionTemplate;
 use ActionKit\ActionRunner;
 use ActionKit\ActionGenerator;
 use Maghead\Testing\ModelTestCase;
+
 use ProductBundle\Model\Product;
 use ProductBundle\Model\ProductCollection;
 use ProductBundle\Model\ProductSchema;
+
+use ProductBundle\Model\ProductCategorySchema;
+use ProductBundle\Model\CategorySchema;
+use ProductBundle\Model\ProductFeatureSchema;
+use ProductBundle\Model\FeatureSchema;
 
 /**
  * RecordAction
@@ -15,119 +21,81 @@ use ProductBundle\Model\ProductSchema;
  */
 class ProductActionTest extends ModelTestCase
 {
-    public $driver = 'sqlite';
-
     public function models()
     {
-        return array( new ProductSchema );
-    }
-
-    public function setUp()
-    {
-        $products = new ProductCollection;
-        foreach ($products as $product) {
-            $product->delete();
-        }
-        parent::setUp();
-    }
-
-    public function tearDown()
-    {
-        $products = new ProductCollection;
-        foreach ($products as $product) {
-            $product->delete();
-        }
-        parent::tearDown();
+        return [new ProductSchema, new ProductCategorySchema, new CategorySchema, new ProductFeatureSchema, new FeatureSchema];
     }
 
     public function createProductActionClass($type)
     {
-        return BaseRecordAction::createCRUDClass('ProductBundle\\Model\\Product',$type);
+        return BaseRecordAction::createCRUDClass(Product::class, $type);
     }
 
-    public function createProduct( $name )
+    protected function createProduct($name)
     {
-        $p = new Product;
-        $ret = $p->create(array( 
-            'name' => $name
-        ));
+        $ret = Product::create([ 'name' => $name ]);
         $this->assertTrue($ret->success);
+
+        $p = Product::findByPrimaryKey($ret->key);
         $this->assertNotNull($p->id,'got created id');
+
         return $p;
     }
 
-
-    public function recordProvider() {
-        return [ 
-            [ new ProductBundle\Model\Product ],
-        ];
-    }
-
-
-    /**
-     * @dataProvider recordProvider
-     */
-    public function testCreateRecordAction($product)
+    public function testCreateRecordAction()
     {
-        $class = BaseRecordAction::createCRUDClass('ProductBundle\\Model\\Product', 'Create');
-        $this->assertNotNull($class);
+        $class = BaseRecordAction::createCRUDClass(Product::class, 'Create');
+        $this->assertEquals('ProductBundle\\Action\\CreateProduct', $class);
 
-        $create = new $class( array( 'name' => 'A' ), $product);
-        $this->assertNotNull($create);
-
+        $create = new $class(['name' => 'A']);
         $ret = $create->run();
-        $this->assertNotNull($ret,'success action');
-
-        $product->delete();
+        $this->assertTrue($ret,'success action');
     }
 
-
-
-    public function testAsCreateAction() {
+    public function testAsCreateAction()
+    {
         $product = new Product;
         $this->assertNotNull($product, 'object created');
         $create = $product->asCreateAction([ 'name' => 'TestProduct' ]);
         $this->assertNotNull( $create->run() , 'action run' );
 
-
         $product = $create->getRecord();
+        $this->assertInstanceOf('ProductBundle\\Model\\Product', $product);
         $this->assertNotNull($id = $product->id, 'product created');
 
         $delete = $product->asDeleteAction();
         $this->assertNotNull($delete->run());
 
-        $product = new Product( $id );
-        $this->assertNotNull( ! $product->id, 'product should be deleted.');
+        $product = Product::findByPrimaryKey($product->id);
+        $this->assertFalse($product, 'product should be deleted.');
     }
 
-    public function testUpdateRecordAction()
+    public function testUpdateRecordWithLoadedRecordObject()
     {
-        $product = new Product;
-        $this->assertNotNull($product);
-        $ret = $product->create(array( 
-            'name' => 'B',
-        ));
-        $this->assertNotNull($ret->success,'record created.');
+        $ret = Product::create([ 'name' => 'B' ]);
+        $this->assertResultSuccess($ret, 'record created.');
 
-        $class = BaseRecordAction::createCRUDClass('ProductBundle\\Model\\Product', 'Update');
-        $this->assertNotNull($class);
+        $class = BaseRecordAction::createCRUDClass(Product::class, 'Update');
+        $this->assertEquals('ProductBundle\\Action\\UpdateProduct', $class);
 
-        $update = new $class( array( 'id' => $product->id, 'name' => 'C' ), $product);
-        $this->assertNotNull($update);
+        $product = Product::load($ret->key);
+
+        $update = new $class([ 'id' => $ret->key, 'name' => 'C' ], $product);
+        $this->assertInstanceOf('ProductBundle\\Action\\UpdateProduct', $update);
 
         $ret = $update->run();
-        $this->assertNotNull($ret,'success action');
+        $this->assertTrue($ret,'success action');
 
-        $ret = $product->load(array( 'name' => 'C' ));
-        $this->assertNotNull($ret->success);
-
-
+        // Verify the update.
+        $product = Product::load([ 'name' => 'C' ]);
         $class = BaseRecordAction::createCRUDClass('ProductBundle\\Model\\Product', 'Delete');
         $this->assertNotNull($class);
 
+        /*
         $delete = new $class(array( 'id' => $product->id ), $product);
         $ret = $delete->run();
         $this->assertNotNull($ret);
+        */
     }
 
 
@@ -252,12 +220,11 @@ class ProductActionTest extends ModelTestCase
     {
         $class = $this->createProductActionClass('Create');
         $create = new $class(array('name' => 'Foo'));
-        $this->assertNotNull( $create->run(), 'create action returns success.' );
-        $this->assertNotNull( $create->getRecord()->delete()->success );
-
+        $this->assertTrue($create->run(), 'create action returns success.' );
+        $this->assertResultSuccess($create->getRecord()->delete());
     }
 
-    public function testActionRelationship() 
+    public function testActionRelationship()
     {
         $class = $this->createProductActionClass('Create');
         $create = new $class(array('name' => 'Foo'));
@@ -268,14 +235,13 @@ class ProductActionTest extends ModelTestCase
     }
 
     /**
-     * @expectedException  ActionKit\Exception\ActionException
+     * @expectedException \ActionKit\Exception\ActionException
      */
     public function testRecordActionWithActionException()
     {
         $class = $this->createProductActionClass('Update');
-        $update = new $class(array());
+        $update = new $class;
     }
-
 }
 
 

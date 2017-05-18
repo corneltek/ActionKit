@@ -22,12 +22,12 @@ abstract class UpdateOrderingRecordAction extends Action
      */
     public $targetColumn = 'ordering';
 
-    public function loadRecord($id)
+    public function loadRecord($key)
     {
-        return new $this->recordClass( (int) $id);
+        return $this->recordClass::findByPrimaryKey($key);
     }
 
-    public function runUpdateList() 
+    public function runUpdateList()
     {
         $orderingList = json_decode($this->arg('list'));
         if ( $this->mode == self::MODE_INCREMENTALLY ) {

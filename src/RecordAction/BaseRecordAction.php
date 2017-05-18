@@ -89,7 +89,7 @@ class BaseRecordAction extends Action
         if ( ! $record->id && ! $this instanceof CreateRecordAction && $this->enableLoadRecord ) {
             // for create action, we don't need to create record
             if (! $this->loadRecordFromArguments($args)) {
-                throw new ActionException(get_class($this). " Record action can not load record from {$this->recordClass}", $this );
+                throw new ActionException(get_class($this). " Record action can not load record from {$this->recordClass}", $this);
             }
         }
 
@@ -105,6 +105,10 @@ class BaseRecordAction extends Action
      */
     protected function loadParamValues()
     {
+        if (!$this->record) {
+            return;
+        }
+
         // load record values into param objects
         if ($columns = $this->record->getColumns(true)) {
             foreach ($columns as $column) {
@@ -141,7 +145,7 @@ class BaseRecordAction extends Action
     public function loadRecordValuesToParams()
     {
         /* load record value */
-        foreach ( $this->record->getColumns(true) as $column ) {
+        foreach ( $this->record->getColumns(true) as $column) {
             if ($val = $this->record->{ $column->name }) {
                 if ( isset($this->params[ $column->name ]) ) {
                     $this->params[ $column->name ]->value = $val;
@@ -159,9 +163,9 @@ class BaseRecordAction extends Action
     {
         if ($primaryKey = $this->recordClass::getSchema()->primaryKey) {
             if (!isset($args[$primaryKey])) {
-                throw new \RuntimeException("primary key '{$primaryKey}' missing in the arguments: " . var_export($args, true) );
+                throw new ActionException("primary key '{$primaryKey}' missing in the arguments: " . var_export($args, true) );
             }
-            return $this->record = $this->recordClass::load($args[$primaryKey]);
+            return $this->record = $this->recordClass::findByPrimaryKey($args[$primaryKey]);
         }
         return false;
     }
@@ -174,9 +178,9 @@ class BaseRecordAction extends Action
         $this->initParamsFromColumns( $this->record->getColumns(true), $this->record );
     }
 
-    public function resetParams() {
-        // reset params
-        $this->params = array();
+    public function resetParams()
+    {
+        $this->params = [];
     }
 
     public function initParamsFromColumns(array $columns, Model $record = null)

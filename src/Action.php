@@ -272,6 +272,9 @@ class Action implements IteratorAggregate
         );
     }
 
+    /**
+     * Load values into the parameter columns.
+     */
     protected function loadParamValues()
     {
         // load param values from $arguments

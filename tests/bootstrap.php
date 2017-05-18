@@ -10,6 +10,7 @@ define('ROOT' , dirname(__DIR__) );
 $loader = require ROOT . '/vendor/autoload.php';
 $loader->add(null, ROOT . '/tests');
 
+/*
 $config = ArrayConfigLoader::load([
     'cli' => [ 'bootstrap' => ['tests/bootstrap.php'] ],
     'schema' => [
@@ -25,7 +26,9 @@ $config = ArrayConfigLoader::load([
     ]
 ]);
 Bootstrap::setup($config);
+*/
 
+/*
 $loader = ComposerSchemaLoader::from('composer.json');
 $loader->load();
 
@@ -36,6 +39,7 @@ $schemas = SchemaLoader::loadDeclaredSchemas();
 $g = new SchemaGenerator($config, $logger);
 $g->setForceUpdate(true);
 $g->generate($schemas);
+ */
 
 /**
  * Clean up cache files

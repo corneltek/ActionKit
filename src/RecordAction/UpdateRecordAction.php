@@ -13,41 +13,51 @@ abstract class UpdateRecordAction
 
     public $enableLoadRecord = true;
 
-    public function loadRecord($args)
+    /**
+     * Load the record and return the result.
+     */
+    protected function loadRecord(array $args)
     {
-        if ( ! isset($args['id']) && ! $this->loadByArray ) {
+        $schema = $this->recordClass::getSchema();
+        $primaryKey = $schema->getPrimaryKey();
+
+        if (! isset($args[$primaryKey]) && ! $this->loadByArray ) {
             $msg = $this->messagePool->translate('record_action.primary_key_is_required');
             return $this->error($msg);
         }
+
         if ($this->loadByArray) {
-            $ret = $this->record->load($args);
-        } else if (isset($args['id'])) {
-            $ret = $this->record->find( $args['id'] );
+
+            $this->record = $this->recordClass::load($args);
+
+        } else if (isset($args[$primaryKey])) {
+
+            $this->record = $this->recordClass::findByPrimaryKey( $args[$primaryKey] );
+
         } else {
+
             $msg = $this->messagePool->translate('record_action.primary_key_is_required');
+
             return $this->error($msg);
         }
-        if (! $ret->success) {
-            $msg = $this->messagePool->translate('record_action.load_failed');
+
+        if (!$this->record) {
+            $msg = $this->messagePool->translate('record_action.record_not_found', $htis->record->getLabel());
             return $this->error($msg);
         }
-        if (! $this->record->id) {
-            $msg = $this->messagePool->translate('record_action.record_not_found', $this->record->getLabel());
-            return $this->error($msg);
-        }
+
         return true;
     }
 
-    public function update( $args )
+    public function update(array $args)
     {
-        $record = $this->record;
-        if ( ! $record->id ) {
-            if ( false === $this->loadRecord($args) ) {
+        if (!$this->record) {
+            if (false === $this->loadRecord($args)) {
                 return false;
             }
         }
 
-        $ret = $record->update( $args );
+        $ret = $this->record->update( $args );
         if (! $ret->success) {
             $this->convertRecordValidation( $ret );
             return $this->updateError( $ret );
@@ -58,7 +68,7 @@ abstract class UpdateRecordAction
 
     public function run()
     {
-        $ret = $this->update( $this->args );
+        $ret = $this->update($this->args);
         if ( $this->nested && ! empty($this->relationships) ) {
             $ret = $this->processSubActions();
         }
