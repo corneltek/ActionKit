@@ -177,7 +177,7 @@ abstract class BaseView
      *
      * @param ActionKit\Action
      */
-    public function setAction($action)
+    public function setAction(Action $action)
     {
         $this->action = $action;
     }
