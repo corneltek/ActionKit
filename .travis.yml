@@ -15,6 +15,3 @@ cache:
   apt: true
   directories:
   - vendor
-notifications:
-  slack:
-    secure: X+iimYs9fGh3K9PYgupJNaQn322zwP7gPKH/9EIcFQbZrwJaWDPrZC578FfF5ArMvUVV4T0O84le1Lm5bO1BsFd8O4qvZ8za9X8z05Jn2v6zWpqxhtN+l1nmpo+8m0lAc78yYLGHOeRrQQnNdHqo3fUZqJMb+kYKQPB9kLOJnzM=
