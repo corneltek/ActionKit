@@ -22,6 +22,8 @@ class BaseRecordAction extends Action
      */
     protected $record; // record schema object
 
+    protected $schema;
+
     /**
      * @var string Record class
      */
@@ -84,6 +86,14 @@ class BaseRecordAction extends Action
         }
 
         $this->setRecord($record);
+        $this->schema = $this->recordClass::getSchema();
+
+        // build relationship config from model schema
+        if ($relations = $this->schema->relations) {
+            foreach ($relations as $rId => $relation) {
+                $this->addRelation($rId, $relation);
+            }
+        }
 
         // CreateRecordAction doesn't require primary key to be existed.
         if (! $record->id && ! $this instanceof CreateRecordAction && $this->enableLoadRecord ) {
@@ -233,12 +243,6 @@ class BaseRecordAction extends Action
             }
         }
 
-        // build relationship config from model schema
-        if ($relations = $this->record->getSchema()->relations) {
-            foreach ( $relations as $rId => $relation ) {
-                $this->addRelation($rId, $relation);
-            }
-        }
     }
 
 
