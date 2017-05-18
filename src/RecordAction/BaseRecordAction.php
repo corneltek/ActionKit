@@ -246,11 +246,6 @@ class BaseRecordAction extends Action
 
 
 
-
-
-
-
-
     /**
      * Permission check method
      *
@@ -283,20 +278,17 @@ class BaseRecordAction extends Action
     }
 
 
-
     public function hasRelation($relationId)
     {
         return isset( $this->relationships[$relationId] );
     }
-
-
 
     /**
      * @return Maghead\Schema\Relationship relationship object
      */
     public function getRelation($relationId)
     {
-        if ( isset($this->relationships[$relationId]) ) {
+        if (isset($this->relationships[$relationId]) ) {
             return $this->relationships[$relationId];
         }
     }
@@ -339,13 +331,13 @@ class BaseRecordAction extends Action
     {
         list($modelNs, $modelName) = explode('\\Model\\', $recordClass);
         $modelNs = ltrim($modelNs,'\\');
-        $actionFullClass = $modelNs . '\\Action\\' . $type . $modelName;
-        $recordClass  = $modelNs . '\\Model\\' . $modelName;
-        $baseAction   = $type . 'RecordAction';
+        $actionFullClass = "{$modelNs}\\Action\\{$type}{$modelName}";
+        $recordClass  = "{$modelNs}\\Model\\{$modelName}";
+        $baseAction   = "\\ActionKit\\RecordAction\\{$type}RecordAction";
 
         $template = new RecordActionTemplate;
         $generatedAction = $template->generate($actionFullClass, [
-            'extends' => '\\ActionKit\\RecordAction\\' . $baseAction,
+            'extends' => $baseAction,
             'properties' => [
                 'recordClass' => $recordClass,
             ],

@@ -1,0 +1,16 @@
+---
+schema:
+  paths:
+    - tests
+databases:
+  master:
+    dsn: 'sqlite::memory:'
+    query_options: { quote_table: true }
+  mysql:
+    dsn: 'mysql:host=localhost;dbname=testing'
+    user: root
+    # create database testing charset utf8;
+    # grant all privileges on testing.* to testing@localhost identified by 'testing';
+  pgsql:
+    dsn: 'pgsql:host=localhost;dbname=testing'
+    user: postgres

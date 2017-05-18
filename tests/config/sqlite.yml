@@ -1,0 +1,25 @@
+---
+cli:
+  bootstrap: tests/bootstrap.php
+schema:
+  auto_id: true
+  base_model: \Maghead\Runtime\Model
+  base_collection: \Maghead\Runtime\Collection
+  paths:
+    - tests
+instance:
+  local:
+    dsn: 'sqlite::memory:'
+databases:
+  master:
+    dsn: 'sqlite::memory:'
+    query_options: { quote_table: true }
+  node1:
+    dsn: 'sqlite::memory:'
+    query_options: { quote_table: true }
+  node2:
+    dsn: 'sqlite::memory:'
+    query_options: { quote_table: true }
+  node3:
+    dsn: 'sqlite::memory:'
+    query_options: { quote_table: true }
