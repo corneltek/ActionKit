@@ -41,8 +41,8 @@ class ColumnConvert
      * Translate Maghead RuntimeColumn to ActionKit param object.
      *
      * @param RuntimeColumn $column
-     * @param Model $record
-     * @return Param;
+     * @param Model $record presents the current values
+     * @return Param
      */
     public static function toParam(RuntimeColumn $column , Model $record = null, Action $action = null)
     {

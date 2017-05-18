@@ -85,8 +85,8 @@ class BaseRecordAction extends Action
             $record = new $this->recordClass;
         }
 
-        $this->setRecord($record);
         $this->schema = $this->recordClass::getSchema();
+        $this->setRecord($record);
 
         // copy relationship config from model schema for extending the properties later.
         if ($relations = $this->schema->relations) {
@@ -238,12 +238,9 @@ class BaseRecordAction extends Action
     {
         $this->record = $record;
 
-        // Convert id column object from record schema to
-        // Action param object.
-        if ($column = $this->record->getColumn('id')) {
-            if ( ! isset($this->params[$column->name] ) ) {
-                $this->params[ $column->name ] = ColumnConvert::toParam($column , $record, $this);
-            }
+        // Create primary key column from the record schema with the current record value.
+        if ($column = $this->schema->getColumn($this->schema->primaryKey)) {
+            $this->params[$column->name] = ColumnConvert::toParam($column , $record, $this);
         }
     }
 
