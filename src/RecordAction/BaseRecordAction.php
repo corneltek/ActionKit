@@ -327,7 +327,7 @@ class BaseRecordAction extends Action
      *
      * @return string class code
      */
-    public static function createCRUDClass( $recordClass , $type )
+    public static function createCRUDClass($recordClass, $type)
     {
         list($modelNs, $modelName) = explode('\\Model\\', $recordClass);
         $modelNs = ltrim($modelNs,'\\');
