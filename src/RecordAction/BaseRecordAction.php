@@ -188,15 +188,20 @@ class BaseRecordAction extends Action
         $this->params = [];
     }
 
+    /**
+     * Creates param objects from schema columns
+     */
     public function initParamsFromColumns(array $columns, Model $record = null)
     {
         foreach ($columns as $column) {
-            if (! isset($this->params[$column->name] ) ) {
-                // do not render this field if renderable === false
-                if ( false !== $column->get('renderable') ) {
-                    $this->params[ $column->name ] = ColumnConvert::toParam($column , $record, $this);
-                }
+            if (isset($this->params[$column->name] )) {
+                continue;
             }
+            // do not render this field if renderable === false
+            if (false === $column->get('renderable')) {
+                continue;
+            }
+            $this->params[ $column->name ] = ColumnConvert::toParam($column , $record, $this);
         }
     }
 
