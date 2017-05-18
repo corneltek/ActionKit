@@ -88,7 +88,7 @@ class BaseRecordAction extends Action
         $this->setRecord($record);
         $this->schema = $this->recordClass::getSchema();
 
-        // build relationship config from model schema
+        // copy relationship config from model schema for extending the properties later.
         if ($relations = $this->schema->relations) {
             foreach ($relations as $rId => $relation) {
                 $this->addRelation($rId, $relation);
@@ -98,9 +98,11 @@ class BaseRecordAction extends Action
         // CreateRecordAction doesn't require primary key to be existed.
         if (! $record->id && ! $this instanceof CreateRecordAction && $this->enableLoadRecord ) {
             // for create action, we don't need to create record
-            if (! $this->loadRecordFromArguments($args)) {
+            $record = $this->loadRecordFromArguments($args);
+            if (!$record) {
                 throw new ActionException(get_class($this). " Record action can not load record from {$this->recordClass}", $this);
             }
+            $this->setRecord($record);
         }
 
         // initialize schema , init base action stuff
@@ -169,15 +171,16 @@ class BaseRecordAction extends Action
      *
      * @return boolean
      */
-    public function loadRecordFromArguments(array $args)
+    protected function loadRecordFromArguments(array $args)
     {
-        if ($primaryKey = $this->recordClass::getSchema()->primaryKey) {
-            if (!isset($args[$primaryKey])) {
-                throw new ActionException("primary key '{$primaryKey}' missing in the arguments: " . var_export($args, true) );
-            }
-            return $this->record = $this->recordClass::findByPrimaryKey($args[$primaryKey]);
+        $primaryKey = $this->schema->primaryKey;
+        if (!$primaryKey) {
+            return false;
         }
-        return false;
+        if (!isset($args[$primaryKey])) {
+            throw new ActionException("primary key '{$primaryKey}' missing in the arguments: " . var_export($args, true) );
+        }
+        return $this->recordClass::findByPrimaryKey($args[$primaryKey]);
     }
 
     /**
@@ -242,7 +245,6 @@ class BaseRecordAction extends Action
                 $this->params[ $column->name ] = ColumnConvert::toParam($column , $record, $this);
             }
         }
-
     }
 
 
