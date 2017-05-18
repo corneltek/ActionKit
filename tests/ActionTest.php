@@ -39,8 +39,7 @@ class TestTakeFilterAction extends Action {
 
 class LoginTestAction extends Action 
 {
-
-    public function schema() 
+    public function schema()
     {
         $this->param('username');
         $this->param('password');
@@ -79,15 +78,14 @@ class ActionTest extends \PHPUnit\Framework\TestCase
         $this->assertNotNull( ! isset($params['extra3']) );
     }
 
-    public function testActionArrayOptions() {
-        $action = new LoginTestAction([],[
-            'current_user' => null,
-        ]);
-    }
-
-    public function testActionContainerOptions() {
+    public function testCreatingActionWithContainerAsTheOptions()
+    {
         $container = new \Pimple\Container;
-        $action = new LoginTestAction([], $container);
+        $action = new LoginTestAction([
+            'username' => 'admin',
+            'password' => 's3cr3t',
+        ], $container);
+        $this->assertTrue($action->run());
     }
 
     public function testRender()

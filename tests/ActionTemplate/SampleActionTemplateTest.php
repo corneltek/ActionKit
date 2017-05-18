@@ -5,6 +5,7 @@ use ActionKit\RecordAction\BaseRecordAction;
 use ActionKit\ActionTemplate\RecordActionTemplate;
 use ActionKit\ActionTemplate\TwigActionTemplate;
 use ActionKit\ActionTemplate\SampleActionTemplate;
+use ActionKit\GeneratedAction;
 
 class SampleActionTemplateTest extends \PHPUnit\Framework\TestCase
 {
@@ -35,10 +36,11 @@ class SampleActionTemplateTest extends \PHPUnit\Framework\TestCase
         $generator->registerTemplate('SampleActionTemplate', new SampleActionTemplate());
         $runner = new ActionRunner([ 'generator' => $generator ]);
         // $runner->registerAction('SampleActionTemplate', array('action_class' => 'SampleAction'));
-        $runner->getGenerator()->generate('SampleActionTemplate', 'SampleAction', [ 
+        $action = $runner->getGenerator()->generate('SampleActionTemplate', 'SampleAction', [ 
             'namespace' => 'FooBar',
             'action_name' => 'CreateSample'
         ]);
+        $this->assertInstanceOf(GeneratedAction::class, $action);
     }
 }
 
