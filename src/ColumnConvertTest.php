@@ -19,9 +19,10 @@ class ColumnConvertTest extends ModelTestCase
 
     public function testColumnConvert()
     {
-        $order = new Order;
-        $schema = $order->getSchema();
+        $schema = Order::getSchema();
         $this->assertNotNull($schema);
+
+        $order = new Order;
         $action = ColumnConvert::convertSchemaToAction($schema, $order);
         $this->assertNotNull($action);
         $this->assertInstanceOf(Action::class, $action);
