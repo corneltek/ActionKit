@@ -52,11 +52,7 @@ class OrderItemTest extends ModelTestCase
     }
 
 
-
-    /**
-     * @expectedException Exception
-     */
-    public function testUpdateWithoutPrimaryKeyValue()
+    public function testUpdate()
     {
         $orderItem = new OrderItem;
         $schema = $orderItem->getSchema();
@@ -73,13 +69,13 @@ class OrderItemTest extends ModelTestCase
         $success = $create();
         $this->assertTrue($success, 'Should be able to create without primary key value.');
 
-
-        $orderItem2 = new OrderItem;
-        $update = $orderItem2->asUpdateAction(['quantity' => 3]);
+        $orderItem = $create->getRecord();
+        $update = $orderItem->asUpdateAction(['quantity' => 3]);
         $this->assertNotNull($update);
         $this->assertInstanceOf('ActionKit\\RecordAction\\BaseRecordAction', $update);
         $this->assertInstanceOf('ActionKit\\RecordAction\\UpdateRecordAction', $update);
-        $update();
+        $result = $update();
+        $this->assertTrue($result);
     }
 
 
@@ -112,8 +108,4 @@ class OrderItemTest extends ModelTestCase
         $success = $update();
         $this->assertFalse($success, 'Should not be able to update required field with null value.');
     }
-
 }
-
-
-
