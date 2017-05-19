@@ -5,7 +5,7 @@ use ActionKit\ActionRunner;
 use ActionKit\GeneratedAction;
 use ActionKit\Exception\RequiredConfigKeyException;
 use Exception;
-use ClassTemplate\ClassFile;
+use CodeGen\ClassFile;
 
 /**
  *  CodeGen-Based Action Template Synopsis

@@ -4,23 +4,25 @@
         { "name": "Yo-An Lin", "email": "yoanlin93+composer@gmail.com" }
     ],
     "require": {
+        "php": ">=5.6",
         "corneltek/cascading-attribute": "^1",
         "corneltek/fileutil": "^1.7",
         "corneltek/universal": "^1.8",
         "corneltek/imagekit": "^1",
-        "corneltek/class-template": "^3.0.0",
+        "maghead/maghead": "4.0.x-dev",
+        "maghead/magsql": "@dev",
+        "corneltek/codegen": "@dev",
+        "corneltek/sqlbuilder": "@dev",
+        "corneltek/cliframework": "@dev",
         "corneltek/formkit": "^1",
         "phifty/locale": "^3",
-        "twig/twig": "~1.32.0",
+        "twig/twig": "^2",
         "pekkis/mime-types": "^1",
         "pimple/pimple": "^3.0"
     },
     "require-dev": {
         "corneltek/webserver-runner": "dev-master",
-        "maghead/maghead": "4.0.x-dev",
-        "corneltek/sqlbuilder": "4.0.x-dev",
-        "corneltek/cliframework": "4.0.x-dev",
-        "corneltek/kendo": "dev-master"
+        "corneltek/kendo": "4.0.x-dev"
     },
     "autoload": {
         "psr-4": {

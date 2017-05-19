@@ -6,7 +6,6 @@ use ActionKit\Exception\UndefinedTemplateException;
 use Exception;
 use UniversalCache;
 use ReflectionClass;
-use ClassTemplate\TemplateClassFile;
 
 /**
  * Action Generator Synopsis
