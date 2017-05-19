@@ -664,24 +664,24 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/maghead/maghead.git",
-                "reference": "1c00f4e68f6278a6674aee137ea0d2133ed6a274"
+                "reference": "1db6ad12a00bf242e2d8fbdba851e50990b4e32a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/maghead/maghead/zipball/1c00f4e68f6278a6674aee137ea0d2133ed6a274",
-                "reference": "1c00f4e68f6278a6674aee137ea0d2133ed6a274",
+                "url": "https://api.github.com/repos/maghead/maghead/zipball/1db6ad12a00bf242e2d8fbdba851e50990b4e32a",
+                "reference": "1db6ad12a00bf242e2d8fbdba851e50990b4e32a",
                 "shasum": ""
             },
             "require": {
                 "corneltek/cascading-attribute": "^1.2",
-                "corneltek/cliframework": "4.0.x-dev",
-                "corneltek/codegen": "4.0.x-dev",
+                "corneltek/cliframework": "4.0.x-dev as 4.0.0",
+                "corneltek/codegen": "4.0.x-dev as 4.0.0",
                 "corneltek/configkit": "^1.6.2",
                 "corneltek/serializerkit": "^1",
                 "corneltek/validationkit": "^1",
                 "cypresslab/gitelephant": "^1.0",
                 "doctrine/inflector": "~1.0",
-                "maghead/magsql": "4.0.x-dev",
+                "maghead/magsql": "4.0.x-dev as 4.0.0",
                 "maghead/sqlite-parser": "^4.0",
                 "monolog/monolog": "^1.22",
                 "php": ">=7.0",
@@ -733,7 +733,7 @@
                 "orm",
                 "sql"
             ],
-            "time": "2017-05-19 05:12:58"
+            "time": "2017-05-19 05:48:29"
         },
         {
             "name": "maghead/magsql",
@@ -1741,7 +1741,7 @@
                 "rbac",
                 "role-based"
             ],
-            "time": "2017-05-18T16:02:40+00:00"
+            "time": "2017-05-18 16:02:40"
         },
         {
             "name": "corneltek/webserver-runner",

@@ -7,8 +7,8 @@ use Maghead\Runtime\Model;
 use Maghead\Schema\SchemaLoader;
 use Maghead\Runtime\Result;
 use Maghead\Runtime\Inflator;
-use SQLBuilder\Bind;
-use SQLBuilder\ArgumentArray;
+use Magsql\Bind;
+use Magsql\ArgumentArray;
 use DateTime;
 
 class FeatureBase
