@@ -664,24 +664,24 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/maghead/maghead.git",
-                "reference": "1db6ad12a00bf242e2d8fbdba851e50990b4e32a"
+                "reference": "9d9d3c7c9c5292bf5b85645129953ebc7af7dae6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/maghead/maghead/zipball/1db6ad12a00bf242e2d8fbdba851e50990b4e32a",
-                "reference": "1db6ad12a00bf242e2d8fbdba851e50990b4e32a",
+                "url": "https://api.github.com/repos/maghead/maghead/zipball/9d9d3c7c9c5292bf5b85645129953ebc7af7dae6",
+                "reference": "9d9d3c7c9c5292bf5b85645129953ebc7af7dae6",
                 "shasum": ""
             },
             "require": {
                 "corneltek/cascading-attribute": "^1.2",
-                "corneltek/cliframework": "4.0.x-dev as 4.0.0",
-                "corneltek/codegen": "4.0.x-dev as 4.0.0",
+                "corneltek/cliframework": "4.0.x-dev",
+                "corneltek/codegen": "4.0.x-dev",
                 "corneltek/configkit": "^1.6.2",
                 "corneltek/serializerkit": "^1",
                 "corneltek/validationkit": "^1",
                 "cypresslab/gitelephant": "^1.0",
                 "doctrine/inflector": "~1.0",
-                "maghead/magsql": "4.0.x-dev as 4.0.0",
+                "maghead/magsql": "4.0.x-dev",
                 "maghead/sqlite-parser": "^4.0",
                 "monolog/monolog": "^1.22",
                 "php": ">=7.0",
@@ -733,7 +733,7 @@
                 "orm",
                 "sql"
             ],
-            "time": "2017-05-19 05:48:29"
+            "time": "2017-05-19 06:34:21"
         },
         {
             "name": "maghead/magsql",
