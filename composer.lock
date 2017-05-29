@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "2dd653c1568bb6895a09e0ac5f399d94",
+    "content-hash": "bb31c7c3b5af38e977796d990fa65664",
     "packages": [
         {
             "name": "corneltek/cascading-attribute",
@@ -45,12 +45,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/c9s/CLIFramework.git",
-                "reference": "62dcf79f562a8239eee86b6dcc4dcdfa0dda796e"
+                "reference": "f69a19febc57f3d7fba7262be7d3bc3d4f8ad092"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/c9s/CLIFramework/zipball/62dcf79f562a8239eee86b6dcc4dcdfa0dda796e",
-                "reference": "62dcf79f562a8239eee86b6dcc4dcdfa0dda796e",
+                "url": "https://api.github.com/repos/c9s/CLIFramework/zipball/f69a19febc57f3d7fba7262be7d3bc3d4f8ad092",
+                "reference": "f69a19febc57f3d7fba7262be7d3bc3d4f8ad092",
                 "shasum": ""
             },
             "require": {
@@ -97,7 +97,7 @@
                 "getopt",
                 "zsh"
             ],
-            "time": "2017-05-19 14:49:53"
+            "time": "2017-05-27 10:02:27"
         },
         {
             "name": "corneltek/codegen",
@@ -105,12 +105,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/c9s/CodeGen.git",
-                "reference": "6c407ea63296ef24a2ee8daac75ad2e840647b57"
+                "reference": "6c225eaba93508d674676ad4abe69803edac35e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/c9s/CodeGen/zipball/6c407ea63296ef24a2ee8daac75ad2e840647b57",
-                "reference": "6c407ea63296ef24a2ee8daac75ad2e840647b57",
+                "url": "https://api.github.com/repos/c9s/CodeGen/zipball/6c225eaba93508d674676ad4abe69803edac35e5",
+                "reference": "6c225eaba93508d674676ad4abe69803edac35e5",
                 "shasum": ""
             },
             "require": {
@@ -141,20 +141,20 @@
             ],
             "description": "PHP Code Generation Library",
             "homepage": "http://github.com/c9s/CodeGen",
-            "time": "2017-05-18 17:21:51"
+            "time": "2017-05-25 14:49:13"
         },
         {
             "name": "corneltek/configkit",
-            "version": "1.6.3",
+            "version": "1.6.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/c9s/ConfigKit.git",
-                "reference": "55aaf1bf1b55ba06b41a3bc8d12a210dd1fce853"
+                "reference": "8ecd955df6d2e45b041cce46ca27b86d45153770"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/c9s/ConfigKit/zipball/55aaf1bf1b55ba06b41a3bc8d12a210dd1fce853",
-                "reference": "55aaf1bf1b55ba06b41a3bc8d12a210dd1fce853",
+                "url": "https://api.github.com/repos/c9s/ConfigKit/zipball/8ecd955df6d2e45b041cce46ca27b86d45153770",
+                "reference": "8ecd955df6d2e45b041cce46ca27b86d45153770",
                 "shasum": ""
             },
             "require": {
@@ -167,6 +167,11 @@
                 "corneltek/phpunit-testmore": "dev-master"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.6.x-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "ConfigKit\\": "src/"
@@ -183,7 +188,7 @@
                 "config",
                 "yaml"
             ],
-            "time": "2017-05-18T17:34:15+00:00"
+            "time": "2017-05-29T04:25:01+00:00"
         },
         {
             "name": "corneltek/fileutil",
@@ -371,47 +376,6 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "time": "2013-12-01T14:32:14+00:00"
-        },
-        {
-            "name": "corneltek/sqlbuilder",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/c9s/SQLBuilder.git",
-                "reference": "58475b02d990409f7339310b8a2f710e6e26df92"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/c9s/SQLBuilder/zipball/58475b02d990409f7339310b8a2f710e6e26df92",
-                "reference": "58475b02d990409f7339310b8a2f710e6e26df92",
-                "shasum": ""
-            },
-            "require-dev": {
-                "corneltek/phpunit-testmore": "dev-master"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "4.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "SQLBuilder\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "c9s",
-                    "email": "cornelius.howl@gmail.com"
-                }
-            ],
-            "description": "Fast and Powerful SQLBuilder for PHP",
-            "time": "2017-05-10 07:44:18"
         },
         {
             "name": "corneltek/universal",
@@ -664,19 +628,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/maghead/maghead.git",
-                "reference": "9d9d3c7c9c5292bf5b85645129953ebc7af7dae6"
+                "reference": "0a8ffc1c5f7f17488683ca726eef0f42ed833094"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/maghead/maghead/zipball/9d9d3c7c9c5292bf5b85645129953ebc7af7dae6",
-                "reference": "9d9d3c7c9c5292bf5b85645129953ebc7af7dae6",
+                "url": "https://api.github.com/repos/maghead/maghead/zipball/0a8ffc1c5f7f17488683ca726eef0f42ed833094",
+                "reference": "0a8ffc1c5f7f17488683ca726eef0f42ed833094",
                 "shasum": ""
             },
             "require": {
                 "corneltek/cascading-attribute": "^1.2",
                 "corneltek/cliframework": "4.0.x-dev",
                 "corneltek/codegen": "4.0.x-dev",
-                "corneltek/configkit": "^1.6.2",
+                "corneltek/configkit": "^1.6",
                 "corneltek/serializerkit": "^1",
                 "corneltek/validationkit": "^1",
                 "cypresslab/gitelephant": "^1.0",
@@ -733,7 +697,7 @@
                 "orm",
                 "sql"
             ],
-            "time": "2017-05-19 06:34:21"
+            "time": "2017-05-29 04:31:08"
         },
         {
             "name": "maghead/magsql",
@@ -741,12 +705,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/maghead/magsql.git",
-                "reference": "103f74802d2882c5d3dc3bfc415775300ddcdc36"
+                "reference": "3b5aeb90328588f3552621fa96db19992211b662"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/maghead/magsql/zipball/103f74802d2882c5d3dc3bfc415775300ddcdc36",
-                "reference": "103f74802d2882c5d3dc3bfc415775300ddcdc36",
+                "url": "https://api.github.com/repos/maghead/magsql/zipball/3b5aeb90328588f3552621fa96db19992211b662",
+                "reference": "3b5aeb90328588f3552621fa96db19992211b662",
                 "shasum": ""
             },
             "require-dev": {
@@ -774,7 +738,7 @@
                 }
             ],
             "description": "Fast and Powerful SQL for PHP",
-            "time": "2017-05-18 17:10:25"
+            "time": "2017-05-20 16:22:02"
         },
         {
             "name": "maghead/sqlite-parser",
@@ -1785,7 +1749,6 @@
         "maghead/maghead": 20,
         "maghead/magsql": 20,
         "corneltek/codegen": 20,
-        "corneltek/sqlbuilder": 20,
         "corneltek/cliframework": 20,
         "corneltek/webserver-runner": 20,
         "corneltek/kendo": 20
