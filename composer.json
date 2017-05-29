@@ -12,7 +12,6 @@
         "maghead/maghead": "4.0.x-dev",
         "maghead/magsql": "@dev",
         "corneltek/codegen": "@dev",
-        "corneltek/sqlbuilder": "@dev",
         "corneltek/cliframework": "@dev",
         "corneltek/formkit": "^1",
         "phifty/locale": "^3",
