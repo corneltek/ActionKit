@@ -7,7 +7,7 @@
         "php": ">=5.6",
         "corneltek/cascading-attribute": "^1",
         "corneltek/fileutil": "^1.7",
-        "corneltek/universal": "^1.8",
+        "universal/universal": "2.0.x-dev",
         "corneltek/imagekit": "^1",
         "maghead/maghead": "4.0.x-dev",
         "maghead/magsql": "@dev",
