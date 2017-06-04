@@ -599,10 +599,9 @@ class BaseRecordAction extends Action
                                 throw new \Exception("Can't create junction record: " . var_export($argsCreate, true));
                             }
 
-                            // $ret = $newRecord->popResult();
-                            // $ret->throwExceptionIfFailed();
                         } else {
-                            // update the existing record data.
+
+                            // Update the existing record data.
                             foreach ($junctionRecords as $r) {
                                 if ($r->{ $middleForeignKey } == $fId) {
                                     $ret = $r->update($argsCreate);
