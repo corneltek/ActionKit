@@ -595,6 +595,10 @@ class BaseRecordAction extends Action
 
                         if (! isset($connected[ $fId ])) {
                             $newRecord = $junctionRecords->create($argsCreate);
+                            if (!$newRecord) {
+                                throw new \Exception("Can't create junction record: " . var_export($argsCreate, true));
+                            }
+
                             // $ret = $newRecord->popResult();
                             // $ret->throwExceptionIfFailed();
                         } else {
@@ -602,7 +606,9 @@ class BaseRecordAction extends Action
                             foreach ($junctionRecords as $r) {
                                 if ($r->{ $middleForeignKey } == $fId) {
                                     $ret = $r->update($argsCreate);
-                                    $ret->throwExceptionIfFailed();
+                                    if ($ret->error) {
+                                        throw new \Exception($ret->message);
+                                    }
                                 }
                             }
                         }
