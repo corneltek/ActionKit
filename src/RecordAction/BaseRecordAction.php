@@ -11,6 +11,7 @@ use Maghead\Schema\DeclareSchema;
 use Maghead\Schema\Relationship\Relationship;
 use Maghead\Runtime\Model;
 use Maghead\Runtime\Result;
+use FormKit\Widget\HiddenInput;
 use Exception;
 
 class BaseRecordAction extends Action
@@ -619,6 +620,14 @@ class BaseRecordAction extends Action
             }
         }
         return true;
+    }
+
+    public function renderKeyWidget(array $attrs = array())
+    {
+        $input = new HiddenInput($this->record->getKeyName(), [
+            'value' => $this->record->getKey(),
+        ]);
+        return $input->render($attrs);
     }
 
 

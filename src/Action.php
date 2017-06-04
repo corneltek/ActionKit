@@ -1221,6 +1221,7 @@ class Action implements IteratorAggregate
         return null;
     }
 
+
     /**
      * Render action hidden field for csrf token
      *
@@ -1238,9 +1239,9 @@ class Action implements IteratorAggregate
         if ($hash) {
             $hidden = new HiddenInput($this->csrfTokenFieldName, array( 'value' => $hash ));
             return $hidden->render($attrs);
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     /**
