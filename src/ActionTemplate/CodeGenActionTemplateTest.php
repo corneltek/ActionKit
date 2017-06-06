@@ -1,5 +1,7 @@
 <?php
-use ActionKit\ActionTemplate\CodeGenActionTemplate;
+
+namespace ActionKit\ActionTemplate;
+
 use ActionKit\ActionRunner;
 use ActionKit\GeneratedAction;
 use ActionKit\Testing\ActionTestCase;

@@ -1,11 +1,13 @@
 <?php
+
+namespace ActionKit\ActionTemplate;
+
 use ActionKit\ActionRunner;
 use ActionKit\ActionGenerator;
 use ActionKit\RecordAction\BaseRecordAction;
-use ActionKit\ActionTemplate\RecordActionTemplate;
-use ActionKit\ActionTemplate\TwigActionTemplate;
-use ActionKit\ActionTemplate\SampleActionTemplate;
 use ActionKit\Testing\ActionTestCase;
+use Twig_Loader_Filesystem;
+use Twig_Environment;
 
 class TwigActionTemplateTest extends ActionTestCase
 {
@@ -58,8 +60,8 @@ class TwigActionTemplateTest extends ActionTestCase
             'action_class' => $className,
             'template' => '@ActionKit/RecordAction.html.twig',
             'variables' => [
-                'record_class' => 'User\\Model\\User',
-                'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction'
+                'record_class' => \User\Model\User::class,
+                'base_class' => \ActionKit\RecordAction\CreateRecordAction::class,
             ]
         ));
         $this->assertCount(1, $runner->getPretreatments());
@@ -86,10 +88,10 @@ class TwigActionTemplateTest extends ActionTestCase
         $actionTemplate->register($runner, 'TwigActionTemplate', array(
             'action_class' => $className,
             'template' => '@ActionKit/RecordAction.html.twig',
-            'variables' => array(
-                'record_class' => 'User\\Model\\User',
-                'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction'
-            )
+            'variables' => [
+                'record_class' => \User\Model\User::class,
+                'base_class' => \ActionKit\RecordAction\CreateRecordAction::class,
+            ]
         ));
         $this->assertCount(1, $runner->getPretreatments());
         $this->assertNotNull($pretreatment = $runner->getActionPretreatment($className));
@@ -107,8 +109,8 @@ class TwigActionTemplateTest extends ActionTestCase
             'action_class' => $className,
             'template' => '@ActionKit/RecordAction.html.twig',
             'variables' => array(
-                'record_class' => 'User\\Model\\User',
-                'base_class' => 'ActionKit\\RecordAction\\CreateRecordAction'
+                'record_class' => \User\Model\User::class,
+                'base_class' => \ActionKit\RecordAction\CreateRecordAction::class,
             )
         ));
         $this->assertCount(1, $runner->getPretreatments());
