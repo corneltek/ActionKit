@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "bb31c7c3b5af38e977796d990fa65664",
+    "content-hash": "df4ebe8f7f9b9ecbc8656f390b806437",
     "packages": [
         {
             "name": "corneltek/cascading-attribute",
@@ -45,22 +45,22 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/c9s/CLIFramework.git",
-                "reference": "f69a19febc57f3d7fba7262be7d3bc3d4f8ad092"
+                "reference": "6d9926e635abd23340d3d3a41d1d71dc4d115ec4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/c9s/CLIFramework/zipball/f69a19febc57f3d7fba7262be7d3bc3d4f8ad092",
-                "reference": "f69a19febc57f3d7fba7262be7d3bc3d4f8ad092",
+                "url": "https://api.github.com/repos/c9s/CLIFramework/zipball/6d9926e635abd23340d3d3a41d1d71dc4d115ec4",
+                "reference": "6d9926e635abd23340d3d3a41d1d71dc4d115ec4",
                 "shasum": ""
             },
             "require": {
                 "corneltek/codegen": "4.0.x-dev",
                 "corneltek/getoptionkit": "~2.5.4",
-                "corneltek/universal": "^1.7",
                 "php": ">=5.3.0",
                 "pimple/pimple": "*",
                 "symfony/class-loader": "~2.8|~3.0|~3.2",
-                "symfony/finder": "~2.8|~3.0|~3.2"
+                "symfony/finder": "~2.8|~3.0|~3.2",
+                "universal/universal": "2.0.x-dev"
             },
             "require-dev": {
                 "corneltek/phpunit-testmore": "dev-master",
@@ -97,7 +97,7 @@
                 "getopt",
                 "zsh"
             ],
-            "time": "2017-05-27 10:02:27"
+            "time": "2017-06-02 07:04:59"
         },
         {
             "name": "corneltek/codegen",
@@ -105,12 +105,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/c9s/CodeGen.git",
-                "reference": "6c225eaba93508d674676ad4abe69803edac35e5"
+                "reference": "4fd58c53d65efd42d4612a8e627a59a51986ccb1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/c9s/CodeGen/zipball/6c225eaba93508d674676ad4abe69803edac35e5",
-                "reference": "6c225eaba93508d674676ad4abe69803edac35e5",
+                "url": "https://api.github.com/repos/c9s/CodeGen/zipball/4fd58c53d65efd42d4612a8e627a59a51986ccb1",
+                "reference": "4fd58c53d65efd42d4612a8e627a59a51986ccb1",
                 "shasum": ""
             },
             "require": {
@@ -141,7 +141,7 @@
             ],
             "description": "PHP Code Generation Library",
             "homepage": "http://github.com/c9s/CodeGen",
-            "time": "2017-05-25 14:49:13"
+            "time": "2017-06-03 13:18:55"
         },
         {
             "name": "corneltek/configkit",
@@ -378,52 +378,6 @@
             "time": "2013-12-01T14:32:14+00:00"
         },
         {
-            "name": "corneltek/universal",
-            "version": "1.8.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/corneltek/Universal.git",
-                "reference": "7b69d656be18d6b1d01a5a672141c80b43b5c2f3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/corneltek/Universal/zipball/7b69d656be18d6b1d01a5a672141c80b43b5c2f3",
-                "reference": "7b69d656be18d6b1d01a5a672141c80b43b5c2f3",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "require-dev": {
-                "corneltek/phpunit-testmore": "dev-master",
-                "satooshi/php-coveralls": "^1"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.8.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Universal\\": "src/Universal/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Yo-An Lin",
-                    "email": "yoanlin93@gmail.com"
-                }
-            ],
-            "description": "Universal library for PHP",
-            "homepage": "http://github.com/corneltek/Universal",
-            "time": "2016-06-11T11:51:45+00:00"
-        },
-        {
             "name": "corneltek/validationkit",
             "version": "1.1.1",
             "source": {
@@ -628,12 +582,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/maghead/maghead.git",
-                "reference": "0a8ffc1c5f7f17488683ca726eef0f42ed833094"
+                "reference": "48597e59efeee9e6a4eafe3eb36dd3cc05adf896"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/maghead/maghead/zipball/0a8ffc1c5f7f17488683ca726eef0f42ed833094",
-                "reference": "0a8ffc1c5f7f17488683ca726eef0f42ed833094",
+                "url": "https://api.github.com/repos/maghead/maghead/zipball/48597e59efeee9e6a4eafe3eb36dd3cc05adf896",
+                "reference": "48597e59efeee9e6a4eafe3eb36dd3cc05adf896",
                 "shasum": ""
             },
             "require": {
@@ -644,7 +598,7 @@
                 "corneltek/serializerkit": "^1",
                 "corneltek/validationkit": "^1",
                 "cypresslab/gitelephant": "^1.0",
-                "doctrine/inflector": "~1.0",
+                "doctrine/inflector": "^1.0",
                 "maghead/magsql": "4.0.x-dev",
                 "maghead/sqlite-parser": "^4.0",
                 "monolog/monolog": "^1.22",
@@ -652,9 +606,11 @@
                 "pimple/pimple": "^3.0",
                 "psr/log": "^1.0",
                 "ramsey/uuid": "^3.5",
-                "symfony/yaml": "^2.8|^3.0|^3.2"
+                "symfony/yaml": "^2.8|^3.0|^3.2",
+                "universal/universal": "@dev"
             },
             "require-dev": {
+                "corneltek/actionkit": "4.0.x-dev",
                 "ext-apcu": "*",
                 "mongodb/mongodb": "^1.1"
             },
@@ -697,7 +653,7 @@
                 "orm",
                 "sql"
             ],
-            "time": "2017-05-29 04:31:08"
+            "time": "2017-06-05 07:37:56"
         },
         {
             "name": "maghead/magsql",
@@ -705,13 +661,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/maghead/magsql.git",
-                "reference": "3b5aeb90328588f3552621fa96db19992211b662"
+                "reference": "b6e074247883548f92fb99ec054fbbe98c611f54"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/maghead/magsql/zipball/3b5aeb90328588f3552621fa96db19992211b662",
-                "reference": "3b5aeb90328588f3552621fa96db19992211b662",
+                "url": "https://api.github.com/repos/maghead/magsql/zipball/b6e074247883548f92fb99ec054fbbe98c611f54",
+                "reference": "b6e074247883548f92fb99ec054fbbe98c611f54",
                 "shasum": ""
+            },
+            "replace": {
+                "corneltek/sqlbuilder": "*"
             },
             "require-dev": {
                 "corneltek/phpunit-testmore": "dev-master"
@@ -738,7 +697,7 @@
                 }
             ],
             "description": "Fast and Powerful SQL for PHP",
-            "time": "2017-05-20 16:22:02"
+            "time": "2017-06-05 03:38:41"
         },
         {
             "name": "maghead/sqlite-parser",
@@ -967,12 +926,12 @@
             "version": "3.1.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/phifty-framework/Locale.git",
+                "url": "https://github.com/phiftyphp/Locale.git",
                 "reference": "b9c753f7606c39dcbdb1d43d752a62cec6b097ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phifty-framework/Locale/zipball/b9c753f7606c39dcbdb1d43d752a62cec6b097ce",
+                "url": "https://api.github.com/repos/phiftyphp/Locale/zipball/b9c753f7606c39dcbdb1d43d752a62cec6b097ce",
                 "reference": "b9c753f7606c39dcbdb1d43d752a62cec6b097ce",
                 "shasum": ""
             },
@@ -1271,16 +1230,16 @@
         },
         {
             "name": "symfony/class-loader",
-            "version": "v3.2.8",
+            "version": "v3.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/class-loader.git",
-                "reference": "fc4c04bfd17130a9dccfded9578353f311967da7"
+                "reference": "386a294d621576302e7cc36965d6ed53b8c73c4f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/class-loader/zipball/fc4c04bfd17130a9dccfded9578353f311967da7",
-                "reference": "fc4c04bfd17130a9dccfded9578353f311967da7",
+                "url": "https://api.github.com/repos/symfony/class-loader/zipball/386a294d621576302e7cc36965d6ed53b8c73c4f",
+                "reference": "386a294d621576302e7cc36965d6ed53b8c73c4f",
                 "shasum": ""
             },
             "require": {
@@ -1296,7 +1255,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.2-dev"
+                    "dev-master": "3.3-dev"
                 }
             },
             "autoload": {
@@ -1323,20 +1282,20 @@
             ],
             "description": "Symfony ClassLoader Component",
             "homepage": "https://symfony.com",
-            "time": "2017-04-12T14:13:17+00:00"
+            "time": "2017-06-02T09:51:43+00:00"
         },
         {
             "name": "symfony/filesystem",
-            "version": "v3.2.8",
+            "version": "v3.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "040651db13cf061827a460cc10f6e36a445c45b4"
+                "reference": "c709670bf64721202ddbe4162846f250735842c0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/040651db13cf061827a460cc10f6e36a445c45b4",
-                "reference": "040651db13cf061827a460cc10f6e36a445c45b4",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/c709670bf64721202ddbe4162846f250735842c0",
+                "reference": "c709670bf64721202ddbe4162846f250735842c0",
                 "shasum": ""
             },
             "require": {
@@ -1345,7 +1304,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.2-dev"
+                    "dev-master": "3.3-dev"
                 }
             },
             "autoload": {
@@ -1372,20 +1331,20 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
-            "time": "2017-04-12T14:13:17+00:00"
+            "time": "2017-05-28T14:08:56+00:00"
         },
         {
             "name": "symfony/finder",
-            "version": "v3.2.8",
+            "version": "v3.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
-                "reference": "9cf076f8f492f4b1ffac40aae9c2d287b4ca6930"
+                "reference": "baea7f66d30854ad32988c11a09d7ffd485810c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/finder/zipball/9cf076f8f492f4b1ffac40aae9c2d287b4ca6930",
-                "reference": "9cf076f8f492f4b1ffac40aae9c2d287b4ca6930",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/baea7f66d30854ad32988c11a09d7ffd485810c4",
+                "reference": "baea7f66d30854ad32988c11a09d7ffd485810c4",
                 "shasum": ""
             },
             "require": {
@@ -1394,7 +1353,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.2-dev"
+                    "dev-master": "3.3-dev"
                 }
             },
             "autoload": {
@@ -1421,7 +1380,7 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
-            "time": "2017-04-12T14:13:17+00:00"
+            "time": "2017-06-01T21:01:25+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -1484,16 +1443,16 @@
         },
         {
             "name": "symfony/process",
-            "version": "v3.2.8",
+            "version": "v3.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "999c2cf5061e627e6cd551dc9ebf90dd1d11d9f0"
+                "reference": "8e30690c67aafb6c7992d6d8eb0d707807dd3eaf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/999c2cf5061e627e6cd551dc9ebf90dd1d11d9f0",
-                "reference": "999c2cf5061e627e6cd551dc9ebf90dd1d11d9f0",
+                "url": "https://api.github.com/repos/symfony/process/zipball/8e30690c67aafb6c7992d6d8eb0d707807dd3eaf",
+                "reference": "8e30690c67aafb6c7992d6d8eb0d707807dd3eaf",
                 "shasum": ""
             },
             "require": {
@@ -1502,7 +1461,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.2-dev"
+                    "dev-master": "3.3-dev"
                 }
             },
             "autoload": {
@@ -1529,11 +1488,11 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2017-04-12T14:13:17+00:00"
+            "time": "2017-05-22T12:32:03+00:00"
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.8.20",
+            "version": "v2.8.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
@@ -1582,16 +1541,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v2.3.2",
+            "version": "v2.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "85e8372c451510165c04bf781295f9d922fa524b"
+                "reference": "fe3e3f3359b23b36f65cb600cd516142c07a2e7d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/85e8372c451510165c04bf781295f9d922fa524b",
-                "reference": "85e8372c451510165c04bf781295f9d922fa524b",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/fe3e3f3359b23b36f65cb600cd516142c07a2e7d",
+                "reference": "fe3e3f3359b23b36f65cb600cd516142c07a2e7d",
                 "shasum": ""
             },
             "require": {
@@ -1606,12 +1565,15 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.3-dev"
+                    "dev-master": "2.4-dev"
                 }
             },
             "autoload": {
                 "psr-0": {
                     "Twig_": "lib/"
+                },
+                "psr-4": {
+                    "Twig\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1641,7 +1603,52 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2017-04-21T00:13:02+00:00"
+            "time": "2017-06-06T03:58:14+00:00"
+        },
+        {
+            "name": "universal/universal",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/c9s/universal.git",
+                "reference": "83367de9b5d61c570e1956df5cecf551178857fa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/c9s/universal/zipball/83367de9b5d61c570e1956df5cecf551178857fa",
+                "reference": "83367de9b5d61c570e1956df5cecf551178857fa",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "replace": {
+                "corneltek/universal": "*"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Universal\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Yo-An Lin",
+                    "email": "yoanlin93@gmail.com"
+                }
+            ],
+            "description": "Universal library for PHP",
+            "homepage": "http://github.com/c9s/universal",
+            "time": "2017-06-04 10:36:52"
         }
     ],
     "packages-dev": [
@@ -1651,12 +1658,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/c9s/Kendo.git",
-                "reference": "ea4787727293de01d3760c4d1db3255c62b1fe73"
+                "reference": "2513c2934198b4a5ef6b201eb876bfb65069cc31"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/c9s/Kendo/zipball/ea4787727293de01d3760c4d1db3255c62b1fe73",
-                "reference": "ea4787727293de01d3760c4d1db3255c62b1fe73",
+                "url": "https://api.github.com/repos/c9s/Kendo/zipball/2513c2934198b4a5ef6b201eb876bfb65069cc31",
+                "reference": "2513c2934198b4a5ef6b201eb876bfb65069cc31",
                 "shasum": ""
             },
             "require": {
@@ -1668,7 +1675,6 @@
                 "corneltek/phpunit-testmore": "dev-master",
                 "corneltek/sessionkit": "dev-master",
                 "corneltek/sqlbuilder": "4.0.x-dev",
-                "corneltek/universal": "*",
                 "maghead/maghead": "4.0.x-dev"
             },
             "type": "library",
@@ -1705,7 +1711,7 @@
                 "rbac",
                 "role-based"
             ],
-            "time": "2017-05-18 16:02:40"
+            "time": "2017-06-02T04:53:00+00:00"
         },
         {
             "name": "corneltek/webserver-runner",
@@ -1746,6 +1752,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "universal/universal": 20,
         "maghead/maghead": 20,
         "maghead/magsql": 20,
         "corneltek/codegen": 20,

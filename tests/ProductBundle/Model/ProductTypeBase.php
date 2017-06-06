@@ -10,10 +10,13 @@ use Maghead\Runtime\Inflator;
 use Magsql\Bind;
 use Magsql\ArgumentArray;
 use DateTime;
+use Maghead\Runtime\ActionCreatorTrait;
 
 class ProductTypeBase
     extends Model
 {
+
+    use ActionCreatorTrait;
 
     const SCHEMA_PROXY_CLASS = 'ProductBundle\\Model\\ProductTypeSchemaProxy';
 

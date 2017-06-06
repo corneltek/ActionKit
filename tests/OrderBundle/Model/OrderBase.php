@@ -10,10 +10,13 @@ use Maghead\Runtime\Inflator;
 use Magsql\Bind;
 use Magsql\ArgumentArray;
 use DateTime;
+use Maghead\Runtime\ActionCreatorTrait;
 
 class OrderBase
     extends Model
 {
+
+    use ActionCreatorTrait;
 
     const SCHEMA_PROXY_CLASS = 'OrderBundle\\Model\\OrderSchemaProxy';
 
@@ -49,6 +52,8 @@ class OrderBase
       0 => 'id',
       1 => 'sum',
       2 => 'qty',
+      3 => 'updated_at',
+      4 => 'created_at',
     );
 
     public static $mixin_classes = array (
@@ -61,6 +66,10 @@ class OrderBase
     public $sum;
 
     public $qty;
+
+    public $updated_at;
+
+    public $created_at;
 
     public static function getSchema()
     {
@@ -116,14 +125,24 @@ class OrderBase
         return intval($this->qty);
     }
 
+    public function getUpdatedAt()
+    {
+        return Inflator::inflate($this->updated_at, 'DateTime');
+    }
+
+    public function getCreatedAt()
+    {
+        return Inflator::inflate($this->created_at, 'DateTime');
+    }
+
     public function getAlterableData()
     {
-        return ["id" => $this->id, "sum" => $this->sum, "qty" => $this->qty];
+        return ["id" => $this->id, "sum" => $this->sum, "qty" => $this->qty, "updated_at" => $this->updated_at, "created_at" => $this->created_at];
     }
 
     public function getData()
     {
-        return ["id" => $this->id, "sum" => $this->sum, "qty" => $this->qty];
+        return ["id" => $this->id, "sum" => $this->sum, "qty" => $this->qty, "updated_at" => $this->updated_at, "created_at" => $this->created_at];
     }
 
     public function setData(array $data)
@@ -131,6 +150,8 @@ class OrderBase
         if (array_key_exists("id", $data)) { $this->id = $data["id"]; }
         if (array_key_exists("sum", $data)) { $this->sum = $data["sum"]; }
         if (array_key_exists("qty", $data)) { $this->qty = $data["qty"]; }
+        if (array_key_exists("updated_at", $data)) { $this->updated_at = $data["updated_at"]; }
+        if (array_key_exists("created_at", $data)) { $this->created_at = $data["created_at"]; }
     }
 
     public function clear()
@@ -138,5 +159,7 @@ class OrderBase
         $this->id = NULL;
         $this->sum = NULL;
         $this->qty = NULL;
+        $this->updated_at = NULL;
+        $this->created_at = NULL;
     }
 }
