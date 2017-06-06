@@ -14,16 +14,12 @@ use Maghead\Schema\DeclareSchema;
 use Maghead\Schema\Schema;
 use Maghead\Schema\RuntimeColumn;
 
-
-
-use SQLBuilder\Raw;
+use Magsql\Raw;
 use Exception;
 
 /**
- * Convert LazyORM column to Action param,
+ * Convert Maghead column to Action param,
  * so that we can render with widget (currently).
- *
- * XXX: refactor this column converter
  */
 class ColumnConvert
 {
@@ -57,6 +53,9 @@ class ColumnConvert
         if ($column->isa) {
             $param->isa($column->isa);
         }
+        if ($column->default && !$column->default instanceof Raw) {
+            $param->default($column->default);
+        }
 
         // Convert notNull to required
         // required() is basically the same as notNull but provides extra
@@ -83,8 +82,11 @@ class ColumnConvert
         }
 
         foreach ($column->attributes as $k => $v) {
-            // if the model column validator is not compatible with action validator
-            if ($k === 'validator' || $v instanceof Raw) {
+            // skip some fields
+            if (in_array(strtolower($k), ['validator', 'default'])) {
+                continue;
+            }
+            if ($v instanceof Raw) {
                 continue;
             }
             $param->$k = $v;
@@ -102,11 +104,9 @@ class ColumnConvert
         } else {
             $default = $column->getDefaultValue();
             if (!$default instanceof Raw) {
-                $param->value = $default;
+                // $param->value = $default;
             }
         }
-
-
 
         // convert related collection model to validValues
         if ($param->refer && ! $param->validValues) {
