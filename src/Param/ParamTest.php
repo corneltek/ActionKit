@@ -1,6 +1,6 @@
 <?php
-use ActionKit\Param\Param;
-use ActionKit\Param\ImageParam;
+
+namespace ActionKit\Param;
 
 class ParamTest extends \PHPUnit\Framework\TestCase
 {

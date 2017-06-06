@@ -1,7 +1,8 @@
 <?php
-use ActionKit\Result;
 
-class ResultTest extends \PHPUnit\Framework\TestCase 
+namespace ActionKit;
+
+class ResultTest extends \PHPUnit\Framework\TestCase
 {
     public function testResult()
     {

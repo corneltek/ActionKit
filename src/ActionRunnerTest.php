@@ -1,11 +1,11 @@
 <?php
+
+namespace ActionKit;
+
 use ActionKit\ActionTemplate\TwigActionTemplate;
 use ActionKit\ActionTemplate\RecordActionTemplate;
 use ActionKit\ActionTemplate\CodeGenActionTemplate;
-use ActionKit\ServiceContainer;
 use ActionKit\Testing\ActionTestAssertions;
-use ActionKit\ActionRunner;
-use ActionKit\Action;
 use User\Model\UserSchema;
 
 class CreateUserWithMoniker extends Action
@@ -34,7 +34,7 @@ class ActionRunnerTest extends \Maghead\Testing\ModelTestCase
     {
         $container = new ServiceContainer;
         $runner = new ActionRunner($container);
-        $runner->run('CreateUserWithMoniker', []);
+        $runner->run('ActionKit::CreateUserWithMoniker', []);
         $result = $runner->getResult('create-user');
         $this->assertNotNull($result);
         $this->assertEquals("foo", $result->data('name'));
