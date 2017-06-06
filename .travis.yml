@@ -12,7 +12,6 @@ matrix:
   allow_failures:
     - php: "5.6"
     - php: "hhvm"
-    - env: DB=mysql
 install:
 - travis_retry composer require satooshi/php-coveralls "^1" --no-update --dev --prefer-dist
 - travis_retry composer install
