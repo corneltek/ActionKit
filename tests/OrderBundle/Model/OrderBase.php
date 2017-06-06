@@ -52,8 +52,9 @@ class OrderBase
       0 => 'id',
       1 => 'sum',
       2 => 'qty',
-      3 => 'updated_at',
-      4 => 'created_at',
+      3 => 'amount',
+      4 => 'updated_at',
+      5 => 'created_at',
     );
 
     public static $mixin_classes = array (
@@ -66,6 +67,8 @@ class OrderBase
     public $sum;
 
     public $qty;
+
+    public $amount;
 
     public $updated_at;
 
@@ -125,6 +128,11 @@ class OrderBase
         return intval($this->qty);
     }
 
+    public function getAmount()
+    {
+        return intval($this->amount);
+    }
+
     public function getUpdatedAt()
     {
         return Inflator::inflate($this->updated_at, 'DateTime');
@@ -137,12 +145,12 @@ class OrderBase
 
     public function getAlterableData()
     {
-        return ["id" => $this->id, "sum" => $this->sum, "qty" => $this->qty, "updated_at" => $this->updated_at, "created_at" => $this->created_at];
+        return ["id" => $this->id, "sum" => $this->sum, "qty" => $this->qty, "amount" => $this->amount, "updated_at" => $this->updated_at, "created_at" => $this->created_at];
     }
 
     public function getData()
     {
-        return ["id" => $this->id, "sum" => $this->sum, "qty" => $this->qty, "updated_at" => $this->updated_at, "created_at" => $this->created_at];
+        return ["id" => $this->id, "sum" => $this->sum, "qty" => $this->qty, "amount" => $this->amount, "updated_at" => $this->updated_at, "created_at" => $this->created_at];
     }
 
     public function setData(array $data)
@@ -150,6 +158,7 @@ class OrderBase
         if (array_key_exists("id", $data)) { $this->id = $data["id"]; }
         if (array_key_exists("sum", $data)) { $this->sum = $data["sum"]; }
         if (array_key_exists("qty", $data)) { $this->qty = $data["qty"]; }
+        if (array_key_exists("amount", $data)) { $this->amount = $data["amount"]; }
         if (array_key_exists("updated_at", $data)) { $this->updated_at = $data["updated_at"]; }
         if (array_key_exists("created_at", $data)) { $this->created_at = $data["created_at"]; }
     }
@@ -159,6 +168,7 @@ class OrderBase
         $this->id = NULL;
         $this->sum = NULL;
         $this->qty = NULL;
+        $this->amount = NULL;
         $this->updated_at = NULL;
         $this->created_at = NULL;
     }

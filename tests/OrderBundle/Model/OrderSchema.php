@@ -14,6 +14,10 @@ class OrderSchema extends \Maghead\Schema\DeclareSchema
         $this->column('qty')
             ->integer();
 
+        $this->column('amount')
+            ->notNull()
+            ->integer();
+
         $this->column('updated_at')
             ->timestamp()
             ->null()

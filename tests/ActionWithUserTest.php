@@ -4,6 +4,8 @@ use ActionKit\ServiceContainer;
 use ActionKit\ActionTemplate\RecordActionTemplate;
 use ActionKit\ActionRunner;
 
+use OrderBundle\Model\OrderSchema;
+
 class TestUser implements \Kendo\Acl\MultiRoleInterface
 {
     public $roles;
@@ -20,9 +22,7 @@ class ActionWithUserTest extends \Maghead\Testing\ModelTestCase
 {
     public function models()
     {
-        return array( 
-            'OrderBundle\\Model\OrderSchema'
-        );
+        return [ new OrderSchema ];
     }
 
     public function userProvider()
@@ -58,7 +58,8 @@ class ActionWithUserTest extends \Maghead\Testing\ModelTestCase
             $runner->setCurrentUser($roles);
         }
         $result = $runner->run('OrderBundle::Action::CreateOrder',[
-            'qty' => '1'
+            'qty' => '1',
+            'amount' => 100,
         ]);
         $this->assertNotNull($result);
         $this->assertEquals($resultType, $result->type);
@@ -96,7 +97,8 @@ class ActionWithUserTest extends \Maghead\Testing\ModelTestCase
         $user->roles = $roles;
         $runner->setCurrentUser($user);
         $result = $runner->run('OrderBundle::Action::CreateOrder',[
-            'qty' => '1'
+            'qty' => '1',
+            'amount' => 100,
         ]);
         $this->assertNotNull($result);
         $this->assertEquals($resultType, $result->type);
