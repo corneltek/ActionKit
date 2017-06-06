@@ -174,38 +174,13 @@ class ColumnConvert
         }
     }
 
-    /**
-     * Translate Maghead RuntimeColumn to ActionKit param object.
-     *
-     * @param RuntimeColumn $c
-     * @param Model $record presents the current values
-     * @return Param
-     */
-    public static function toParam(RuntimeColumn $c, Model $record = null, Action $action = null)
+
+    private static function setupValidValues(Param $p, RuntimeColumn $c)
     {
-        $name = $c->name;
-        $param = new Param($name, $action);
-        self::setupIsa($param, $c);
-        self::setupDefault($param, $c);
-        self::setupRequired($param, $c, $action);
-
-        foreach ($c->attributes as $k => $v) {
-            // skip some fields
-            if (in_array(strtolower($k), ['validator', 'default'])) {
-                continue;
-            }
-            if ($v instanceof Raw) {
-                continue;
-            }
-            $param->$k = $v;
-        }
-
-        self::setupCurrentValue($param, $c, $record);
-
         // convert related collection model to validValues
-        if ($param->refer && ! $param->validValues) {
-            if (class_exists($param->refer, true)) {
-                $referClass = $param->refer;
+        if ($p->refer && ! $p->validValues) {
+            if (class_exists($p->refer, true)) {
+                $referClass = $p->refer;
 
                 // it's a `has many`-like relationship
                 if (is_subclass_of($referClass, Collection::class, true)) {
@@ -217,7 +192,7 @@ class ColumnConvert
                                 : $item->getKey();
                         $options[ $label ] = $item->dataKeyValue();
                     }
-                    $param->validValues = $options;
+                    $p->validValues = $options;
                 } elseif (is_subclass_of($referClass, Model::class, true)) {
                     // it's a `belongs-to`-like relationship
                     $class = $referClass . 'Collection';
@@ -229,7 +204,7 @@ class ColumnConvert
                                 : $item->getKey();
                         $options[ $label ] = $item->dataKeyValue();
                     }
-                    $param->validValues = $options;
+                    $p->validValues = $options;
                 } elseif (is_subclass_of($referClass, DeclareSchema::class, true)) {
                     $schema = new $referClass;
                     $collection = $schema->newCollection();
@@ -241,23 +216,50 @@ class ColumnConvert
                                 : $item->getKey();
                         $options[ $label ] = $item->dataKeyValue();
                     }
-                    $param->validValues = $options;
+                    $p->validValues = $options;
                 } else {
                     throw new Exception('Unsupported refer type');
                 }
-            } elseif ($relation = $record->getSchema()->getRelation($param->refer)) {
+            } elseif ($relation = $record->getSchema()->getRelation($p->refer)) {
                 // so it's a relationship reference
                 // TODO: implement this
                 throw new Exception('Unsupported refer type');
             }
         }
 
-        //  Convert column type to param type.
-        // copy widget attributes
-        self::setupWidget($param, $c);
-        self::setupWidgetType($param, $c);
+    }
 
 
-        return $param;
+    /**
+     * Translate Maghead RuntimeColumn to ActionKit param object.
+     *
+     * @param RuntimeColumn $c
+     * @param Model $record presents the current values
+     * @return Param
+     */
+    public static function toParam(RuntimeColumn $c, Model $record = null, Action $action = null)
+    {
+        $name = $c->name;
+        $p = new Param($name, $action);
+        self::setupIsa($p, $c);
+        self::setupDefault($p, $c);
+        self::setupRequired($p, $c, $action);
+
+        foreach ($c->attributes as $k => $v) {
+            // skip some fields
+            if (in_array(strtolower($k), ['validator', 'default'])) {
+                continue;
+            }
+            if ($v instanceof Raw) {
+                continue;
+            }
+            $p->$k = $v;
+        }
+
+        self::setupCurrentValue($p, $c, $record);
+        self::setupValidValues($p, $c);
+        self::setupWidget($p, $c);
+        self::setupWidgetType($p, $c);
+        return $p;
     }
 }
