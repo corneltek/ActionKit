@@ -10,7 +10,7 @@ use InvalidArgumentException;
 use Exception;
 use LogicException;
 use Maghead\Runtime\Model;
-use SQLBuilder\Raw;
+use Magsql\Raw;
 
 class Param extends CascadingAttribute
 {
@@ -390,7 +390,7 @@ class Param extends CascadingAttribute
                 if ($val = $this->getRenderableCurrentValue()) {
                     $newAttributes['value'] = $val;
                 }
-            } elseif ($this->default) {
+            } else if ($this->default) {
                 $default = $this->getDefaultValue();
                 if (!$default instanceof Raw) {
                     $newAttributes['value'] = $default;
