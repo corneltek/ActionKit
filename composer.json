@@ -13,7 +13,7 @@
         "corneltek/cliframework": "@dev",
         "corneltek/formkit": "^1",
         "phifty/locale": "^3",
-        "twig/twig": "^1|^2",
+        "twig/twig": "^2",
         "pekkis/mime-types": "^1",
         "pimple/pimple": "^3.0"
     },
