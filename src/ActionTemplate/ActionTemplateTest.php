@@ -1,12 +1,11 @@
 <?php
-use ActionKit\ActionTemplate\SampleActionTemplate;
-use ActionKit\ActionTemplate\RecordActionTemplate;
-use ActionKit\ActionTemplate\TwigActionTemplate;
-use ActionKit\ActionTemplate\UpdateOrderingRecordActionTemplate;
+
+namespace ActionKit\ActionTemplate;
+
 use ActionKit\Testing\ActionTestCase;
 use ActionKit\ActionRunner;
 
-class ActionTemplate extends ActionTestCase
+class ActionTemplateTest extends ActionTestCase
 {
 
     public function failingArgumentProvider()

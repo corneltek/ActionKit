@@ -1,7 +1,7 @@
 <?php
-use ActionKit\Csrf\CsrfTokenProvider;
-use ActionKit\Csrf\CsrfSessionStorage;
-use ActionKit\Csrf\CsrfArrayStorage;
+
+
+namespace ActionKit\Csrf;
 
 class CsrfTokenProviderTest extends \PHPUnit\Framework\TestCase 
 {
