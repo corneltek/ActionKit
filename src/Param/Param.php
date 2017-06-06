@@ -2,7 +2,6 @@
 namespace ActionKit\Param;
 
 use CascadingAttribute;
-use FormKit;
 use ActionKit\MessagePool;
 use ActionKit\Action;
 use DateTime;
@@ -11,6 +10,8 @@ use Exception;
 use LogicException;
 use Maghead\Runtime\Model;
 use Magsql\Raw;
+
+use Maghead\Utils;
 
 class Param extends CascadingAttribute
 {
@@ -66,7 +67,7 @@ class Param extends CascadingAttribute
     public $widgetAttributes = array();
 
     /* default widget namespace */
-    public $widgetNamespace = 'FormKit\\Widget';
+    public static $widgetNamespace = \FormKit\Widget::class;
 
     public $validator;
 
@@ -327,7 +328,7 @@ class Param extends CascadingAttribute
     public function createHintWidget($widgetClass = null, $attributes = array())
     {
         if ($this->hint) {
-            $class = $widgetClass ?: 'FormKit\\Element\\Div';
+            $class = $widgetClass ?: \FormKit\Element\Div::class;
             $widget = new $class($attributes);
             $widget->append($this->hint);
 
@@ -337,7 +338,7 @@ class Param extends CascadingAttribute
 
     public function createLabelWidget($widgetClass = null, $attributes = array())
     {
-        $class = $widgetClass ?: 'FormKit\\Widget\\Label';
+        $class = $widgetClass ?: \FormKit\Widget\Label::class;
         if ($this->required) {
             return new $class('* ' . $this->getLabel());
         }
@@ -422,7 +423,7 @@ class Param extends CascadingAttribute
         if ('+' == $class[0]) {
             $class = substr($class, 1);
         } else {
-            $class = $this->widgetNamespace . '\\' . $class;
+            $class = \Maghead\Utils::resolveClass($class, [\App\Widget::class, \ActionKit\Widget::class, $this->widgetNamespace], $this->action);
         }
 
         // create new widget object.

@@ -239,8 +239,7 @@ class ColumnConvert
      */
     public static function toParam(RuntimeColumn $c, Model $record = null, Action $action = null)
     {
-        $name = $c->name;
-        $p = new Param($name, $action);
+        $p = new Param($c->name, $action);
         self::setupIsa($p, $c);
         self::setupDefault($p, $c);
         self::setupRequired($p, $c, $action);
