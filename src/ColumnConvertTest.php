@@ -13,12 +13,23 @@ use Magsql\Raw;
 
 use ActionKit\Param\Param;
 use DateTime;
+use Closure;
 
 class ColumnConvertTest extends ModelTestCase
 {
     public function models()
     {
         return [ new OrderSchema, new OrderItemSchema ];
+    }
+
+    public function testConvertDateTimeDefaultClosure()
+    {
+        $schema = Order::getSchema();
+        $column = $schema->getColumn('created_at');
+        $this->assertInstanceOf(RuntimeColumn::class, $column);
+
+        // assert the input
+        $this->assertInstanceOf(Closure::class, $column->default);
     }
 
     public function testConvertCurrentTimestampIntoPHPDateTimeObject()
