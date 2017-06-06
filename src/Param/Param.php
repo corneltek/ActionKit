@@ -137,8 +137,12 @@ class Param extends CascadingAttribute
                         $dateTime->setTimestamp($value);
                         return $dateTime;
                     } elseif (is_string($value)) {
-                        $dateTime = new DateTime($value);
-                        return $dateTime;
+                        try {
+                            $dateTime = new DateTime($value);
+                            return $dateTime;
+                        } catch (Exception $e) {
+                            return new InvalidArgumentException("Invalid DateTime string.");
+                        }
                     } else {
                         throw new InvalidArgumentException("Invalid argument value for DateTime type param.");
                     }
