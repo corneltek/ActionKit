@@ -53,8 +53,17 @@ class ColumnConvert
         if ($column->isa) {
             $param->isa($column->isa);
         }
-        if ($column->default && !$column->default instanceof Raw) {
-            $param->default($column->default);
+        if ($column->default) {
+            // do not use default value from the column if it's an instance of Raw
+            if ($column->default instanceof Raw) {
+                if ('current_timestamp' === strtolower($column->default->__toString())) {
+                    $param->default(function() {
+                        return new \DateTime;
+                    });
+                }
+            } else {
+                $param->default($column->default);
+            }
         }
 
         // Convert notNull to required
