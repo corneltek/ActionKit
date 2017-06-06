@@ -39,6 +39,6 @@ class OrderSchema extends \Maghead\Schema\DeclareSchema
             })
             ;
 
+        $this->hasMany('items', OrderItemSchema::class, 'order_id', 'id');
     }
 }
-

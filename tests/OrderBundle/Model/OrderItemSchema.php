@@ -17,6 +17,8 @@ class OrderItemSchema extends \Maghead\Schema\DeclareSchema
             ->refer(OrderSchema::class);
 
         $this->column('subtotal')->integer();
+
+        $this->belongsTo('order', OrderSchema::class, 'id', 'order_id');
     }
 }
 

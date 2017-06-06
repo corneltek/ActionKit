@@ -172,4 +172,17 @@ class OrderBase
         $this->updated_at = NULL;
         $this->created_at = NULL;
     }
+
+    public function fetchItems()
+    {
+        return static::masterRepo()->fetchItemsOf($this);
+    }
+
+    public function getItems()
+    {
+        $collection = new \OrderBundle\Model\OrderItemCollection;
+        $collection->where()->equal("order_id", $this->id);
+        $collection->setPresetVars([ "order_id" => $this->id ]);
+        return $collection;
+    }
 }
