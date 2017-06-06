@@ -9,8 +9,6 @@
         "corneltek/fileutil": "^1.7",
         "universal/universal": "2.0.x-dev",
         "corneltek/imagekit": "^1",
-        "maghead/maghead": "4.0.x-dev",
-        "maghead/magsql": "@dev",
         "corneltek/codegen": "@dev",
         "corneltek/cliframework": "@dev",
         "corneltek/formkit": "^1",
@@ -20,6 +18,8 @@
         "pimple/pimple": "^3.0"
     },
     "require-dev": {
+        "maghead/maghead": "4.0.x-dev",
+        "maghead/magsql": "@dev",
         "corneltek/webserver-runner": "dev-master",
         "corneltek/kendo": "4.0.x-dev"
     },
