@@ -17,6 +17,9 @@ install:
 - travis_retry composer require satooshi/php-coveralls "^1" --no-update --dev --prefer-dist
 - travis_retry composer install
 before_script:
+- rm -rf *.sqlite
+- if [[ "$DB" == "pgsql" ]]; then vendor/maghead/maghead/travis/setup-pgsql ; fi
+- if [[ "$DB" == "mysql" ]]; then vendor/maghead/maghead/travis/setup-mysql ; fi
 - phpenv rehash
 - php vendor/bin/maghead use tests/config/sqlite.yml
 - php vendor/bin/maghead schema build -f
