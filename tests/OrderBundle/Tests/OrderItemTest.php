@@ -15,6 +15,7 @@ use OrderBundle\Model\OrderItemCollection;
 use OrderBundle\Model\OrderItemSchema;
 
 use Maghead\Testing\ModelTestCase;
+use ActionKit\RecordAction\BaseRecordAction;
 use ActionKit\RecordAction\CreateRecordAction;
 use ActionKit\RecordAction\UpdateRecordAction;
 use ActionKit\RecordAction\DeleteRecordAction;
@@ -33,47 +34,52 @@ class OrderItemTest extends ModelTestCase
 
     public function testCreateWithoutPrimaryKeyValue()
     {
-        $orderItem = new OrderItem;
+
         $schema = OrderItem::getSchema();
-        $this->assertEquals('id',$schema->primaryKey);
+        $this->assertEquals('id', $schema->primaryKey);
 
         $primaryKeyColumn = $schema->getColumn('id');
         $this->assertNotNull($primaryKeyColumn);
 
         $this->assertTrue($primaryKeyColumn->autoIncrement, 'primary key is a auto-increment column');
 
-        $create = $orderItem->asCreateAction([ 'quantity' => 3, 'subtotal' => 120 ]);
+        $orderRet = Order::create([ 'amount' => 100 ]);
+        $orderItem = new OrderItem;
+        $create = $orderItem->asCreateAction(['quantity' => 3, 'subtotal' => 120, 'order_id' => $orderRet->key ]);
         $this->assertNotNull($create);
-        $this->assertInstanceOf('ActionKit\\RecordAction\\BaseRecordAction', $create);
-        $this->assertInstanceOf('ActionKit\\RecordAction\\CreateRecordAction', $create);
+        $this->assertInstanceOf(BaseRecordAction::class, $create);
+        $this->assertInstanceOf(CreateRecordAction::class, $create);
 
         $success = $create();
         $this->assertTrue($success, 'Should be able to create without primary key value.');
     }
 
-
     public function testUpdateQuantityTo3()
     {
-        $orderItem = new OrderItem;
-        $schema = $orderItem->getSchema();
-        $this->assertEquals('id',$schema->primaryKey);
+        
+        $schema = OrderItem::getSchema();
+        $this->assertEquals('id', $schema->primaryKey);
 
         $primaryKeyColumn = $schema->getColumn('id');
         $this->assertNotNull($primaryKeyColumn);
         $this->assertTrue($primaryKeyColumn->autoIncrement, 'primary key is a auto-increment column');
 
-        $create = $orderItem->asCreateAction([ 'quantity' => 3, 'subtotal' => 120 ]);
+        $orderRet = Order::create([ 'amount' => 100 ]);
+        $orderItem = new OrderItem;
+        $create = $orderItem->asCreateAction([ 'quantity' => 3, 'subtotal' => 120, 'order_id' => $orderRet->key ]);
         $this->assertNotNull($create);
-        $this->assertInstanceOf('ActionKit\\RecordAction\\BaseRecordAction', $create);
-        $this->assertInstanceOf('ActionKit\\RecordAction\\CreateRecordAction', $create);
+        $this->assertInstanceOf(BaseRecordAction::class, $create);
+        $this->assertInstanceOf(CreateRecordAction::class, $create);
+
         $success = $create();
         $this->assertTrue($success, 'Should be able to create without primary key value.');
 
         $orderItem = $create->getRecord();
         $update = $orderItem->asUpdateAction(['quantity' => 3]);
         $this->assertNotNull($update);
-        $this->assertInstanceOf('ActionKit\\RecordAction\\BaseRecordAction', $update);
-        $this->assertInstanceOf('ActionKit\\RecordAction\\UpdateRecordAction', $update);
+        $this->assertInstanceOf(BaseRecordAction::class, $update);
+        $this->assertInstanceOf(UpdateRecordAction::class, $update);
+
         $result = $update();
         $this->assertTrue($result);
     }
@@ -88,12 +94,14 @@ class OrderItemTest extends ModelTestCase
         $this->assertNotNull($primaryKeyColumn);
         $this->assertTrue($primaryKeyColumn->autoIncrement, 'primary key is a auto-increment column');
 
-
+        $orderRet = Order::create([ 'amount' => 100 ]);
         $orderItem = new OrderItem;
-        $create = $orderItem->asCreateAction([ 'quantity' => 3, 'subtotal' => 120 ]);
+
+        $create = $orderItem->asCreateAction([ 'quantity' => 3, 'subtotal' => 120, 'order_id' => $orderRet->key ]);
         $this->assertNotNull($create);
-        $this->assertInstanceOf('ActionKit\\RecordAction\\BaseRecordAction', $create);
-        $this->assertInstanceOf('ActionKit\\RecordAction\\CreateRecordAction', $create);
+        $this->assertInstanceOf(BaseRecordAction::class, $create);
+        $this->assertInstanceOf(CreateRecordAction::class, $create);
+
         $success = $create();
         $this->assertTrue($success, 'Should be able to create without primary key value.');
 
@@ -103,8 +111,9 @@ class OrderItemTest extends ModelTestCase
 
         $update = $record->asUpdateAction(['quantity' => null]);
         $this->assertNotNull($update);
-        $this->assertInstanceOf('ActionKit\\RecordAction\\BaseRecordAction', $update);
-        $this->assertInstanceOf('ActionKit\\RecordAction\\UpdateRecordAction', $update);
+        $this->assertInstanceOf(BaseRecordAction::class, $update);
+        $this->assertInstanceOf(UpdateRecordAction::class, $update);
+
         $success = $update();
         $this->assertFalse($success, 'Should not be able to update required field with null value.');
     }

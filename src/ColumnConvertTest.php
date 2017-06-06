@@ -19,7 +19,7 @@ class ColumnConvertTest extends ModelTestCase
 {
     public function models()
     {
-        return [ new OrderSchema, new OrderItemSchema ];
+        return [new OrderSchema, new OrderItemSchema];
     }
 
     public function testConvertDateTimeDefaultClosure()
@@ -47,8 +47,6 @@ class ColumnConvertTest extends ModelTestCase
 
         $this->assertTrue($param->required);
     }
-
-
 
     public function testConvertCurrentTimestampIntoPHPDateTimeObject()
     {

@@ -58,7 +58,7 @@ class ActionWithUserTest extends \Maghead\Testing\ModelTestCase
             $runner->setCurrentUser($roles);
         }
         $result = $runner->run('OrderBundle::Action::CreateOrder',[
-            'qty' => '1',
+            'quantity' => '1',
             'amount' => 100,
         ]);
         $this->assertNotNull($result);
@@ -97,7 +97,7 @@ class ActionWithUserTest extends \Maghead\Testing\ModelTestCase
         $user->roles = $roles;
         $runner->setCurrentUser($user);
         $result = $runner->run('OrderBundle::Action::CreateOrder',[
-            'qty' => '1',
+            'quantity' => '1',
             'amount' => 100,
         ]);
         $this->assertNotNull($result);

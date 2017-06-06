@@ -51,7 +51,7 @@ class OrderBase
     public static $column_names = array (
       0 => 'id',
       1 => 'sum',
-      2 => 'qty',
+      2 => 'quantity',
       3 => 'amount',
       4 => 'updated_at',
       5 => 'created_at',
@@ -66,7 +66,7 @@ class OrderBase
 
     public $sum;
 
-    public $qty;
+    public $quantity;
 
     public $amount;
 
@@ -123,9 +123,9 @@ class OrderBase
         return intval($this->sum);
     }
 
-    public function getQty()
+    public function getQuantity()
     {
-        return intval($this->qty);
+        return intval($this->quantity);
     }
 
     public function getAmount()
@@ -145,19 +145,19 @@ class OrderBase
 
     public function getAlterableData()
     {
-        return ["id" => $this->id, "sum" => $this->sum, "qty" => $this->qty, "amount" => $this->amount, "updated_at" => $this->updated_at, "created_at" => $this->created_at];
+        return ["id" => $this->id, "sum" => $this->sum, "quantity" => $this->quantity, "amount" => $this->amount, "updated_at" => $this->updated_at, "created_at" => $this->created_at];
     }
 
     public function getData()
     {
-        return ["id" => $this->id, "sum" => $this->sum, "qty" => $this->qty, "amount" => $this->amount, "updated_at" => $this->updated_at, "created_at" => $this->created_at];
+        return ["id" => $this->id, "sum" => $this->sum, "quantity" => $this->quantity, "amount" => $this->amount, "updated_at" => $this->updated_at, "created_at" => $this->created_at];
     }
 
     public function setData(array $data)
     {
         if (array_key_exists("id", $data)) { $this->id = $data["id"]; }
         if (array_key_exists("sum", $data)) { $this->sum = $data["sum"]; }
-        if (array_key_exists("qty", $data)) { $this->qty = $data["qty"]; }
+        if (array_key_exists("quantity", $data)) { $this->quantity = $data["quantity"]; }
         if (array_key_exists("amount", $data)) { $this->amount = $data["amount"]; }
         if (array_key_exists("updated_at", $data)) { $this->updated_at = $data["updated_at"]; }
         if (array_key_exists("created_at", $data)) { $this->created_at = $data["created_at"]; }
@@ -167,7 +167,7 @@ class OrderBase
     {
         $this->id = NULL;
         $this->sum = NULL;
-        $this->qty = NULL;
+        $this->quantity = NULL;
         $this->amount = NULL;
         $this->updated_at = NULL;
         $this->created_at = NULL;

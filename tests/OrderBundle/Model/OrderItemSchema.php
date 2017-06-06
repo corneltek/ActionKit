@@ -10,6 +10,12 @@ class OrderItemSchema extends \Maghead\Schema\DeclareSchema
             ->required()
             ;
 
+        $this->column('order_id')
+            ->integer()
+            ->required()
+            ->unsigned()
+            ->refer(OrderSchema::class);
+
         $this->column('subtotal')->integer();
     }
 }

@@ -11,7 +11,7 @@ class OrderSchema extends \Maghead\Schema\DeclareSchema
         $this->column('sum')
             ->integer();
 
-        $this->column('qty')
+        $this->column('quantity')
             ->integer();
 
         $this->column('amount')

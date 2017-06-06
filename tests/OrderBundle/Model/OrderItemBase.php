@@ -51,7 +51,8 @@ class OrderItemBase
     public static $column_names = array (
       0 => 'id',
       1 => 'quantity',
-      2 => 'subtotal',
+      2 => 'order_id',
+      3 => 'subtotal',
     );
 
     public static $mixin_classes = array (
@@ -62,6 +63,8 @@ class OrderItemBase
     public $id;
 
     public $quantity;
+
+    public $order_id;
 
     public $subtotal;
 
@@ -114,6 +117,11 @@ class OrderItemBase
         return intval($this->quantity);
     }
 
+    public function getOrderId()
+    {
+        return intval($this->order_id);
+    }
+
     public function getSubtotal()
     {
         return intval($this->subtotal);
@@ -121,18 +129,19 @@ class OrderItemBase
 
     public function getAlterableData()
     {
-        return ["id" => $this->id, "quantity" => $this->quantity, "subtotal" => $this->subtotal];
+        return ["id" => $this->id, "quantity" => $this->quantity, "order_id" => $this->order_id, "subtotal" => $this->subtotal];
     }
 
     public function getData()
     {
-        return ["id" => $this->id, "quantity" => $this->quantity, "subtotal" => $this->subtotal];
+        return ["id" => $this->id, "quantity" => $this->quantity, "order_id" => $this->order_id, "subtotal" => $this->subtotal];
     }
 
     public function setData(array $data)
     {
         if (array_key_exists("id", $data)) { $this->id = $data["id"]; }
         if (array_key_exists("quantity", $data)) { $this->quantity = $data["quantity"]; }
+        if (array_key_exists("order_id", $data)) { $this->order_id = $data["order_id"]; }
         if (array_key_exists("subtotal", $data)) { $this->subtotal = $data["subtotal"]; }
     }
 
@@ -140,6 +149,12 @@ class OrderItemBase
     {
         $this->id = NULL;
         $this->quantity = NULL;
+        $this->order_id = NULL;
         $this->subtotal = NULL;
+    }
+
+    public function fetchOrder()
+    {
+        return static::masterRepo()->fetchOrderOf($this);
     }
 }
