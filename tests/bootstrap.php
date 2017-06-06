@@ -6,6 +6,10 @@ use Maghead\Runtime\Config\FileConfigLoader;
 use Maghead\Runtime\Config\ArrayConfigLoader;
 use Maghead\Runtime\Bootstrap;
 
+if (!class_exists('\PHPUnit_Framework_TestCase') && class_exists('\PHPUnit\Framework\TestCase')) {
+    class_alias('\PHPUnit\Framework\TestCase', '\PHPUnit_Framework_TestCase');
+}
+
 define('ROOT' , dirname(__DIR__) );
 $loader = require ROOT . '/vendor/autoload.php';
 $loader->add(null, ROOT . '/tests');
