@@ -23,6 +23,13 @@ use Exception;
  */
 class ColumnConvert
 {
+    public static $typeWidgets = [
+        'date' => 'DateInput',
+        'datetime' => 'DateTimeInput',
+        'text' => 'TextareaInput',
+    ];
+
+
     /**
      * Convert a Maghead schema to action.
      *
@@ -94,7 +101,7 @@ class ColumnConvert
         }
     }
 
-    protected static function setupCurrentValue(Param $p, RuntimeColumn $c, Model $r = null)
+    private static function setupCurrentValue(Param $p, RuntimeColumn $c, Model $r = null)
     {
         // if we got record, load the value from it.
         if ($r) {
@@ -109,6 +116,60 @@ class ColumnConvert
             $default = $c->getDefaultValue();
             if (!$default instanceof Raw) {
                 $p->value = $default;
+            }
+        }
+    }
+
+
+    private static function setupWidget(Param $p, RuntimeColumn $c)
+    {
+        if ($c->widgetClass) {
+            $p->widgetClass = $c->widgetClass;
+        }
+
+        if ($c->widgetAttributes) {
+            $p->widgetAttributes = $c->widgetAttributes;
+        } else {
+            $p->widgetAttributes = [];
+        }
+
+        if ($c->immutable) {
+            $p->widgetAttributes['readonly'] = 'readonly';
+        }
+    }
+
+    private static function setupWidgetType(Param $p, RuntimeColumn $c)
+    {
+        // When renderAs is specified, we should always use the widget name 
+        if ($c->renderAs) {
+
+            $p->renderAs($c->renderAs);
+
+        } else {
+
+            self::setupWidgetTypeAuto($p, $c);
+            
+        }
+    }
+
+
+    private static function setupWidgetTypeAuto(Param $p, RuntimeColumn $c)
+    {
+        if ($p->validValues || $p->validPairs || $p->optionValues) {
+
+            $p->renderAs('SelectInput');
+
+        } else if ($c->primary) {
+
+            // When it's a primary key field, then it should be hidden input if renderAs is not specified.
+            $p->renderAs('HiddenInput');
+
+        } else {
+
+            if (isset(static::$typeWidgets[ $p->type ])) {
+                $p->renderAs(static::$typeWidgets[$p->type]);
+            } else {
+                $p->renderAs('TextInput');
             }
         }
     }
@@ -153,7 +214,7 @@ class ColumnConvert
                     foreach ($collection as $item) {
                         $label = method_exists($item, 'dataLabel')
                                 ? $item->dataLabel()
-                                : $item->id;
+                                : $item->getKey();
                         $options[ $label ] = $item->dataKeyValue();
                     }
                     $param->validValues = $options;
@@ -165,7 +226,7 @@ class ColumnConvert
                     foreach ($collection as $item) {
                         $label = method_exists($item, 'dataLabel')
                                 ? $item->dataLabel()
-                                : $item->id;
+                                : $item->getKey();
                         $options[ $label ] = $item->dataKeyValue();
                     }
                     $param->validValues = $options;
@@ -177,7 +238,7 @@ class ColumnConvert
                     foreach ($collection as $item) {
                         $label = method_exists($item, 'dataLabel')
                                 ? $item->dataLabel()
-                                : $item->id;
+                                : $item->getKey();
                         $options[ $label ] = $item->dataKeyValue();
                     }
                     $param->validValues = $options;
@@ -193,37 +254,9 @@ class ColumnConvert
 
         //  Convert column type to param type.
         // copy widget attributes
-        if ($c->widgetClass) {
-            $param->widgetClass = $c->widgetClass;
-        }
+        self::setupWidget($param, $c);
+        self::setupWidgetType($param, $c);
 
-        if ($c->widgetAttributes) {
-            $param->widgetAttributes = $c->widgetAttributes;
-        }
-
-        if ($c->immutable) {
-            $param->widgetAttributes['readonly'] = 'readonly';
-        }
-
-        if ($c->renderAs) {
-            $param->renderAs($c->renderAs);
-        } elseif ($param->validValues || $param->validPairs || $param->optionValues) {
-            $param->renderAs('SelectInput');
-        } elseif ($param->name === 'id') {
-            $param->renderAs('HiddenInput');
-        } else {
-            // guess input widget from data type
-            $typeMapping = [
-                'date' => 'DateInput',
-                'datetime' => 'DateTimeInput',
-                'text' => 'TextareaInput',
-            ];
-            if (isset($typeMapping[ $param->type ])) {
-                $param->renderAs($typeMapping[$param->type]);
-            } else {
-                $param->renderAs('TextInput');
-            }
-        }
 
         return $param;
     }
