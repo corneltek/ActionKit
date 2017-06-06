@@ -30,7 +30,25 @@ class ColumnConvertTest extends ModelTestCase
 
         // assert the input
         $this->assertInstanceOf(Closure::class, $column->default);
+
+        $param = ColumnConvert::toParam($column);
+        $this->assertInstanceOf(Param::class, $param);
+        $this->assertInstanceOf(DateTime::class, $param->getDefaultValue()); 
     }
+
+    public function testConvertColumnNotNull()
+    {
+        $schema = Order::getSchema();
+        $column = $schema->getColumn('amount');
+        $this->assertInstanceOf(RuntimeColumn::class, $column);
+
+        $param = ColumnConvert::toParam($column);
+        $this->assertInstanceOf(Param::class, $param);
+
+        $this->assertTrue($param->required);
+    }
+
+
 
     public function testConvertCurrentTimestampIntoPHPDateTimeObject()
     {
