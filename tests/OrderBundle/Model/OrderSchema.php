@@ -20,7 +20,7 @@ class OrderSchema extends \Maghead\Schema\DeclareSchema
 
         $this->column('updated_at')
             ->timestamp()
-            ->null()
+            ->notNull()
             ->isa('DateTime')
             ->renderAs('DateTimeInput')
             ->default(new Raw('CURRENT_TIMESTAMP'))

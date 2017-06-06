@@ -39,55 +39,96 @@ class ColumnConvert
     }
 
 
-    /**
-     * Translate Maghead RuntimeColumn to ActionKit param object.
-     *
-     * @param RuntimeColumn $column
-     * @param Model $record presents the current values
-     * @return Param
-     */
-    public static function toParam(RuntimeColumn $column, Model $record = null, Action $action = null)
+    protected static function setupDefault(Param $p, RuntimeColumn $c)
     {
-        $name = $column->name;
-        $param = new Param($name, $action);
-        if ($column->isa) {
-            $param->isa($column->isa);
-        }
-        if ($column->default) {
+        if ($c->default) {
             // do not use default value from the column if it's an instance of Raw
-            if ($column->default instanceof Raw) {
+            if ($c->default instanceof Raw) {
                 // let database put the default value by themself.
                 // TODO: parse fixed value here.
             } else {
-                $param->default($column->default);
+                $p->default($c->default);
             }
         }
+    }
 
+    protected static function setupRequired(Param $p, RuntimeColumn $c, BaseRecordAction $a = null)
+    {
         // Convert notNull to required
         // required() is basically the same as notNull but provides extra
         // software validation.
         // When creating records, the primary key with auto-increment support is not required.
         // However when updating records, the primary key is required for updating the existing record..
-        if ($column->notNull) {
-            if ($action && $column->primary) {
-                if ($action instanceof CreateRecordAction) {
+        if ($c->notNull) {
+            if ($a) {
 
-                    // autoIncrement is not defined, then it requires the input value.
-                    if ($column->autoIncrement) {
-                        $param->required = false;
-                    } else {
-                        $param->required = true;
+                if ($c->primary) {
+
+                    if ($a instanceof CreateRecordAction) {
+                        // autoIncrement is not defined, then it requires the input value.
+                        if ($c->autoIncrement) {
+                            $p->required = false;
+                        } else {
+                            $p->required = true;
+                        }
+                    } else if ($a instanceof UpdateRecordAction || $a instanceof DeleteRecordAction) {
+                        // primary key is required to update/delete records.
+                        $p->required = true;
                     }
-                } elseif ($action instanceof UpdateRecordAction || $action instanceof DeleteRecordAction) {
-                    // primary key column is required to update/delete records.
-                    $param->required = true;
+                } else {
+                    $p->required = true;
                 }
+
             } else {
-                $param->required = true;
+                if (!$c->default && !($c->primary && $c->autoIncrement)) {
+                    $p->required = true;
+                }
             }
         }
+    }
 
-        foreach ($column->attributes as $k => $v) {
+    protected static function setupIsa(Param $p, RuntimeColumn $c)
+    {
+        if ($c->isa) {
+            $p->isa($c->isa);
+        }
+    }
+
+    protected static function setupCurrentValue(Param $p, RuntimeColumn $c, Model $r = null)
+    {
+        // if we got record, load the value from it.
+        if ($r) {
+            // $val = $r->{$name};
+            // $val = $val instanceof Model ? $val->dataKeyValue() : $val;
+            $val = $r->getValue($c->name);
+            $p->value   = $val;
+
+            // XXX: should get default value (from column definition)
+            //      default value is only used in create action.
+        } else {
+            $default = $c->getDefaultValue();
+            if (!$default instanceof Raw) {
+                $p->value = $default;
+            }
+        }
+    }
+
+    /**
+     * Translate Maghead RuntimeColumn to ActionKit param object.
+     *
+     * @param RuntimeColumn $c
+     * @param Model $record presents the current values
+     * @return Param
+     */
+    public static function toParam(RuntimeColumn $c, Model $record = null, Action $action = null)
+    {
+        $name = $c->name;
+        $param = new Param($name, $action);
+        self::setupIsa($param, $c);
+        self::setupDefault($param, $c);
+        self::setupRequired($param, $c, $action);
+
+        foreach ($c->attributes as $k => $v) {
             // skip some fields
             if (in_array(strtolower($k), ['validator', 'default'])) {
                 continue;
@@ -98,21 +139,7 @@ class ColumnConvert
             $param->$k = $v;
         }
 
-        // if we got record, load the value from it.
-        if ($record) {
-            // $val = $record->{$name};
-            // $val = $val instanceof Model ? $val->dataKeyValue() : $val;
-            $val = $record->getValue($name);
-            $param->value   = $val;
-
-            // XXX: should get default value (from column definition)
-            //      default value is only used in create action.
-        } else {
-            $default = $column->getDefaultValue();
-            if (!$default instanceof Raw) {
-                // $param->value = $default;
-            }
-        }
+        self::setupCurrentValue($param, $c, $record);
 
         // convert related collection model to validValues
         if ($param->refer && ! $param->validValues) {
@@ -166,20 +193,20 @@ class ColumnConvert
 
         //  Convert column type to param type.
         // copy widget attributes
-        if ($column->widgetClass) {
-            $param->widgetClass = $column->widgetClass;
+        if ($c->widgetClass) {
+            $param->widgetClass = $c->widgetClass;
         }
 
-        if ($column->widgetAttributes) {
-            $param->widgetAttributes = $column->widgetAttributes;
+        if ($c->widgetAttributes) {
+            $param->widgetAttributes = $c->widgetAttributes;
         }
 
-        if ($column->immutable) {
+        if ($c->immutable) {
             $param->widgetAttributes['readonly'] = 'readonly';
         }
 
-        if ($column->renderAs) {
-            $param->renderAs($column->renderAs);
+        if ($c->renderAs) {
+            $param->renderAs($c->renderAs);
         } elseif ($param->validValues || $param->validPairs || $param->optionValues) {
             $param->renderAs('SelectInput');
         } elseif ($param->name === 'id') {

@@ -21,4 +21,3 @@ class OrderItemSchema extends \Maghead\Schema\DeclareSchema
         $this->belongsTo('order', OrderSchema::class, 'id', 'order_id');
     }
 }
-

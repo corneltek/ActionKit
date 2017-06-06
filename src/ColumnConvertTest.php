@@ -22,6 +22,11 @@ class ColumnConvertTest extends ModelTestCase
         return [new OrderSchema, new OrderItemSchema];
     }
 
+    public function testColumnNotNullWithDefaultShouldNotBeRequiredField()
+    {
+
+    }
+
     public function testConvertDateTimeDefaultClosure()
     {
         $schema = Order::getSchema();
