@@ -1,6 +1,8 @@
 <?php
+
+namespace ActionKit\FieldView;
+
 use ActionKit\Param\Param;
-use ActionKit\FieldView\DivFieldView;
 
 class DivFieldViewTest extends \PHPUnit\Framework\TestCase
 {

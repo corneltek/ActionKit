@@ -1,6 +1,9 @@
 <?php
+
+
+namespace ActionKit\FieldView;
+
 use ActionKit\Param\Param;
-use ActionKit\FieldView\BootstrapFieldView;
 
 class BootstrapFieldViewTest extends \PHPUnit\Framework\TestCase
 {

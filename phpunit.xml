@@ -18,26 +18,20 @@
     <const name="WEB_SERVER_DOCROOT" value="./examples" />
   </php>
 
-  <filter>
-    <whitelist>
-      <directory suffix=".php">src</directory>
-      <exclude>
-        <directory suffix="Test.php">src</directory>
-        <directory suffix=".php">src/Testing</directory>
-        <directory suffix=".php">src/Cache</directory>
-      </exclude>
-    </whitelist>
-  </filter>
-
   <testsuites>
-    <testsuite name="ActionKit">
+    <testsuite name="Unit Tests">
       <directory suffix="Test.php">src</directory>
+    </testsuite>
+
+    <testsuite name="Functional Tests">
       <directory suffix="Test.php">tests</directory>
     </testsuite>
-    <testsuite name="ProductBundle">
+
+    <testsuite name="ProductBundle Integration Tests">
       <directory suffix="Test.php">tests/ProductBundle</directory>
     </testsuite>
-    <testsuite name="OrderBundle">
+
+    <testsuite name="OrderBundle Integration Tests">
       <directory suffix="Test.php">tests/OrderBundle</directory>
     </testsuite>
   </testsuites>
