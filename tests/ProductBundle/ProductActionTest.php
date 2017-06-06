@@ -10,6 +10,7 @@ use ProductBundle\Model\ProductCollection;
 use ProductBundle\Model\ProductSchema;
 
 use ProductBundle\Model\ProductCategorySchema;
+use ProductBundle\Model\ProductImageSchema;
 use ProductBundle\Model\CategorySchema;
 use ProductBundle\Model\ProductFeatureSchema;
 use ProductBundle\Model\FeatureSchema;
@@ -23,7 +24,14 @@ class ProductActionTest extends ModelTestCase
 {
     public function models()
     {
-        return [new ProductSchema, new ProductCategorySchema, new CategorySchema, new ProductFeatureSchema, new FeatureSchema];
+        return [
+            new ProductSchema,
+            new ProductImageSchema,
+            new CategorySchema,
+            new ProductCategorySchema,
+            new ProductFeatureSchema,
+            new FeatureSchema
+        ];
     }
 
     public function createProductActionClass($type)

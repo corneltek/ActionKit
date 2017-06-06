@@ -94,8 +94,8 @@ class ProductBundleTest extends ModelTestCase
     {
         return [
             new ProductSchema,
-            new ProductCategorySchema,
             new CategorySchema,
+            new ProductCategorySchema,
             new ProductImageSchema,
             new ProductFeatureSchema,
             new FeatureSchema,
