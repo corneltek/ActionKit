@@ -56,11 +56,8 @@ class ColumnConvert
         if ($column->default) {
             // do not use default value from the column if it's an instance of Raw
             if ($column->default instanceof Raw) {
-                if ('current_timestamp' === strtolower($column->default->__toString())) {
-                    $param->default(function() {
-                        return new \DateTime;
-                    });
-                }
+                // let database put the default value by themself.
+                // TODO: parse fixed value here.
             } else {
                 $param->default($column->default);
             }

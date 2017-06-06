@@ -31,9 +31,11 @@ class ColumnConvertTest extends ModelTestCase
         $this->assertInstanceOf(Raw::class, $column->default);
         $this->assertEquals('CURRENT_TIMESTAMP', $column->default->__toString());
 
+
         $param = ColumnConvert::toParam($column);
         $this->assertInstanceOf(Param::class, $param);
-        $this->assertInstanceOf(DateTime::class, $param->getDefaultValue()); 
+        $this->assertEquals('DateTime', $param->isa);
+        $this->assertNull($param->getDefaultValue()); 
     }
 
     public function testColumnConvert()
