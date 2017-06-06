@@ -1,5 +1,6 @@
 <?php
-use ActionKit\ValueType\IntType;
+
+namespace ActionKit\ValueType;
 
 class IntTypeTest extends \PHPUnit\Framework\TestCase
 {

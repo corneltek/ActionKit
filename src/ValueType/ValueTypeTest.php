@@ -1,18 +1,9 @@
 <?php
-use ActionKit\ValueType\BoolType;
-use ActionKit\ValueType\StrType;
-use ActionKit\ValueType\FileType;
-use ActionKit\ValueType\NumType;
-use ActionKit\ValueType\UrlType;
-use ActionKit\ValueType\IpType;
-use ActionKit\ValueType\Ipv4Type;
-use ActionKit\ValueType\Ipv6Type;
-use ActionKit\ValueType\EmailType;
-use ActionKit\ValueType\PathType;
+
+namespace ActionKit\ValueType;
 
 class ValueTypeTest extends \PHPUnit\Framework\TestCase
 {
-
     public function testTypeClass() 
     {
         $this->assertNotNull(new BoolType);
@@ -21,8 +12,8 @@ class ValueTypeTest extends \PHPUnit\Framework\TestCase
         $this->assertNotNull(new NumType );
         $this->assertNotNull(new UrlType );
         $this->assertNotNull(new IpType );
-        $this->assertNotNull(new Ipv4Type );
-        $this->assertNotNull(new Ipv6Type );
+        $this->assertNotNull(new Ipv4Type);
+        $this->assertNotNull(new Ipv6Type);
         $this->assertNotNull(new EmailType);
         $this->assertNotNull(new PathType);
     }

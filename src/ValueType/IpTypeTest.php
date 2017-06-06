@@ -1,7 +1,6 @@
 <?php
-use ActionKit\ValueType\IpType;
-use ActionKit\ValueType\Ipv4Type;
-use ActionKit\ValueType\Ipv6Type;
+
+namespace ActionKit\ValueType;
 
 class IpTypeTest extends \PHPUnit\Framework\TestCase
 {

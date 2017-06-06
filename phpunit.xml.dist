@@ -21,9 +21,9 @@
     <whitelist>
         <directory suffix=".php">src</directory>
         <exclude>
-          <directory suffix=".php">src/Cache</directory>
-          <directory suffix=".php">src/Testing</directory>
-          <directory suffix="Test.php">src</directory>
+            <directory>src/Cache</directory>
+            <directory>src/Testing</directory>
+            <directory suffix="Test.php">src</directory>
         </exclude>
     </whitelist>
   </filter>

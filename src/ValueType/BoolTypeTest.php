@@ -1,5 +1,6 @@
 <?php
-use ActionKit\ValueType\BoolType;
+
+namespace ActionKit\ValueType;
 
 class BoolTypeTest extends \PHPUnit\Framework\TestCase
 {

@@ -1,5 +1,6 @@
 <?php
-use ActionKit\ValueType\DateTimeType;
+
+namespace ActionKit\ValueType;
 
 class DateTimeTypeTest extends \PHPUnit\Framework\TestCase
 {
