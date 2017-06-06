@@ -186,11 +186,11 @@ class ColumnConvert
             $param->renderAs('HiddenInput');
         } else {
             // guess input widget from data type
-            $typeMapping = array(
+            $typeMapping = [
                 'date' => 'DateInput',
                 'datetime' => 'DateTimeInput',
                 'text' => 'TextareaInput',
-            );
+            ];
             if (isset($typeMapping[ $param->type ])) {
                 $param->renderAs($typeMapping[$param->type]);
             } else {
