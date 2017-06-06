@@ -423,7 +423,7 @@ class Param extends CascadingAttribute
         if ('+' == $class[0]) {
             $class = substr($class, 1);
         } else {
-            $class = \Maghead\Utils::resolveClass($class, [\App\Widget::class, \ActionKit\Widget::class, $this->widgetNamespace], $this->action);
+            $class = \Maghead\Utils::resolveClass($class, [\App\Widget::class, \ActionKit\Widget::class, static::$widgetNamespace], $this->action);
         }
 
         // create new widget object.
