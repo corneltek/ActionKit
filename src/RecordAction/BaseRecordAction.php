@@ -8,6 +8,7 @@ use ActionKit\Exception\RequiredConfigKeyException;
 use ActionKit\ActionTemplate\RecordActionTemplate;
 use ActionKit\RecordAction\CreateRecordAction;
 use Maghead\Schema\DeclareSchema;
+use Maghead\Schema\Schema;
 use Maghead\Schema\Relationship\Relationship;
 use Maghead\Runtime\Model;
 use Maghead\Runtime\Result;
@@ -91,16 +92,10 @@ class BaseRecordAction extends Action
 
         $this->schema = $this->recordClass::getSchema();
         $this->setRecord($record);
-
-        // copy relationship config from model schema for extending the properties later.
-        if ($relations = $this->schema->relations) {
-            foreach ($relations as $rId => $relation) {
-                $this->addRelation($rId, $relation);
-            }
-        }
+        $this->addRecordRelations($this->schema);
 
         // CreateRecordAction doesn't require primary key to be existed.
-        if (! $record->id && ! $this instanceof CreateRecordAction && $this->enableLoadRecord) {
+        if (! $record->hasKey() && ! $this instanceof CreateRecordAction && $this->enableLoadRecord) {
             // for create action, we don't need to create record
             $record = $this->loadRecordFromArguments($args);
             if (!$record) {
@@ -296,6 +291,17 @@ class BaseRecordAction extends Action
         }
     }
 
+    /**
+     * Copy relationship config from model schema for extending the properties later.
+     */
+    protected function addRecordRelations(Schema $schema)
+    {
+        if ($relations = $this->schema->relations) {
+            foreach ($relations as $rId => $relation) {
+                $this->addRelation($rId, $relation);
+            }
+        }
+    }
 
 
     /**
