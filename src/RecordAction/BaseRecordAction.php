@@ -275,22 +275,6 @@ class BaseRecordAction extends Action
         }
     }
 
-
-    public function hasRelation($relationId)
-    {
-        return isset($this->relationships[$relationId]);
-    }
-
-    /**
-     * @return Maghead\Schema\Relationship relationship object
-     */
-    public function getRelation($relationId)
-    {
-        if (isset($this->relationships[$relationId])) {
-            return $this->relationships[$relationId];
-        }
-    }
-
     /**
      * Copy relationship config from model schema for extending the properties later.
      */
@@ -301,30 +285,6 @@ class BaseRecordAction extends Action
                 $this->addRelation($rId, $relation);
             }
         }
-    }
-
-
-    /**
-     * Add relationship config
-     *
-     *  $this->addRelation('images', array(
-     *      'has_many' => true,
-     *      'record' => 'Product\\Model\\ProductImage',
-     *      'self_key' => 'product_id',
-     *      'foreign_key' => 'id',
-     *  );
-     *
-     * @param string $relationId
-     * @param array $config relationship config
-     */
-    public function addRelation($relationId, Relationship $config)
-    {
-        $this->relationships[ $relationId ] = $config;
-    }
-
-    public function removeRelation($id)
-    {
-        unset($this->relationships[$id]);
     }
 
 
