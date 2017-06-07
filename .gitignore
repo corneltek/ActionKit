@@ -29,3 +29,6 @@ cache.properties
 *RepoBase.php
 *.swp
 /build/
+.maghead-cli.yml
+.php_cs.cache
+composer.lock
