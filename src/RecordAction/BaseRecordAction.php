@@ -144,7 +144,7 @@ class BaseRecordAction extends Action
      */
     public function useRecordSchema()
     {
-        $this->initParamsFromColumns($this->schema->getColumns(true), $this->record);
+        $this->initParamsFromSchema($this->schema, $this->record);
     }
 
 
@@ -189,8 +189,9 @@ class BaseRecordAction extends Action
     /**
      * Creates param objects from schema columns
      */
-    public function initParamsFromColumns(array $columns, Model $record = null)
+    public function initParamsFromSchema(Schema $schema, Model $record = null)
     {
+        $columns = $schema->getColumns(true);
         foreach ($columns as $column) {
             if (isset($this->params[$column->name])) {
                 continue;
