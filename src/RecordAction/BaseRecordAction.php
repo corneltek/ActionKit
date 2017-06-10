@@ -6,7 +6,6 @@ use ActionKit\ColumnConvert;
 use ActionKit\Exception\ActionException;
 use ActionKit\Exception\RequiredConfigKeyException;
 use ActionKit\ActionTemplate\RecordActionTemplate;
-use ActionKit\RecordAction\CreateRecordAction;
 use Maghead\Schema\DeclareSchema;
 use Maghead\Schema\Schema;
 use Maghead\Schema\Relationship\Relationship;
