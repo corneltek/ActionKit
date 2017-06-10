@@ -287,6 +287,47 @@ class BaseRecordAction extends Action
         }
     }
 
+    /**
+     * Add relationship config
+     *
+     *
+     * FIXME: this is the deprecated config structure
+     * FIXME: add test for relationships
+     *
+     *  $this->addRelation('images', array(
+     *      'has_many' => true,
+     *      'record' => ProductImage::class,
+     *      'self_key' => 'product_id',
+     *      'foreign_key' => 'id',
+     *  );
+     *
+     * @param string $relationId
+     * @param array $config relationship config
+     */
+    public function addRelation($relationId, Relationship $config)
+    {
+        $this->relationships[ $relationId ] = $config;
+    }
+
+    /**
+     * @return Maghead\Schema\Relationship relationship object
+     */
+    public function getRelation($relationId)
+    {
+        if (isset($this->relationships[$relationId])) {
+            return $this->relationships[$relationId];
+        }
+    }
+
+    public function hasRelation($relationId)
+    {
+        return isset($this->relationships[$relationId]);
+    }
+
+    public function removeRelation($id)
+    {
+        unset($this->relationships[$id]);
+    }
 
     /**
      * Create CRUD class
@@ -624,4 +665,7 @@ class BaseRecordAction extends Action
     {
         return $ret->message;
     }
+
+
+
 }
