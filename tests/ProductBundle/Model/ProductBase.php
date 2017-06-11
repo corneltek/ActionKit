@@ -64,6 +64,8 @@ class ProductBase
       12 => 'token',
       13 => 'ordering',
       14 => 'hide',
+      15 => 'updated_at',
+      16 => 'created_at',
     );
 
     public static $mixin_classes = array (
@@ -100,6 +102,10 @@ class ProductBase
     public $ordering;
 
     public $hide;
+
+    public $updated_at;
+
+    public $created_at;
 
     public static function getSchema()
     {
@@ -227,14 +233,24 @@ class ProductBase
         return boolval($value);
     }
 
+    public function getUpdatedAt()
+    {
+        return Inflator::inflate($this->updated_at, 'DateTime');
+    }
+
+    public function getCreatedAt()
+    {
+        return Inflator::inflate($this->created_at, 'DateTime');
+    }
+
     public function getAlterableData()
     {
-        return ["id" => $this->id, "name" => $this->name, "subtitle" => $this->subtitle, "sn" => $this->sn, "description" => $this->description, "content" => $this->content, "category_id" => $this->category_id, "is_cover" => $this->is_cover, "sellable" => $this->sellable, "orig_price" => $this->orig_price, "price" => $this->price, "external_link" => $this->external_link, "token" => $this->token, "ordering" => $this->ordering, "hide" => $this->hide];
+        return ["id" => $this->id, "name" => $this->name, "subtitle" => $this->subtitle, "sn" => $this->sn, "description" => $this->description, "content" => $this->content, "category_id" => $this->category_id, "is_cover" => $this->is_cover, "sellable" => $this->sellable, "orig_price" => $this->orig_price, "price" => $this->price, "external_link" => $this->external_link, "token" => $this->token, "ordering" => $this->ordering, "hide" => $this->hide, "updated_at" => $this->updated_at, "created_at" => $this->created_at];
     }
 
     public function getData()
     {
-        return ["id" => $this->id, "name" => $this->name, "subtitle" => $this->subtitle, "sn" => $this->sn, "description" => $this->description, "content" => $this->content, "category_id" => $this->category_id, "is_cover" => $this->is_cover, "sellable" => $this->sellable, "orig_price" => $this->orig_price, "price" => $this->price, "external_link" => $this->external_link, "token" => $this->token, "ordering" => $this->ordering, "hide" => $this->hide];
+        return ["id" => $this->id, "name" => $this->name, "subtitle" => $this->subtitle, "sn" => $this->sn, "description" => $this->description, "content" => $this->content, "category_id" => $this->category_id, "is_cover" => $this->is_cover, "sellable" => $this->sellable, "orig_price" => $this->orig_price, "price" => $this->price, "external_link" => $this->external_link, "token" => $this->token, "ordering" => $this->ordering, "hide" => $this->hide, "updated_at" => $this->updated_at, "created_at" => $this->created_at];
     }
 
     public function setData(array $data)
@@ -254,6 +270,8 @@ class ProductBase
         if (array_key_exists("token", $data)) { $this->token = $data["token"]; }
         if (array_key_exists("ordering", $data)) { $this->ordering = $data["ordering"]; }
         if (array_key_exists("hide", $data)) { $this->hide = $data["hide"]; }
+        if (array_key_exists("updated_at", $data)) { $this->updated_at = $data["updated_at"]; }
+        if (array_key_exists("created_at", $data)) { $this->created_at = $data["created_at"]; }
     }
 
     public function clear()
@@ -273,6 +291,8 @@ class ProductBase
         $this->token = NULL;
         $this->ordering = NULL;
         $this->hide = NULL;
+        $this->updated_at = NULL;
+        $this->created_at = NULL;
     }
 
     public function fetchProductFeatures()

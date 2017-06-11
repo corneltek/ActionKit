@@ -5,6 +5,7 @@ use ProductBundle\Model\ProductTypeCollection;
 use ProductBundle\Model\ProductImageCollection;
 use ProductBundle\Model\ResourceCollection;
 use Maghead\Schema\DeclareSchema;
+use Magsql\Raw;
 
 class ProductSchema extends DeclareSchema
 {
@@ -94,6 +95,23 @@ class ProductSchema extends DeclareSchema
             ->default(false)
             ->label(_('隱藏這個產品'))
             ->desc( _('目錄頁不要顯示這個產品，但是可以從網址列看到這個產品頁') );
+
+        $this->column('updated_at')
+            ->timestamp()
+            ->isa('DateTime')
+            ->renderAs('DateTimeInput')
+            ->default(new Raw('CURRENT_TIMESTAMP'))
+            ->onUpdate(new Raw('CURRENT_TIMESTAMP'))
+            ->label('Updated at')
+            ;
+
+        $this->column('created_at')
+            ->timestamp()
+            ->isa('DateTime')
+            ->default(new Raw('CURRENT_TIMESTAMP'))
+            ->renderAs('DateTimeInput')
+            ->label('Created At')
+            ;
 
         $this->many( 'product_features', 'ProductBundle\\Model\\ProductFeatureSchema', 'product_id', 'id' );
         $this->manyToMany( 'features',   'product_features' , 'feature' );

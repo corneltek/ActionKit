@@ -25,7 +25,7 @@ class UpdateProduct extends \ActionKit\RecordAction\UpdateRecordAction
 
     public function successMessage($ret)
     {
-        return '產品資料 ' . $this->record->name . ' 更新成功';
+        return "Product {$this->record->name} updated.";
     }
 }
 

@@ -30,6 +30,3 @@ class ProductBaseMixin
         $this->object->useRecordSchema();
     }
 }
-
-
-

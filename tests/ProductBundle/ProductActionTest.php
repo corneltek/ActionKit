@@ -5,6 +5,9 @@ use ActionKit\ActionRunner;
 use ActionKit\ActionGenerator;
 use Maghead\Testing\ModelTestCase;
 
+use ProductBundle\Action\CreateProduct;
+use ProductBundle\Action\UpdateProduct;
+
 use ProductBundle\Model\Product;
 use ProductBundle\Model\ProductCollection;
 use ProductBundle\Model\ProductSchema;
@@ -53,7 +56,7 @@ class ProductActionTest extends ModelTestCase
     public function testCreateRecordAction()
     {
         $class = BaseRecordAction::createCRUDClass(Product::class, 'Create');
-        $this->assertEquals('ProductBundle\\Action\\CreateProduct', $class);
+        $this->assertEquals(CreateProduct::class, $class);
 
         $create = new $class(['name' => 'A']);
         $ret = $create->run();
@@ -78,18 +81,59 @@ class ProductActionTest extends ModelTestCase
         $this->assertFalse($product, 'product should be deleted.');
     }
 
+    public function testAsUpdateForTimestampFormatWihtoutTimezone()
+    {
+        $p = Product::createAndLoad([ 'name' => 'B', 'updated_at' => '2017-06-11 14:00:00' ]);
+        $this->assertNotNull($p, 'record created.');
+        $this->assertEquals('2017-06-11 14:00:00', $p->updated_at);
+
+        $a = $p->asUpdateAction([ 'updated_at' => '2000-02-02 02:02:02' ]);
+        $ret = $a->run();
+        $this->assertTrue($ret, 'Success action');
+
+        $ret = $p->reload();
+        $this->assertResultSuccess($ret);
+        $this->assertEquals('2000-02-02 02:02:02', $p->updated_at);
+    }
+
+    public function testUpdateRecordForTimestampFormatWithoutTimezone()
+    {
+        $p = Product::createAndLoad([ 'name' => 'B', 'updated_at' => '2017-06-11 14:00:00' ]);
+        $this->assertNotNull($p, 'record created.');
+        $this->assertEquals('2017-06-11 14:00:00', $p->updated_at);
+
+        $ret = $p->update([ 'updated_at' => '2017-06-01 12:00:00' ]);
+        $this->assertResultSuccess($ret);
+
+        $ret = $p->reload();
+        $this->assertResultSuccess($ret);
+        $this->assertEquals('2017-06-01 12:00:00', $p->updated_at);
+
+        $u = new UpdateProduct([
+            'id' => $p->getKey(),
+            'name' => 'C',
+            'updated_at' => '2010-01-01 00:00:00' ,
+        ], $p);
+        $ret = $u->run();
+        $this->assertTrue($ret, 'Success action');
+
+        $p2 = Product::findByPrimaryKey($p->getKey());
+        $this->assertNotNull($p2, 'record created.');
+        $this->assertEquals('2010-01-01 00:00:00', $p->updated_at);
+    }
+
     public function testUpdateRecordWithLoadedRecordObject()
     {
         $ret = Product::create([ 'name' => 'B' ]);
         $this->assertResultSuccess($ret, 'record created.');
 
         $class = BaseRecordAction::createCRUDClass(Product::class, 'Update');
-        $this->assertEquals('ProductBundle\\Action\\UpdateProduct', $class);
+        $this->assertEquals(UpdateProduct::class, $class);
 
         $product = Product::load($ret->key);
 
         $update = new $class([ 'id' => $ret->key, 'name' => 'C' ], $product);
-        $this->assertInstanceOf('ProductBundle\\Action\\UpdateProduct', $update);
+        $this->assertInstanceOf(UpdateProduct::class, $update);
 
         $ret = $update->run();
         $this->assertTrue($ret,'success action');
@@ -98,12 +142,6 @@ class ProductActionTest extends ModelTestCase
         $product = Product::load([ 'name' => 'C' ]);
         $class = BaseRecordAction::createCRUDClass('ProductBundle\\Model\\Product', 'Delete');
         $this->assertNotNull($class);
-
-        /*
-        $delete = new $class(array( 'id' => $product->id ), $product);
-        $ret = $delete->run();
-        $this->assertNotNull($ret);
-        */
     }
 
 
