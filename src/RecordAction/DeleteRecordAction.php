@@ -29,21 +29,6 @@ abstract class DeleteRecordAction extends BaseRecordAction
             }
         }
 
-        /*
-        FIXME
-        $relations = $schema->getRelations();
-        foreach( $relations as $rId => $relation ) {
-            if ( ! $relation->isHasMany() ) {
-                continue;
-            }
-            $relatedRecords = $record->{ $rId };
-            $relatedRecords->fetch();
-            foreach($relatedRecords as $rr) {
-                $rr->delete();
-            }
-        }
-        */
-
         return $this->doDelete($this->args);
     }
 
