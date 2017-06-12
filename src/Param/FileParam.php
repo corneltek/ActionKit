@@ -6,6 +6,7 @@ use ActionKit\Param\Param;
 use ActionKit\Utils;
 use Universal\Http\UploadedFile;
 use Exception;
+use ActionKit\Storage\FileRenameMethods;
 
 /**
  * Preprocess image data fields
@@ -38,6 +39,7 @@ class FileParam extends Param
         $this->supportedAttributes['putIn'] = self::ATTR_STRING;
         $this->supportedAttributes['sizeLimit'] = self::ATTR_ANY;
         $this->supportedAttributes['renameFile'] = self::ATTR_ANY;
+        $this->renameFile = [FileRenameMethods::class, 'md5ize'];
 
         if (static::$defaultUploadDirectory) {
             $this->putIn(static::$defaultUploadDirectory);
@@ -133,7 +135,7 @@ class FileParam extends Param
 
         $newName = $uploadedFile->getOriginalFileName();
         if ($this->renameFile) {
-            $newName = call_user_func($this->rename, $newName, $uploadedFile->getTmpName(), $uploadedFile, $this);
+            $newName = call_user_func($this->renameFile, $newName, $uploadedFile->getTmpName(), $uploadedFile, $this->action);
         }
         $targetPath = $this->putIn . DIRECTORY_SEPARATOR . $newName ;
 
