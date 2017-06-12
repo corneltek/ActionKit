@@ -12,6 +12,10 @@ use FormKit\Widget\CheckboxInput;
 use FormKit\Layout\GenericLayout;
 use Maghead\Schema\DeclareSchema;
 use Maghead\Schema\Relationship\Relationship;
+use Maghead\Schema\Relationship\HasOne;
+use Maghead\Schema\Relationship\HasMany;
+use Maghead\Schema\Relationship\BelongsTo;
+use Maghead\Schema\Relationship\ManyToMany;
 use Maghead\Runtime\Model;
 use Maghead\Runtime\Collection;
 
@@ -146,10 +150,10 @@ SCRIPT;
         $container = $this->getContainer();
 
         // handle HAS_MANY records
-        if (Relationship::HAS_MANY === $relation['type']) {
+        if ($relation instanceof HasMany) {
             $contentContainer = $this->buildOneToManyRelationalActionViewForExistingRecords($record, $relationId, $relation);
             $contentContainer->appendTo($container);
-        } elseif (Relationship::MANY_TO_MANY === $relation['type']) {
+        } else if ($relation instanceof ManyToMany) {
             $contentContainer = $this->buildManyToManyRelationalActionViewForExistingRecords($record, $relationId, $relation  /* $subset, $collection */);
             $contentContainer->appendTo($container);
         }
@@ -167,7 +171,8 @@ SCRIPT;
         // create another subview for creating new (one-many) record.
         // currently onlly for HAS_MANY relationship
         $container = $this->getContainer();
-        if (Relationship::HAS_MANY === $relation['type']) {
+
+        if ($relation instanceof HasMany) {
             $addButton = $this->createRelationalActionViewForNewRecord($relationId, $relation);
             $container->append($addButton);
         }
@@ -193,7 +198,7 @@ SCRIPT;
             $this->buildRelationalActionViewForExistingRecords($relationId, $relation);
 
             // currently we only support rendering new record form for "has many"
-            if (Relationship::HAS_MANY === $relation['type']) {
+            if ($relation instanceof HasMany) {
                 $this->buildRelationalActionViewForNewRecord($relationId, $relation);
             }
         }
