@@ -33,11 +33,18 @@ class FilePathTest extends TestCase
         $this->assertEquals('upload/foo.jpg', $p2->__toString());
     }
 
+    public function testUniqid()
+    {
+        $p = new FilePath('upload/foo.jpg');
+        $p->appendFilenameUniqid();
+        $this->assertRegExp('!upload/foo_\w+.jpg!', $p->__toString());
+    }
+
     public function testStrip()
     {
         $p = new FilePath('upload/test_(1200x300)_中文.jpg');
-        $p->strip('/_*[\W]+/');
-        $this->assertEquals('upload/test1200x300.jpg', $p->__toString());
+        $p->strip();
+        $this->assertEquals('upload/test_1200x300.jpg', $p->__toString());
     }
 
 

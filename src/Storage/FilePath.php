@@ -39,12 +39,27 @@ class FilePath {
         return file_exists($p);
     }
 
-    public function strip($pattern, $to = '')
+    public function appendFilenameTimestamp()
     {
-        $cnt = 0;
-        do {
-            $this->filename = preg_replace($pattern, $to, $this->filename, -1, $cnt);
-        } while ($cnt > 0);
+        $timestamp = time();
+        $this->filename = "{$this->filename}_{$timestamp}";
+    }
+
+    public function appendFilenameUniqid($prefix = null)
+    {
+        $uniqid = uniqid($prefix);
+        $this->filename = "{$this->filename}_{$uniqid}";
+    }
+
+
+    /**
+     * strip special charactor
+     */
+    public function strip()
+    {
+        $this->filename = preg_replace('/\W+/', '_', $this->filename);
+        $this->filename = preg_replace('/_{2,}/', '_', $this->filename);
+        $this->filename = preg_replace('/_+$/', '', $this->filename);
     }
 
 
