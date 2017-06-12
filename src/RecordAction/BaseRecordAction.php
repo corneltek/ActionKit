@@ -9,6 +9,9 @@ use ActionKit\ActionTemplate\RecordActionTemplate;
 use Maghead\Schema\DeclareSchema;
 use Maghead\Schema\Schema;
 use Maghead\Schema\Relationship\Relationship;
+use Maghead\Schema\Relationship\HasMany;
+use Maghead\Schema\Relationship\ManyToMany;
+use Maghead\Schema\Relationship\BelongsTo;
 use Maghead\Runtime\Model;
 use Maghead\Runtime\Result;
 use FormKit\Widget\HiddenInput;
@@ -489,7 +492,7 @@ class BaseRecordAction extends Action
                 continue;
             }
 
-            if (Relationship::HAS_MANY === $relation['type']) {
+            if ($relation instanceof HasMany) {
                 // In this behavior, we don't handle the
                 // previous created records, only the records from the form submit.
                 //
@@ -550,7 +553,9 @@ class BaseRecordAction extends Action
                         return false;
                     }
                 }
-            } elseif (Relationship::MANY_TO_MANY === $relation['type']) {
+
+            } else if ($relation instanceof ManyToMany) {
+
                 // Process the junction of many-to-many relationship
                 //
                 // For the many-to-many relationship, we should simply focus on the
