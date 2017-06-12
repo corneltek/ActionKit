@@ -11,6 +11,9 @@ class FilePathTest extends TestCase
     {
         return [
             ['upload/test_1200x300.jpg'],
+            ['upload/test_中文.png'],
+            ['upload/test.bak.png'],
+            ['upload/to/path/test.bak.png'],
         ];
     }
 
