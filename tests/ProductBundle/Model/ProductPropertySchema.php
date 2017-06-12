@@ -10,8 +10,9 @@ class ProductPropertySchema extends DeclareSchema
         $this->column('val')->varchar(512);
         $this->column('product_id')
             ->integer()
-            ->refer( 'ProductBundle\\Model\\ProductSchema')
+            ->unsigned()
+            ->refer(ProductSchema::class)
             ;
-        $this->belongsTo('product','ProductBundle\\Model\\ProductSchema','id','product_id');
+        $this->belongsTo('product', ProductSchema::class, 'id','product_id');
     }
 }
