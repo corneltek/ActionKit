@@ -100,6 +100,7 @@ class ProductSchema extends DeclareSchema
             ->timestamp()
             ->isa('DateTime')
             ->renderAs('DateTimeInput')
+            ->notNull()
             ->default(new Raw('CURRENT_TIMESTAMP'))
             ->onUpdate(new Raw('CURRENT_TIMESTAMP'))
             ->label('Updated at')
@@ -107,6 +108,7 @@ class ProductSchema extends DeclareSchema
 
         $this->column('created_at')
             ->timestamp()
+            ->notNull()
             ->isa('DateTime')
             ->default(new Raw('CURRENT_TIMESTAMP'))
             ->renderAs('DateTimeInput')
