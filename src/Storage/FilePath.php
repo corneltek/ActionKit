@@ -39,6 +39,15 @@ class FilePath {
         return file_exists($p);
     }
 
+    public function strip($pattern, $to = '')
+    {
+        $cnt = 0;
+        do {
+            $this->filename = preg_replace($pattern, $to, $this->filename, -1, $cnt);
+        } while ($cnt > 0);
+    }
+
+
     /**
      * The rename method returns a new FilePath to copy the instance.
      *

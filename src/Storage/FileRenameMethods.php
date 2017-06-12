@@ -2,65 +2,20 @@
 
 namespace ActionKit\Storage;
 
-
+use Universal\Http\UploadedFile;
+use ActionKit\Action;
+use RuntimeException;
 
 class FileRenameMethods
 {
-    public static function filename_md5($filename, $tmpFile = null)
+    public static function md5ize($file, $tmpFile, UploadedFile $uf = null, Action $a = null)
     {
-        $md5 = $tmpFile ? md5($tmpFile) : md5($filename . time());
-        $info = pathinfo($filename);
-        return "{$info['dirname']}/{$md5}.{$info['extension']}";
-    }
-
-    public static function filename_append_md5($filename, $tmpFile = null)
-    {
-        $suffix = $tmpFile ? md5($tmpFile) : md5($filename . time());
-        $pos = strrpos($filename , '.');
-        if ($pos) {
-            return
-                substr( $filename , 0 , $pos )
-                . $suffix
-                . substr( $filename , $pos );
+        if (!file_exists($tmpFile)) {
+            throw new RuntimeException("filename to md5 require the tmp file to exist.");
         }
-
-        return $filename . $suffix;
+        $md5 = md5_file($tmpFile);
+        $p = new FilePath($file);
+        $p2 = $p->renameAs($md5);
+        return $p2->__toString();
     }
-
-    public static function filename_increase($path)
-    {
-        if (! file_exists($path)) {
-            return $path;
-        }
-
-        $pos = strrpos( $path , '.' );
-        if ($pos !== false) {
-            $filepath = substr($path, 0 , $pos);
-            $extension = substr($path, $pos);
-            $newfilepath = $filepath . $extension;
-            $i = 1;
-            while ( file_exists($newfilepath) ) {
-                $newfilepath = $filepath . " (" . $i++ . ")" . $extension;
-            }
-
-            return $newfilepath;
-        }
-
-        return $path;
-    }
-
-    public static function filename_suffix( $filename , $suffix )
-    {
-        $pos = strrpos( $filename , '.' );
-        if ($pos !== false) {
-            return substr( $filename , 0 , $pos )
-                . $suffix
-                . substr( $filename , $pos );
-        }
-
-        return $filename . $suffix;
-    }
-    
-
-
 }

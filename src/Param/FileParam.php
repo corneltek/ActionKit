@@ -1,4 +1,5 @@
 <?php
+
 namespace ActionKit\Param;
 
 use ActionKit\Param\Param;
@@ -38,11 +39,6 @@ class FileParam extends Param
         $this->supportedAttributes['sizeLimit'] = self::ATTR_ANY;
         $this->supportedAttributes['renameFile'] = self::ATTR_ANY;
 
-        /*
-        $this->renameFile = function($filename) {
-            return Utils::filename_increase_suffix_number( $filename );
-        };
-         */
         if (static::$defaultUploadDirectory) {
             $this->putIn(static::$defaultUploadDirectory);
         }
@@ -137,7 +133,7 @@ class FileParam extends Param
 
         $newName = $uploadedFile->getOriginalFileName();
         if ($this->renameFile) {
-            $newName = call_user_func($this->rename, $newName);
+            $newName = call_user_func($this->rename, $newName, $uploadedFile->getTmpName(), $uploadedFile, $this);
         }
         $targetPath = $this->putIn . DIRECTORY_SEPARATOR . $newName ;
 
