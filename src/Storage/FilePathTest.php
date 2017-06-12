@@ -33,6 +33,12 @@ class FilePathTest extends TestCase
         $this->assertEquals('upload/foo.jpg', $p2->__toString());
     }
 
+    public function testSuffix()
+    {
+        $p = new FilePath('upload/test.jpg');
+        $p->appendFilenameSuffix('_foo');
+        $this->assertEquals('upload/test_foo.jpg', $p->__toString());
+    }
 
     public function testExists()
     {
