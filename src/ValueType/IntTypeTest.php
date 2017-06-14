@@ -4,15 +4,31 @@ namespace ActionKit\ValueType;
 
 class IntTypeTest extends \PHPUnit\Framework\TestCase
 {
-    public function testIntType()
+
+    public function intDataProvider()
+    {
+        return [
+            [1, true],
+            [100, true],
+            [-100, true],
+
+            ["", NULL],
+
+            ['123', true],
+            ['10', true],
+            ['-10', true],
+            ['foo', false],
+        ];
+    }
+
+
+    /**
+     * @dataProvider intDataProvider
+     */
+    public function testIntType($input, $expect)
     {
         $bool = new IntType;
-        $this->assertTrue($bool->test(1));
-        $this->assertTrue($bool->test(100));
-        $this->assertTrue($bool->test(-10));
-        $this->assertTrue($bool->test('123'));
-        $this->assertTrue($bool->test('-10'));
-        $this->assertFalse($bool->test('foo'));
+        $this->assertEquals($expect, $bool->test($input));
     }
 }
 
