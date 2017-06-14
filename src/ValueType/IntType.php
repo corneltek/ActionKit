@@ -11,7 +11,7 @@ class IntType extends BaseType
 
     public function parse($value)
     {
-        return intval($value);
+        return filter_var($value, FILTER_VALIDATE_INT);
     }
 
     public function deflate($value)
