@@ -9,22 +9,16 @@ abstract class CreateRecordAction extends BaseRecordAction
 
     protected function create(array $args)
     {
-        $model = $this->recordClass;
-        $this->recordResult = $ret = $model::create($args);
+        $this->recordResult = $ret = $this->recordClass::create($args);
         if ($ret->error) {
             $this->convertRecordValidation($ret);
             return $this->createError($ret);
         }
-        $this->record = $model::load($ret->key);
+        $this->record = $this->recordClass::findByPrimaryKey($ret->key);
         $this->result->data($this->record->getData());
         return $this->createSuccess($ret);
     }
 
-    /**
-     * Apply arguments whitelist (takeFields) and blacklist (filterOutFields)
-     *
-     * @return args
-     */
     protected function filterArguments(array $args)
     {
         if ($this->takeFields) {
@@ -41,7 +35,6 @@ abstract class CreateRecordAction extends BaseRecordAction
      * */
     public function run()
     {
-        /* default run method , to run create action */
         $ret = $this->create($this->args);
         if ($ret === false) {
             return $ret;

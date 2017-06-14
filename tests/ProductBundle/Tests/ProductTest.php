@@ -9,6 +9,8 @@ use ActionKit\ActionTemplate\RecordActionTemplate;
 use ActionKit\Testing\ActionTestAssertions;
 use ActionKit\RecordAction\UpdateRecordAction;
 
+use ActionKit\Param\Param;
+
 use ProductBundle\Model\Product;
 use ProductBundle\Model\ProductCollection;
 use ProductBundle\Model\ProductImage;
@@ -24,6 +26,7 @@ use ProductBundle\Model\Category;
 use ProductBundle\Model\FeatureSchema;
 
 use ProductBundle\Action\CreateProduct;
+use ProductBundle\Action\CreateCategory;
 use ProductBundle\Action\UpdateProduct;
 use ProductBundle\Action\CreateProductFile;
 use ProductBundle\Action\CreateProductImage;
@@ -125,14 +128,31 @@ class ProductBundleTest extends ModelTestCase
             ]
         ]);
 
-        $result = $runner->run('ProductBundle::Action::CreateCategory',[
+        $action = $runner->createAction(CreateCategory::class, [ 
             'name' => 'Foo',
             'parent_id' => '',
         ]);
-        $this->assertNotNull($result);
+        $this->assertInstanceOf(CreateCategory::class, $action);
 
-        $cate = Category::load($result->data["id"]);
-        $this->assertNull($cate->getParentId());
+        $param = $action->getParam('parent_id');
+        $this->assertInstanceOf(Param::class, $param);
+        $this->assertEquals('Int', $param->isa);
+
+        $args = $action->getArgs();
+        $this->assertSame([
+            'name' => 'Foo',
+            'parent_id' => NULL,
+        ], $args);
+
+
+        $ret = $action->run();
+        $this->assertTrue($ret);
+
+        $result = $action->getResult();
+
+        $cate = Category::findByPrimaryKey($result->data["id"]);
+        $this->assertNotNull($cate);
+        $this->assertNull($cate->parent_id);
     }
 
     /**

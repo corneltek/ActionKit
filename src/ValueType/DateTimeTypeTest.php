@@ -4,13 +4,25 @@ namespace ActionKit\ValueType;
 
 class DateTimeTypeTest extends \PHPUnit\Framework\TestCase
 {
-    public function testDateTimeTypeTest()
+
+    public function dateTimeDataProvider()
     {
-        $bool = new DateTimeType;
-        $this->assertTrue($bool->test('2015-01-01'));
-        $this->assertTrue($bool->test(date('c')));
-        $this->assertFalse($bool->test('foo'));
-        $this->assertFalse($bool->test('123'));
+        return [
+            ['2015-01-01', true],
+            [date('c'), true],
+            ['foo', false],
+            ['123', false],
+        ];
+    }
+
+
+    /**
+     * @dataProvider dateTimeDataProvider
+     */
+    public function testDateTimeTypeTest($input, $expected)
+    {
+        $type = new DateTimeType;
+        $this->assertSame($expected, $type->test($input));
     }
 
     public function testDateTimeTypeParse()

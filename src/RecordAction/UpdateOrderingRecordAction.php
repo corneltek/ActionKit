@@ -23,6 +23,13 @@ abstract class UpdateOrderingRecordAction extends Action
      */
     public $targetColumn = 'ordering';
 
+
+    public function schema()
+    {
+        $this->param('list')->isa('str');
+    }
+
+
     public function loadRecord($key)
     {
         return $this->recordClass::findByPrimaryKey($key);
@@ -30,17 +37,17 @@ abstract class UpdateOrderingRecordAction extends Action
 
     public function runUpdateList()
     {
-        $orderingList = json_decode($this->arg('list'));
-        if ($this->mode == self::MODE_INCREMENTALLY) {
+        if ($this->mode !== self::MODE_INCREMENTALLY) {
+            throw new Exception("Unsupported sort mode");
+        }
+        if ($orderingList = json_decode($this->arg('list'))) {
             foreach ($orderingList as $ordering) {
-                $record = $this->loadRecord((int) $ordering->record);
+                $record = $this->loadRecord($ordering->record);
                 $ret = $record->update(array( $this->targetColumn => $ordering->ordering ));
-                if (! $ret->success) {
-                    throw new Exception($ret->message);
+                if ($ret->error) {
+                    throw new Exception("Record update failed: {$ret->message}");
                 }
             }
-        } else {
-            throw new Exception("Unsupported sort mode");
         }
     }
 
@@ -49,7 +56,7 @@ abstract class UpdateOrderingRecordAction extends Action
         try {
             $this->runUpdateList();
         } catch (Exception $e) {
-            return $this->error(__('Ordering Update Failed: %1', $e->getMessage()));
+            return $this->error("Ordering Update Failed: {$e->getMessage()}");
         }
         return $this->success('排列順序已更新');
     }

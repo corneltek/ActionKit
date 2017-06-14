@@ -4,6 +4,7 @@ namespace ActionKit\Param;
 use CascadingAttribute;
 use ActionKit\MessagePool;
 use ActionKit\Action;
+use ActionKit\ValueType\BaseType;
 use DateTime;
 use InvalidArgumentException;
 use Exception;
@@ -11,13 +12,12 @@ use LogicException;
 use Maghead\Runtime\Model;
 use Magsql\Raw;
 
+
+
 use Maghead\Utils;
 
 class Param extends CascadingAttribute
 {
-    public static $typeClasses = [];
-
-
     /**
      * @var ActionKit\Action action object referenece
      * */
@@ -84,15 +84,6 @@ class Param extends CascadingAttribute
     {
     }
 
-    public static function getTypeClass($isa)
-    {
-        $isa = ucfirst($isa);
-        if (!isset(self::$typeClasses[$isa])) {
-            $isaClass = "ActionKit\\ValueType\\{$isa}Type";
-            self::$typeClasses[$isa] = new $isaClass;
-        }
-        return self::$typeClasses[$isa];
-    }
 
     public function isa($isa)
     {
@@ -123,42 +114,46 @@ class Param extends CascadingAttribute
         return $this;
     }
 
-    public function inflate($value)
+    public function inflate($formValue)
     {
         if ($this->inflator) {
-            return call_user_func($this->inflator, $value, $this, $this->action);
+            return call_user_func($this->inflator, $formValue, $this, $this->action);
         }
 
-        // Built-in supported inflators
-        if ($isa = $this->getAttributeValue('isa')) {
-            switch ($isa) {
-                case "DateTime":
-                    if (is_int($value)) {
-                        $dateTime = new DateTime();
-                        $dateTime->setTimestamp($value);
+        if ($this->isa) {
+            $type = BaseType::create($this->isa);
+            return $type->parse($formValue);
+        }
+
+        return $formValue;
+
+        /*
+        switch ($this->isa) {
+            case "DateTime":
+                if (is_int($value)) {
+                    $dateTime = new DateTime();
+                    $dateTime->setTimestamp($value);
+                    return $dateTime;
+                } elseif (is_string($value)) {
+                    try {
+                        $dateTime = new DateTime($value);
                         return $dateTime;
-                    } elseif (is_string($value)) {
-                        try {
-                            $dateTime = new DateTime($value);
-                            return $dateTime;
-                        } catch (Exception $e) {
-                            return new InvalidArgumentException("Invalid DateTime string.");
-                        }
-                    } else {
-                        throw new InvalidArgumentException("Invalid argument value for DateTime type param.");
+                    } catch (Exception $e) {
+                        return new InvalidArgumentException("Invalid DateTime string.");
                     }
-                break;
-                case "json":
-                    if (is_string($value)) {
-                        return json_decode($json);
-                    } else {
-                        throw new InvalidArgumentException("Invalid argument value for JSON type param.");
-                    }
-                break;
-            }
+                } else {
+                    throw new InvalidArgumentException("Invalid argument value for DateTime type param.");
+                }
+            break;
+            case "json":
+                if (is_string($value)) {
+                    return json_decode($json);
+                } else {
+                    throw new InvalidArgumentException("Invalid argument value for JSON type param.");
+                }
+            break;
         }
-
-        return $value;
+        */
     }
 
 
@@ -171,27 +166,7 @@ class Param extends CascadingAttribute
      */
     public function typeCastValue($formValue)
     {
-        if ($isa = $this->getAttributeValue('isa')) {
-            switch ($isa) {
-            case 'int':
-                return intval($formValue);
-            case 'str':
-                return (string) $formValue;
-            case 'float':
-                return floatval($formValue);
-            case 'bool':
-            case 'boolean':
-                if ($formValue === null) {
-                    return null;
-                }
-                if (is_string($formValue)) {
-                    if ($formValue === '') {
-                        return null;
-                    } else {
-                        return filter_var($formValue, FILTER_VALIDATE_BOOLEAN, array('flags' => FILTER_NULL_ON_FAILURE));
-                    }
-                }
-            }
+        if ($isa = $this->isa) {
         }
         return $formValue;
     }
@@ -229,7 +204,7 @@ class Param extends CascadingAttribute
         // empty string parameter is equal to null
         if ($this->isa && $this->action->request->existsParam($this->name)) {
             if ($value !== '' && $value !== null) {
-                $type = self::getTypeClass($this->isa);
+                $type = BaseType::create($this->isa);
                 if (false === $type->test($value)) {
                     return [false, "Invalid type value on {$this->isa}"];
                 }

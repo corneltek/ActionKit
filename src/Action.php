@@ -52,6 +52,10 @@ class Action implements IteratorAggregate
     public $args = array();   // post,get args for action
 
 
+    protected $originalArgs = [];
+
+
+
     /**
      * @var array[Universal\Http\UploadedFile] the action wide file objects.
      */
@@ -214,8 +218,16 @@ class Action implements IteratorAggregate
             $mixin->schema();
         }
 
+
+        // save the original arguments
+        $this->originalArgs = $args;
+
         // use the schema definitions to filter arguments
         $this->args = $this->filterArguments($args);
+        $this->args = $this->inflateArguments($this->args);
+
+
+
 
         // See if we need to render the input names with relationship ID and
         // index?
@@ -334,6 +346,26 @@ class Action implements IteratorAggregate
         return $this;
     }
 
+    protected function inflateArguments(array $args)
+    {
+        $newArgs = [];
+
+        foreach ($args as $name => $value) {
+            if ($param = $this->getParam($name)) {
+                $newArgs[$name] = $param->inflate($value);
+            } else {
+                $newArgs[$name] = $value;
+            }
+        }
+
+        return $newArgs;
+    }
+
+    /**
+     * Apply arguments whitelist (takeFields) and blacklist (filterOutFields)
+     *
+     * @return args
+     */
     protected function filterArguments(array $args)
     {
         // find immutable params and unset them
@@ -735,12 +767,7 @@ class Action implements IteratorAggregate
         // getting values
         if (1 === $nOfArgs) {
             if (array_key_exists($name, $this->args)) {
-                $value = $this->args[$name];
-                if ($param = $this->getParam($name)) {
-                    $value = $param->typeCastValue($value);
-                    return $param->inflate($value);
-                }
-                return $value;
+                return $this->args[$name];
             }
             return null;
         } elseif (2 === $nOfArgs) {

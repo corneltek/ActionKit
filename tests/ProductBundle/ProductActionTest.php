@@ -18,6 +18,10 @@ use ProductBundle\Model\CategorySchema;
 use ProductBundle\Model\ProductFeatureSchema;
 use ProductBundle\Model\FeatureSchema;
 
+use ProductBundle\Action\UpdateProductOrdering;
+
+// use DateTime;
+
 /**
  * RecordAction
  *
@@ -93,7 +97,8 @@ class ProductActionTest extends ModelTestCase
 
         $ret = $p->reload();
         $this->assertResultSuccess($ret);
-        $this->assertEquals('2000-02-02 02:02:02', $p->updated_at);
+        $this->assertInstanceOf(DateTime::class, $p->getUpdatedAt());
+        $this->assertEquals('2000-02-02 02:02:02', $p->getUpdatedAt()->format("Y-m-d h:m:s") );
     }
 
     public function testUpdateRecordForTimestampFormatWithoutTimezone()
@@ -119,7 +124,9 @@ class ProductActionTest extends ModelTestCase
 
         $p2 = Product::findByPrimaryKey($p->getKey());
         $this->assertNotNull($p2, 'record created.');
-        $this->assertEquals('2010-01-01 00:00:00', $p->updated_at);
+
+        $this->assertInstanceOf(DateTime::class, $p2->getUpdatedAt());
+        $this->assertEquals('2010-01-01 00:00:00', $p2->getUpdatedAt()->format("Y-m-d H:i:s") );
     }
 
     public function testUpdateRecordWithLoadedRecordObject()
@@ -168,18 +175,20 @@ class ProductActionTest extends ModelTestCase
             $this->assertNotNull($product);
             $idList[] = ['record' => $product->id, 'ordering' => 21 - $num];
         }
-        $products = new ProductCollection;
-        $this->assertEquals(20, $products->count());
 
+
+        $products = new ProductCollection;
+        $this->assertCount(20, $products);
+
+        $runner = new ActionRunner;
 
         $actionTemplate = new UpdateOrderingRecordActionTemplate;
-        $runner = new ActionKit\ActionRunner;
-        $actionTemplate->register($runner, 'UpdateOrderingRecordActionTemplate', array(
+        $actionTemplate->register($runner, 'UpdateOrderingRecordActionTemplate', [
             'namespace' => 'ProductBundle',
             'model'     => 'Product'   // model's name
-        ));
+        ]);
 
-        $className = 'ProductBundle\Action\UpdateProductOrdering';
+        $className = UpdateProductOrdering::class;
 
         $this->assertNotNull($pretreatment = $runner->getActionPretreatment($className));
 
@@ -188,12 +197,15 @@ class ProductActionTest extends ModelTestCase
 
         $tmp = $generatedAction->load();
 
-        $updateOrdering = new $className(array( 'list' => json_encode($idList) ));
+        $updateOrdering = new $className([ 'list' => json_encode($idList) ]);
         $this->assertEquals($updateOrdering->getName(), 'UpdateProductOrdering');
-        $this->assertNotNull($updateOrdering->run());
 
-        $result = $updateOrdering->loadRecord(9);
-        $this->assertEquals($result->ordering, 21-9);
+        $ret = $updateOrdering->run();
+        $result = $updateOrdering->getResult();
+        $this->assertTrue($ret);
+
+        $record = $updateOrdering->loadRecord(9);
+        $this->assertEquals($record->ordering, 21 - 9);
 
         $updateOrdering->mode = 99;
         $this->assertEquals(false, $updateOrdering->run());
