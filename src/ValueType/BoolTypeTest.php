@@ -4,7 +4,6 @@ namespace ActionKit\ValueType;
 
 class BoolTypeTest extends \PHPUnit\Framework\TestCase
 {
-
     public function boolDataProvider()
     {
         return [
@@ -25,8 +24,6 @@ class BoolTypeTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-
-
     /**
      * @dataProvider boolDataProvider
      */
@@ -35,44 +32,6 @@ class BoolTypeTest extends \PHPUnit\Framework\TestCase
         $bool = new BoolType;
         $this->assertSame($success, $bool->test($input));
         $this->assertSame($expected, $bool->parse($input));
-    }
-
-    public function falseValueProvider()
-    {
-        return [
-            ['FALSE'],
-            ['False'],
-            ['false'],
-            ['0'],
-        ];
-    }
-
-    public function trueValueProvider()
-    {
-        return [
-            ['TRUE'],
-            ['True'],
-            ['true'],
-            ['1'],
-        ];
-    }
-
-    /**
-     * @dataProvider trueValueProvider
-     */
-    public function testTrueBoolTypeParse($str)
-    {
-        $bool = new BoolType;
-        $this->assertTrue($bool->parse($str));
-    }
-
-    /**
-     * @dataProvider falseValueProvider
-     */
-    public function testFalseBoolTypeParse($str)
-    {
-        $bool = new BoolType;
-        $this->assertFalse($bool->parse($str));
     }
 }
 
