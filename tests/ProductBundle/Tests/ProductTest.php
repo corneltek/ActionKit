@@ -111,8 +111,6 @@ class ProductBundleTest extends ModelTestCase
     {
         $container = new ServiceContainer;
         $generator = $container['generator'];
-        $generator->registerTemplate('TwigActionTemplate', new TwigActionTemplate());
-        $generator->registerTemplate('UpdateOrderingRecordActionTemplate', new UpdateOrderingRecordActionTemplate);
         $generator->registerTemplate('RecordActionTemplate', new RecordActionTemplate);
 
         $runner = new ActionRunner($container);
@@ -120,7 +118,6 @@ class ProductBundleTest extends ModelTestCase
         $runner->registerAction('RecordActionTemplate', [
             'namespace'    => 'ProductBundle',
             'model'        => 'Category',
-            'record_class' => Category::class,   // model's name
             'types' => [
                 ['prefix' => 'Create'],
                 ['prefix' => 'Update'],
