@@ -5,6 +5,7 @@ use ActionKit\Testing\ActionTestCase;
 use ActionKit\ServiceContainer;
 use ActionKit\ActionTemplate\TwigActionTemplate;
 use ActionKit\ActionTemplate\UpdateOrderingRecordActionTemplate;
+use ActionKit\ActionTemplate\RecordActionTemplate;
 use ActionKit\Testing\ActionTestAssertions;
 use ActionKit\RecordAction\UpdateRecordAction;
 
@@ -19,6 +20,7 @@ use ProductBundle\Model\ProductCategorySchema;
 use ProductBundle\Model\ProductProductSchema;
 use ProductBundle\Model\ProductFileSchema;
 use ProductBundle\Model\CategorySchema;
+use ProductBundle\Model\Category;
 use ProductBundle\Model\FeatureSchema;
 
 use ProductBundle\Action\CreateProduct;
@@ -102,6 +104,38 @@ class ProductBundleTest extends ModelTestCase
             new ProductProductSchema,
             new ProductFileSchema,
         ];
+    }
+
+
+    public function testCreateCategoryEmptyParentIdShouldBeNull()
+    {
+        $container = new ServiceContainer;
+        $generator = $container['generator'];
+        $generator->registerTemplate('TwigActionTemplate', new TwigActionTemplate());
+        $generator->registerTemplate('UpdateOrderingRecordActionTemplate', new UpdateOrderingRecordActionTemplate);
+        $generator->registerTemplate('RecordActionTemplate', new RecordActionTemplate);
+
+        $runner = new ActionRunner($container);
+        $runner->registerAutoloader();
+        $runner->registerAction('RecordActionTemplate', [
+            'namespace'    => 'ProductBundle',
+            'model'        => 'Category',
+            'record_class' => Category::class,   // model's name
+            'types' => [
+                ['prefix' => 'Create'],
+                ['prefix' => 'Update'],
+                ['prefix' => 'Delete']
+            ]
+        ]);
+
+        $result = $runner->run('ProductBundle::Action::CreateCategory',[
+            'name' => 'Foo',
+            'parent_id' => '',
+        ]);
+        $this->assertNotNull($result);
+
+        $cate = Category::load($result->data["id"]);
+        $this->assertNull($cate->getParentId());
     }
 
     /**

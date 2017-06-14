@@ -3,6 +3,7 @@ namespace ProductBundle\Model;
 use ProductBundle\Model\ProductBundle;
 use ProductBundle\Model\ProductCollection;
 use ProductBundle\Model\CategoryCollection;
+use ProductBundle\Model\CategorySchema;
 use Maghead\Schema\DeclareSchema;
 
 class CategorySchema extends DeclareSchema
@@ -16,22 +17,22 @@ class CategorySchema extends DeclareSchema
             ->label('產品類別名稱')
             ->required(1);
 
-        $this->column( 'description' )
+        $this->column('description')
             ->text()
             ->label('產品類別敘述')
             ->renderAs('TextareaInput',array(
                 'class' => '+=mceEditor',
             ));
 
-        $this->column( 'parent_id' )
+        $this->column('parent_id')
             ->integer()
-            ->refer( 'ProductBundle\\Model\\CategorySchema' )
+            ->unsigned()
+            ->refer(CategorySchema::class)
             ->label( _('父類別') )
-            ->integer()
-            ->default(0)
-            ->renderAs('SelectInput',array(
-                'allow_empty' => 0,
-            ));
+            ->default(NULL)
+            ->renderAs('SelectInput', [
+                'allow_empty' => NULL,
+            ]);
 
         // hide this category in front-end
         $this->column('hide')

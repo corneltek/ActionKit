@@ -1258,11 +1258,13 @@ class Action implements IteratorAggregate
         if ($name) {
             if ($widget = $this->widget($name)) {
                 return $widget->render($attrs);
-            } else {
-                throw new Exception("parameter $name is not defined.");
             }
+
+            throw new Exception("Param '$name' is not defined.");
+
         } else {
-            /* Render all widgets */
+
+            // render all widgets
             $html = '';
             foreach ($this->params as $param) {
                 $html .= $param->render($attrs);
