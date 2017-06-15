@@ -296,6 +296,11 @@ class ActionRunner implements IteratorAggregate, ArrayAccess
         spl_autoload_register(array($this,'loadActionClass'), true, false);
     }
 
+    public function __destruct()
+    {
+        spl_autoload_unregister(array($this,'loadActionClass'));
+    }
+
 
     /**
      * registerAction register actions by passing action config to ActionTemplate.
