@@ -1,4 +1,6 @@
 <?php
+require 'vendor/autoload.php';
+
 use Maghead\Generator\Schema\SchemaGenerator;
 use Maghead\Schema\Loader\ComposerSchemaLoader;
 use Maghead\Schema\SchemaLoader;
@@ -10,9 +12,6 @@ if (!class_exists('\PHPUnit_Framework_TestCase') && class_exists('\PHPUnit\Frame
     class_alias('\PHPUnit\Framework\TestCase', '\PHPUnit_Framework_TestCase');
 }
 
-define('ROOT' , dirname(__DIR__) );
-$loader = require ROOT . '/vendor/autoload.php';
-$loader->add(null, ROOT . '/tests');
 
 /*
 $config = ArrayConfigLoader::load([
