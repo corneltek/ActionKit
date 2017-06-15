@@ -4,7 +4,7 @@ dist: trusty
 
 language: php
 php:
-- 7.0
+# - 7.0 # trusty has some problem with phpunit
 - 7.1
 - hhvm
 env:
