@@ -113,9 +113,46 @@ class Param extends CascadingAttribute
         return $this;
     }
 
+    public function defaultValue($value)
+    {
+        $this->default = $value;
+
+        return $this;
+    }
+
+    public function validator($value)
+    {
+        $this->validator = $value;
+
+        return $this;
+    }
+
+
     public function inflator(callable $inflator)
     {
         $this->inflator = $inflator;
+
+        return $this;
+    }
+
+    /**
+     * Render action column as {Type}Widget, with extra options/attributes
+     *
+     *     $this->column('created_on')
+     *         ->renderAs('DateInput', array( 'format' => 'yy-mm-dd' ))
+     *
+     * @param string $type       Widget type
+     * @param array  $attributes
+     *
+     * @return self
+     */
+    public function renderAs($type, array $attributes = null)
+    {
+        $this->widgetClass = $type;
+        if ($attributes) {
+            $this->widgetAttributes = array_merge($this->widgetAttributes, $attributes);
+        }
+
         return $this;
     }
 
@@ -261,27 +298,6 @@ class Param extends CascadingAttribute
     /*******************************************************************************
      * Widget/UI Related Methods
      ******************************************************************************/
-
-    /**
-     * Render action column as {Type}Widget, with extra options/attributes
-     *
-     *     $this->column('created_on')
-     *         ->renderAs('DateInput', array( 'format' => 'yy-mm-dd' ))
-     *
-     * @param string $type       Widget type
-     * @param array  $attributes
-     *
-     * @return self
-     */
-    public function renderAs($type, array $attributes = null)
-    {
-        $this->widgetClass = $type;
-        if ($attributes) {
-            $this->widgetAttributes = array_merge($this->widgetAttributes, $attributes);
-        }
-
-        return $this;
-    }
 
 
     /**
