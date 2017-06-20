@@ -18,6 +18,8 @@ use Maghead\Utils;
 
 class Param extends CascadingAttribute
 {
+    public static $supportedIsa = ['Int', 'Num', 'Str', 'Bool', 'Dir', 'DateTime', 'Timestamp', 'Ip', 'Ipv4', 'Ipv6', 'Path', 'Regex', 'Url', 'Email', 'Json'];
+
     /**
      * @var ActionKit\Action action object referenece
      * */
@@ -89,9 +91,10 @@ class Param extends CascadingAttribute
     {
         $isa = ucfirst($isa);
         // valid isa type
-        if (!in_array($isa, ['Int', 'Num', 'Str', 'Bool', 'Dir', 'DateTime', 'Timestamp', 'Ip', 'Ipv4', 'Ipv6', 'Path', 'Regex', 'Url', 'Email', 'Json'])) {
+        if (!in_array($isa, static::$supportedIsa)) {
             throw new LogicException("Invalid isa '$isa' on param {$this->name}.");
         }
+
         $this->isa = $isa;
         return $this;
     }
@@ -126,34 +129,6 @@ class Param extends CascadingAttribute
         }
 
         return $formValue;
-
-        /*
-        switch ($this->isa) {
-            case "DateTime":
-                if (is_int($value)) {
-                    $dateTime = new DateTime();
-                    $dateTime->setTimestamp($value);
-                    return $dateTime;
-                } elseif (is_string($value)) {
-                    try {
-                        $dateTime = new DateTime($value);
-                        return $dateTime;
-                    } catch (Exception $e) {
-                        return new InvalidArgumentException("Invalid DateTime string.");
-                    }
-                } else {
-                    throw new InvalidArgumentException("Invalid argument value for DateTime type param.");
-                }
-            break;
-            case "json":
-                if (is_string($value)) {
-                    return json_decode($json);
-                } else {
-                    throw new InvalidArgumentException("Invalid argument value for JSON type param.");
-                }
-            break;
-        }
-        */
     }
 
 
@@ -244,12 +219,24 @@ class Param extends CascadingAttribute
     }
 
 
+    /**
+     * getValidValues is currently used in widget attributes.
+     */
     public function getValidValues()
     {
         if (is_callable($this->validValues)) {
             return call_user_func($this->validValues);
         }
         return $this->validValues;
+    }
+
+    /**
+     * Check if a value is in the valid values.
+     */
+    public function isValidValue($value)
+    {
+        $valids = $this->getValidValues();
+        return in_array($value, $valids);
     }
 
     public function getOptionValues()
