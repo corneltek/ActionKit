@@ -92,7 +92,7 @@ class Param extends CascadingAttribute
     public function isa($isa)
     {
         $isa = ucfirst($isa);
-        // valid isa type
+
         if (!in_array($isa, static::$supportedIsa)) {
             throw new LogicException("Invalid isa '$isa' on param {$this->name}.");
         }
@@ -119,6 +119,14 @@ class Param extends CascadingAttribute
 
         return $this;
     }
+
+    public function label($label)
+    {
+        $this->label = $label;
+
+        return $this;
+    }
+
 
     public function validator($value)
     {
@@ -231,7 +239,6 @@ class Param extends CascadingAttribute
                 }
             }
         }
-
 
         if ($this->validator) {
             return call_user_func($this->validator, $value);
