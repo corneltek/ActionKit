@@ -7,9 +7,11 @@ use LogicException;
 use RuntimeException;
 use ImageKit\ImageProcessor;
 use ActionKit\RecordAction\UpdateRecordAction;
-use ActionKit\RecordAction\CreateRecordAction;
 use ActionKit\Utils;
 use Universal\Http\UploadedFile;
+
+use ActionKit\Storage\FileRenameMethods;
+use ActionKit\Storage\FileRename\Md5Rename;
 
 class ImageParam extends Param
 {
@@ -71,9 +73,7 @@ class ImageParam extends Param
         $this->supportedAttributes[ 'renameFile'] = self::ATTR_ANY;
         $this->supportedAttributes[ 'compression' ] = self::ATTR_ANY;
         $this->supportedAttributes[ 'argumentPostFilter' ] = self::ATTR_ANY;
-        $this->renameFile = function ($filename) {
-            return Utils::filename_increase_suffix_number($filename);
-        };
+        $this->renameFile = new Md5Rename;
 
         if (static::$defaultUploadDirectory) {
             $this->putIn(static::$defaultUploadDirectory);
@@ -283,12 +283,14 @@ class ImageParam extends Param
             return;
         }
 
-        $targetPath = trim($this->putIn, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $origFilename;
+        $newName = $uploadedFile->getOriginalFileName();
         if ($this->renameFile) {
-            if ($ret = call_user_func($this->renameFile, $targetPath, $uploadedFile)) {
-                $targetPath = $ret;
-            }
+            $newName = call_user_func($this->renameFile, $newName, $uploadedFile->getTmpName(), $uploadedFile, $this->action);
         }
+        $targetPath = $this->putIn . DIRECTORY_SEPARATOR . $newName;
+
+
+
 
         // TODO: improve the file rename approach
         $renameLimit = 10;
