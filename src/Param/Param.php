@@ -89,7 +89,7 @@ class Param extends CascadingAttribute
     {
         $isa = ucfirst($isa);
         // valid isa type
-        if (!in_array($isa, ['Int', 'Num', 'Str', 'Bool', 'Dir', 'DateTime', 'Timestamp', 'Ip', 'Ipv4', 'Ipv6', 'Path', 'Regex', 'Url', 'Email'])) {
+        if (!in_array($isa, ['Int', 'Num', 'Str', 'Bool', 'Dir', 'DateTime', 'Timestamp', 'Ip', 'Ipv4', 'Ipv6', 'Path', 'Regex', 'Url', 'Email', 'Json'])) {
             throw new LogicException("Invalid isa '$isa' on param {$this->name}.");
         }
         $this->isa = $isa;
