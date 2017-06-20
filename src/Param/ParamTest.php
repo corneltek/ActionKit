@@ -9,9 +9,8 @@ class ParamTest extends \PHPUnit\Framework\TestCase
     public function test()
     {
         $p = new Param('name');
-        $p->required(1);
+        $p->required();
         $this->assertNotNull($p->required);
-
     }
 
     public function testDefaultValueByScalar()

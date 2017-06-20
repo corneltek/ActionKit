@@ -82,10 +82,12 @@ class Param extends CascadingAttribute
         $this->build();
     }
 
-    public function build()
-    {
-    }
+    /**
+     *
+     */
+    protected function build() {
 
+    }
 
     public function isa($isa)
     {
@@ -116,6 +118,13 @@ class Param extends CascadingAttribute
         $this->inflator = $inflator;
         return $this;
     }
+
+
+
+
+
+
+
 
     public function inflate($formValue)
     {

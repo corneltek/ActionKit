@@ -62,7 +62,7 @@ class ImageParam extends Param
 
     public static $defaultUploadDirectory;
 
-    public function build()
+    protected function build()
     {
         $this->supportedAttributes[ 'validExtensions' ] = self::ATTR_ARRAY;
         $this->supportedAttributes[ 'size' ] = self::ATTR_ARRAY;

@@ -34,7 +34,7 @@ class FileParam extends Param
 
     public static $defaultUploadDirectory;
 
-    public function build()
+    protected function build()
     {
         // XXX: use CascadingAttribute class setter instead.
         $this->supportedAttributes['validExtensions'] = self::ATTR_ARRAY;
