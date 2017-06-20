@@ -34,10 +34,18 @@ class FileParam extends Param
 
     public static $defaultUploadDirectory;
 
+    public $validExtensions;
+
+    public function validExtensions($exts)
+    {
+        $this->validExtensions = $exts;
+
+        return $this;
+    }
+
     protected function build()
     {
         // XXX: use CascadingAttribute class setter instead.
-        $this->supportedAttributes['validExtensions'] = self::ATTR_ARRAY;
         $this->supportedAttributes['putIn'] = self::ATTR_STRING;
         $this->supportedAttributes['sizeLimit'] = self::ATTR_ANY;
         $this->supportedAttributes['renameFile'] = self::ATTR_ANY;
@@ -99,7 +107,7 @@ class FileParam extends Param
         return $this;
     }
 
-    public function init(& $args)
+    public function init(array & $args)
     {
         /* how do we make sure the file is a real http upload ?
          * if we pass args to model ?

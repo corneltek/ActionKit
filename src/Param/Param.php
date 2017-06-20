@@ -87,9 +87,9 @@ class Param extends CascadingAttribute
      */
     protected function build() { }
 
-    public function preinit(& $args) { }
+    public function preinit(array & $args) { }
 
-    public function init(& $args) { }
+    public function init(array & $args) { }
 
     public function isa($isa)
     {

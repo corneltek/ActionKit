@@ -257,7 +257,7 @@ class ImageParam extends Param
      *
      * @param array $args request arguments ($_REQUEST)
      */
-    public function init(& $args)
+    public function init(array & $args)
     {
         // Is the file upload from HTTP
         $requireUploadMove = false;
