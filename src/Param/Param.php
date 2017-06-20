@@ -85,9 +85,11 @@ class Param extends CascadingAttribute
     /**
      *
      */
-    protected function build() {
+    protected function build() { }
 
-    }
+    public function preinit(& $args) { }
+
+    public function init(& $args) { }
 
     public function isa($isa)
     {
@@ -246,13 +248,6 @@ class Param extends CascadingAttribute
         return true;
     }
 
-    public function preinit(& $args)
-    {
-    }
-
-    public function init(& $args)
-    {
-    }
 
     public function getLabel()
     {
