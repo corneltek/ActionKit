@@ -94,11 +94,6 @@ class Param extends CascadingAttribute
     public function isa($isa)
     {
         $isa = ucfirst($isa);
-
-        if (!in_array($isa, static::$supportedIsa)) {
-            throw new LogicException("Invalid isa '$isa' on param {$this->name}.");
-        }
-
         $this->isa = $isa;
         return $this;
     }
