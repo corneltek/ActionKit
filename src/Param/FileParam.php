@@ -36,6 +36,8 @@ class FileParam extends Param
 
     public $validExtensions;
 
+    public $putIn;
+
     public function validExtensions($exts)
     {
         $this->validExtensions = $exts;
@@ -43,11 +45,23 @@ class FileParam extends Param
         return $this;
     }
 
+    public function sizeLimit($bytes)
+    {
+        $this->sizeLimit = $bytes;
+
+        return $this;
+    }
+
+    public function putIn($dir)
+    {
+        $this->putIn = $dir;
+
+        return $this;
+    }
+
     protected function build()
     {
         // XXX: use CascadingAttribute class setter instead.
-        $this->supportedAttributes['putIn'] = self::ATTR_STRING;
-        $this->supportedAttributes['sizeLimit'] = self::ATTR_ANY;
         $this->supportedAttributes['renameFile'] = self::ATTR_ANY;
 
         // $this->renameFile = [FileRenameMethods::class, 'md5ize'];
