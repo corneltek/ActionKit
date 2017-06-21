@@ -22,8 +22,6 @@ use ActionKit\Storage\FileRenameMethods;
  */
 class FileParam extends Param
 {
-    public $paramType = 'file';
-
     public $sizeLimit;
 
     public $sourceField;  /* If field is not defined, use this source field */

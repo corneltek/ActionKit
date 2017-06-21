@@ -91,6 +91,9 @@ class Param extends CascadingAttribute
 
     public function init(array & $args) { }
 
+
+
+
     public function isa($isa)
     {
         $isa = ucfirst($isa);
@@ -214,7 +217,7 @@ class Param extends CascadingAttribute
         /* if it's file type , should read from $_FILES , not from the args of action */
         // TODO: note, we should do this validation in File Param or Image Param
         if ($this->action && $this->required) {
-            if ($this->paramType === 'file') {
+            if ($this instanceof FileParam) {
                 if (! $this->action->request->file($this->name) && ! $this->action->request->param($this->name)) {
                     return [false, $this->action->messagePool->translate('file.required', $this->getLabel())];
                 }

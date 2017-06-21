@@ -15,10 +15,6 @@ use ActionKit\Storage\FileRename\Md5Rename;
 
 class ImageParam extends Param
 {
-
-    // XXX: think about me.
-    public $paramType = 'file';
-
     /* image column attributes */
     public $resizeWidth;
 
