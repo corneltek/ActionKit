@@ -9,7 +9,8 @@ use ActionKit\RecordAction\BulkRecordAction;
 class BulkZhConvertRecordAction extends BulkRecordAction
 {
     public $convertionKeys = array();
-    public $convertionFunctions = array('to_cn','to_tw');
+
+    public $convertionFunctions = ['to_cn','to_tw'];
 
     public function convertRecords($convertion, $records)
     {

@@ -12,8 +12,6 @@ use ActionKit\Action;
  */
 class BulkRecordAction extends Action
 {
-    const TYPE = 'bulk';
-
     public $recordClass;
 
     public function schema()

@@ -41,9 +41,6 @@ function duplicate_data($data, $schema)
 
 class BulkCopyRecordAction extends BulkRecordAction
 {
-    const TYPE = 'bulk_copy';
-
-
     /**
      * @var array New fields are defined to be override.
      */

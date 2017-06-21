@@ -3,9 +3,6 @@ namespace ActionKit\RecordAction;
 
 abstract class BulkDeleteRecordAction extends BulkRecordAction
 {
-    const TYPE = 'bulk_delete';
-
-
     /*
      * Define your record class here:
      *

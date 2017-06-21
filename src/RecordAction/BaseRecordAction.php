@@ -19,8 +19,6 @@ use Exception;
 
 class BaseRecordAction extends Action
 {
-    const TYPE = 'base';
-
     /**
      *
      * @var Phifty\Model

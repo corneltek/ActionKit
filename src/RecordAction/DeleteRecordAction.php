@@ -3,8 +3,6 @@ namespace ActionKit\RecordAction;
 
 abstract class DeleteRecordAction extends BaseRecordAction
 {
-    const TYPE = 'delete';
-
     public $enableLoadRecord = true;
     public $unlink= true;
 

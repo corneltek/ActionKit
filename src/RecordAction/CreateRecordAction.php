@@ -3,8 +3,6 @@ namespace ActionKit\RecordAction;
 
 abstract class CreateRecordAction extends BaseRecordAction
 {
-    const TYPE = 'create';
-
     public $enableLoadRecord = false;
 
     protected function create(array $args)

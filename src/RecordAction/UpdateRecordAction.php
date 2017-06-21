@@ -3,8 +3,6 @@ namespace ActionKit\RecordAction;
 
 abstract class UpdateRecordAction extends BaseRecordAction
 {
-    const TYPE = 'update';
-
     /**
      * @var boolean load record by conditions defined in array.
      */
