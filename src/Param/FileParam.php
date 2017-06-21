@@ -38,7 +38,26 @@ class FileParam extends Param
 
     public $putIn;
 
-    public function validExtensions($exts)
+
+
+
+    protected function build()
+    {
+        // XXX: use CascadingAttribute class setter instead.
+        $this->supportedAttributes['renameFile'] = self::ATTR_ANY;
+
+        // $this->renameFile = [FileRenameMethods::class, 'md5ize'];
+        $this->renameFile = new Md5Rename;
+
+        if (static::$defaultUploadDirectory) {
+            $this->putIn(static::$defaultUploadDirectory);
+        }
+    }
+
+
+
+
+    public function validExtensions(array $exts)
     {
         $this->validExtensions = $exts;
 
@@ -57,19 +76,6 @@ class FileParam extends Param
         $this->putIn = $dir;
 
         return $this;
-    }
-
-    protected function build()
-    {
-        // XXX: use CascadingAttribute class setter instead.
-        $this->supportedAttributes['renameFile'] = self::ATTR_ANY;
-
-        // $this->renameFile = [FileRenameMethods::class, 'md5ize'];
-        $this->renameFile = new Md5Rename;
-
-        if (static::$defaultUploadDirectory) {
-            $this->putIn(static::$defaultUploadDirectory);
-        }
     }
 
     public function validate($value)
