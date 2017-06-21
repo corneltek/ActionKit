@@ -236,7 +236,7 @@ class ColumnConvert
      * @param Model $record presents the current values
      * @return Param
      */
-    public static function toParam(RuntimeColumn $c, Model $record = null, Action $action = null)
+    public static function toParam(RuntimeColumn $c, Action $action, Model $record = null)
     {
         $p = new Param($c->name, $action);
         self::setupIsa($p, $c);

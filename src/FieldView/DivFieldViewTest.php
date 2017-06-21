@@ -3,12 +3,13 @@
 namespace ActionKit\FieldView;
 
 use ActionKit\Param\Param;
+use ActionKit\Action;
 
 class DivFieldViewTest extends \PHPUnit\Framework\TestCase
 {
     public function testText()
     {
-        $column = new Param('name');
+        $column = new Param('name', new Action);
         $column->required(1);
         $column->default('John');
 

@@ -3,26 +3,27 @@
 namespace ActionKit\Param;
 
 use DateTime;
+use ActionKit\Action;
 
 class ParamTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {
-        $p = new Param('name');
+        $p = new Param('name', new Action);
         $p->required();
         $this->assertNotNull($p->required);
     }
 
     public function testDefaultValueByScalar()
     {
-        $p = new Param('name');
+        $p = new Param('name', new Action);
         $p->default('John');
         $this->assertEquals('John', $p->getDefaultValue());
     }
 
     public function testDefaultValueByClosure()
     {
-        $p = new Param('created_at');
+        $p = new Param('created_at', new Action);
         $p->default(function() {
             return new DateTime;
         });
@@ -31,7 +32,7 @@ class ParamTest extends \PHPUnit\Framework\TestCase
 
     public function testValidValuesByArray()
     {
-        $p = new Param('type');
+        $p = new Param('type', new Action);
         $p->validValues([
             'user',
             'admin',
@@ -48,7 +49,7 @@ class ParamTest extends \PHPUnit\Framework\TestCase
 
     public function testValidValuesByClosure()
     {
-        $p = new Param('type');
+        $p = new Param('type', new Action);
         $p->validValues(function() {
             return [ 'user', 'admin', 'guest' ];
         });

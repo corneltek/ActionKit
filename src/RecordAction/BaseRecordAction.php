@@ -202,7 +202,7 @@ class BaseRecordAction extends Action
             if (false === $column->get('renderable')) {
                 continue;
             }
-            $this->params[ $column->name ] = ColumnConvert::toParam($column, $record, $this);
+            $this->params[ $column->name ] = ColumnConvert::toParam($column, $this, $record);
         }
     }
 
@@ -241,7 +241,7 @@ class BaseRecordAction extends Action
             return;
         }
         if ($column = $this->schema->getColumn($this->schema->primaryKey)) {
-            $this->params[$column->name] = ColumnConvert::toParam($column, $record, $this);
+            $this->params[$column->name] = ColumnConvert::toParam($column, $this, $record);
         }
     }
 

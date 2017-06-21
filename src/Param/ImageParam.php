@@ -15,7 +15,6 @@ use ActionKit\Storage\FileRename\Md5Rename;
 
 class ImageParam extends Param
 {
-    /* image column attributes */
     public $resizeWidth;
 
     public $resizeHeight;

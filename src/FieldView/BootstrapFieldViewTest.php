@@ -9,7 +9,7 @@ class BootstrapFieldViewTest extends \PHPUnit\Framework\TestCase
 {
     public function testText()
     {
-        $column = new Param('account');
+        $column = new Param('account', new \ActionKit\Action);
         $column->required(1);
 
         $field = new BootstrapFieldView($column, array(

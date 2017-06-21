@@ -75,7 +75,7 @@ class Param extends CascadingAttribute
 
     protected $inflator;
 
-    public function __construct($name, Action $action = null)
+    public function __construct($name, Action $action)
     {
         $this->name = $name;
         $this->action = $action;
@@ -216,7 +216,7 @@ class Param extends CascadingAttribute
     {
         /* if it's file type , should read from $_FILES , not from the args of action */
         // TODO: note, we should do this validation in File Param or Image Param
-        if ($this->action && $this->required) {
+        if ($this->required) {
             if ($this instanceof FileParam) {
                 if (! $this->action->request->file($this->name) && ! $this->action->request->param($this->name)) {
                     return [false, $this->action->messagePool->translate('file.required', $this->getLabel())];
